@@ -5,13 +5,16 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.util.*;
 
 public class Controller {
 
     private View view;
+    private ArrayList<Client> clients;
 
     public Controller(View view) {
         this.view = view;
+        clients = new ArrayList<Client>();
         view.clientButton.addActionListener(new ClientButtonListener());
         view.serverButton.addActionListener(new ServerButtonListener());
         view.connectButton.addActionListener(new ConnectButtonListener());
