@@ -69,10 +69,11 @@ public class View {
         connectButton.setEnabled(false);
         sendButton.setEnabled(false); //Enable when file chosen
         colorButton.setBorder(BorderFactory.createEmptyBorder());
-        //colorButton.setBorderPainted(false);
-        //colorButton.setContentAreaFilled(false);
-        //colorButton.setFocusPainted(false);
-        //colorButton.setOpaque(false);
+        fileButton.setBorder(BorderFactory.createEmptyBorder());
+        closeButton.setBorderPainted(false);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setFocusPainted(false);
+        closeButton.setOpaque(false);
 
         chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -119,11 +120,11 @@ public class View {
         networkButtonPanel.add(clientButton);
         networkButtonPanel.add(serverButton);
         networkButtonPanel.add(connectButton);
+        filePanel.add(fileButton);
         filePanel.add(fileField);
         filePanel.add(descriptionField);
         filePanel.add(sendButton);
         filePanel.add(fileEncryptions);
-        fileColorExitPanel.add(fileButton);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         //panel.add(colorButton);
