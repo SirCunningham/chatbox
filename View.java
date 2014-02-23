@@ -53,7 +53,7 @@ public class View {
     JComboBox messageEncryptions;
     JComboBox fileEncryptions;
     JComboBox serverOptions;
-    String color;
+    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String filePath;
     boolean tabLock = false;
     int tabCount = 1;
@@ -68,9 +68,11 @@ public class View {
         sendMsgButton.setEnabled(false);
         connectButton.setEnabled(false);
         sendButton.setEnabled(false); //Enable when file chosen
-        Color defColor = Color.BLACK;
-        color = Integer.toHexString(defColor.getRGB()).substring(2);
-        colorButton.setBackground(defColor);
+        colorButton.setBorder(BorderFactory.createEmptyBorder());
+        //colorButton.setBorderPainted(false);
+        //colorButton.setContentAreaFilled(false);
+        //colorButton.setFocusPainted(false);
+        //colorButton.setOpaque(false);
 
         chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -94,11 +96,11 @@ public class View {
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);
 
-
         passLabel.setVisible(false);
         passField.setVisible(false);
 
         chatBoxPanel.add(tabbedPane);
+        chatBoxButtonPanel.add(colorButton);
         chatBoxButtonPanel.add(nameField);
         chatBoxButtonPanel.add(messageField);
         chatBoxButtonPanel.add(sendMsgButton);
@@ -122,7 +124,6 @@ public class View {
         filePanel.add(sendButton);
         filePanel.add(fileEncryptions);
         fileColorExitPanel.add(fileButton);
-        fileColorExitPanel.add(colorButton);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         //panel.add(colorButton);

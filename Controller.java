@@ -229,6 +229,8 @@ public class Controller {
                 view.colorButton.setBackground(newColor);
                 view.color = Integer.toHexString(
                         newColor.getRGB()).substring(2);
+                view.nameField.setForeground(newColor);
+                view.messageField.setForeground(newColor);
             }
         }
     }
