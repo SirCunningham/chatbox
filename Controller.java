@@ -285,7 +285,7 @@ public class Controller {
                 view.chatBoxes.remove(index);
                 
                 //clients.get(index).kill();
-                clients.remove(index);
+                //clients.remove(index);
                 updateTabButtonIndex(index);
             }
         }
