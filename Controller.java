@@ -5,13 +5,16 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.util.*;
 
 public class Controller {
 
     private View view;
+    private ArrayList<Client> clients;
 
     public Controller(View view) {
         this.view = view;
+        clients = new ArrayList<Client>();
         view.clientButton.addActionListener(new ClientButtonListener());
         view.serverButton.addActionListener(new ServerButtonListener());
         view.connectButton.addActionListener(new ConnectButtonListener());
@@ -159,6 +162,7 @@ public class Controller {
                         Integer.parseInt(view.getPortField().getText()),
                         view);
                 thr.start();
+                clients.add(thr);
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade3: " + ex);
             }
@@ -281,6 +285,8 @@ public class Controller {
                 view.tabbedPane.remove(index);
                 view.getTabButtons().remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
+                clients.get(index).kill();
+                clients.remove(index);
                 updateTabButtonIndex(index);
             }
         }
