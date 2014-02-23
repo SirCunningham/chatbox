@@ -152,7 +152,6 @@ public class Controller {
 
     // Starta klient
     public class ClientButtonListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
