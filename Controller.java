@@ -227,7 +227,7 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
 
             Color newColor = JColorChooser.showDialog(view.chatBoxPanel,
-                    "Choose background color",
+                    "Choose text color",
                     view.chatBoxPanel.getBackground());
             if (newColor != null) {
                 view.colorButton.setBackground(newColor);
