@@ -227,14 +227,12 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
 
             Color newColor = JColorChooser.showDialog(view.chatBoxPanel,
-                    "Choose text color",
-                    view.chatBoxPanel.getBackground());
+                    "Choose text color", view.chatBoxPanel.getBackground());
             if (newColor != null) {
-                view.colorButton.setBackground(newColor);
-                view.color = Integer.toHexString(
-                        newColor.getRGB()).substring(2);
                 view.nameField.setForeground(newColor);
                 view.messageField.setForeground(newColor);
+                view.color = Integer.toHexString(
+                        newColor.getRGB()).substring(2);
             }
         }
     }
