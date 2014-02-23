@@ -8,6 +8,8 @@ public class TabButton extends JButton {
 
     public TabButton(Icon icon, int index) {
         super(icon);
+        setContentAreaFilled(false);
+        setOpaque(false);
         this.index = index;
     }
 

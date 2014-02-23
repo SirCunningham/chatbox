@@ -65,15 +65,13 @@ public class View {
     // Skapa GUI
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tabbedPane.setFocusable(false);
         sendMsgButton.setEnabled(false);
         connectButton.setEnabled(false);
         sendButton.setEnabled(false); //Enable when file chosen
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         fileButton.setBorder(BorderFactory.createEmptyBorder());
-        closeButton.setBorderPainted(false);
-        closeButton.setContentAreaFilled(false);
         closeButton.setFocusPainted(false);
-        closeButton.setOpaque(false);
 
         chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
