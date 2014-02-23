@@ -162,6 +162,7 @@ public class Controller {
                         Integer.parseInt(view.getPortField().getText()),
                         view);
                 thr.start();
+                clients.add(thr);
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade3: " + ex);
             }
@@ -282,6 +283,8 @@ public class Controller {
                 view.tabbedPane.remove(index);
                 view.getTabButtons().remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
+                clients.get(index).kill();
+                clients.remove(index);
                 updateTabButtonIndex(index);
             }
         }
