@@ -283,9 +283,10 @@ public class Controller {
                 view.tabbedPane.remove(index);
                 view.getTabButtons().remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
-                
-                //clients.get(index).kill();
-                //clients.remove(index);
+                if (clients.size()>0) {
+                    clients.get(index).kill();
+                    clients.remove(index);
+                }
                 updateTabButtonIndex(index);
             }
         }

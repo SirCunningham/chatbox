@@ -156,7 +156,8 @@ public class View {
         cBox.setText("This is where it happens.");
         chatBoxes.add(cBox);
         JScrollPane scrollPane = new JScrollPane(cBox);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollPane;
 
     }
