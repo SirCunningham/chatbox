@@ -20,6 +20,7 @@ public class IOThread extends Thread {
     private Controller controller;
     private boolean isClient;
     private volatile boolean isNotRunnable;
+    private volatile boolean tabLock = false;
 
     // Konstruktor
     public IOThread(Socket sock, View view, boolean client) {
@@ -105,8 +106,9 @@ public class IOThread extends Thread {
                     "ERROR: Failed to close connection", Color.RED);
         }
     }
+
     public void kill() {
-        isNotRunnable=true;
+        isNotRunnable = true;
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
@@ -140,6 +142,7 @@ public class IOThread extends Thread {
                         view.messageField.getText()),
                         Color.decode("#" + view.color));
                 view.messageField.setText("");
+
             } catch (Exception ex) {
                 appendToPane(
                         view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
