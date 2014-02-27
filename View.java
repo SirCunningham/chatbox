@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.util.*;
 
 // Lägg till JRadioButton för val mellan klient/server!
+// Ersätt vissa texfields med JPasswordField!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
