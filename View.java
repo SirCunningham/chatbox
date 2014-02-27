@@ -7,6 +7,7 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import java.util.*;
 
+// Lägg till JRadioButton för val mellan klient/server!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
