@@ -3,6 +3,7 @@ package chatbox;
 import java.io.*;
 import java.net.*;
 
+// Använd JProgressBar för hämtning av fil!
 public class FileReceiver extends Thread {
 
     private FileOutputStream out;
