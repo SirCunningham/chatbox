@@ -8,9 +8,7 @@ import javax.imageio.ImageIO;
 import java.util.*;
 
 // Lägg till JRadioButton för val mellan klient/server ("join/create")!
-// Låt servern boota godtyckliga användare!
-// Ersätt vissa texfields med JPasswordField!
-// Markera del av text som skall krypteras, frivilligt!
+// Låt servern boota godtyckliga användare, från JList!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
@@ -34,7 +32,7 @@ public class View {
     private final JLabel typeLabel = new JLabel("Type:");
     JTextField IPField = new JTextField("127.0.0.1", 10);
     JTextField portField = new JTextField("4444", 9);
-    JTextField passField = new JTextField("4hfJ/dc.5t", 9);
+    JTextField passField = new JPasswordField("4hfJ/dc.5t", 9);
     JTextField tabField = new JTextField("Chat 1", 9);
     JTextField nameField = new JTextField("Dante", 5);
     JTextField messageField = new JTextField("In medio cursu vitae"
@@ -44,8 +42,9 @@ public class View {
             15);
     // Fields must be multi-threaded
     
-    ArrayList<JTextPane> chatBoxes= new ArrayList<JTextPane>();
+    ArrayList<JTextPane> chatBoxes= new ArrayList<>();
     JButton sendMsgButton = new JButton("Send message");
+    JButton encryptButton = new JButton("Encrypt selected");
     JButton clientButton = new JButton("Connect to server");
     JButton serverButton = new JButton("Start a server");
     JButton connectButton = new JButton("Disconnect");
@@ -61,7 +60,7 @@ public class View {
     String filePath;
     boolean tabLock = false;
     int tabCount = 1;
-    private ArrayList<TabButton> tabButtons = new ArrayList<TabButton>();
+    private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private ImageIcon icon;
     Panel pane = new Panel();
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -71,6 +70,7 @@ public class View {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tabbedPane.setFocusable(false);
         sendMsgButton.setEnabled(false);
+        encryptButton.setEnabled(false);
         connectButton.setEnabled(false);
         sendButton.setEnabled(false); //Enable when file chosen
         colorButton.setBorder(BorderFactory.createEmptyBorder());
@@ -107,6 +107,7 @@ public class View {
         chatBoxButtonPanel.add(nameField);
         chatBoxButtonPanel.add(messageField);
         chatBoxButtonPanel.add(sendMsgButton);
+        chatBoxButtonPanel.add(encryptButton);
         chatBoxButtonPanel.add(encryptLabel);
         chatBoxButtonPanel.add(messageEncryptions);
         IPPanel.add(IPLabel);

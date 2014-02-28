@@ -14,7 +14,7 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        clients = new ArrayList<Client>();
+        clients = new ArrayList<>();
         view.clientButton.addActionListener(new ClientButtonListener());
         view.serverButton.addActionListener(new ServerButtonListener());
         view.connectButton.addActionListener(new ConnectButtonListener());
