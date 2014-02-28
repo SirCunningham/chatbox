@@ -35,7 +35,7 @@ public class XMLString {
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                xmlStr =xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                 i = 0;
             }
         }
