@@ -23,8 +23,8 @@ public class Controller {
         view.messageField.addFocusListener(new FieldListener());
         view.fileField.addFocusListener(new FieldListener());
         view.descriptionField.addFocusListener(new FieldListener());
-        view.clientButton.addActionListener(new ClientButtonListener());
-        view.serverButton.addActionListener(new ServerButtonListener());
+        view.startButton.addActionListener(new StartButtonListener());
+        view.serverButton.addChangeListener(new ServerButtonListener());
         view.connectButton.addActionListener(new ConnectButtonListener());
         view.sendButton.addActionListener(new SendButtonListener());
         view.receiveButton.addActionListener(new ReceiveButtonListener());
@@ -140,19 +140,40 @@ public class Controller {
         }
     }
     
-    public class ServerButtonListener implements ActionListener {
+    // Starta klient eller server
+    public class StartButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 disableConnection();
-                view.serverButton.setBackground(Color.RED);
-                Server thr = new Server(Integer.parseInt(
-                        view.getPortField().getText()),
-                        view);
-                thr.start();
+                if (view.serverButton.isSelected()) {
+                    view.startButton.setBackground(Color.RED);
+                    Server thr = new Server(Integer.parseInt(
+                            view.getPortField().getText()), view);
+                    thr.start();
+                } else {
+                    view.startButton.setBackground(Color.GREEN);
+                    Client thr = new Client(view.getIPField().getText(),
+                            Integer.parseInt(view.getPortField().getText()),
+                            view);
+                    thr.start();
+                    clients.add(thr);
+                }
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade1: " + ex);
+            }
+        }
+    }
+
+    public class ServerButtonListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (view.serverButton.isSelected()) {
+                view.startButton.setText("Create server");
+            } else {
+                view.startButton.setText("Join server");
             }
         }
     }
@@ -173,26 +194,7 @@ public class Controller {
         }
     }
 
-    // Starta klient
-    public class ClientButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                disableConnection();
-                view.clientButton.setBackground(Color.GREEN);
-                Client thr = new Client(view.getIPField().getText(),
-                        Integer.parseInt(view.getPortField().getText()),
-                        view);
-                thr.start();
-                clients.add(thr);
-            } catch (Exception ex) {
-                System.err.println("Ett fel inträffade3: " + ex);
-            }
-        }
-    }
     // Mottag fil med server
-
     public class ReceiveButtonListener implements ActionListener {
 
         @Override

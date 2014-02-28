@@ -7,7 +7,6 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import java.util.*;
 
-// Lägg till JRadioButton för val mellan klient/server ("join/create")!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
@@ -23,6 +22,10 @@ public class View {
     JPanel networkButtonPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
+    JPanel startPanel = new JPanel();
+    JRadioButton clientButton = new JRadioButton("Client");
+    JRadioButton serverButton = new JRadioButton("Server");
+    ButtonGroup buttonGroup = new ButtonGroup();
     private final JLabel IPLabel = new JLabel("IP:");
     private final JLabel portLabel = new JLabel("Port:");
     private final JLabel passLabel = new JLabel("Password:");
@@ -48,9 +51,8 @@ public class View {
     
     ArrayList<JTextPane> chatBoxes= new ArrayList<>();
     JButton sendMsgButton = new JButton("Send message");
-    JButton encryptButton = new JButton("Encrypt selected");
-    JButton clientButton = new JButton("Connect to server");
-    JButton serverButton = new JButton("Start a server");
+    JButton encryptButton = new JButton("Encrypt selected"); //JToggleButton
+    JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
     JButton sendButton = new JButton("Send to selected");
     JButton receiveButton = new JButton("Receive [testing only]");
@@ -98,6 +100,10 @@ public class View {
         //lägg till ruta för deltagare
         //tabbedPane.addTab(null, createChatBox());
 
+        buttonGroup.add(clientButton);
+        buttonGroup.add(serverButton);
+        clientButton.setSelected(true);
+        
         list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         int[] select = {1, 3};
         list.setSelectedIndices(select);
@@ -129,8 +135,7 @@ public class View {
         passPanel.add(passField);
         tabPanel.add(tabLabel);
         tabPanel.add(tabField);
-        networkButtonPanel.add(clientButton);
-        networkButtonPanel.add(serverButton);
+        networkButtonPanel.add(startButton);
         networkButtonPanel.add(connectButton);
         filePanel.add(fileButton);
         filePanel.add(fileField);
@@ -139,10 +144,11 @@ public class View {
         filePanel.add(fileEncryptions);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
-        //panel.add(colorButton);
-        //panel.add(closeButton);
         leftPanel.add(chatBoxPanel);
         leftPanel.add(chatBoxButtonPanel);
+        startPanel.add(clientButton);
+        startPanel.add(serverButton);
+        rightPanel.add(startPanel);
         rightPanel.add(IPPanel);
         rightPanel.add(portPanel);
         rightPanel.add(passPanel);
@@ -155,12 +161,9 @@ public class View {
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         frame.add(leftPanel, BorderLayout.CENTER);
-        //frame.add(scrollPane, BorderLayout.CENTER);
-        //frame.add(chatBoxButtonPanel, BorderLayout.SOUTH);
         frame.add(rightPanel, BorderLayout.EAST);
         frame.pack();
         frame.setVisible(true);
-
     }
 
     public JScrollPane createChatBox() {
