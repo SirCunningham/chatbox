@@ -11,6 +11,8 @@ public class Controller {
 
     private View view;
     private ArrayList<Client> clients;
+    private String backup;
+    private boolean tabLock = false;
     int startEnc = 0;
     int endEnc = 0;
 
@@ -24,6 +26,7 @@ public class Controller {
         view.nameField.addFocusListener(new FieldListener());
         view.messageField.addFocusListener(new FieldListener());
         view.fileField.addFocusListener(new FieldListener());
+        view.encField.addFocusListener(new FieldListener());
         view.descriptionField.addFocusListener(new FieldListener());
         view.startButton.addActionListener(new StartButtonListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
@@ -55,14 +58,17 @@ public class Controller {
         view.startButton.setEnabled(false);
         view.clientButton.setEnabled(false);
         view.serverButton.setEnabled(false);
-        view.IPField.setEnabled(false);
+        if (!view.serverButton.isSelected()) {
+            view.getIPLabel().setEnabled(false);
+            view.IPField.setEnabled(false);
+        }
+        view.getPortLabel().setEnabled(false);
         view.portField.setEnabled(false);
         view.serverOptions.setEnabled(false);
         view.passField.setEnabled(false);
 
         view.connectButton.setEnabled(true);
         view.sendMsgButton.setEnabled(true);
-        //view.encryptButton.setEnabled(true);
     }
 
     //Replace by state boolean!
@@ -70,14 +76,17 @@ public class Controller {
         view.startButton.setEnabled(true);
         view.clientButton.setEnabled(true);
         view.serverButton.setEnabled(true);
-        view.IPField.setEnabled(true);
+        if (!view.serverButton.isSelected()) {
+            view.getIPLabel().setEnabled(true);
+            view.IPField.setEnabled(true);
+        }
+        view.getPortLabel().setEnabled(true);
         view.portField.setEnabled(true);
         view.serverOptions.setEnabled(true);
         view.passField.setEnabled(true);
 
         view.connectButton.setEnabled(false);
         view.sendMsgButton.setEnabled(false);
-        //view.encryptButton.setEnabled(false);
         view.startButton.setBackground(null);
     }
 
@@ -108,23 +117,24 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (endEnc > startEnc) {
-                String message = view.messageField.getText();
-                String a = "";
-                if (startEnc > 0) {
-                    a = message.substring(0, startEnc - 1);
+            // Skaffa ett lås eller liknande och se till att osparad text ej försvinner
+            if (view.encryptButton.isSelected()) {
+                if (endEnc > startEnc) {
+                    backup = view.messageField.getText();
+                    String newStr = new String();
+                    if (startEnc > 0) {
+                        newStr += backup.substring(0, startEnc - 1);
+                    }
+                    newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
+                            String.valueOf(view.messageEncryptions.getSelectedItem()),
+                            view.encField.getText(), backup.substring(startEnc, endEnc));
+                    if (endEnc < backup.length()) {
+                        newStr += backup.substring(endEnc + 1);
+                    }
+                    view.messageField.setText(newStr);
                 }
-                String b = "";
-                if (endEnc < message.length())
-                    b = message.substring(endEnc + 1);
-                view.messageField.setText(a
-                        + "<encrypted type=\""
-                        + String.valueOf(view.messageEncryptions.getSelectedItem()).toLowerCase()
-                        + "\" key=\""
-                        + view.encField.getText() + "\">"
-                        + message.substring(startEnc, endEnc)
-                        + "</encrypted>" + b);
-                //Save unencrypted copy so that it can be undone!
+            } else {
+                view.messageField.setText(backup);
             }
         }
     }
@@ -135,8 +145,8 @@ public class Controller {
         public void stateChanged(ChangeEvent e) {
             int i = view.getTabbedPane().getSelectedIndex();
             int j = view.tabbedPane.getTabCount() - 1;
-            if (i == j && !view.tabLock) {
-                view.tabLock = true;
+            if (i == j && !tabLock) {
+                tabLock = true;
                 if (j >= 0) {
                     view.tabbedPane.remove(j);
                 }
@@ -147,7 +157,7 @@ public class Controller {
                         "Create a new chat");
                 view.tabCount += 1;
                 view.tabField.setText("Chat " + String.valueOf(view.tabCount));
-                view.tabLock = false;
+                tabLock = false;
             }
         }
     }
@@ -335,17 +345,14 @@ public class Controller {
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(
                     view.messageEncryptions.getSelectedItem());
-            if ("Caesar".equals(chosen) || "AES".equals(chosen)) {
-                view.getEncLabel().setVisible(true);
-                view.encField.setVisible(true);
-            } else {
-                view.getEncLabel().setVisible(false);
-                view.encField.setVisible(false);
-            }
             if ("None".equals(chosen)) {
                 view.encryptButton.setEnabled(false);
+                view.getEncLabel().setVisible(false);
+                view.encField.setVisible(false);
             } else {
                 view.encryptButton.setEnabled(true);
+                view.getEncLabel().setVisible(true);
+                view.encField.setVisible(true);
             }
         }
     }

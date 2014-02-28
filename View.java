@@ -54,7 +54,7 @@ public class View {
     
     ArrayList<JTextPane> chatBoxes= new ArrayList<>();
     JButton sendMsgButton = new JButton("Send message");
-    JButton encryptButton = new JButton("Encrypt selected"); //JToggleButton
+    JToggleButton encryptButton = new JToggleButton("Encrypt selected");
     JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
     JButton sendButton = new JButton("Send to selected");
@@ -68,7 +68,6 @@ public class View {
     JComboBox serverOptions;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String filePath;
-    boolean tabLock = false;
     int tabCount = 1;
     private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private ImageIcon icon;
@@ -111,7 +110,7 @@ public class View {
         int[] select = {1, 3};
         list.setSelectedIndices(select);
         
-        String[] stringEncryptions = {"None", "Caesar", "AES", "RSA", "Mixed"};
+        String[] stringEncryptions = {"None", "caesar", "AES", "RSA", "blowfish"};
         messageEncryptions = new JComboBox(stringEncryptions);
         fileEncryptions = new JComboBox(stringEncryptions);
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
@@ -203,6 +202,10 @@ public class View {
 
     public JTextField getFileField() {
         return fileField;
+    }
+    
+    public JLabel getPortLabel() {
+        return portLabel;
     }
 
     public JLabel getIPLabel() {
