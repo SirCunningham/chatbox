@@ -15,6 +15,14 @@ public class Controller {
     public Controller(View view) {
         this.view = view;
         clients = new ArrayList<>();
+        view.IPField.addFocusListener(new FieldListener());
+        view.portField.addFocusListener(new FieldListener());
+        view.passField.addFocusListener(new FieldListener());
+        view.tabField.addFocusListener(new FieldListener());
+        view.nameField.addFocusListener(new FieldListener());
+        view.messageField.addFocusListener(new FieldListener());
+        view.fileField.addFocusListener(new FieldListener());
+        view.descriptionField.addFocusListener(new FieldListener());
         view.clientButton.addActionListener(new ClientButtonListener());
         view.serverButton.addActionListener(new ServerButtonListener());
         view.connectButton.addActionListener(new ConnectButtonListener());
@@ -117,6 +125,21 @@ public class Controller {
         }
     }
 
+    public class FieldListener implements FocusListener {
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            source.selectAll();
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            source.select(0, 0);
+        }
+    }
+    
     public class ServerButtonListener implements ActionListener {
 
         @Override

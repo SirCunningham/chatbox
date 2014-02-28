@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import java.util.*;
 
 // Lägg till JRadioButton för val mellan klient/server ("join/create")!
-// Låt servern boota godtyckliga användare, från JList!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
@@ -42,14 +41,20 @@ public class View {
             15);
     // Fields must be multi-threaded
     
+    // Possible to do ArrayList.toArray() to add items dynamically
+    // Use getSelected...
+    private String[] items = {"User 1", "User 2", "User 3", "User 4"};
+    JList list = new JList(items);
+    
     ArrayList<JTextPane> chatBoxes= new ArrayList<>();
     JButton sendMsgButton = new JButton("Send message");
     JButton encryptButton = new JButton("Encrypt selected");
     JButton clientButton = new JButton("Connect to server");
     JButton serverButton = new JButton("Start a server");
-    JButton connectButton = new JButton("Disconnect");
-    JButton sendButton = new JButton("Send");
+    JButton connectButton = new JButton("Disconnect [currently: receive]");
+    JButton sendButton = new JButton("Send to selected");
     JButton receiveButton = new JButton("Receive [testing only]");
+    JButton bootButton = new JButton("Boot selected"); //Add confirmation dialog, only unlocked if server!!
     IconButton fileButton = new IconButton("fileIcon.png");
     IconButton colorButton = new IconButton("colorIcon.png");
     IconButton closeButton = new IconButton("closeIcon.png");
@@ -93,6 +98,10 @@ public class View {
         //lägg till ruta för deltagare
         //tabbedPane.addTab(null, createChatBox());
 
+        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        int[] select = {1, 3};
+        list.setSelectedIndices(select);
+        
         String[] stringEncryptions = {"None", "Caesar", "AES", "RSA", "Mixed"};
         messageEncryptions = new JComboBox(stringEncryptions);
         fileEncryptions = new JComboBox(stringEncryptions);
@@ -139,6 +148,8 @@ public class View {
         rightPanel.add(passPanel);
         rightPanel.add(tabPanel);
         rightPanel.add(networkButtonPanel);
+        rightPanel.add(list);
+        rightPanel.add(bootButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileColorExitPanel);
         mainPanel.add(leftPanel);
