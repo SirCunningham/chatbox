@@ -33,6 +33,7 @@ public class Controller {
         view.closeButton.addActionListener(new CloseButtonListener());
         view.serverOptions.addActionListener(new ServerOptionsListener());
         view.tabbedPane.addChangeListener(new TabbedPaneListener());
+        view.messageEncryptions.addActionListener(new EncryptionListener());
         //view.tabbedPane.setTabComponentAt(0, createTabPanel(1));
 
         //Skapa nya knappar och fält för varje tabb!
@@ -168,8 +169,12 @@ public class Controller {
         public void stateChanged(ChangeEvent e) {
             if (view.serverButton.isSelected()) {
                 view.startButton.setText("Create server");
+                view.getIPLabel().setEnabled(false);
+                view.IPField.setEnabled(false);
             } else {
                 view.startButton.setText("Join server");
+                view.getIPLabel().setEnabled(true);
+                view.IPField.setEnabled(true);
             }
         }
     }
@@ -290,6 +295,22 @@ public class Controller {
         }
     }
 
+    public class EncryptionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String chosen = String.valueOf(
+                    view.messageEncryptions.getSelectedItem());
+            if ("Caesar".equals(chosen) || "AES".equals(chosen)) {
+                view.getEncLabel().setVisible(true);
+                view.encField.setVisible(true);
+            } else {
+                view.getEncLabel().setVisible(false);
+                view.encField.setVisible(false);
+            }
+        }
+    }
+    
     public class TabButtonListener implements ActionListener {
 
         @Override

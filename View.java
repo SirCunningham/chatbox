@@ -44,6 +44,9 @@ public class View {
             15);
     // Fields must be multi-threaded
     
+    private final JLabel encLabel = new JLabel("Int:");
+    JTextField encField = new JTextField("68", 5);
+    
     // Possible to do ArrayList.toArray() to add items dynamically
     // Use getSelected...
     private String[] items = {"User 1", "User 2", "User 3", "User 4"};
@@ -116,6 +119,9 @@ public class View {
 
         passLabel.setVisible(false);
         passField.setVisible(false);
+        
+        encLabel.setVisible(false);
+        encField.setVisible(false);
 
         chatBoxPanel.add(tabbedPane);
         chatBoxButtonPanel.add(colorButton);
@@ -125,6 +131,8 @@ public class View {
         chatBoxButtonPanel.add(encryptButton);
         chatBoxButtonPanel.add(encryptLabel);
         chatBoxButtonPanel.add(messageEncryptions);
+        chatBoxButtonPanel.add(encLabel);
+        chatBoxButtonPanel.add(encField);
         IPPanel.add(IPLabel);
         IPPanel.add(IPField);
         portPanel.add(portLabel);
@@ -197,6 +205,14 @@ public class View {
         return fileField;
     }
 
+    public JLabel getIPLabel() {
+        return IPLabel;
+    }
+    
+    public JLabel getEncLabel() {
+        return encLabel;
+    }
+    
     public JLabel getPassLabel() {
         return passLabel;
     }
