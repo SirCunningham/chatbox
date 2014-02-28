@@ -11,10 +11,14 @@ public class Controller {
 
     private View view;
     private ArrayList<Client> clients;
-    private String backup;
+    private ArrayList<TabButton> tabButtons;
     private boolean tabLock = false;
-    int startEnc = 0;
-    int endEnc = 0;
+    private int tabCount = 1;
+    private int startEnc = 0;
+    private int endEnc = 0;
+    private String backup;
+    private String filePath;
+    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
 
     public Controller(View view) {
         this.view = view;
@@ -47,7 +51,7 @@ public class Controller {
     }
 
     public void updateTabButtonIndex(int index) {
-        for (TabButton button : view.getTabButtons()) {
+        for (TabButton button : tabButtons) {
             if (button.getIndex() > index) {
                 button.setIndex(button.getIndex() - 1);
             }
@@ -96,7 +100,7 @@ public class Controller {
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
         TabButton btnClose = new TabButton(view.getIcon(),
                 view.tabbedPane.getTabCount() - 1);
-        view.getTabButtons().add(btnClose);
+        tabButtons.add(btnClose);
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.addActionListener(new TabButtonListener());
 
@@ -157,8 +161,8 @@ public class Controller {
                 view.tabbedPane.setSelectedIndex(i);
                 view.tabbedPane.addTab("+", null, view.pane,
                         "Create a new chat");
-                view.tabCount += 1;
-                view.tabField.setText("Chat " + String.valueOf(view.tabCount));
+                tabCount += 1;
+                view.tabField.setText("Chat " + String.valueOf(tabCount));
                 tabLock = false;
             }
         }
@@ -303,7 +307,7 @@ public class Controller {
             if (newColor != null) {
                 view.nameField.setForeground(newColor);
                 view.messageField.setForeground(newColor);
-                view.color = Integer.toHexString(
+                color = Integer.toHexString(
                         newColor.getRGB()).substring(2);
             }
         }
@@ -318,7 +322,7 @@ public class Controller {
             int returnVal = chooser.showOpenDialog(view.chatBoxPanel);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
-                view.filePath = file.getAbsolutePath();
+                filePath = file.getAbsolutePath();
                 view.getFileField().setText(file.getName());
             }
         }
@@ -371,7 +375,7 @@ public class Controller {
                     view.tabbedPane.setSelectedIndex(index - 1);
                 }
                 view.tabbedPane.remove(index);
-                view.getTabButtons().remove(index);  //=>ButtonIndex=TabIndex
+                tabButtons.remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
                 if (clients.size() > 0) {
                     clients.get(index).kill();

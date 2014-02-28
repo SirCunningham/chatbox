@@ -42,6 +42,7 @@ public class View {
     JTextField fileField = new JTextField("filename.txt", 8);
     JTextField descriptionField = new JTextField("File description (optional)",
             15);
+    JProgressBar progressBar = new JProgressBar();
     // Fields must be multi-threaded
     
     private final JLabel encLabel = new JLabel("Int:");
@@ -66,10 +67,6 @@ public class View {
     JComboBox messageEncryptions;
     JComboBox fileEncryptions;
     JComboBox serverOptions;
-    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
-    String filePath;
-    int tabCount = 1;
-    private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private ImageIcon icon;
     Panel pane = new Panel();
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -164,6 +161,7 @@ public class View {
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);
+        rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
@@ -222,10 +220,6 @@ public class View {
 
     public JTabbedPane getTabbedPane() {
         return tabbedPane;
-    }
-
-    public ArrayList<TabButton> getTabButtons() {
-        return tabButtons;
     }
 
     public ImageIcon getIcon() {
