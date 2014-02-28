@@ -118,6 +118,9 @@ public class IOThread extends Thread {
         StyleConstants.setForeground(style, c);
 
         try {
+            XMLString XMLMsg=new XMLString(msg);
+            XMLMsg.handleString();
+            msg=XMLMsg.toText();
             doc.insertString(doc.getLength(), "\n" + msg, style);
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(null, "String insertion failed.",

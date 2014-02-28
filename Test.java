@@ -5,35 +5,14 @@ public class Test {
     public static void main(String[] args) {
         String test = encryptCaesar("men det är detta", 5);
         String test2 = encryptCaesar("och även detta", 10);
-        System.out.println(test2);
         String xmlTest = "<message sender=\"dante\"> <text color=\"asdfasf\"> Detta är inte krypterat "
                 + "<encrypted type=\"caesar\" key=\"5\">"+test+"</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">"+test2+"</encrypted></text></message>";
-        String msg="";
-        for (int i=0; i<xmlTest.length();i++) {
-            if (i==xmlTest.indexOf("<encrypted")) {
-                msg+=xmlTest.substring(0,i);
-                xmlTest = xmlTest.substring(i + 10);
-                String temp = xmlTest.substring(xmlTest.indexOf("\"")+1);
-                String type = temp.substring(0,temp.indexOf("\""));
-                String key = temp.substring(temp.indexOf("key")+5,
-                        temp.indexOf(">")-1);
-                String encryptedMsg=temp.substring(temp.indexOf(">")+1, temp.indexOf("</encrypted>"));
-                if (type.equals("caesar")) {
-                    msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
-                }
-                System.out.println(type);
-                System.out.println(key);
-                xmlTest=" "+xmlTest.substring(xmlTest.indexOf("</encrypted>")+12);
-                i=0;
-            }
-        }
-
-        System.out.println(msg);
+        System.out.println("<message></message>");
     }
     
 
-    public String handleString(String xmlMsg) {
+    public static String handleString(String xmlMsg) {
         String msg = "";
         for (int i = 0; i < xmlMsg.length(); i++) {
             if (i == xmlMsg.indexOf("<encrypted")) {
@@ -47,8 +26,6 @@ public class Test {
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
                 }
-                System.out.println(type);
-                System.out.println(key);
                 xmlMsg = " " + xmlMsg.substring(xmlMsg.indexOf("</encrypted>") + 12);
                 i = 0;
             }

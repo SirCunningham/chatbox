@@ -40,6 +40,7 @@ public class XMLString {
             }
         }
         msg += xmlStr;
+        xmlStr=msg;
     }
     public String decryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
