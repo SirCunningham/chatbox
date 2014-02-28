@@ -11,7 +11,8 @@ public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
     JPanel chatBoxPanel = new JPanel();
-    JPanel chatBoxButtonPanel = new JPanel();
+    JPanel messagePanel = new JPanel();
+    JPanel msgButtonPanel = new JPanel();
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
@@ -20,8 +21,8 @@ public class View {
     JPanel portPanel = new JPanel();
     JPanel passPanel = new JPanel();
     JPanel tabPanel = new JPanel();
-    JPanel networkButtonPanel = new JPanel();
     JPanel filePanel = new JPanel();
+    JPanel fileButtonPanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
     JPanel startPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
@@ -31,18 +32,19 @@ public class View {
     private final JLabel portLabel = new JLabel("Port:");
     private final JLabel passLabel = new JLabel("Password:");
     private final JLabel tabLabel = new JLabel("Chat name:");
-    private final JLabel encryptLabel = new JLabel("Encryption:");
+    private final JLabel encryptLabel1 = new JLabel("Encryption:");
+    private final JLabel encryptLabel2 = new JLabel("Encryption:");
     private final JLabel typeLabel = new JLabel("Type:");
-    JTextField IPField = new JTextField("127.0.0.1", 10);
-    JTextField portField = new JTextField("4444", 9);
-    JTextField passField = new JPasswordField("4hfJ/dc.5t", 9);
-    JTextField tabField = new JTextField("Chat 1", 9);
-    JTextField nameField = new JTextField("Dante", 5);
+    JTextField IPField = new JTextField("127.0.0.1", 25);
+    JTextField portField = new JTextField("4444", 24);
+    JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
+    JTextField tabField = new JTextField("Chat 1", 24);
+    JTextField nameField = new JTextField("Dante", 8);
     JTextField messageField = new JTextField("In medio cursu vitae"
-            + "nostrae, eram in silva obscura...", 40);
-    JTextField fileField = new JTextField("filename.txt", 8);
+            + "nostrae, eram in silva obscura...", 75);
+    JTextField fileField = new JTextField("filename.txt", 12);
     JTextField descriptionField = new JTextField("File description (optional)",
-            15);
+            25);
     JProgressBar progressBar = new JProgressBar();
     // Fields must be multi-threaded
     
@@ -122,15 +124,15 @@ public class View {
         encField.setVisible(false);
 
         chatBoxPanel.add(tabbedPane);
-        chatBoxButtonPanel.add(colorButton);
-        chatBoxButtonPanel.add(nameField);
-        chatBoxButtonPanel.add(messageField);
-        chatBoxButtonPanel.add(sendMsgButton);
-        chatBoxButtonPanel.add(encryptButton);
-        chatBoxButtonPanel.add(encryptLabel);
-        chatBoxButtonPanel.add(messageEncryptions);
-        chatBoxButtonPanel.add(encLabel);
-        chatBoxButtonPanel.add(encField);
+        messagePanel.add(colorButton);
+        messagePanel.add(nameField);
+        messagePanel.add(messageField);
+        msgButtonPanel.add(sendMsgButton);
+        msgButtonPanel.add(encryptButton);
+        msgButtonPanel.add(encryptLabel1);
+        msgButtonPanel.add(messageEncryptions);
+        msgButtonPanel.add(encLabel);
+        msgButtonPanel.add(encField);
         IPPanel.add(IPLabel);
         IPPanel.add(IPField);
         portPanel.add(portLabel);
@@ -141,17 +143,18 @@ public class View {
         passPanel.add(passField);
         tabPanel.add(tabLabel);
         tabPanel.add(tabField);
-        networkButtonPanel.add(startButton);
-        networkButtonPanel.add(connectButton);
         filePanel.add(fileButton);
         filePanel.add(fileField);
         filePanel.add(descriptionField);
-        filePanel.add(sendButton);
-        filePanel.add(fileEncryptions);
+        fileButtonPanel.add(sendButton);
+        fileButtonPanel.add(encryptLabel2);
+        fileButtonPanel.add(fileEncryptions);
+        fileColorExitPanel.add(connectButton);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         leftPanel.add(chatBoxPanel);
-        leftPanel.add(chatBoxButtonPanel);
+        leftPanel.add(messagePanel);
+        leftPanel.add(msgButtonPanel);
         startPanel.add(clientButton);
         startPanel.add(serverButton);
         dialogPanel.add(startPanel);
@@ -159,10 +162,11 @@ public class View {
         dialogPanel.add(portPanel);
         dialogPanel.add(passPanel);
         dialogPanel.add(tabPanel);
-        dialogPanel.add(networkButtonPanel);
+        dialogPanel.add(startButton);
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);
+        rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
         mainPanel.add(leftPanel);
