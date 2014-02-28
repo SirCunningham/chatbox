@@ -48,35 +48,31 @@ public class Controller {
     }
 
     public void disableConnection() {
-        /*
+        view.startButton.setEnabled(false);
         view.clientButton.setEnabled(false);
         view.serverButton.setEnabled(false);
         view.IPField.setEnabled(false);
         view.portField.setEnabled(false);
         view.serverOptions.setEnabled(false);
         view.passField.setEnabled(false);
-         * 
-         */
+
         view.connectButton.setEnabled(true);
         view.sendMsgButton.setEnabled(true);
     }
 
     //Replace by state boolean!
     public void enableConnection() {
+        view.startButton.setEnabled(true);
         view.clientButton.setEnabled(true);
         view.serverButton.setEnabled(true);
         view.IPField.setEnabled(true);
         view.portField.setEnabled(true);
         view.serverOptions.setEnabled(true);
         view.passField.setEnabled(true);
-        /*
+
         view.connectButton.setEnabled(false);
         view.sendMsgButton.setEnabled(false);
-         * 
-         */
-
-        view.clientButton.setBackground(null);
-        view.serverButton.setBackground(null);
+        view.startButton.setBackground(null);
     }
 
     public final JPanel createTabPanel() {

@@ -35,7 +35,7 @@ public class Server extends Thread {
                 // 'IOThread', som sedan behandlar resten av kommunikationen
                 try {
                     clientSocket = serverSocket.accept();
-                    IOThread thr = new IOThread(clientSocket, view, false);    //Varför false?
+                    IOThread thr = new IOThread(clientSocket, view, false);
                     thr.start();
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,
