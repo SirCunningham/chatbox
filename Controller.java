@@ -10,13 +10,18 @@ import java.util.*;
 public class Controller {
 
     private View view;
-    private ArrayList<Client> clients;
-    int startEnc = 0;
-    int endEnc = 0;
+    private ArrayList<Client> clients = new ArrayList<>();
+    private ArrayList<TabButton> tabButtons = new ArrayList<>();
+    private boolean tabLock = false;
+    private int tabCount = 1;
+    private int startEnc = 0;
+    private int endEnc = 0;
+    private String backup;
+    private String filePath;
+    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
 
     public Controller(View view) {
         this.view = view;
-        clients = new ArrayList<>();
         view.IPField.addFocusListener(new FieldListener());
         view.portField.addFocusListener(new FieldListener());
         view.passField.addFocusListener(new FieldListener());
@@ -24,6 +29,7 @@ public class Controller {
         view.nameField.addFocusListener(new FieldListener());
         view.messageField.addFocusListener(new FieldListener());
         view.fileField.addFocusListener(new FieldListener());
+        view.encField.addFocusListener(new FieldListener());
         view.descriptionField.addFocusListener(new FieldListener());
         view.startButton.addActionListener(new StartButtonListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
@@ -44,7 +50,7 @@ public class Controller {
     }
 
     public void updateTabButtonIndex(int index) {
-        for (TabButton button : view.getTabButtons()) {
+        for (TabButton button : tabButtons) {
             if (button.getIndex() > index) {
                 button.setIndex(button.getIndex() - 1);
             }
@@ -55,14 +61,17 @@ public class Controller {
         view.startButton.setEnabled(false);
         view.clientButton.setEnabled(false);
         view.serverButton.setEnabled(false);
-        view.IPField.setEnabled(false);
+        if (!view.serverButton.isSelected()) {
+            view.getIPLabel().setEnabled(false);
+            view.IPField.setEnabled(false);
+        }
+        view.getPortLabel().setEnabled(false);
         view.portField.setEnabled(false);
         view.serverOptions.setEnabled(false);
         view.passField.setEnabled(false);
 
         view.connectButton.setEnabled(true);
         view.sendMsgButton.setEnabled(true);
-        //view.encryptButton.setEnabled(true);
     }
 
     //Replace by state boolean!
@@ -70,24 +79,30 @@ public class Controller {
         view.startButton.setEnabled(true);
         view.clientButton.setEnabled(true);
         view.serverButton.setEnabled(true);
-        view.IPField.setEnabled(true);
+        if (!view.serverButton.isSelected()) {
+            view.getIPLabel().setEnabled(true);
+            view.IPField.setEnabled(true);
+        }
+        view.getPortLabel().setEnabled(true);
         view.portField.setEnabled(true);
         view.serverOptions.setEnabled(true);
         view.passField.setEnabled(true);
 
         view.connectButton.setEnabled(false);
         view.sendMsgButton.setEnabled(false);
-        //view.encryptButton.setEnabled(false);
         view.startButton.setBackground(null);
     }
 
     public final JPanel createTabPanel() {
+        JOptionPane.showOptionDialog(view.frame, view.dialogPanel, "Create a new chat",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+        
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
         TabButton btnClose = new TabButton(view.getIcon(),
                 view.tabbedPane.getTabCount() - 1);
-        view.getTabButtons().add(btnClose);
+        tabButtons.add(btnClose);
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.addActionListener(new TabButtonListener());
 
@@ -108,35 +123,38 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (endEnc > startEnc) {
-                String message = view.messageField.getText();
-                String a = "";
-                if (startEnc > 0) {
-                    a = message.substring(0, startEnc - 1);
+            // Skaffa ett lås eller liknande och se till att osparad text ej försvinner
+            if (view.encryptButton.isSelected()) {
+                if (endEnc > startEnc) {
+                    backup = view.messageField.getText();
+                    String newStr = new String();
+                    if (startEnc > 0) {
+                        newStr += backup.substring(0, startEnc - 1);
+                    }
+                    String key = view.encField.getText();
+                    String message = backup.substring(startEnc, endEnc);
+                    newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
+                            String.valueOf(view.messageEncryptions.getSelectedItem()),
+                            key, encryptCaesar(message, Integer.valueOf(key)));
+                    if (endEnc < backup.length()) {
+                        newStr += backup.substring(endEnc + 1);
+                    }
+                    view.messageField.setText(newStr);
                 }
-                String b = "";
-                if (endEnc < message.length())
-                    b = message.substring(endEnc + 1);
-                view.messageField.setText(a
-                        + "<encrypted type=\""
-                        + String.valueOf(view.messageEncryptions.getSelectedItem()).toLowerCase()
-                        + "\" key=\""
-                        + view.encField.getText() + "\">"
-                        + encryptCaesar(message.substring(startEnc, endEnc),Integer.valueOf(view.encField.getText()))
-                        + "</encrypted>" + b);
-                //Save unencrypted copy so that it can be undone!
+            } else {
+                //view.messageField.setText(backup);
             }
         }
     }
-    
+
     public class TabbedPaneListener implements ChangeListener {
 
         @Override
         public void stateChanged(ChangeEvent e) {
             int i = view.getTabbedPane().getSelectedIndex();
             int j = view.tabbedPane.getTabCount() - 1;
-            if (i == j && !view.tabLock) {
-                view.tabLock = true;
+            if (i == j && !tabLock) {
+                tabLock = true;
                 if (j >= 0) {
                     view.tabbedPane.remove(j);
                 }
@@ -145,9 +163,9 @@ public class Controller {
                 view.tabbedPane.setSelectedIndex(i);
                 view.tabbedPane.addTab("+", null, view.pane,
                         "Create a new chat");
-                view.tabCount += 1;
-                view.tabField.setText("Chat " + String.valueOf(view.tabCount));
-                view.tabLock = false;
+                tabCount += 1;
+                view.tabField.setText("Chat " + String.valueOf(tabCount));
+                tabLock = false;
             }
         }
     }
@@ -291,8 +309,7 @@ public class Controller {
             if (newColor != null) {
                 view.nameField.setForeground(newColor);
                 view.messageField.setForeground(newColor);
-                view.color = Integer.toHexString(
-                        newColor.getRGB()).substring(2);
+                color = Integer.toHexString(newColor.getRGB()).substring(2);
             }
         }
     }
@@ -306,7 +323,7 @@ public class Controller {
             int returnVal = chooser.showOpenDialog(view.chatBoxPanel);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
-                view.filePath = file.getAbsolutePath();
+                filePath = file.getAbsolutePath();
                 view.getFileField().setText(file.getName());
             }
         }
@@ -335,17 +352,14 @@ public class Controller {
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(
                     view.messageEncryptions.getSelectedItem());
-            if ("Caesar".equals(chosen) || "AES".equals(chosen)) {
-                view.getEncLabel().setVisible(true);
-                view.encField.setVisible(true);
-            } else {
-                view.getEncLabel().setVisible(false);
-                view.encField.setVisible(false);
-            }
             if ("None".equals(chosen)) {
                 view.encryptButton.setEnabled(false);
+                view.getEncLabel().setVisible(false);
+                view.encField.setVisible(false);
             } else {
                 view.encryptButton.setEnabled(true);
+                view.getEncLabel().setVisible(true);
+                view.encField.setVisible(true);
             }
         }
     }
@@ -362,7 +376,7 @@ public class Controller {
                     view.tabbedPane.setSelectedIndex(index - 1);
                 }
                 view.tabbedPane.remove(index);
-                view.getTabButtons().remove(index);  //=>ButtonIndex=TabIndex
+                tabButtons.remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
                 if (clients.size() > 0) {
                     clients.get(index).kill();
@@ -389,5 +403,4 @@ public class Controller {
         }
         return new String(chars);
     }
-
 }

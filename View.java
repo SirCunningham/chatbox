@@ -15,6 +15,7 @@ public class View {
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
+    JPanel dialogPanel = new JPanel();
     JPanel IPPanel = new JPanel();
     JPanel portPanel = new JPanel();
     JPanel passPanel = new JPanel();
@@ -42,6 +43,7 @@ public class View {
     JTextField fileField = new JTextField("filename.txt", 8);
     JTextField descriptionField = new JTextField("File description (optional)",
             15);
+    JProgressBar progressBar = new JProgressBar();
     // Fields must be multi-threaded
     
     private final JLabel encLabel = new JLabel("Int:");
@@ -54,7 +56,7 @@ public class View {
     
     ArrayList<JTextPane> chatBoxes= new ArrayList<>();
     JButton sendMsgButton = new JButton("Send message");
-    JButton encryptButton = new JButton("Encrypt selected"); //JToggleButton
+    JToggleButton encryptButton = new JToggleButton("Encrypt selected");
     JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
     JButton sendButton = new JButton("Send to selected");
@@ -66,11 +68,6 @@ public class View {
     JComboBox messageEncryptions;
     JComboBox fileEncryptions;
     JComboBox serverOptions;
-    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
-    String filePath;
-    boolean tabLock = false;
-    int tabCount = 1;
-    private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private ImageIcon icon;
     Panel pane = new Panel();
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -90,6 +87,7 @@ public class View {
         chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         //justera bilden åt höger
@@ -111,7 +109,7 @@ public class View {
         int[] select = {1, 3};
         list.setSelectedIndices(select);
         
-        String[] stringEncryptions = {"None", "Caesar", "AES", "RSA", "Mixed"};
+        String[] stringEncryptions = {"None", "caesar", "AES", "RSA", "blowfish"};
         messageEncryptions = new JComboBox(stringEncryptions);
         fileEncryptions = new JComboBox(stringEncryptions);
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
@@ -156,15 +154,16 @@ public class View {
         leftPanel.add(chatBoxButtonPanel);
         startPanel.add(clientButton);
         startPanel.add(serverButton);
-        rightPanel.add(startPanel);
-        rightPanel.add(IPPanel);
-        rightPanel.add(portPanel);
-        rightPanel.add(passPanel);
-        rightPanel.add(tabPanel);
-        rightPanel.add(networkButtonPanel);
+        dialogPanel.add(startPanel);
+        dialogPanel.add(IPPanel);
+        dialogPanel.add(portPanel);
+        dialogPanel.add(passPanel);
+        dialogPanel.add(tabPanel);
+        dialogPanel.add(networkButtonPanel);
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);
+        rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
@@ -204,6 +203,10 @@ public class View {
     public JTextField getFileField() {
         return fileField;
     }
+    
+    public JLabel getPortLabel() {
+        return portLabel;
+    }
 
     public JLabel getIPLabel() {
         return IPLabel;
@@ -219,10 +222,6 @@ public class View {
 
     public JTabbedPane getTabbedPane() {
         return tabbedPane;
-    }
-
-    public ArrayList<TabButton> getTabButtons() {
-        return tabButtons;
     }
 
     public ImageIcon getIcon() {

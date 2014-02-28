@@ -41,14 +41,6 @@ public class XMLString {
         }
         msg += xmlStr;
     }
-    
-    /*
-    public String processXMLString(String str) {
-        //Encryptions
-        
-    }
-     * 
-     */
     public String decryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
