@@ -118,7 +118,11 @@ public class Controller {
                 if (endEnc < message.length())
                     b = message.substring(endEnc + 1);
                 view.messageField.setText(a
-                        + "<encrypted>" + message.substring(startEnc, endEnc)
+                        + "<encrypted type=\""
+                        + String.valueOf(view.messageEncryptions.getSelectedItem()).toLowerCase()
+                        + "\" key=\""
+                        + view.encField.getText() + "\">"
+                        + message.substring(startEnc, endEnc)
                         + "</encrypted>" + b);
                 //Save unencrypted copy so that it can be undone!
             }
