@@ -25,7 +25,9 @@ public class IOThread extends Thread {
     // Konstruktor
     public IOThread(Socket sock, View view, boolean client) {
         clientSocket = sock;
-        view.sendMsgButton.addActionListener(new SendMsgButtonListener());
+        if (view.sendMsgButton.getActionListeners().length<1) {
+            view.sendMsgButton.addActionListener(new SendMsgButtonListener());
+        }
         this.view = view;
         this.isClient = client;
         controller = new Controller(view);
@@ -129,12 +131,14 @@ public class IOThread extends Thread {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("Count of listeners: " + ((JButton) e.getSource()).getActionListeners().length);
             // Skicka och visa i textrutan
             try {
                 out.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\">%s</text></message>",
                         view.nameField.getText(), view.color,
                         view.messageField.getText()));
+                
                 
                 appendToPane(
                         view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
