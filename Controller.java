@@ -166,7 +166,7 @@ public class Controller {
             source.select(0, 0);
         }
     }
-    
+
     // Starta klient eller server
     public class StartButtonListener implements ActionListener {
 
@@ -340,7 +340,7 @@ public class Controller {
             }
         }
     }
-    
+
     public class TabButtonListener implements ActionListener {
 
         @Override
@@ -362,5 +362,37 @@ public class Controller {
                 updateTabButtonIndex(index);
             }
         }
+    }
+
+    public static String encryptCaesar(String text, int shift) {
+        char[] chars = text.toCharArray();
+        for (int i = 0; i < text.length(); i++) {
+            char c = chars[i];
+            //Tag inte med control characters
+            if (c >= 32 && c <= 127) {
+                int x = c - 32;
+                x = (x + shift) % 96;
+                if (x < 0) {
+                    x += 96;
+                }
+                chars[i] = (char) (x + 32);
+            }
+        }
+        return new String(chars);
+    }
+    public static String decryptCaesar(String text, int shift) {
+        char[] chars = text.toCharArray();
+        for (int i = 0; i < text.length(); i++) {
+            char c = chars[i];
+            if (c >= 32 && c <= 127) {
+                int x = c - 32;
+                x = (x - shift) % 96;
+                if (x < 0) {
+                    x += 96;
+                }
+                chars[i] = (char) (x + 32);
+            }
+        }
+        return new String(chars);
     }
 }
