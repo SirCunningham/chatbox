@@ -10,7 +10,7 @@ import java.util.*;
 public class Controller {
 
     private View view;
-    private ArrayList<Client> clients;
+    private ArrayList<Client> clients = new ArrayList<>();
     private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private boolean tabLock = false;
     private int tabCount = 1;
@@ -22,7 +22,6 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        clients = new ArrayList<>();
         view.IPField.addFocusListener(new FieldListener());
         view.portField.addFocusListener(new FieldListener());
         view.passField.addFocusListener(new FieldListener());
