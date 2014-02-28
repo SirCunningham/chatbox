@@ -62,7 +62,7 @@ public class Controller {
 
         view.connectButton.setEnabled(true);
         view.sendMsgButton.setEnabled(true);
-        view.encryptButton.setEnabled(true);
+        //view.encryptButton.setEnabled(true);
     }
 
     //Replace by state boolean!
@@ -77,7 +77,7 @@ public class Controller {
 
         view.connectButton.setEnabled(false);
         view.sendMsgButton.setEnabled(false);
-        view.encryptButton.setEnabled(false);
+        //view.encryptButton.setEnabled(false);
         view.startButton.setBackground(null);
     }
 
@@ -341,6 +341,11 @@ public class Controller {
             } else {
                 view.getEncLabel().setVisible(false);
                 view.encField.setVisible(false);
+            }
+            if ("None".equals(chosen)) {
+                view.encryptButton.setEnabled(false);
+            } else {
+                view.encryptButton.setEnabled(true);
             }
         }
     }
