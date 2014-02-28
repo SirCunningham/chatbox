@@ -19,6 +19,36 @@ public class XMLString {
         String hexColor = xmlStr.substring(index + 7, index + 13);
         return Color.decode("#" + hexColor);
     }
+    
+    public void handleString() {
+        String msg = "";
+        for (int i = 0; i < xmlStr.length(); i++) {
+            if (i == xmlStr.indexOf("<encrypted")) {
+                msg += xmlStr.substring(0, i);
+                xmlStr = xmlStr.substring(i + 10);
+                String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
+                String type = temp.substring(0, temp.indexOf("\""));
+                String key = temp.substring(temp.indexOf("key") + 5,
+                        temp.indexOf(">") - 1);
+                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
+                        temp.indexOf("</encrypted>"));
+                if (type.equals("caesar")) {
+                    msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
+                }
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                i = 0;
+            }
+        }
+        msg += xmlStr;
+    }
+    
+    /*
+    public String processXMLString(String str) {
+        //Encryptions
+        
+    }
+     * 
+     */
     public String decryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
