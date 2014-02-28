@@ -7,7 +7,8 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import java.util.*;
 
-// Lägg till JRadioButton för val mellan klient/server!
+// Lägg till JRadioButton för val mellan klient/server ("join/create")!
+// Låt servern boota godtyckliga användare!
 // Ersätt vissa texfields med JPasswordField!
 public class View {
 
