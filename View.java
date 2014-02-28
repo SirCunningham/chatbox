@@ -10,6 +10,7 @@ import java.util.*;
 // Lägg till JRadioButton för val mellan klient/server ("join/create")!
 // Låt servern boota godtyckliga användare!
 // Ersätt vissa texfields med JPasswordField!
+// Markera del av text som skall krypteras, frivilligt!
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
