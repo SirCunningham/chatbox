@@ -22,7 +22,6 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-
         boolean successful = false;
         // Skapa socket för klienten
         try {
