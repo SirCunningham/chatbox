@@ -11,7 +11,7 @@ public class Controller {
 
     private View view;
     private ArrayList<Client> clients;
-    private ArrayList<TabButton> tabButtons;
+    private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private boolean tabLock = false;
     private int tabCount = 1;
     private int startEnc = 0;
@@ -307,8 +307,7 @@ public class Controller {
             if (newColor != null) {
                 view.nameField.setForeground(newColor);
                 view.messageField.setForeground(newColor);
-                color = Integer.toHexString(
-                        newColor.getRGB()).substring(2);
+                color = Integer.toHexString(newColor.getRGB()).substring(2);
             }
         }
     }
