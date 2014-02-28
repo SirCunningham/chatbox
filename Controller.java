@@ -125,20 +125,20 @@ public class Controller {
                     if (startEnc > 0) {
                         newStr += backup.substring(0, startEnc - 1);
                     }
+                    String key = view.encField.getText();
+                    String message = backup.substring(startEnc, endEnc);
                     newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
                             String.valueOf(view.messageEncryptions.getSelectedItem()),
-                            view.encField.getText(), backup.substring(startEnc, endEnc));
+                            key, encryptCaesar(message, Integer.valueOf(key)));
                     if (endEnc < backup.length()) {
                         newStr += backup.substring(endEnc + 1);
                     }
                     view.messageField.setText(newStr);
                 }
-            } else {
-                view.messageField.setText(backup);
             }
         }
     }
-    
+
     public class TabbedPaneListener implements ChangeListener {
 
         @Override
@@ -388,21 +388,6 @@ public class Controller {
             if (c >= 32 && c <= 127) {
                 int x = c - 32;
                 x = (x + shift) % 96;
-                if (x < 0) {
-                    x += 96;
-                }
-                chars[i] = (char) (x + 32);
-            }
-        }
-        return new String(chars);
-    }
-    public String decryptCaesar(String text, int shift) {
-        char[] chars = text.toCharArray();
-        for (int i = 0; i < text.length(); i++) {
-            char c = chars[i];
-            if (c >= 32 && c <= 127) {
-                int x = c - 32;
-                x = (x - shift) % 96;
                 if (x < 0) {
                     x += 96;
                 }
