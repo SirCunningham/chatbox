@@ -15,6 +15,7 @@ public class View {
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
+    JPanel dialogPanel = new JPanel();
     JPanel IPPanel = new JPanel();
     JPanel portPanel = new JPanel();
     JPanel passPanel = new JPanel();
@@ -86,6 +87,7 @@ public class View {
         chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         //justera bilden åt höger
@@ -152,12 +154,12 @@ public class View {
         leftPanel.add(chatBoxButtonPanel);
         startPanel.add(clientButton);
         startPanel.add(serverButton);
-        rightPanel.add(startPanel);
-        rightPanel.add(IPPanel);
-        rightPanel.add(portPanel);
-        rightPanel.add(passPanel);
-        rightPanel.add(tabPanel);
-        rightPanel.add(networkButtonPanel);
+        dialogPanel.add(startPanel);
+        dialogPanel.add(IPPanel);
+        dialogPanel.add(portPanel);
+        dialogPanel.add(passPanel);
+        dialogPanel.add(tabPanel);
+        dialogPanel.add(networkButtonPanel);
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);

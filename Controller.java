@@ -94,6 +94,9 @@ public class Controller {
     }
 
     public final JPanel createTabPanel() {
+        JOptionPane.showOptionDialog(view.frame, view.dialogPanel, "Create a new chat",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+        
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
