@@ -11,6 +11,8 @@ public class Controller {
 
     private View view;
     private ArrayList<Client> clients;
+    int startEnc = 0;
+    int endEnc = 0;
 
     public Controller(View view) {
         this.view = view;
@@ -31,9 +33,10 @@ public class Controller {
         view.fileButton.addActionListener(new FileButtonListener());
         view.colorButton.addActionListener(new ColorButtonListener());
         view.closeButton.addActionListener(new CloseButtonListener());
-        view.serverOptions.addActionListener(new ServerOptionsListener());
+        view.serverOptions.addItemListener(new ServerOptionsListener());
+        view.messageEncryptions.addItemListener(new EncryptionListener());
         view.tabbedPane.addChangeListener(new TabbedPaneListener());
-        view.messageEncryptions.addActionListener(new EncryptionListener());
+        view.encryptButton.addActionListener(new EncryptButtonListener());
         //view.tabbedPane.setTabComponentAt(0, createTabPanel(1));
 
         //Skapa nya knappar och fält för varje tabb!
@@ -59,6 +62,7 @@ public class Controller {
 
         view.connectButton.setEnabled(true);
         view.sendMsgButton.setEnabled(true);
+        view.encryptButton.setEnabled(true);
     }
 
     //Replace by state boolean!
@@ -73,6 +77,7 @@ public class Controller {
 
         view.connectButton.setEnabled(false);
         view.sendMsgButton.setEnabled(false);
+        view.encryptButton.setEnabled(false);
         view.startButton.setBackground(null);
     }
 
@@ -99,6 +104,27 @@ public class Controller {
         return pnlTab;
     }
 
+    public class EncryptButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (endEnc > startEnc) {
+                String message = view.messageField.getText();
+                String a = "";
+                if (startEnc > 0) {
+                    a = message.substring(0, startEnc - 1);
+                }
+                String b = "";
+                if (endEnc < message.length())
+                    b = message.substring(endEnc + 1);
+                view.messageField.setText(a
+                        + "<encrypted>" + message.substring(startEnc, endEnc)
+                        + "</encrypted>" + b);
+                //Save unencrypted copy so that it can be undone!
+            }
+        }
+    }
+    
     public class TabbedPaneListener implements ChangeListener {
 
         @Override
@@ -133,6 +159,10 @@ public class Controller {
         @Override
         public void focusLost(FocusEvent e) {
             JTextField source = (JTextField) e.getSource();
+            if (source == view.messageField) {
+                startEnc = source.getSelectionStart();
+                endEnc = source.getSelectionEnd();
+            }
             source.select(0, 0);
         }
     }
@@ -279,10 +309,10 @@ public class Controller {
     }
 
     //Gör så att den tomma platsen ockuperas!
-    public class ServerOptionsListener implements ActionListener {
+    public class ServerOptionsListener implements ItemListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(
                     view.serverOptions.getSelectedItem());
             if ("Protected".equals(chosen) || "Secret".equals(chosen)) {
@@ -295,10 +325,10 @@ public class Controller {
         }
     }
 
-    public class EncryptionListener implements ActionListener {
+    public class EncryptionListener implements ItemListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(
                     view.messageEncryptions.getSelectedItem());
             if ("Caesar".equals(chosen) || "AES".equals(chosen)) {
