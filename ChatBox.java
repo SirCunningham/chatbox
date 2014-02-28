@@ -1,6 +1,6 @@
 package chatbox;
 
-//Scrollen fungerar ej!
+//Scrollen fungerar ej - ibland!
 //Begränsa tabbarnas tjocklek!
 public class ChatBox {
 
