@@ -131,18 +131,19 @@ public class IOThread extends Thread {
         public void actionPerformed(ActionEvent e) {
             // Skicka och visa i textrutan
             try {
-                out.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\">%s</text></message>",
-                        view.nameField.getText(), view.color,
-                        view.messageField.getText()));
-                
-                appendToPane(
-                        view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
-                        String.format("%s: %s", view.nameField.getText(),
-                        view.messageField.getText()),
-                        Color.decode("#" + view.color));
-                view.messageField.setText("");
+                if (!view.messageField.getText().equals("")) {
+                    out.println(String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\">%s</text></message>",
+                            view.nameField.getText(), view.color,
+                            view.messageField.getText()));
 
+                    appendToPane(
+                            view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+                            String.format("%s: %s", view.nameField.getText(),
+                            view.messageField.getText()),
+                            Color.decode("#" + view.color));
+                    view.messageField.setText("");
+                }
             } catch (Exception ex) {
                 appendToPane(
                         view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
