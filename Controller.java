@@ -334,7 +334,7 @@ public class Controller {
         }
     }
 
-    public static String encryptCaesar(String text, int shift) {
+    public String encryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
@@ -350,7 +350,7 @@ public class Controller {
         }
         return new String(chars);
     }
-    public static String decryptCaesar(String text, int shift) {
+    public String decryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
