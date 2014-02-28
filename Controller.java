@@ -122,7 +122,7 @@ public class Controller {
                         + String.valueOf(view.messageEncryptions.getSelectedItem()).toLowerCase()
                         + "\" key=\""
                         + view.encField.getText() + "\">"
-                        + message.substring(startEnc, endEnc)
+                        + encryptCaesar(message.substring(startEnc, endEnc),Integer.valueOf(view.encField.getText()))
                         + "</encrypted>" + b);
                 //Save unencrypted copy so that it can be undone!
             }
