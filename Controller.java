@@ -135,6 +135,8 @@ public class Controller {
                     }
                     view.messageField.setText(newStr);
                 }
+            } else {
+                //view.messageField.setText(backup);
             }
         }
     }
