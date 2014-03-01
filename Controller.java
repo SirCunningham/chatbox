@@ -128,8 +128,9 @@ public class Controller {
                 if (endEnc > startEnc) {
                     backup = view.messageField.getText();
                     String newStr = new String();
+                    // Kolla om if-satser behövs!!!
                     if (startEnc > 0) {
-                        newStr += backup.substring(0, startEnc - 1);
+                        newStr += backup.substring(0, startEnc);
                     }
                     String key = view.encField.getText();
                     String message = backup.substring(startEnc, endEnc);
@@ -137,7 +138,7 @@ public class Controller {
                             String.valueOf(view.messageEncryptions.getSelectedItem()),
                             key, encryptCaesar(message, Integer.valueOf(key)));
                     if (endEnc < backup.length()) {
-                        newStr += backup.substring(endEnc + 1);
+                        newStr += backup.substring(endEnc);
                     }
                     view.messageField.setText(newStr);
                 }
