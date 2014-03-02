@@ -43,7 +43,8 @@ public class XMLString {
         xmlStr = msg;
     }
 
-    public String decryptCaesar(String text, int shift) {
+    public static String decryptCaesar(String text, int shift) {
+        text = hexToString(text);
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
@@ -57,5 +58,16 @@ public class XMLString {
             }
         }
         return new String(chars);
+    }
+
+    //stackoverflow.com/questions/4785654/convert-a-string-of-hex-into-ascii-in-java
+    public static String hexToString(String hex) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < hex.length(); i += 2) {
+            String str = hex.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+        return output.toString();
+
     }
 }

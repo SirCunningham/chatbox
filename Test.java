@@ -5,20 +5,30 @@ import javax.crypto.*;
 import java.security.*;
 import java.security.spec.*;
 import javax.crypto.spec.*;
-
+import java.math.*;
 
 public class Test {
 
     public static void main(String[] args) {
-        String test = encryptCaesar("men det är detta", 5);
-        String test2 = encryptCaesar("och även detta", 10);
+        String test="";
+        String test2="";
+        try {
+            test = encryptCaesar("men det är detta", 5);
+            test2 = encryptCaesar("och även detta", 10);
+
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
         String xmlTest = "<message sender=\"dante\"> <text color=\"asdfasf\"> Detta är inte krypterat "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
-        System.out.println("<message></message>");
+        System.out.println(test);
+        System.out.println(decryptCaesar(test,5));
+        String encMsg;
+        /*
         try {
-            String encMsg = encryptAES("Hej", "nyckel");
-            String msg = decryptAES(encMsg,"nyckel");
+            encMsg = encryptAES("Hej", "nyckel");
+            String msg = decryptAES(encMsg, "nyckel");
             System.out.println(msg);
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
@@ -35,6 +45,10 @@ public class Test {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
+         * 
+         */
+
+
 
 
     }
@@ -61,7 +75,7 @@ public class Test {
         return msg;
     }
 
-    public static String encryptCaesar(String text, int shift) {
+    public static String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
@@ -75,10 +89,11 @@ public class Test {
                 chars[i] = (char) (x + 32);
             }
         }
-        return new String(chars);
+        return stringToHex(new String(chars));
     }
 
     public static String decryptCaesar(String text, int shift) {
+        text=hexToString(text);
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
@@ -93,13 +108,30 @@ public class Test {
         }
         return new String(chars);
     }
+
+    //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
+    public static String stringToHex(String msg) throws UnsupportedEncodingException {
+        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
+    }                                                                                       //ISO-8859-1 fungerar för åäö
+
+    //stackoverflow.com/questions/4785654/convert-a-string-of-hex-into-ascii-in-java
+    public static String hexToString(String hex) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < hex.length(); i += 2) {
+            String str = hex.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+        return output.toString();
+        
+    }
+    /*
     //http://stackoverflow.com/questions/2568841/aes-encryption-java-invalid-key-length
 
     public static SecretKey getAESKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         String salt = "awefåoäj#¤(#¤?\"=!\"##¤#ia343å023iå3irjWFOEfm3R33OIJWFA"
                 + "WEÖFs";
-        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 1024, 256);  
+        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 2048, 256);
         SecretKey temp = factory.generateSecret(keySpec);
         SecretKey key = new SecretKeySpec(temp.getEncoded(), "AES");
         return key;
@@ -121,12 +153,15 @@ public class Test {
     public static String decryptAES(String encMsg, String key) throws
             NoSuchAlgorithmException, NoSuchPaddingException,
             InvalidKeySpecException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException {
+            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException{
         Cipher cipher = Cipher.getInstance("AES");
         SecretKey secretKey = getAESKey(key);
+
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        System.out.println(encMsg.getBytes().length);
-        String decMsg = new String(cipher.doFinal(encMsg.getBytes()));
+        System.out.println(new String(encMsg.getBytes()));
+        String decMsg = new String(cipher.doFinal(encMsg.getBytes(("UTF-8"))));
         return decMsg;
     }
+     * 
+     */
 }

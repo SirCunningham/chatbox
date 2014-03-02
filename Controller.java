@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 
 public class Controller {
@@ -134,9 +135,13 @@ public class Controller {
                     }
                     String key = view.encField.getText();
                     String message = backup.substring(startEnc, endEnc);
-                    newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
-                            String.valueOf(view.messageEncryptions.getSelectedItem()),
-                            key, encryptCaesar(message, Integer.valueOf(key)));
+                    try {
+                        newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
+                                String.valueOf(view.messageEncryptions.getSelectedItem()),
+                                key, encryptCaesar(message, Integer.valueOf(key)));
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    }
                     if (endEnc < backup.length()) {
                         newStr += backup.substring(endEnc);
                     }
@@ -391,7 +396,7 @@ public class Controller {
         }
     }
 
-    public String encryptCaesar(String text, int shift) {
+    public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
@@ -405,6 +410,11 @@ public class Controller {
                 chars[i] = (char) (x + 32);
             }
         }
-        return new String(chars);
+        return stringToHex(new String(chars));
     }
+    
+    //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
+    public static String stringToHex(String msg) throws UnsupportedEncodingException {
+        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
+    }    
 }
