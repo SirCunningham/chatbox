@@ -14,6 +14,7 @@ public class AESCrypto2 {
     private KeyGenerator AESgen;
     private SecretKeySpec AESkey;
     private SecretKeySpec decodeKey;
+    private String hexDecodeKey;
     private byte[] cipherData;
     private String msg;
     private String encMsg;
@@ -42,11 +43,12 @@ public class AESCrypto2 {
 
     }
 
-    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException {
+    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException, UnsupportedEncodingException {
         AESgen = KeyGenerator.getInstance("AES");
         AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
+        hexDecodeKey = stringToHex(decodeKey.getEncoded().toString());
         AEScipher = Cipher.getInstance("AES");
 
     }
@@ -70,8 +72,12 @@ public class AESCrypto2 {
         return encMsg;
     }
 
-    public String decrypt(String msg) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        AEScipher.init(Cipher.DECRYPT_MODE, decodeKey);
+    public String decrypt(String msg, String hexDecodeKey) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        try {
+            AEScipher.init(Cipher.DECRYPT_MODE, convertDecodeKey(hexDecodeKey));
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
         byte[] decryptedData = AEScipher.doFinal(cipherData);
         encMsg = msg;
         msg = hexToString(new String(decryptedData));
@@ -84,6 +90,14 @@ public class AESCrypto2 {
 
     public String getDecryptedMsg() {
         return msg;
+    }
+    public String getDecodeKey() throws UnsupportedEncodingException {
+        return hexDecodeKey;
+    }
+    public SecretKeySpec convertDecodeKey(String decodeKey) throws UnsupportedEncodingException {
+        byte[] data = decodeKey.getBytes("UTF-8");
+        SecretKeySpec key = new SecretKeySpec(data, 0, data.length, "AES");
+        return key;
     }
 
     public String stringToHex(String msg) throws UnsupportedEncodingException {
