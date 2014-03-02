@@ -108,18 +108,6 @@ public class Test {
         return new String(chars);
     }
 
-    public static String stringToHex2(String msg) throws UnsupportedEncodingException {
-        final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
-        byte[] b = msg.getBytes("UTF-8");
-        char[] chars = new char[2 * b.length];
-        for (int i = 0; i < b.length; ++i) {
-            chars[2 * i] = HEX_CHARS[(b[i] & 0xF0) >>> 4];
-            chars[2 * i + 1] = HEX_CHARS[b[i] & 0x0F];
-        }
-        return new String(chars);
-
-    }
-
     //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
     public static String stringToHex(String msg) throws UnsupportedEncodingException {
         return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase(); 
