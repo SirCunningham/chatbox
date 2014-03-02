@@ -19,7 +19,7 @@ public class XMLString {
         String hexColor = xmlStr.substring(index + 7, index + 13);
         return Color.decode("#" + hexColor);
     }
-    
+
     public void handleString() {
         String msg = "";
         for (int i = 0; i < xmlStr.length(); i++) {
@@ -35,13 +35,14 @@ public class XMLString {
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
                 }
-                xmlStr =" "+xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                 i = 0;
             }
         }
         msg += xmlStr;
-        xmlStr=msg;
+        xmlStr = msg;
     }
+
     public String decryptCaesar(String text, int shift) {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {

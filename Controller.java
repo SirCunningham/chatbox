@@ -162,7 +162,7 @@ public class Controller {
                 view.tabbedPane.addTab(null, view.createChatBox());
                 view.tabbedPane.setTabComponentAt(i, createTabPanel());
                 view.tabbedPane.setSelectedIndex(i);
-                view.tabbedPane.addTab("+", null, view.pane,
+                view.tabbedPane.addTab("+", null, new Panel(),
                         "Create a new chat");
                 tabCount += 1;
                 view.tabField.setText("Chat " + String.valueOf(tabCount));
@@ -379,10 +379,13 @@ public class Controller {
                 view.tabbedPane.remove(index);
                 tabButtons.remove(index);  //=>ButtonIndex=TabIndex
                 view.chatBoxes.remove(index);
+                /*
                 if (clients.size() > 0) {
                     clients.get(index).kill();
                     clients.remove(index);
                 }
+                 * 
+                 */
                 updateTabButtonIndex(index);
             }
         }
