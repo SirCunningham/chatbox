@@ -23,6 +23,9 @@ public class AESCrypto2 {
         try {
             AESCrypto2 a = new AESCrypto2("Hej");
             System.out.println(a.getEncryptedMsg());
+            a.encrypt("asdasdasd");
+            System.out.println(a.getEncryptedMsg());
+            System.out.println(a.getDecryptedMsg());
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         } catch (NoSuchPaddingException ex) {
@@ -39,11 +42,13 @@ public class AESCrypto2 {
 
     }
 
-    public AESCrypto2() throws NoSuchAlgorithmException {
+    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException {
         AESgen = KeyGenerator.getInstance("AES");
         AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
+        AEScipher = Cipher.getInstance("AES");
+
     }
 
     public AESCrypto2(String msg) throws NoSuchAlgorithmException,
@@ -56,16 +61,14 @@ public class AESCrypto2 {
     }
 
     public String encrypt(String msg) throws NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException,
-            UnsupportedEncodingException, IllegalBlockSizeException,
-            BadPaddingException {
-        Cipher AEScipher = Cipher.getInstance("AES");
+            InvalidKeyException, UnsupportedEncodingException,
+            IllegalBlockSizeException, BadPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
         cipherData = AEScipher.doFinal(msg.getBytes("UTF-8"));
+        this.msg = msg;
         encMsg = stringToHex(new String(cipherData));
         return encMsg;
     }
-    
 
     public String decrypt(String msg) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         AEScipher.init(Cipher.DECRYPT_MODE, decodeKey);
