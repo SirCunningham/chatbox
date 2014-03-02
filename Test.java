@@ -27,27 +27,29 @@ public class Test {
         System.out.println(test);
         System.out.println(decryptCaesar(test, 5));
         String encMsg;
-
+        /*
         try {
-            encMsg = encryptAES("89", "nyckel");
-            System.out.println(encMsg);
-            String msg = decryptAES(encMsg, "nyckel");
-            System.out.println(msg);
+        encMsg = encryptAES("89asdfasdfasdffsdfsdfdsffffffffd", "nyckel");
+        System.out.println(encMsg);
+        String msg = decryptAES(encMsg, "nyckel");
+        System.out.println(msg);
         } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (NoSuchPaddingException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (InvalidKeyException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (IllegalBlockSizeException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (BadPaddingException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (InvalidKeySpecException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         }
+         * 
+         */
 
 
 
@@ -75,6 +77,20 @@ public class Test {
         }
         msg += xmlMsg;
         return msg;
+    }
+
+    public static SecretKeySpec genereateAESKey() throws NoSuchAlgorithmException {
+        KeyGenerator AESgen = KeyGenerator.getInstance("AES");
+        AESgen.init(128);
+        SecretKeySpec AESkey = (SecretKeySpec) AESgen.generateKey();
+        return AESkey;
+    }
+
+    public static String encryptAES(String msg, SecretKeySpec key) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+        Cipher AEScipher = Cipher.getInstance("AES");
+        AEScipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] cipherData = AEScipher.doFinal(msg.getBytes("UTF-8"));
+        return stringToHex(new String(cipherData));
     }
 
     public static String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
@@ -110,9 +126,10 @@ public class Test {
 
     //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
     public static String stringToHex(String msg) throws UnsupportedEncodingException {
-        return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase(); 
-    }                                                                                       
+        return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase();
+    }
     //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
+
     public static String hexToString(String hex) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {
@@ -123,40 +140,44 @@ public class Test {
         String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
         return s;
     }
-
+    /*
+    
     //http://stackoverflow.com/questions/2568841/aes-encryption-java-invalid-key-length
-    public static SecretKey getAESKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        String salt = "asdasd3434";
-        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 2048, 256);
-        SecretKey temp = factory.generateSecret(keySpec);
-        SecretKey key = new SecretKeySpec(temp.getEncoded(), "AES");
-        return key;
+    public static SecretKey getAESKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException {
+    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+    String salt = "asdasd3434";
+    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes("UTF-8"), 2048, 128);
+    SecretKey temp = factory.generateSecret(keySpec);
+    SecretKey key = new SecretKeySpec(temp.getEncoded(), "AES");
+    return key;
     }
-
+    
     public static String encryptAES(String msg, String key) throws
-            NoSuchAlgorithmException, NoSuchPaddingException,
-            InvalidKeyException, IllegalBlockSizeException,
-            BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException {
-        SecretKey secret = getAESKey(key);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-        cipher.init(Cipher.ENCRYPT_MODE, secret);
-        byte[] byteMsg = cipher.doFinal(msg.getBytes("UTF-8"));
-        //final String encryptedString = new BASE64Encoder().encode(byteMsg);//Base64.encodeBase64String(cipher.doFinal(msg.getBytes()));
-        return stringToHex(new String(byteMsg));
+    NoSuchAlgorithmException, NoSuchPaddingException,
+    InvalidKeyException, IllegalBlockSizeException,
+    BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException {
+    SecretKey secret = getAESKey(key);
+    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+    cipher.init(Cipher.ENCRYPT_MODE, secret);
+    System.out.println(msg.getBytes("UTF-8").length);
+    byte[] byteMsg = cipher.doFinal(msg.getBytes());
+    //final String encryptedString = new BASE64Encoder().encode(byteMsg);//Base64.encodeBase64String(cipher.doFinal(msg.getBytes()));
+    return stringToHex(new String(byteMsg));
     }
-
+    
     public static String decryptAES(String encMsg, String key) throws
-            NoSuchAlgorithmException, NoSuchPaddingException,
-            InvalidKeySpecException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-        encMsg = hexToString(encMsg);
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-        SecretKey secretKey = getAESKey(key);
-
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        System.out.println(new String(encMsg.getBytes()));
-        String decMsg = new String(cipher.doFinal(encMsg.getBytes(("UTF-8"))));
-        return decMsg;
+    NoSuchAlgorithmException, NoSuchPaddingException,
+    InvalidKeySpecException, InvalidKeyException,
+    IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+    encMsg = hexToString(encMsg);
+    Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+    SecretKey secretKey = getAESKey(key);
+    
+    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+    System.out.println(new String(encMsg.getBytes()));
+    String decMsg = new String(cipher.doFinal(encMsg.getBytes()));
+    return decMsg;
     }
+     * 
+     */
 }
