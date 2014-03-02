@@ -22,11 +22,10 @@ public class AESCrypto2 {
     public static void main(String[] args) {
 
         try {
-            AESCrypto2 a = new AESCrypto2("Hej");
-            System.out.println(a.getEncryptedMsg());
-            a.encrypt("asdasdasd");
-            System.out.println(a.getEncryptedMsg());
-            System.out.println(a.getDecryptedMsg());
+            AESCrypto2 a = new AESCrypto2();
+            a.encrypt("Hej");
+            String msg = a.getEncryptedMsg();
+            a.decrypt(msg, a.getDecodeKey());
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         } catch (NoSuchPaddingException ex) {
@@ -43,14 +42,20 @@ public class AESCrypto2 {
 
     }
 
-    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException, UnsupportedEncodingException {
+    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException,
+            UnsupportedEncodingException {
         AESgen = KeyGenerator.getInstance("AES");
         AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = stringToHex(decodeKey.getEncoded().toString());
+  
+        //System.out.println(hexToString(hexDecodeKey));
+        //System.out.println(decodeKey.getEncoded());
+        SecretKeySpec key2 = new SecretKeySpec(hexDecodeKey.getBytes("UTF-8"), 0, decodeKey.getEncoded().length, "AES");
+        SecretKeySpec key = convertDecodeKey(hexDecodeKey);
+        System.out.println(decodeKey.equals(key2));
         AEScipher = Cipher.getInstance("AES");
-
     }
 
     public AESCrypto2(String msg) throws NoSuchAlgorithmException,
@@ -72,13 +77,15 @@ public class AESCrypto2 {
         return encMsg;
     }
 
-    public String decrypt(String msg, String hexDecodeKey) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public String decrypt(String msg, String hexDecodeKey) throws
+            InvalidKeyException, IllegalBlockSizeException,
+            BadPaddingException, UnsupportedEncodingException {
         try {
             AEScipher.init(Cipher.DECRYPT_MODE, convertDecodeKey(hexDecodeKey));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
-        byte[] decryptedData = AEScipher.doFinal(cipherData);
+        byte[] decryptedData = AEScipher.doFinal(hexToString(msg).getBytes("UTF-8"));
         encMsg = msg;
         msg = hexToString(new String(decryptedData));
         return msg;
@@ -91,21 +98,27 @@ public class AESCrypto2 {
     public String getDecryptedMsg() {
         return msg;
     }
-    public String getDecodeKey() throws UnsupportedEncodingException {
+
+    public String getDecodeKey() {
         return hexDecodeKey;
     }
+
+    public SecretKeySpec getKey() {
+        return decodeKey;
+    }
+
     public SecretKeySpec convertDecodeKey(String decodeKey) throws UnsupportedEncodingException {
-        byte[] data = decodeKey.getBytes("UTF-8");
+        byte[] data = (hexToString(decodeKey)).getBytes("UTF-8");
         SecretKeySpec key = new SecretKeySpec(data, 0, data.length, "AES");
         return key;
     }
 
-    public String stringToHex(String msg) throws UnsupportedEncodingException {
-        return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase();
+    public static String stringToHex(String msg) throws UnsupportedEncodingException {
+        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();
     }
 
     //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
-    public String hexToString(String hex) {
+    public static String hexToString(String hex) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {
             String str = hex.substring(i, i + 2);
