@@ -1,6 +1,8 @@
 package chatbox;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 public class XMLString {
 
@@ -60,14 +62,15 @@ public class XMLString {
         return new String(chars);
     }
 
-    //stackoverflow.com/questions/4785654/convert-a-string-of-hex-into-ascii-in-java
+    //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
     public static String hexToString(String hex) {
-        StringBuilder output = new StringBuilder();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {
             String str = hex.substring(i, i + 2);
-            output.append((char) Integer.parseInt(str, 16));
+            int byteVal = Integer.parseInt(str, 16);
+            baos.write(byteVal);
         }
-        return output.toString();
-
+        String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
+        return s;
     }
 }

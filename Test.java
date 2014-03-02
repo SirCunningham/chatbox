@@ -1,17 +1,19 @@
 package chatbox;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import javax.crypto.*;
 import java.security.*;
 import java.security.spec.*;
 import javax.crypto.spec.*;
 import java.math.*;
+import java.nio.charset.Charset;
 
 public class Test {
 
     public static void main(String[] args) {
-        String test="";
-        String test2="";
+        String test = "";
+        String test2 = "";
         try {
             test = encryptCaesar("men det är detta", 5);
             test2 = encryptCaesar("och även detta", 10);
@@ -23,11 +25,12 @@ public class Test {
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         System.out.println(test);
-        System.out.println(decryptCaesar(test,5));
+        System.out.println(decryptCaesar(test, 5));
         String encMsg;
-        /*
+
         try {
-            encMsg = encryptAES("Hej", "nyckel");
+            encMsg = encryptAES("89", "nyckel");
+            System.out.println(encMsg);
             String msg = decryptAES(encMsg, "nyckel");
             System.out.println(msg);
         } catch (NoSuchAlgorithmException ex) {
@@ -45,8 +48,7 @@ public class Test {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
-         * 
-         */
+
 
 
 
@@ -79,58 +81,65 @@ public class Test {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
-            //Tag inte med control characters
-            if (c >= 32 && c <= 127) {
-                int x = c - 32;
-                x = (x + shift) % 96;
-                if (x < 0) {
-                    x += 96;
-                }
-                chars[i] = (char) (x + 32);
+
+            int x = c;
+            x = (x + shift) % 255;
+            if (x < 0) {
+                x += 255;
             }
+            chars[i] = (char) x;
         }
         return stringToHex(new String(chars));
     }
 
     public static String decryptCaesar(String text, int shift) {
-        text=hexToString(text);
+        text = hexToString(text);
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
             char c = chars[i];
-            if (c >= 32 && c <= 127) {
-                int x = c - 32;
-                x = (x - shift) % 96;
-                if (x < 0) {
-                    x += 96;
-                }
-                chars[i] = (char) (x + 32);
+
+            int x = c;
+            x = (x - shift) % 255;
+            if (x < 0) {
+                x += 255;
             }
+            chars[i] = (char) x;
         }
         return new String(chars);
     }
 
+    public static String stringToHex2(String msg) throws UnsupportedEncodingException {
+        final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+        byte[] b = msg.getBytes("UTF-8");
+        char[] chars = new char[2 * b.length];
+        for (int i = 0; i < b.length; ++i) {
+            chars[2 * i] = HEX_CHARS[(b[i] & 0xF0) >>> 4];
+            chars[2 * i + 1] = HEX_CHARS[b[i] & 0x0F];
+        }
+        return new String(chars);
+
+    }
+
     //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
     public static String stringToHex(String msg) throws UnsupportedEncodingException {
-        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
-    }                                                                                       //ISO-8859-1 fungerar för åäö
-
-    //stackoverflow.com/questions/4785654/convert-a-string-of-hex-into-ascii-in-java
+        return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase(); 
+    }                                                                                       
+    //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
     public static String hexToString(String hex) {
-        StringBuilder output = new StringBuilder();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {
             String str = hex.substring(i, i + 2);
-            output.append((char) Integer.parseInt(str, 16));
+            int byteVal = Integer.parseInt(str, 16);
+            baos.write(byteVal);
         }
-        return output.toString();
-        
+        String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
+        return s;
     }
-    /*
-    //http://stackoverflow.com/questions/2568841/aes-encryption-java-invalid-key-length
 
+    //http://stackoverflow.com/questions/2568841/aes-encryption-java-invalid-key-length
     public static SecretKey getAESKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        String salt = "awefåoäj#¤(#¤?\"=!\"##¤#ia343å023iå3irjWFOEfm3R33OIJWFA"
-                + "WEÖFs";
+        String salt = "asdasd3434";
         KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 2048, 256);
         SecretKey temp = factory.generateSecret(keySpec);
         SecretKey key = new SecretKeySpec(temp.getEncoded(), "AES");
@@ -142,19 +151,19 @@ public class Test {
             InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException {
         SecretKey secret = getAESKey(key);
-
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
         byte[] byteMsg = cipher.doFinal(msg.getBytes("UTF-8"));
         //final String encryptedString = new BASE64Encoder().encode(byteMsg);//Base64.encodeBase64String(cipher.doFinal(msg.getBytes()));
-        return new String(byteMsg);
+        return stringToHex(new String(byteMsg));
     }
 
     public static String decryptAES(String encMsg, String key) throws
             NoSuchAlgorithmException, NoSuchPaddingException,
             InvalidKeySpecException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException{
-        Cipher cipher = Cipher.getInstance("AES");
+            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+        encMsg = hexToString(encMsg);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
         SecretKey secretKey = getAESKey(key);
 
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -162,6 +171,4 @@ public class Test {
         String decMsg = new String(cipher.doFinal(encMsg.getBytes(("UTF-8"))));
         return decMsg;
     }
-     * 
-     */
 }
