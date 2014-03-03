@@ -41,7 +41,7 @@ public class View {
             25);
     JProgressBar progressBar = new JProgressBar();
     private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
-    // Fields must be multi-threaded
+
     // Possible to do ArrayList.toArray() to add items dynamically
     // Use getSelected...
     String[] items = {"User 1", "User 2", "User 3", "User 4"};
@@ -73,16 +73,12 @@ public class View {
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
-        //justera bilden åt höger
         try {
             icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
         } catch (IOException e) {
             System.err.println("Filen kunde inte hittas");
             e.printStackTrace();
         }
-
-        //lägg till ruta för deltagare
-        //tabbedPane.addTab(null, createChatBox());
 
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);

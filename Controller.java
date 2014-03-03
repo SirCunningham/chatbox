@@ -31,7 +31,6 @@ public class Controller {
         view.fileButton.addActionListener(new FileButtonListener());
         view.closeButton.addActionListener(new CloseButtonListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
-        //view.tabbedPane.setTabComponentAt(0, createTabPanel(1));
 
         //Skapa nya knappar och fält för varje tabb!
     }
@@ -103,7 +102,6 @@ public class Controller {
                     view.tabbedPane.insertTab(null, null, messageBox, view.tabField.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
-                    //view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
                     tabCount += 1;
                     view.tabField.setText("Chat " + String.valueOf(tabCount));
                     view.startButton.setBackground(null);
