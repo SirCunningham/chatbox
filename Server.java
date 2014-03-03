@@ -15,12 +15,12 @@ public class Server implements Runnable {
 
     private int port;
     private View view;
-    private Controller controller;
+    private MessageBox messageBox;
 
-    public Server(int port, View view) {
+    public Server(int port, View view, MessageBox messageBox) {
         this.port = port;
         this.view = view;
-        controller = new Controller(view);
+        this.messageBox = messageBox;
     }
 
     public void run() {
@@ -35,8 +35,8 @@ public class Server implements Runnable {
                 // 'IOThread', som sedan behandlar resten av kommunikationen
                 try {
                     clientSocket = serverSocket.accept();
-                    IOThread thr = new IOThread(clientSocket, view, false);
-                    thr.run();
+                    Thread thr = new Thread(new IOThread(clientSocket, false, view, messageBox));
+                    thr.start();
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,
                             String.format("Accept failed "
@@ -48,9 +48,6 @@ public class Server implements Runnable {
             JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
                     + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
-        } finally {
-            controller.enableConnection();
         }
     }
-
 }
