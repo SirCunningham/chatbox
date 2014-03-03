@@ -9,26 +9,23 @@ public class Client implements Runnable {
 
     private String IP;
     private int port;
-    private View proj;
-    private Controller controller;
-    private IOThread thr;
+    private View view;
+    private MessageBox messageBox;
 
-    public Client(String IP, int port, View proj) {
+    public Client(String IP, int port, View view, MessageBox messageBox) {
         this.IP = IP;
         this.port = port;
-        this.proj = proj;
-        controller = new Controller(proj);
+        this.view = view;
+        this.messageBox = messageBox;
     }
 
     @Override
     public void run() {
-        boolean successful = false;
         // Skapa socket för klienten
         try {
             Socket clientSocket = new Socket(IP, port);
-            thr = new IOThread(clientSocket, proj, true);
-            thr.run();
-            successful = true;
+            Thread thr = new Thread(new IOThread(clientSocket, true, view, messageBox));
+            thr.start();
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, "Don't know about host.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
@@ -37,12 +34,5 @@ public class Client implements Runnable {
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
         }
-
-        if (!successful) {
-            controller.enableConnection();
-        }
-    }
-    public void kill() {
-        thr.kill();
     }
 }

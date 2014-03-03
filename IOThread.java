@@ -17,18 +17,17 @@ public class IOThread implements Runnable {
     private BufferedReader in;
     private Socket clientSocket;
     private View view;
-    private Controller controller;
+    private MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
-    private volatile boolean tabLock = false;
 
     // Konstruktor
-    public IOThread(Socket sock, View view, boolean client) {
+    public IOThread(Socket sock, boolean client, View view, MessageBox messageBox) {
         clientSocket = sock;
-        view.sendMsgButton.addActionListener(new SendMsgButtonListener());
         this.view = view;
+        this.messageBox = messageBox;
         this.isClient = client;
-        controller = new Controller(view);
+        messageBox.sendButton.addActionListener(new SendMsgButtonListener());
     }
 
     @Override
@@ -43,9 +42,6 @@ public class IOThread implements Runnable {
         } catch (IOException e) {
             appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
                     "ERROR: Failed to create an output stream", Color.RED);
-            if (isClient) {
-                controller.enableConnection();
-            }
             return;
         }
         try {
@@ -54,9 +50,6 @@ public class IOThread implements Runnable {
         } catch (IOException e) {
             appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
                     "ERROR: Failed to create an input stream", Color.RED);
-            if (isClient) {
-                controller.enableConnection();
-            }
             return;
         }
 
@@ -81,9 +74,6 @@ public class IOThread implements Runnable {
                             view.tabbedPane.getSelectedIndex()),
                             String.format("INFO: %s disconnected",
                             clientSocket.getInetAddress()), Color.BLUE);
-                    if (isClient) {
-                        controller.enableConnection();
-                    }
                     isNotRunnable = true;
                 } else {
                     appendToPane(view.chatBoxes.get(
@@ -118,9 +108,9 @@ public class IOThread implements Runnable {
         StyleConstants.setForeground(style, c);
 
         try {
-            XMLString XMLMsg=new XMLString(msg);
+            XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
-            msg=XMLMsg.toText();
+            msg = XMLMsg.toText();
             doc.insertString(doc.getLength(), "\n" + msg, style);
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(null, "String insertion failed.",
@@ -134,18 +124,18 @@ public class IOThread implements Runnable {
         public void actionPerformed(ActionEvent e) {
             // Skicka och visa i textrutan
             try {
-                if (!view.messageField.getText().equals("")) {
+                if (!messageBox.messageField.getText().equals("")) {
                     out.println(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
-                            view.nameField.getText(), controller.color,
-                            view.messageField.getText()));
+                            messageBox.nameField.getText(), messageBox.color,
+                            messageBox.messageField.getText()));
 
                     appendToPane(
                             view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
-                            String.format("%s: %s", view.nameField.getText(),
-                            view.messageField.getText()),
-                            Color.decode("#" + controller.color));
-                    view.messageField.setText("");
+                            String.format("%s: %s", messageBox.nameField.getText(),
+                            messageBox.messageField.getText()),
+                            Color.decode("#" + messageBox.color));
+                    messageBox.messageField.setText("");
                 }
             } catch (Exception ex) {
                 appendToPane(
