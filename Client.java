@@ -5,7 +5,7 @@ import java.net.*;
 import javax.swing.*;
 
 // Kill client when the server disconnects to avoid duplicates!!
-public class Client extends Thread {
+public class Client implements Runnable {
 
     private String IP;
     private int port;
@@ -27,7 +27,7 @@ public class Client extends Thread {
         try {
             Socket clientSocket = new Socket(IP, port);
             thr = new IOThread(clientSocket, proj, true);
-            thr.start();
+            thr.run();
             successful = true;
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, "Don't know about host.",

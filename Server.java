@@ -11,7 +11,7 @@ import javax.swing.*;
  * En ny tråd startas för varje anslutande klient
  * och programmet körs till det stängs av utifrån
  */
-public class Server extends Thread {
+public class Server implements Runnable {
 
     private int port;
     private View view;
@@ -36,7 +36,7 @@ public class Server extends Thread {
                 try {
                     clientSocket = serverSocket.accept();
                     IOThread thr = new IOThread(clientSocket, view, false);
-                    thr.start();
+                    thr.run();
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,
                             String.format("Accept failed "

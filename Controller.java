@@ -171,13 +171,13 @@ public class Controller {
                     view.startButton.setBackground(Color.RED);
                     Server thr = new Server(Integer.parseInt(
                             view.getPortField().getText()), view);
-                    thr.start();
+                    thr.run();
                 } else {
                     view.startButton.setBackground(Color.GREEN);
                     Client thr = new Client(view.getIPField().getText(),
                             Integer.parseInt(view.getPortField().getText()),
                             view);
-                    thr.start();
+                    thr.run();
                     clients.add(thr);
                 }
                  */
