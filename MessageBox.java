@@ -21,6 +21,7 @@ class MessageBox extends JPanel {
     JComboBox cipherBox = new JComboBox(cipherString);
     JLabel keyLabel = new JLabel("Key:");
     JTextField keyField = new JTextField("68", 5);
+    JCheckBox keyBox = new JCheckBox("Send key", true);
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     int startEnc;
     int endEnc;
@@ -55,12 +56,14 @@ class MessageBox extends JPanel {
         keyLabel.setVisible(false);
         keyField.setVisible(false);
         keyField.addFocusListener(new FieldListener());
+        keyBox.setVisible(false);
         buttonPanel.add(sendButton);
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
         buttonPanel.add(cipherBox);
         buttonPanel.add(keyLabel);
         buttonPanel.add(keyField);
+        buttonPanel.add(keyBox);
         add(buttonPanel);
     }
 
@@ -117,9 +120,15 @@ class MessageBox extends JPanel {
                     String key = keyField.getText();
                     String message = backup.substring(startEnc, endEnc);
                     try {
-                        newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
+                        if (keyBox.isSelected()) {
+                            newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
                                 String.valueOf(cipherBox.getSelectedItem()),
                                 key, encryptCaesar(message, Integer.valueOf(key)));
+                        } else {
+                            newStr += String.format("<encrypted type=\"%s\">%s</encrypted>",
+                                    String.valueOf(cipherBox.getSelectedItem()),
+                                    encryptCaesar(message, Integer.valueOf(key)));
+                        }
                     } catch (UnsupportedEncodingException ex) {
                         ex.printStackTrace();
                     }
