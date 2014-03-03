@@ -12,7 +12,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
-public class AESCrypto2 {
+public class AESCrypto3 {
 
     private Cipher AEScipher;
     private KeyGenerator AESgen;
@@ -26,7 +26,7 @@ public class AESCrypto2 {
 
     public static void main(String[] args) {
         try {
-            AESCrypto2 a = new AESCrypto2();
+            AESCrypto3 a = new AESCrypto3();
             a.encrypt("Hello!");
             try {
                 a.decrypt(a.getEncryptedMsg(), a.getDecodeKey());
@@ -49,17 +49,17 @@ public class AESCrypto2 {
 
     }
 
-    public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException,
+    public AESCrypto3() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
         AESgen = KeyGenerator.getInstance("AES");
         AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = keyToString(decodeKey);
-        AEScipher = Cipher.getInstance("AES/ECB/NoPadding");
+        AEScipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     }
 
-    public AESCrypto2(String msg) throws NoSuchAlgorithmException,
+    public AESCrypto3(String msg) throws NoSuchAlgorithmException,
             NoSuchPaddingException, InvalidKeyException,
             UnsupportedEncodingException, IllegalBlockSizeException,
             BadPaddingException {
@@ -71,10 +71,10 @@ public class AESCrypto2 {
             InvalidKeyException, UnsupportedEncodingException,
             IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
-        cipherData = AEScipher.doFinal(handleString(msg.getBytes("UTF-8")));
+        cipherData = AEScipher.doFinal(msg.getBytes("UTF-8"));
 
         this.msg = msg;
-        encMsg = stringToHex(new String(cipherData));
+        encMsg = byteArrayToHex(cipherData);
         return encMsg;
     }
 
@@ -82,8 +82,9 @@ public class AESCrypto2 {
             InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException, UnsupportedEncodingException,
             NoSuchAlgorithmException, NoSuchPaddingException, DecoderException {
-        AEScipher.init(Cipher.DECRYPT_MODE, stringToKey(hexDecodeKey));
-        byte[] decryptedData = AEScipher.doFinal(handleString(hexToString(msg).getBytes()));
+        SecretKeySpec key = stringToKey(hexDecodeKey);
+        AEScipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decryptedData = AEScipher.doFinal(hexToByteArray(msg));
         encMsg = msg;
         msg = new String(decryptedData);
         System.out.println(msg);
@@ -106,16 +107,6 @@ public class AESCrypto2 {
         return decodeKey;
     }
 
-    //AEScipher requires that 16 divides the length of b
-    public static byte[] handleString(byte[] b) throws UnsupportedEncodingException {
-        byte[] temp = b;
-        if (temp.length % 16 != 0) {
-            byte[] byteMsg = Arrays.copyOf(temp, temp.length + 16 - (temp.length % 16));
-            return byteMsg;
-        }
-        return temp;
-    }
-
     public static String keyToString(SecretKeySpec key) {
         String decoded = Hex.encodeHexString(key.getEncoded());
         return decoded;
@@ -126,11 +117,11 @@ public class AESCrypto2 {
         return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
     }
 
-    public static String stringToHex(String msg) throws UnsupportedEncodingException {
-        return Hex.encodeHexString(msg.getBytes("UTF-8"));
+    public static String byteArrayToHex(byte[] bytes) throws UnsupportedEncodingException {
+        return Hex.encodeHexString(bytes);
     }
 
-    public static String hexToString(String msg) throws DecoderException {
-        return new String(Hex.decodeHex(msg.toCharArray()));
+    public static byte[] hexToByteArray(String hex) throws DecoderException {
+        return Hex.decodeHex(hex.toCharArray());
     }
 }
