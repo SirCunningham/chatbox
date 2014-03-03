@@ -112,37 +112,29 @@ class MessageBox extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Skaffa ett lås eller liknande och se till att osparad text ej försvinner
+            // Bugg: markera krypterad text, hamna utanför index
             if (cipherButton.isSelected()) {
-                if (endEnc > startEnc) {
+                if (startEnc < endEnc) {
                     backup = messageField.getText();
-                    String newStr = new String();
-                    // Kolla om if-satser behövs!!!
-                    if (startEnc > 0) {
-                        newStr += backup.substring(0, startEnc);
-                    }
+                    String string = new String();
                     String key = keyField.getText();
-                    String message = backup.substring(startEnc, endEnc);
+                    String keyString = new String();
+                    if (keyBox.isSelected()) {
+                        keyString = String.format(" key=\"%s\"", key);
+                    }
                     try {
-                        if (keyBox.isSelected()) {
-                            newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
-                                    String.valueOf(cipherBox.getSelectedItem()),
-                                    key, encryptCaesar(message, Integer.valueOf(key)));
-                        } else {
-                            newStr += String.format("<encrypted type=\"%s\">%s</encrypted>",
-                                    String.valueOf(cipherBox.getSelectedItem()),
-                                    encryptCaesar(message, Integer.valueOf(key)));
-                        }
+                        string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
+                                backup.substring(0, startEnc),
+                                String.valueOf(cipherBox.getSelectedItem()),
+                                keyString, encryptCaesar(backup.substring(startEnc,
+                                endEnc), Integer.valueOf(key)), backup.substring(endEnc));
                     } catch (UnsupportedEncodingException ex) {
                         ex.printStackTrace();
                     }
-                    if (endEnc < backup.length()) {
-                        newStr += backup.substring(endEnc);
-                    }
-                    messageField.setText(newStr);
+                    messageField.setText(string);
                 }
             } else {
-                //view.messageField.setText(backup);
+                messageField.setText(backup);
             }
         }
     }
