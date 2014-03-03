@@ -112,25 +112,27 @@ class MessageBox extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Skaffa ett lås eller liknande och se till att osparad text ej försvinner
+            // Bugg: markera krypterad text, hamna utanför index
             if (cipherButton.isSelected()) {
-                backup = messageField.getText();
-                String string = new String();
-                String key = keyField.getText();
-                String keyString = new String();
-                if (keyBox.isSelected()) {
-                    keyString = String.format(" key=\"%s\"", key);
+                if (startEnc < endEnc) {
+                    backup = messageField.getText();
+                    String string = new String();
+                    String key = keyField.getText();
+                    String keyString = new String();
+                    if (keyBox.isSelected()) {
+                        keyString = String.format(" key=\"%s\"", key);
+                    }
+                    try {
+                        string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
+                                backup.substring(0, startEnc),
+                                String.valueOf(cipherBox.getSelectedItem()),
+                                keyString, encryptCaesar(backup.substring(startEnc,
+                                endEnc), Integer.valueOf(key)), backup.substring(endEnc));
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    }
+                    messageField.setText(string);
                 }
-                try {
-                    string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
-                            backup.substring(0, startEnc),
-                            String.valueOf(cipherBox.getSelectedItem()),
-                            keyString, encryptCaesar(backup.substring(startEnc,
-                            endEnc), Integer.valueOf(key)), backup.substring(endEnc));
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
-                messageField.setText(string);
             } else {
                 messageField.setText(backup);
             }
