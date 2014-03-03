@@ -2,14 +2,31 @@ package chatbox;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import org.apache.commons.codec.DecoderException;
 
 public class XMLString {
 
     private String xmlStr;
+    private AESCrypto AES;
 
     public XMLString(String xmlStr) {
         this.xmlStr = xmlStr;
+        try {
+            AES = new AESCrypto();
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        } catch (NoSuchPaddingException ex) {
+            ex.printStackTrace();
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public String toText() {
@@ -36,6 +53,24 @@ public class XMLString {
                         temp.indexOf("</encrypted>"));
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
+                } else if (type.equals("AES")) {
+                    try {
+                        msg += AES.decrypt(encryptedMsg, key);
+                    } catch (InvalidKeyException ex) {
+                        ex.printStackTrace();
+                    } catch (IllegalBlockSizeException ex) {
+                        ex.printStackTrace();
+                    } catch (BadPaddingException ex) {
+                        ex.printStackTrace();
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    } catch (NoSuchAlgorithmException ex) {
+                        ex.printStackTrace();
+                    } catch (NoSuchPaddingException ex) {
+                        ex.printStackTrace();
+                    } catch (DecoderException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                 i = 0;

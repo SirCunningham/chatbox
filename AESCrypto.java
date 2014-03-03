@@ -52,7 +52,7 @@ public class AESCrypto {
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
         AESgen = KeyGenerator.getInstance("AES");
-        AESgen.init(128);
+        AESgen.init(256);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = keyToString(decodeKey);
@@ -72,7 +72,6 @@ public class AESCrypto {
             IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
         cipherData = AEScipher.doFinal(msg.getBytes("UTF-8"));
-
         this.msg = msg;
         encMsg = byteArrayToHex(cipherData);
         return encMsg;
@@ -87,7 +86,6 @@ public class AESCrypto {
         byte[] decryptedData = AEScipher.doFinal(hexToByteArray(msg));
         encMsg = msg;
         msg = new String(decryptedData);
-        System.out.println(msg);
         return msg;
     }
 
@@ -101,10 +99,6 @@ public class AESCrypto {
 
     public String getDecodeKey() {
         return hexDecodeKey;
-    }
-
-    public SecretKeySpec getKey() {
-        return decodeKey;
     }
 
     public static String keyToString(SecretKeySpec key) {

@@ -2,6 +2,8 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;

@@ -4,6 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
 
@@ -11,6 +16,7 @@ class MessageBox extends JPanel {
 
     private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
     private View view;
+    private AESCrypto AES;
     IconButton colorButton = new IconButton("colorIcon.png");
     JTextField nameField = new JTextField("Dante", 8);
     JTextField messageField = new JTextField("In medio cursu vitae"
@@ -109,7 +115,33 @@ class MessageBox extends JPanel {
     }
 
     class CipherButtonListener implements ActionListener {
-
+        private String encrypt(String type, String text, String key) {
+            if (type.equals("caesar")) {
+                try {
+                    int k = Integer.valueOf(key);
+                    return encryptCaesar(text,k);
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                }
+            } else if (type.equals("AES")) {
+                try {
+                    AES.encrypt(text);
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                } catch (InvalidKeyException ex) {
+                    ex.printStackTrace();
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                } catch (IllegalBlockSizeException ex) {
+                    ex.printStackTrace();
+                } catch (BadPaddingException ex) {
+                    ex.printStackTrace();
+                } catch (NoSuchPaddingException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return null;
+        }
         @Override
         public void actionPerformed(ActionEvent e) {
             // Bugg: markera krypterad text, hamna utanför index
@@ -138,6 +170,7 @@ class MessageBox extends JPanel {
             }
         }
     }
+
 
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
