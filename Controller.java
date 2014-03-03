@@ -164,8 +164,11 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean success = true;
+
             try {
+                /*
                 disableConnection();
+                
                 if (view.serverButton.isSelected()) {
                     view.startButton.setBackground(Color.RED);
                     Server thr = new Server(Integer.parseInt(
@@ -179,6 +182,8 @@ public class Controller {
                     thr.start();
                     clients.add(thr);
                 }
+                 * 
+                 */
             } catch (Exception ex) {
                 success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
