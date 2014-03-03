@@ -48,12 +48,12 @@ public class AESCrypto2 {
 
     public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
-        AESgen = KeyGenerator.getInstance("AES");
+        AESgen = KeyGenerator.getInstance( "AES");
         AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = stringToHex(new String(decodeKey.getEncoded()));
-        AEScipher = Cipher.getInstance("AES");
+        AEScipher = Cipher.getInstance("AES/CBC/NoPadding");
     }
 
     public AESCrypto2(String msg) throws NoSuchAlgorithmException,
