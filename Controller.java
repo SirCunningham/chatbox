@@ -163,6 +163,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            boolean success = true;
             try {
                 disableConnection();
                 if (view.serverButton.isSelected()) {
@@ -178,15 +179,20 @@ public class Controller {
                     thr.start();
                     clients.add(thr);
                 }
-                int index = view.tabbedPane.getTabCount() - 1;
-                view.tabbedPane.insertTab(null, null, view.createChatBox(), view.tabField.getText(), index);
-                view.tabbedPane.setTabComponentAt(index, createTabPanel());
-                view.tabbedPane.setSelectedIndex(index);
-                view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
-                tabCount += 1;
-                view.tabField.setText("Chat " + String.valueOf(tabCount));
             } catch (Exception ex) {
+                success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
+            } finally {
+                if (success) {
+                    //kill idling threads here!
+                    int index = view.tabbedPane.getTabCount() - 1;
+                    view.tabbedPane.insertTab(null, null, view.createChatBox(), view.tabField.getText(), index);
+                    view.tabbedPane.setTabComponentAt(index, createTabPanel());
+                    view.tabbedPane.setSelectedIndex(index);
+                    view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
+                    tabCount += 1;
+                    view.tabField.setText("Chat " + String.valueOf(tabCount));
+                }
             }
         }
     }
