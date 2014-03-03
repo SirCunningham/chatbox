@@ -31,8 +31,6 @@ public class Controller {
         view.fileButton.addActionListener(new FileButtonListener());
         view.closeButton.addActionListener(new CloseButtonListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
-
-        //Skapa nya knappar och fält för varje tabb!
     }
 
     public final JPanel createTabPanel() {        
