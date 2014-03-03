@@ -41,7 +41,7 @@ public class IOThread extends Thread {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                     "ERROR: Failed to create an output stream", Color.RED);
             if (isClient) {
                 controller.enableConnection();
@@ -52,7 +52,7 @@ public class IOThread extends Thread {
             in = new BufferedReader(new InputStreamReader(
                     clientSocket.getInputStream()));
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                     "ERROR: Failed to create an input stream", Color.RED);
             if (isClient) {
                 controller.enableConnection();
@@ -62,11 +62,11 @@ public class IOThread extends Thread {
 
         // Kommer vi hit har anslutningen gått bra
         if (isClient) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                     "SUCCESS: Connection successful", Color.GREEN);
         } else {
             // Skriv ut IP-nummret från klienten
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                     String.format("SUCCESS: Connection established with %s",
                     clientSocket.getInetAddress()), Color.GREEN);
         }
@@ -78,7 +78,7 @@ public class IOThread extends Thread {
                 String echo = in.readLine();
                 if (echo == null) {
                     appendToPane(view.chatBoxes.get(
-                            view.tabbedPane.getSelectedIndex()),
+                            view.tabbedPane2.getSelectedIndex()),
                             String.format("INFO: %s disconnected",
                             clientSocket.getInetAddress()), Color.BLUE);
                     if (isClient) {
@@ -87,12 +87,12 @@ public class IOThread extends Thread {
                     isNotRunnable = true;
                 } else {
                     appendToPane(view.chatBoxes.get(
-                            view.tabbedPane.getSelectedIndex()), echo,
+                            view.tabbedPane2.getSelectedIndex()), echo,
                             new XMLString(echo).toColor());
                 }
             } catch (IOException e) {
                 appendToPane(view.chatBoxes.get(
-                        view.tabbedPane.getSelectedIndex()),
+                        view.tabbedPane2.getSelectedIndex()),
                         "ERROR: Communication failed", Color.RED);
             }
         }
@@ -102,7 +102,7 @@ public class IOThread extends Thread {
             out.close();
             clientSocket.close();
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                     "ERROR: Failed to close connection", Color.RED);
         }
     }
@@ -141,7 +141,7 @@ public class IOThread extends Thread {
                             view.messageField.getText()));
 
                     appendToPane(
-                            view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+                            view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                             String.format("%s: %s", view.nameField.getText(),
                             view.messageField.getText()),
                             Color.decode("#" + controller.color));
@@ -149,7 +149,7 @@ public class IOThread extends Thread {
                 }
             } catch (Exception ex) {
                 appendToPane(
-                        view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+                        view.chatBoxes.get(view.tabbedPane2.getSelectedIndex()),
                         "ERROR: Output stream failed", Color.RED);
             }
         }

@@ -71,13 +71,12 @@ public class View {
     JComboBox fileEncryptions;
     JComboBox serverOptions;
     private ImageIcon icon;
-    Panel pane = new Panel();
-    JTabbedPane tabbedPane = new JTabbedPane();
+    JTabbedPane tabbedPane2 = new JTabbedPane();
 
     // Skapa GUI
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tabbedPane.setFocusable(false);
+        tabbedPane2.setFocusable(false);
         sendMsgButton.setEnabled(false);
         encryptButton.setEnabled(false);
         connectButton.setEnabled(false);
@@ -90,7 +89,7 @@ public class View {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane2.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         //justera bilden åt höger
         try {
@@ -122,8 +121,10 @@ public class View {
         
         encLabel.setVisible(false);
         encField.setVisible(false);
-
-        chatBoxPanel.add(tabbedPane);
+        
+        tabbedPane2.addTab("+", null, dialogPanel, "Create a new chat");
+        
+        chatBoxPanel.add(tabbedPane2);
         messagePanel.add(colorButton);
         messagePanel.add(nameField);
         messagePanel.add(messageField);
@@ -191,11 +192,6 @@ public class View {
 
     }
 
-    //close tab when close image is clicked
-    public void removeTab(int i) {
-        tabbedPane.remove(i);
-    }
-
     public JTextField getPortField() {
         return portField;
     }
@@ -222,10 +218,6 @@ public class View {
     
     public JLabel getPassLabel() {
         return passLabel;
-    }
-
-    public JTabbedPane getTabbedPane() {
-        return tabbedPane;
     }
 
     public ImageIcon getIcon() {
