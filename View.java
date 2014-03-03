@@ -71,12 +71,12 @@ public class View {
     JComboBox fileEncryptions;
     JComboBox serverOptions;
     private ImageIcon icon;
-    JTabbedPane tabbedPane2 = new JTabbedPane();
+    JTabbedPane tabbedPane = new JTabbedPane();
 
     // Skapa GUI
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tabbedPane2.setFocusable(false);
+        tabbedPane.setFocusable(false);
         sendMsgButton.setEnabled(false);
         encryptButton.setEnabled(false);
         connectButton.setEnabled(false);
@@ -89,7 +89,7 @@ public class View {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-        tabbedPane2.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         //justera bilden åt höger
         try {
@@ -122,9 +122,9 @@ public class View {
         encLabel.setVisible(false);
         encField.setVisible(false);
         
-        tabbedPane2.addTab("+", null, dialogPanel, "Create a new chat");
+        tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
         
-        chatBoxPanel.add(tabbedPane2);
+        chatBoxPanel.add(tabbedPane);
         messagePanel.add(colorButton);
         messagePanel.add(nameField);
         messagePanel.add(messageField);

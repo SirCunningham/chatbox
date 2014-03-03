@@ -84,15 +84,12 @@ public class Controller {
         view.startButton.setBackground(null);
     }
 
-    public final JPanel createTabPanel() {
-        //JOptionPane.showOptionDialog(view.frame, view.dialogPanel, "Create a new chat",
-        //        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
-        
+    public final JPanel createTabPanel() {        
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
         TabButton btnClose = new TabButton(view.getIcon(),
-                view.tabbedPane2.getTabCount() - 2);
+                view.tabbedPane.getTabCount() - 2);
         tabButtons.add(btnClose);
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.addActionListener(new TabButtonListener());
@@ -101,7 +98,6 @@ public class Controller {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
-
         pnlTab.add(lblTitle, gbc);
 
         gbc.gridx++;
@@ -168,7 +164,6 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                /**
                 disableConnection();
                 if (view.serverButton.isSelected()) {
                     view.startButton.setBackground(Color.RED);
@@ -183,12 +178,11 @@ public class Controller {
                     thr.start();
                     clients.add(thr);
                 }
-                **/
-                int index = view.tabbedPane2.getTabCount() - 1;
-                view.tabbedPane2.insertTab(null, null, view.createChatBox(), view.tabField.getText(), index);
-                view.tabbedPane2.setTabComponentAt(index, createTabPanel());
-                view.tabbedPane2.setSelectedIndex(index);
-                view.tabbedPane2.addTab("+", null, view.dialogPanel, "Create a new chat");
+                int index = view.tabbedPane.getTabCount() - 1;
+                view.tabbedPane.insertTab(null, null, view.createChatBox(), view.tabField.getText(), index);
+                view.tabbedPane.setTabComponentAt(index, createTabPanel());
+                view.tabbedPane.setSelectedIndex(index);
+                view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
                 tabCount += 1;
                 view.tabField.setText("Chat " + String.valueOf(tabCount));
             } catch (Exception ex) {
@@ -352,11 +346,10 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             TabButton button = (TabButton) e.getSource();
             int index = button.getIndex();
-            if (index == view.tabbedPane2.getTabCount() - 2) {
-                view.tabbedPane2.setSelectedIndex(index - 1);
+            if (index == view.tabbedPane.getTabCount() - 2) {
+                view.tabbedPane.setSelectedIndex(index - 1);
             }
-            System.out.println(index);
-            view.tabbedPane2.remove(index);
+            view.tabbedPane.remove(index);
             tabButtons.remove(index);
             view.chatBoxes.remove(index);
             for (TabButton button1 : tabButtons) {
