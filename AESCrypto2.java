@@ -30,12 +30,16 @@ public class AESCrypto2 {
             AESCrypto2 a = new AESCrypto2();
             a.encrypt("Hej");
             String msg = a.getEncryptedMsg();
-            String hexkey = a.getDecodeKey();
-            SecretKeySpec t1;
+            String dstr = a.getDecodeKey();
             try {
-                t1 = a.convertDecodeKey(hexkey);
-                SecretKeySpec t2 = a.convertDecodeKey(hexkey);
-                System.out.println(t1.equals(t2));
+                SecretKeySpec key1 = a.getKey();
+                SecretKeySpec key2 = a.stringToKey(dstr);
+                System.out.println(key1.equals(key2));
+            } catch (DecoderException ex) {
+                ex.printStackTrace();
+            }
+
+            try {
                 a.decrypt(msg, a.getDecodeKey());
             } catch (DecoderException ex) {
                 ex.printStackTrace();
@@ -62,8 +66,7 @@ public class AESCrypto2 {
         AESgen.init(256);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
-
-        hexDecodeKey = stringToHex(new String(decodeKey.getEncoded()));
+        hexDecodeKey = keyToString(decodeKey);
         AEScipher = Cipher.getInstance("AES");
     }
 
@@ -80,7 +83,7 @@ public class AESCrypto2 {
             InvalidKeyException, UnsupportedEncodingException,
             IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
-        cipherData = AEScipher.doFinal(handleMsg(msg));
+        cipherData = AEScipher.doFinal(msg.getBytes());
         this.msg = msg;
         encMsg = stringToHex(new String(cipherData));
         return encMsg;
@@ -88,13 +91,11 @@ public class AESCrypto2 {
 
     public String decrypt(String msg, String hexDecodeKey) throws
             InvalidKeyException, IllegalBlockSizeException,
-            BadPaddingException, UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, DecoderException {
-        try {
-            AEScipher.init(Cipher.DECRYPT_MODE, convertDecodeKey(hexDecodeKey));
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
-        }
-        byte[] decryptedData = AEScipher.doFinal(handleMsg(hexToString(msg)));
+            BadPaddingException, UnsupportedEncodingException,
+            NoSuchAlgorithmException, NoSuchPaddingException, DecoderException {
+        AEScipher.init(Cipher.DECRYPT_MODE, stringToKey(hexDecodeKey));
+
+        byte[] decryptedData = AEScipher.doFinal(handleString(hexToString(msg)));
         encMsg = msg;
         msg = hexToString(new String(decryptedData));
         return msg;
@@ -116,52 +117,30 @@ public class AESCrypto2 {
         return decodeKey;
     }
 
-    public static byte[] handleMsg(String msg) throws UnsupportedEncodingException {
-        byte[] tempByte = msg.getBytes(Charset.forName("UTF-8"));
-        if (tempByte.length % 16 != 0) {
-            byte[] msgByte = Arrays.copyOf(tempByte, tempByte.length + 16 - (tempByte.length % 16));
-            return msgByte;
+    public static byte[] handleString(String msg) throws UnsupportedEncodingException {
+        byte[] temp = msg.getBytes("UTF-8");
+        if (temp.length % 16 != 0) {
+            byte[] byteMsg = Arrays.copyOf(temp, temp.length+16-(temp.length%16));
+            return byteMsg;
         }
-        return tempByte;
+        return temp;
     }
 
-    public static SecretKeySpec convertDecodeKey(String hexDecodeKey) throws UnsupportedEncodingException, DecoderException {
-        String temp = hexToString(hexDecodeKey);
-        byte[] data = handleMsg(temp);
-        SecretKeySpec key = new SecretKeySpec(data, 0, data.length, "AES");
-        return key;
+    public static String keyToString(SecretKeySpec key) {
+        String decoded = Hex.encodeHexString(key.getEncoded());
+        return decoded;
     }
 
-    public static String stringToHex(String msg) {
-        return new String(Hex.encodeHex(msg.getBytes()));
+    public static SecretKeySpec stringToKey(String key) throws DecoderException {
+        byte[] decodedKey = Hex.decodeHex(key.toCharArray());
+        return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+    }
+
+    public static String stringToHex(String msg) throws UnsupportedEncodingException {
+        return new String(Hex.encodeHex(msg.getBytes("UTF-8")));
     }
 
     public static String hexToString(String msg) throws DecoderException {
         return new String(Hex.decodeHex(msg.toCharArray()));
     }
-    /*
-    public static String stringToHex(String msg) throws UnsupportedEncodingException {
-    String str = String.format("%x", new BigInteger(1, msg.getBytes(Charset.forName("UTF-8")))).toUpperCase();
-    System.out.println(str.length());
-    return String.format("%x", new BigInteger(1, msg.getBytes(Charset.forName("UTF-8")))).toUpperCase();
-    }
-    
-    //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
-    public static String hexToString(String hex) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    for (int i = 0; i < hex.length(); i += 2) {
-    String str = "";
-    if (i + 2 < hex.length()) {
-    str = hex.substring(i, i + 2);
-    } else {
-    str = hex.substring(i, i + 1);
-    }
-    int byteVal = Integer.parseInt(str, 16);
-    baos.write(byteVal);
-    }
-    String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
-    return s;
-    }
-     * 
-     */
 }
