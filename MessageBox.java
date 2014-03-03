@@ -44,6 +44,7 @@ class MessageBox extends JPanel {
         colorButton.addActionListener(new ColorButtonListener());
         nameField.addFocusListener(new FieldListener());
         messageField.addFocusListener(new FieldListener());
+        messageField.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
         messagePanel.add(nameField);
         messagePanel.add(messageField);
@@ -125,8 +126,8 @@ class MessageBox extends JPanel {
                     try {
                         if (keyBox.isSelected()) {
                             newStr += String.format("<encrypted type=\"%s\" key=\"%s\">%s</encrypted>",
-                                String.valueOf(cipherBox.getSelectedItem()),
-                                key, encryptCaesar(message, Integer.valueOf(key)));
+                                    String.valueOf(cipherBox.getSelectedItem()),
+                                    key, encryptCaesar(message, Integer.valueOf(key)));
                         } else {
                             newStr += String.format("<encrypted type=\"%s\">%s</encrypted>",
                                     String.valueOf(cipherBox.getSelectedItem()),
@@ -179,6 +180,24 @@ class MessageBox extends JPanel {
                 endEnc = source.getSelectionEnd();
             }
             source.select(0, 0);
+        }
+    }
+
+    class MessageListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                sendButton.doClick();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
         }
     }
 }

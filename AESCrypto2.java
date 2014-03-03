@@ -63,11 +63,11 @@ public class AESCrypto2 {
     public AESCrypto2() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
         AESgen = KeyGenerator.getInstance("AES");
-        AESgen.init(256);
+        AESgen.init(128);
         AESkey = (SecretKeySpec) AESgen.generateKey();
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = keyToString(decodeKey);
-        AEScipher = Cipher.getInstance("AES");
+        AEScipher = Cipher.getInstance("AES/ECB/NoPadding ");
     }
 
     public AESCrypto2(String msg) throws NoSuchAlgorithmException,
@@ -75,7 +75,6 @@ public class AESCrypto2 {
             UnsupportedEncodingException, IllegalBlockSizeException,
             BadPaddingException {
         this();
-        this.msg = msg;
         encrypt(msg);
     }
 
@@ -83,7 +82,7 @@ public class AESCrypto2 {
             InvalidKeyException, UnsupportedEncodingException,
             IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
-        cipherData = AEScipher.doFinal(msg.getBytes());
+        cipherData = AEScipher.doFinal(handleString(msg));
         this.msg = msg;
         encMsg = stringToHex(new String(cipherData));
         return encMsg;
@@ -94,10 +93,10 @@ public class AESCrypto2 {
             BadPaddingException, UnsupportedEncodingException,
             NoSuchAlgorithmException, NoSuchPaddingException, DecoderException {
         AEScipher.init(Cipher.DECRYPT_MODE, stringToKey(hexDecodeKey));
-
         byte[] decryptedData = AEScipher.doFinal(handleString(hexToString(msg)));
         encMsg = msg;
-        msg = hexToString(new String(decryptedData));
+        msg = new String(decryptedData);
+        System.out.println(msg);
         return msg;
     }
 
@@ -120,7 +119,7 @@ public class AESCrypto2 {
     public static byte[] handleString(String msg) throws UnsupportedEncodingException {
         byte[] temp = msg.getBytes("UTF-8");
         if (temp.length % 16 != 0) {
-            byte[] byteMsg = Arrays.copyOf(temp, temp.length+16-(temp.length%16));
+            byte[] byteMsg = Arrays.copyOf(temp, temp.length + 16 - (temp.length % 16));
             return byteMsg;
         }
         return temp;
@@ -137,7 +136,7 @@ public class AESCrypto2 {
     }
 
     public static String stringToHex(String msg) throws UnsupportedEncodingException {
-        return new String(Hex.encodeHex(msg.getBytes("UTF-8")));
+        return Hex.encodeHexString(msg.getBytes("UTF-8"));
     }
 
     public static String hexToString(String msg) throws DecoderException {
