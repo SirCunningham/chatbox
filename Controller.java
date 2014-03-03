@@ -166,24 +166,23 @@ public class Controller {
             boolean success = true;
 
             try {
-                /*
+
                 disableConnection();
                 
                 if (view.serverButton.isSelected()) {
                     view.startButton.setBackground(Color.RED);
                     Server thr = new Server(Integer.parseInt(
                             view.getPortField().getText()), view);
-                    thr.start();
+                    thr.run();
                 } else {
                     view.startButton.setBackground(Color.GREEN);
                     Client thr = new Client(view.getIPField().getText(),
                             Integer.parseInt(view.getPortField().getText()),
                             view);
-                    thr.start();
+                    thr.run();
                     clients.add(thr);
                 }
-                 * 
-                 */
+
             } catch (Exception ex) {
                 success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
@@ -194,7 +193,7 @@ public class Controller {
                     view.tabbedPane.insertTab(null, null, view.createChatBox(), view.tabField.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
-                    view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
+                    //view.tabbedPane.addTab("+", null, view.dialogPanel, "Create a new chat");
                     tabCount += 1;
                     view.tabField.setText("Chat " + String.valueOf(tabCount));
                 }
@@ -357,7 +356,7 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             TabButton button = (TabButton) e.getSource();
             int index = button.getIndex();
-            if (index == view.tabbedPane.getTabCount() - 2) {
+            if (index == view.tabbedPane.getTabCount() - 2 && index != 0) {
                 view.tabbedPane.setSelectedIndex(index - 1);
             }
             view.tabbedPane.remove(index);

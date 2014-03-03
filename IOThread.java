@@ -10,7 +10,7 @@ import java.awt.event.*;
 /**
  * Tråd för input- och outputströmmar
  */
-public class IOThread extends Thread {
+public class IOThread implements Runnable {
 
     // Fält för strömmar
     private PrintWriter out;
