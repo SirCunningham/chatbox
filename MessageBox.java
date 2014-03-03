@@ -92,14 +92,17 @@ class MessageBox extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
+            // Use a state vector!!!
             if ("None".equals(chosen)) {
                 cipherButton.setEnabled(false);
                 keyLabel.setVisible(false);
                 keyField.setVisible(false);
+                keyBox.setVisible(false);
             } else {
                 cipherButton.setEnabled(true);
                 keyLabel.setVisible(true);
                 keyField.setVisible(true);
+                keyBox.setVisible(true);
             }
         }
     }
