@@ -20,11 +20,8 @@ public class XMLString {
         this.xmlStr = xmlStr;
         try {
             AES = new AESCrypto();
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchPaddingException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException
+                | UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
     }
@@ -51,26 +48,20 @@ public class XMLString {
                         temp.indexOf("&gt") - 1);
                 String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
                         temp.indexOf("&lt/encrypted&gt"));
-                if (type.equals("caesar")) {
-                    msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
-                } else if (type.equals("AES")) {
-                    try {
-                        msg += AES.decrypt(encryptedMsg, key);
-                    } catch (InvalidKeyException ex) {
-                        ex.printStackTrace();
-                    } catch (IllegalBlockSizeException ex) {
-                        ex.printStackTrace();
-                    } catch (BadPaddingException ex) {
-                        ex.printStackTrace();
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    } catch (NoSuchAlgorithmException ex) {
-                        ex.printStackTrace();
-                    } catch (NoSuchPaddingException ex) {
-                        ex.printStackTrace();
-                    } catch (DecoderException ex) {
-                        ex.printStackTrace();
-                    }
+                switch (type) {
+                    case "caesar":
+                        msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
+                        break;
+                    case "AES":
+                        try {
+                            msg += AES.decrypt(encryptedMsg, key);
+                        } catch (InvalidKeyException | IllegalBlockSizeException
+                                | BadPaddingException | UnsupportedEncodingException
+                                | NoSuchAlgorithmException | NoSuchPaddingException
+                                | DecoderException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
                 }
                 xmlStr = " " + xmlStr.substring(xmlStr.indexOf("&lt/encrypted&gt") + 12);
                 i = 0;
