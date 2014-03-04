@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 
 /**
  * Tråd för input- och outputströmmar
@@ -19,7 +20,7 @@ public class IOThread implements Runnable {
 
     // Fält för strömmar
     private PrintWriter out;
-    private BufferedReader in;
+    private BufferedReader in;  
     private Socket clientSocket;
     private View view;
     private MessageBox messageBox;
@@ -108,21 +109,15 @@ public class IOThread implements Runnable {
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     private void appendToPane(JTextPane chatBox, String msg, Color col) {
-        StyledDocument doc = chatBox.getStyledDocument();
-
-        Style style = chatBox.addStyle("Default Style", null);
-        StyleConstants.setForeground(style, col);
-
         try {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
             HTMLEditorKit kit =(HTMLEditorKit) chatBox.getEditorKit();
-            
+            StyleSheet styleSheet = kit.getStyleSheet();
+            HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML((HTMLDocument) chatBox.getDocument(), 
-                        ((HTMLDocument) chatBox.getDocument()).getLength(), msg,
-                        0,0,null);
+                kit.insertHTML(doc, doc.getLength(), msg,0,0,null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
