@@ -47,26 +47,25 @@ public class IOThread implements Runnable {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#FF0000\">Failed to create an output stream</text></message>"));
+                    + "<text color=\"#FF0000\">Failed to create an output stream </text></message>"));
             return;
         }
         try {
-            in = new BufferedReader(new InputStreamReader(
-                    clientSocket.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#FF0000\">Failed to create an input stream</text></message>"));
+                    + "<text color=\"#FF0000\">Failed to create an input stream </text></message>"));
             return;
         }
 
         // Kommer vi hit har anslutningen gått bra
         if (isClient) {
             appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00FF00\">Connection successful</text></message>"));
+                    + "<text color=\"#00FF00\">Connection successful </text></message>"));
         } else {
             // Skriv ut IP-nummret från klienten
             appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00FF00\">Connection established with %s</text></message>", clientSocket.getInetAddress()));
+                    + "<text color=\"#00FF00\">Connection established with %s </text></message>", clientSocket.getInetAddress()));
         }
 
         // Här läser vi in klientens budskap
@@ -75,30 +74,30 @@ public class IOThread implements Runnable {
             try {
                 String echo = in.readLine();
                 if (echo == null) {
-
+                    isNotRunnable = true;
                     appendToPane(String.format("<message sender=\"INFO\">"
-                            + "<text color=\"0000FF\">disconnected</text></message>"));
+                            + "<text color=\"0000FF\"> disconnected </text></message>"));
 
                     if (!isClient) {
                         messageBox.items.removeElement(clientSocket.getInetAddress());
                     }
-                    isNotRunnable = true;
                 } else {
                     appendToPane(echo);
                 }
             } catch (IOException e) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#FF0000\">Communication failed</text></message>"));
+                        + "<text color=\"#FF0000\">Communication failed </text></message>"));
             }
 
-            try {
-                in.close();
-                out.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#FF0000\">Failed to close connection</text></message>"));
-            }
+
+        }
+        try {
+            in.close();
+            out.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            appendToPane(String.format("<message sender=\"ERROR\">"
+                    + "<text color=\"#FF0000\">Failed to close connection </text></message>"));
         }
     }
 
@@ -121,7 +120,6 @@ public class IOThread implements Runnable {
                 ex.printStackTrace();
             }
 
-
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(null, "String insertion failed.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
@@ -138,13 +136,13 @@ public class IOThread implements Runnable {
                 if (!messageBox.messagePane.getText().equals("")) {
                     if (!messageBox.keyRequestBox.isSelected()) {
                         out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s</text></message>",
+                                + "<text color=\"%s\">%s </text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
                                 messageBox.messagePane.getText()));
                     } else {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
-                                + "type=\"%s\"> "
+                                + "type=\"%s\">"
                                 + "%s</keyrequest></text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
