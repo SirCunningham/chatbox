@@ -8,31 +8,18 @@ import javax.imageio.ImageIO;
 
 public class View {
 
-    ArrayList<JTextPane> chatBoxes = new ArrayList<>();
     JFrame frame = new JFrame("Instant messaging program for pros");
-    JPanel chatBoxPanel = new JPanel();
-    JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
     JPanel dialogPanel = new JPanel();
-    JPanel IPPanel = new JPanel();
-    JPanel portPanel = new JPanel();
-    JPanel passPanel = new JPanel();
-    JPanel startPanel = new JPanel();
-    JPanel tabPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
-    JPanel radioPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
-    final JLabel IPLabel = new JLabel("IP:");
-    final JLabel portLabel = new JLabel("Port:");
-    final JLabel passLabel = new JLabel("Password:");
-    final JLabel tabLabel = new JLabel("Chat name:");
-    final JLabel encryptLabel2 = new JLabel("Encryption:");
-    final JLabel typeLabel = new JLabel("Type:");
+    JLabel IPLabel = new JLabel("IP:");
+    JLabel passLabel = new JLabel("Password:");
     JTextField IPField = new JTextField("127.0.0.1", 25);
     JTextField portField = new JTextField("4444", 24);
     JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
@@ -43,15 +30,10 @@ public class View {
     JProgressBar progressBar = new JProgressBar();
     private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
 
-    // Possible to do ArrayList.toArray() to add items dynamically
-    // Use getSelected...
-    String[] items = {"User 1", "User 2", "User 3", "User 4"};
-    JList list = new JList(items);
     JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
     JButton sendButton = new JButton("Send to selected");
     JButton receiveButton = new JButton("Receive [testing only]");
-    JButton bootButton = new JButton("Boot selected"); //Add confirmation dialog, only unlocked if server!!
     IconButton fileButton = new IconButton("fileIcon.png");
     IconButton closeButton = new IconButton("closeIcon.png");
     JComboBox fileEncryptions;
@@ -68,11 +50,11 @@ public class View {
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         closeButton.setFocusPainted(false);
 
-        chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
 
         try {
             icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
@@ -85,10 +67,6 @@ public class View {
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
 
-        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        int[] select = {1, 3};
-        list.setSelectedIndices(select);
-
         fileEncryptions = new JComboBox(cipherString);
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);
@@ -96,47 +74,46 @@ public class View {
         passLabel.setVisible(false);
         passField.setVisible(false);
 
+        JPanel radioPanel = new JPanel();
+        JPanel IPPanel = new JPanel();
+        JPanel portPanel = new JPanel();
+        JPanel passPanel = new JPanel();
+        JPanel tabPanel = new JPanel();
+        JPanel startPanel = new JPanel();
+        radioPanel.add(clientButton);
+        radioPanel.add(serverButton);
+        IPPanel.add(IPLabel);
+        IPPanel.add(IPField);
+        portPanel.add(new JLabel("Port:"));
+        portPanel.add(portField);
+        passPanel.add(new JLabel("Type:"));
+        passPanel.add(serverOptions);
+        passPanel.add(passLabel);
+        passPanel.add(passField);
+        tabPanel.add(new JLabel("Chat name:"));
+        tabPanel.add(tabField);
+        startPanel.add(startButton);
         dialogPanel.add(radioPanel);
         dialogPanel.add(IPPanel);
         dialogPanel.add(portPanel);
         dialogPanel.add(passPanel);
         dialogPanel.add(tabPanel);
         dialogPanel.add(startPanel);
-        tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
-
-        chatBoxPanel.add(tabbedPane);
-        IPPanel.add(IPLabel);
-        IPPanel.add(IPField);
-        portPanel.add(portLabel);
-        portPanel.add(portField);
-        passPanel.add(typeLabel);
-        passPanel.add(serverOptions);
-        passPanel.add(passLabel);
-        passPanel.add(passField);
-        tabPanel.add(tabLabel);
-        tabPanel.add(tabField);
-        startPanel.add(startButton);
         
         filePanel.add(fileButton);
         filePanel.add(fileField);
         filePanel.add(descriptionField);
         fileButtonPanel.add(sendButton);
-        fileButtonPanel.add(encryptLabel2);
+        fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileColorExitPanel.add(connectButton);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
-        leftPanel.add(chatBoxPanel);
-        radioPanel.add(clientButton);
-        radioPanel.add(serverButton);
-        rightPanel.add(list);
-        rightPanel.add(bootButton);
+        leftPanel.add(tabbedPane);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
-        mainPanel.add(leftPanel);
-        mainPanel.add(rightPanel);
         frame.add(leftPanel, BorderLayout.CENTER);
         frame.add(rightPanel, BorderLayout.EAST);
         frame.pack();

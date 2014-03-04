@@ -14,11 +14,14 @@ import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-class MessageBox extends JPanel {
+class MessageBox {
 
     private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     private AESCrypto AES;
+    JPanel mainPanel = new JPanel();
+    JPanel leftPanel = new JPanel();
+    JPanel rightPanel = new JPanel();
     IconButton colorButton = new IconButton("colorIcon.png");
     JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane();
@@ -41,17 +44,60 @@ class MessageBox extends JPanel {
     int cipherStart;
     int cipherEnd;
     
+    // Fix flexibility, add items not here!
+    // Possible to do ArrayList.toArray() to add items dynamically
+    // Use getSelected...
+    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
+    JList list = new JList(items);
+    //Add confirmation dialog to button below, only unlocked if server!!
+    JButton bootButton = new JButton("Boot selected");
+    
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     
     public MessageBox(View view) {
+        //Not here
+        list.setSelectionModel(new DefaultListSelectionModel() {
+
+            private static final long serialVersionUID = 1L;
+            boolean gestureStarted = false;
+
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                if (!gestureStarted) {
+                    if (isSelectedIndex(index0)) {
+                        super.removeSelectionInterval(index0, index1);
+                    } else {
+                        super.addSelectionInterval(index0, index1);
+                    }
+                }
+                gestureStarted = true;
+            }
+
+            @Override
+            public void setValueIsAdjusting(boolean isAdjusting) {
+                if (isAdjusting == false) {
+                    gestureStarted = false;
+                }
+            }
+        });
+        int[] select = {1, 3};
+        list.setSelectedIndices(select);
+        rightPanel.add(list);
+        rightPanel.add(bootButton);
+        
         this.view = view;
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
         
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
@@ -64,10 +110,9 @@ class MessageBox extends JPanel {
         cBox.setEditorKit(kit);
         cBox.setDocument(doc);
         cBox.setText("This is where it happens.");
-        view.chatBoxes.add(cBox);
         JScrollPane scrollPane = new JScrollPane(cBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        add(scrollPane);
+        leftPanel.add(scrollPane);
 
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
@@ -82,7 +127,7 @@ class MessageBox extends JPanel {
         messagePanel.add(colorButton);
         messagePanel.add(namePane);
         messagePanel.add(messagePane);
-        add(messagePanel);
+        leftPanel.add(messagePanel);
 
         JPanel buttonPanel = new JPanel();
         cipherButton.setEnabled(false);
@@ -101,7 +146,7 @@ class MessageBox extends JPanel {
         buttonPanel.add(keyField);
         buttonPanel.add(keyBox);
         buttonPanel.add(keyRequestBox);
-        add(buttonPanel);
+        leftPanel.add(buttonPanel);
     }
 
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
@@ -220,8 +265,8 @@ class MessageBox extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            Color newColor = JColorChooser.showDialog(view.chatBoxPanel,
-                    "Choose text color", view.chatBoxPanel.getBackground());
+            Color newColor = JColorChooser.showDialog(view.frame,
+                    "Choose text color", view.frame.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
                 namePane.setForeground(colorObj);

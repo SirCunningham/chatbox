@@ -33,7 +33,7 @@ public class Controller {
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
-    public final JPanel createTabPanel() {        
+    public final JPanel createTabPanel() {
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
@@ -97,7 +97,8 @@ public class Controller {
                 if (success) {
                     //kill idling threads here!
                     int index = view.tabbedPane.getTabCount() - 1;
-                    view.tabbedPane.insertTab(null, null, messageBox, view.tabField.getText(), index);
+                    view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
+                            view.tabField.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
                     tabCount += 1;
@@ -197,7 +198,7 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
 
-            int returnVal = chooser.showOpenDialog(view.chatBoxPanel);
+            int returnVal = chooser.showOpenDialog(view.frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
@@ -234,7 +235,6 @@ public class Controller {
             }
             view.tabbedPane.remove(index);
             tabButtons.remove(index);
-            view.chatBoxes.remove(index);
             for (TabButton button1 : tabButtons) {
                 if (button1.getIndex() > index) {
                     button1.setIndex(button1.getIndex() - 1);
