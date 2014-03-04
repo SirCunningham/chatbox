@@ -19,8 +19,9 @@ class MessageBox extends JPanel {
     private AESCrypto AES;
     IconButton colorButton = new IconButton("colorIcon.png");
     JTextField nameField = new JTextField("Dante", 8);
-    JTextField messageField = new JTextField("In medio cursu vitae"
-            + "nostrae, eram in silva obscura...", 75);
+    JTextPane messagePane = new JTextPane();
+    StyledDocument doc = messagePane.getStyledDocument();
+    Style style = messagePane.addStyle("Default Style", null);
     JButton sendButton = new JButton("Send message");
     JToggleButton cipherButton = new JToggleButton("Encrypt selected");
     JLabel cipherLabel = new JLabel("Cryptosystem:");
@@ -28,10 +29,11 @@ class MessageBox extends JPanel {
     JLabel keyLabel = new JLabel("Key:");
     JTextField keyField = new JTextField("68", 5);
     JCheckBox keyBox = new JCheckBox("Send key", true);
+    Color colorObj = Color.BLACK;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
-    int startEnc;
-    int endEnc;
-    String backup;
+    String cipherMessage;
+    int cipherStart;
+    int cipherEnd;
 
     public MessageBox(View view) {
         this.view = view;
@@ -49,11 +51,13 @@ class MessageBox extends JPanel {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
         nameField.addFocusListener(new FieldListener());
-        messageField.addFocusListener(new FieldListener());
-        messageField.addKeyListener(new MessageListener());
+        messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
+        ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter());
+        messagePane.addFocusListener(new FieldListener());
+        messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
         messagePanel.add(nameField);
-        messagePanel.add(messageField);
+        messagePanel.add(messagePane);
         add(messagePanel);
 
         JPanel buttonPanel = new JPanel();
@@ -116,57 +120,59 @@ class MessageBox extends JPanel {
 
     class CipherButtonListener implements ActionListener {
         private String encrypt(String type, String text, String key) {
-            if (type.equals("caesar")) {
-                try {
-                    int k = Integer.valueOf(key);
-                    return encryptCaesar(text,k);
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                }
-            } else if (type.equals("AES")) {
-                try {
-                    AES.encrypt(text);
-                } catch (NoSuchAlgorithmException ex) {
-                    ex.printStackTrace();
-                } catch (InvalidKeyException ex) {
-                    ex.printStackTrace();
-                } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                } catch (IllegalBlockSizeException ex) {
-                    ex.printStackTrace();
-                } catch (BadPaddingException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchPaddingException ex) {
-                    ex.printStackTrace();
-                }
+            switch (type) {
+                case "caesar":
+                    try {
+                        int k = Integer.valueOf(key);
+                        return encryptCaesar(text,k);
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    }
+                case "AES":
+                    try {
+                        AES.encrypt(text);
+                    } catch (NoSuchAlgorithmException | InvalidKeyException
+                            | UnsupportedEncodingException | IllegalBlockSizeException
+                            | BadPaddingException | NoSuchPaddingException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
             }
             return null;
         }
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Bugg: markera krypterad text, hamna utanför index
             if (cipherButton.isSelected()) {
-                if (startEnc < endEnc) {
-                    backup = messageField.getText();
-                    String string = new String();
+                if (cipherStart < cipherEnd) {
+                    String getText = messagePane.getText();
+                    String text = getText.substring(cipherStart, cipherEnd);
                     String key = keyField.getText();
                     String keyString = new String();
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
                     }
                     try {
-                        string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
-                                backup.substring(0, startEnc),
-                                String.valueOf(cipherBox.getSelectedItem()),
-                                keyString, encryptCaesar(backup.substring(startEnc,
-                                endEnc), Integer.valueOf(key)), backup.substring(endEnc));
-                    } catch (UnsupportedEncodingException ex) {
+                        cipherMessage = String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
+                                getText.substring(0, cipherStart),
+                                String.valueOf(cipherBox.getSelectedItem()), keyString,
+                                encryptCaesar(text, Integer.valueOf(key)),
+                                getText.substring(cipherEnd));
+                        StyleConstants.setBackground(style, colorObj);
+                        doc.remove(cipherStart, cipherEnd - cipherStart);
+                        doc.insertString(cipherStart, text, style);
+                        StyleConstants.setBackground(style, Color.WHITE);
+                    } catch (BadLocationException | UnsupportedEncodingException ex) {
                         ex.printStackTrace();
                     }
-                    messageField.setText(string);
                 }
             } else {
-                messageField.setText(backup);
+                String text = messagePane.getText().substring(cipherStart, cipherEnd);
+                try {
+                    doc.remove(cipherStart, cipherEnd - cipherStart);
+                    doc.insertString(cipherStart, text, style);
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -181,9 +187,21 @@ class MessageBox extends JPanel {
             Color newColor = JColorChooser.showDialog(view.chatBoxPanel,
                     "Choose text color", view.chatBoxPanel.getBackground());
             if (newColor != null) {
-                nameField.setForeground(newColor);
-                messageField.setForeground(newColor);
-                color = Integer.toHexString(newColor.getRGB()).substring(2);
+                colorObj = newColor;
+                nameField.setForeground(colorObj);
+                messagePane.setForeground(colorObj);
+                color = Integer.toHexString(colorObj.getRGB()).substring(2);
+                if (cipherButton.isSelected()) {
+                    String text = messagePane.getText().substring(cipherStart, cipherEnd);
+                    StyleConstants.setBackground(style, colorObj);
+                    try {
+                        doc.remove(cipherStart, cipherEnd - cipherStart);
+                        doc.insertString(cipherStart, text, style);
+                    } catch (BadLocationException ex) {
+                        ex.printStackTrace();
+                    }
+                    StyleConstants.setBackground(style, Color.WHITE);
+                }
             }
         }
     }
@@ -193,16 +211,16 @@ class MessageBox extends JPanel {
 
         @Override
         public void focusGained(FocusEvent e) {
-            JTextField source = (JTextField) e.getSource();
+            JTextComponent source = (JTextComponent) e.getSource();
             source.selectAll();
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            JTextField source = (JTextField) e.getSource();
-            if (source == messageField) {
-                startEnc = source.getSelectionStart();
-                endEnc = source.getSelectionEnd();
+            JTextComponent source = (JTextComponent) e.getSource();
+            if (source == messagePane && !cipherButton.isSelected()) {
+                cipherStart = source.getSelectionStart();
+                cipherEnd = source.getSelectionEnd();
             }
             source.select(0, 0);
         }

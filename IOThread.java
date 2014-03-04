@@ -104,10 +104,10 @@ public class IOThread implements Runnable {
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-    private void appendToPane(JTextPane chatBox, String msg, Color c) {
+    private void appendToPane(JTextPane chatBox, String msg, Color col) {
         StyledDocument doc = chatBox.getStyledDocument();
-        Style style = chatBox.addStyle("I'm a Style", null);
-        StyleConstants.setForeground(style, c);
+        Style style = chatBox.addStyle("Default Style", null);
+        StyleConstants.setForeground(style, col);
 
         try {
             XMLString XMLMsg = new XMLString(msg);
@@ -126,18 +126,18 @@ public class IOThread implements Runnable {
         public void actionPerformed(ActionEvent e) {
             // Skicka och visa i textrutan
             try {
-                if (!messageBox.messageField.getText().equals("")) {
+                if (!messageBox.messagePane.getText().equals("")) {
                     out.println(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
                             messageBox.nameField.getText(), messageBox.color,
-                            messageBox.messageField.getText()));
+                            messageBox.messagePane.getText()));
 
                     appendToPane(
                             view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
                             String.format("%s: %s", messageBox.nameField.getText(),
-                            messageBox.messageField.getText()),
+                            messageBox.messagePane.getText()),
                             Color.decode("#" + messageBox.color));
-                    messageBox.messageField.setText("");
+                    messageBox.messagePane.setText("");
                 }
             } catch (Exception ex) {
                 appendToPane(
