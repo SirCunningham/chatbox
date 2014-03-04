@@ -97,7 +97,8 @@ public class Controller {
                 if (success) {
                     //kill idling threads here!
                     int index = view.tabbedPane.getTabCount() - 1;
-                    view.tabbedPane.insertTab(null, null, messageBox, view.tabField.getText(), index);
+                    view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
+                            view.tabField.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
                     tabCount += 1;
