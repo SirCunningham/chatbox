@@ -127,10 +127,19 @@ public class IOThread implements Runnable {
             // Skicka och visa i textrutan
             try {
                 if (!messageBox.messageField.getText().equals("")) {
-                    out.println(String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s</text></message>",
-                            messageBox.nameField.getText(), messageBox.color,
-                            messageBox.messageField.getText()));
+                    if (!messageBox.keyRequestBox.isSelected()) {
+                        out.println(String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\">%s</text></message>",
+                                messageBox.nameField.getText(), messageBox.color,
+                                messageBox.messageField.getText()));
+                    }
+                    else {
+                        out.println(String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\"><keyrequest type=\"%s\"> %s</keyrequest></text></message>",
+                                messageBox.nameField.getText(), messageBox.color,
+                                String.valueOf(messageBox.cipherBox.getSelectedItem()),
+                                messageBox.messageField.getText()));
+                    }
 
                     appendToPane(
                             view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
@@ -138,6 +147,8 @@ public class IOThread implements Runnable {
                             messageBox.messageField.getText()),
                             Color.decode("#" + messageBox.color));
                     messageBox.messageField.setText("");
+
+
                 }
             } catch (Exception ex) {
                 appendToPane(

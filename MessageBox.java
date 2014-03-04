@@ -176,13 +176,11 @@ class MessageBox extends JPanel {
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
                     }
-
                     string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
                             backup.substring(0, startEnc),
                             String.valueOf(cipherBox.getSelectedItem()),
                             keyString, encrypt(String.valueOf(cipherBox.getSelectedItem()), backup.substring(startEnc,
                             endEnc), key), backup.substring(endEnc));
-
                     messageField.setText(string);
                 }
             } else {
