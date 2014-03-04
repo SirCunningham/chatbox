@@ -26,6 +26,7 @@ public class Test {
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         System.out.println(test);
         System.out.println(decryptCaesar(test, 5));
+        System.out.println(getSender(xmlTest));
         String encMsg;
         /*
         try {
@@ -50,11 +51,11 @@ public class Test {
         }
          * 
          */
-
-
-
-
-
+    }
+    
+    public static String getSender(String xmlMsg) {
+        int i = xmlMsg.indexOf("sender");
+        return xmlMsg.substring(i+8,xmlMsg.indexOf(">")-1);
     }
 
     public static String handleString(String xmlMsg) {

@@ -38,19 +38,24 @@ public class XMLString {
         String hexColor = xmlStr.substring(index + 7, index + 13);
         return Color.decode("#" + hexColor);
     }
+    
+    public static String getSender(String xmlMsg) {
+        int i = xmlMsg.indexOf("sender");
+        return xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
+    }
 
     public void handleString() {
         String msg = "";
         for (int i = 0; i < xmlStr.length(); i++) {
-            if (i == xmlStr.indexOf("&ltencrypted")) {
+            if (i == xmlStr.indexOf("<encrypted")) {
                 msg += xmlStr.substring(0, i);
                 xmlStr = xmlStr.substring(i + 10);
                 String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
-                        temp.indexOf("&gt") - 1);
-                String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
-                        temp.indexOf("&lt/encrypted&gt"));
+                        temp.indexOf(">") - 1);
+                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
+                        temp.indexOf("</encrypted>"));
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
                 } else if (type.equals("AES")) {
@@ -72,7 +77,7 @@ public class XMLString {
                         ex.printStackTrace();
                     }
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("&lt/encrypted&gt") + 12);
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                 i = 0;
             }
         }

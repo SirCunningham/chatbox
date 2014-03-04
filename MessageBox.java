@@ -11,6 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 class MessageBox extends JPanel {
@@ -30,7 +31,7 @@ class MessageBox extends JPanel {
     JTextField keyField = new JTextField("68", 5);
     JCheckBox keyBox = new JCheckBox("Send key", true);
     JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
-    String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
+    String color = Integer.toHexString(Color.RED.getRGB()).substring(2);
     int startEnc;
     int endEnc;
     String backup;
@@ -51,7 +52,11 @@ class MessageBox extends JPanel {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         cBox.setEditable(false);
         cBox.setContentType("text/html");
-        cBox.setEditorKit(new HTMLEditorKit());
+        HTMLEditorKit kit = new HTMLEditorKit();
+        HTMLDocument doc = new HTMLDocument();
+        
+        cBox.setEditorKit(kit);
+        cBox.setDocument(doc);
         cBox.setText("This is where it happens.");
         view.chatBoxes.add(cBox);
         JScrollPane scrollPane = new JScrollPane(cBox);

@@ -8,6 +8,9 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.text.html.HTML.Tag;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 /**
  * Tråd för input- och outputströmmar
@@ -108,12 +111,19 @@ public class IOThread implements Runnable {
         StyledDocument doc = chatBox.getStyledDocument();
         Style style = chatBox.addStyle("I'm a Style", null);
         StyleConstants.setForeground(style, c);
-
         try {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
-            doc.insertString(doc.getLength(), "\n" + msg, style);
+            HTMLEditorKit kit =(HTMLEditorKit) chatBox.getEditorKit();
+            
+            try {
+                kit.insertHTML((HTMLDocument) chatBox.getDocument(), 
+                        ((HTMLDocument) chatBox.getDocument()).getLength(), msg,
+                        0,0,null);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(null, "String insertion failed.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
@@ -142,9 +152,8 @@ public class IOThread implements Runnable {
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
                                 messageBox.messageField.getText()));
                     }
-
                     appendToPane(
-                            view.chatBoxes.get(view.tabbedPane.getSelectedIndex())  ,
+                            view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
                             String.format("%s: %s", messageBox.nameField.getText(),
                             messageBox.messageField.getText()),
                             Color.decode("#" + messageBox.color));
