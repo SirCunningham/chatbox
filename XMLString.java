@@ -20,11 +20,7 @@ public class XMLString {
         this.xmlStr = xmlStr;
         try {
             AES = new AESCrypto();
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchPaddingException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
     }
@@ -38,46 +34,32 @@ public class XMLString {
         String hexColor = xmlStr.substring(index + 7, index + 13);
         return Color.decode("#" + hexColor);
     }
-    
-    public static String getSender(String xmlMsg) {
-        int i = xmlMsg.indexOf("sender");
-        return xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
-    }
 
     public void handleString() {
         String msg = "";
         for (int i = 0; i < xmlStr.length(); i++) {
-            if (i == xmlStr.indexOf("<encrypted")) {
+            if (i == xmlStr.indexOf("&ltencrypted")) {
                 msg += xmlStr.substring(0, i);
                 xmlStr = xmlStr.substring(i + 10);
                 String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
-                        temp.indexOf(">") - 1);
-                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
-                        temp.indexOf("</encrypted>"));
-                if (type.equals("caesar")) {
-                    msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
-                } else if (type.equals("AES")) {
-                    try {
-                        msg += AES.decrypt(encryptedMsg, key);
-                    } catch (InvalidKeyException ex) {
-                        ex.printStackTrace();
-                    } catch (IllegalBlockSizeException ex) {
-                        ex.printStackTrace();
-                    } catch (BadPaddingException ex) {
-                        ex.printStackTrace();
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    } catch (NoSuchAlgorithmException ex) {
-                        ex.printStackTrace();
-                    } catch (NoSuchPaddingException ex) {
-                        ex.printStackTrace();
-                    } catch (DecoderException ex) {
-                        ex.printStackTrace();
-                    }
+                        temp.indexOf("&gt") - 1);
+                String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
+                        temp.indexOf("&lt/encrypted&gt"));
+                switch (type) {
+                    case "caesar":
+                        msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
+                        break;
+                    case "AES":
+                        try {
+                            msg += AES.decrypt(encryptedMsg, key);
+                        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("&lt/encrypted&gt") + 12);
                 i = 0;
             }
         }
