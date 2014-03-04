@@ -107,7 +107,7 @@ class MessageBox {
         rightPanel.add(bootPanel);
         
         fileButton.setBorder(BorderFactory.createEmptyBorder());
-        sendFileButton.setEnabled(false); //Enable when file chosen
+        sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
         filePane.addFocusListener(new FieldListener());
         filePane.setText("filename.txt");
@@ -396,6 +396,7 @@ class MessageBox {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
                 filePane.setText(file.getName());
+                sendFileButton.setEnabled(true);
             }
         }
     }
