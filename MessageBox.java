@@ -15,7 +15,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 class MessageBox extends JPanel {
 
-    private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
+    private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     private AESCrypto AES;
     IconButton colorButton = new IconButton("colorIcon.png");
@@ -36,7 +36,11 @@ class MessageBox extends JPanel {
     String cipherMessage;
     int cipherStart;
     int cipherEnd;
-
+    
+    private static final int TYPE_NONE = 0;
+    private static final int TYPE_CAESAR = 1;
+    private static final int TYPE_AES = 2;
+    
     public MessageBox(View view) {
         this.view = view;
         try {
@@ -44,6 +48,7 @@ class MessageBox extends JPanel {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -107,6 +112,15 @@ class MessageBox extends JPanel {
         String msg = new String(chars);
         return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
     }
+    
+    public void toggleType(int type) {
+        cipherButton.setEnabled(type != TYPE_NONE);
+        keyLabel.setVisible(type != TYPE_NONE);
+        keyField.setVisible(type != TYPE_NONE);
+        keyField.setEditable(type != TYPE_AES);
+        keyBox.setVisible(type != TYPE_NONE);
+        keyRequestBox.setVisible(type != TYPE_NONE);
+    }
 
     // Välj krypteringssystem
     class CipherBoxListener implements ItemListener {
@@ -115,23 +129,17 @@ class MessageBox extends JPanel {
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             // Use a state vector!!!
-            if ("None".equals(chosen)) {
-                cipherButton.setEnabled(false);
-                keyLabel.setVisible(false);
-                keyField.setVisible(false);
-                keyBox.setVisible(false);
-                keyRequestBox.setVisible(false);
-            } else {
-                cipherButton.setEnabled(true);
-                keyLabel.setVisible(true);
-                keyField.setVisible(true);
-                keyField.setEditable(true);
-                keyBox.setVisible(true);
-                keyRequestBox.setVisible(true);
-            }
-            if ("AES".equals(chosen)) {
-                keyField.setEditable(false);
-                keyField.setText(AES.getDecodeKey());
+            switch (chosen) {
+                case "caesar":
+                    toggleType(TYPE_CAESAR);
+                    keyField.setText("68");
+                    break;
+                case "AES":
+                    toggleType(TYPE_AES);
+                    keyField.setText(AES.getDecodeKey());
+                    break;
+                default:
+                    toggleType(TYPE_NONE);
             }
         }
     }
