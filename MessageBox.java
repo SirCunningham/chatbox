@@ -48,7 +48,6 @@ class MessageBox {
     DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
     JScrollPane listPane = new JScrollPane(list);
-    //Add confirmation dialog to button below, only unlocked if server!!
     JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
     
@@ -83,23 +82,6 @@ class MessageBox {
             }
         });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        items.addElement("ID 1");
-        items.addElement("ID 2");
-        items.addElement("ID 3");
-        items.addElement("ID 4");
-        items.addElement("ID 5");
-        items.addElement("ID 6");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
-        items.addElement("ID 7");
         bootButton.addActionListener(new BootButtonListener());
         bootPanel.add(bootButton);
         bootPanel.setVisible(false);
