@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
 import java.util.*;
+import javax.imageio.ImageIO;
 
 public class Controller {
 
@@ -13,7 +14,7 @@ public class Controller {
     private ArrayList<Thread> clients = new ArrayList<>();
     private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private int tabCount = 1;
-    private String filePath;
+    private ImageIcon icon;
 
     public Controller(View view) {
         this.view = view;
@@ -21,23 +22,24 @@ public class Controller {
         view.portField.addFocusListener(new FieldListener());
         view.passField.addFocusListener(new FieldListener());
         view.tabField.addFocusListener(new FieldListener());
-        view.fileField.addFocusListener(new FieldListener());
-        view.descriptionField.addFocusListener(new FieldListener());
         view.startButton.addActionListener(new StartButtonListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
-        view.connectButton.addActionListener(new ConnectButtonListener());
-        view.sendButton.addActionListener(new SendButtonListener());
-        view.receiveButton.addActionListener(new ReceiveButtonListener());
-        view.fileButton.addActionListener(new FileButtonListener());
         view.closeButton.addActionListener(new CloseButtonListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
     public final JPanel createTabPanel() {
+        try {
+            icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
+        } catch (IOException e) {
+            System.err.println("Filen kunde inte hittas");
+            e.printStackTrace();
+        }
+        
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
-        TabButton btnClose = new TabButton(view.icon,
+        TabButton btnClose = new TabButton(icon,
                 view.tabbedPane.getTabCount() - 2);
         tabButtons.add(btnClose);
         btnClose.setPreferredSize(new Dimension(12, 12));
@@ -125,38 +127,6 @@ public class Controller {
         }
     }
 
-    // Skicka fil med klient
-    public class SendButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                FileSender thr = new FileSender(view.IPField.getText(),
-                        Integer.parseInt(view.portField.getText()),
-                        view.fileField.getText());
-                thr.start();
-            } catch (Exception ex) {
-                System.err.println("Ett fel inträffade2: " + ex);
-            }
-        }
-    }
-
-    // Mottag fil med server
-    public class ReceiveButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()),
-                        view.fileField.getText());
-                thr.start();
-            } catch (Exception ex) {
-                System.err.println("Ett fel inträffade4: " + ex);
-            }
-        }
-    }
-
     // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 
@@ -170,39 +140,6 @@ public class Controller {
             } else {
                 JOptionPane.showMessageDialog(null, "Good choice. "
                         + "Everyone's finger can slip!");
-            }
-        }
-    }
-
-    public class ConnectButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("File name: %s\nFile description: %s\n"
-                    + "File size: unknown\nAccept file and kill?",
-                    view.fileField.getText(),
-                    view.descriptionField.getText()),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Hello killer!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Goodbye!");
-            }
-        }
-    }
-
-    public class FileButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JFileChooser chooser = new JFileChooser();
-
-            int returnVal = chooser.showOpenDialog(view.frame);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                filePath = file.getAbsolutePath();
-                view.fileField.setText(file.getName());
             }
         }
     }

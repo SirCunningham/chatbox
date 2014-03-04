@@ -2,9 +2,6 @@ package chatbox;
 
 import java.awt.*;
 import javax.swing.*;
-import java.io.*;
-import java.util.*;
-import javax.imageio.ImageIO;
 
 public class View {
 
@@ -12,8 +9,6 @@ public class View {
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
     JPanel dialogPanel = new JPanel();
-    JPanel filePanel = new JPanel();
-    JPanel fileButtonPanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
@@ -24,30 +19,17 @@ public class View {
     JTextField portField = new JTextField("4444", 24);
     JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
     JTextField tabField = new JTextField("Chat 1", 24);
-    JTextField fileField = new JTextField("filename.txt", 12);
-    JTextField descriptionField = new JTextField("File description (optional)",
-            25);
     JProgressBar progressBar = new JProgressBar();
-    private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
 
     JButton startButton = new JButton("Join server");
-    JButton connectButton = new JButton("Disconnect [currently: receive]");
-    JButton sendButton = new JButton("Send to selected");
-    JButton receiveButton = new JButton("Receive [testing only]");
-    IconButton fileButton = new IconButton("fileIcon.png");
     IconButton closeButton = new IconButton("closeIcon.png");
-    JComboBox fileEncryptions;
     JComboBox serverOptions;
-    ImageIcon icon;
     JTabbedPane tabbedPane = new JTabbedPane();
 
     // Skapa GUI
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tabbedPane.setFocusable(false);
-        connectButton.setEnabled(false);
-        sendButton.setEnabled(false); //Enable when file chosen
-        fileButton.setBorder(BorderFactory.createEmptyBorder());
         closeButton.setFocusPainted(false);
 
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -56,18 +38,10 @@ public class View {
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
 
-        try {
-            icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
-        } catch (IOException e) {
-            System.err.println("Filen kunde inte hittas");
-            e.printStackTrace();
-        }
-
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
 
-        fileEncryptions = new JComboBox(cipherString);
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);
 
@@ -100,18 +74,8 @@ public class View {
         dialogPanel.add(tabPanel);
         dialogPanel.add(startPanel);
         
-        filePanel.add(fileButton);
-        filePanel.add(fileField);
-        filePanel.add(descriptionField);
-        fileButtonPanel.add(sendButton);
-        fileButtonPanel.add(new JLabel("Encryption:"));
-        fileButtonPanel.add(fileEncryptions);
-        fileColorExitPanel.add(connectButton);
         fileColorExitPanel.add(closeButton);
-        //panel.add(receiveButton);
         leftPanel.add(tabbedPane);
-        rightPanel.add(filePanel);
-        rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
         frame.add(leftPanel, BorderLayout.CENTER);
