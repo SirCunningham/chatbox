@@ -35,6 +35,15 @@ class MessageBox extends JPanel {
 
     public MessageBox(View view) {
         this.view = view;
+        try {
+            AES = new AESCrypto();
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        } catch (NoSuchPaddingException ex) {
+            ex.printStackTrace();
+        } catch (UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+        }
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -111,21 +120,27 @@ class MessageBox extends JPanel {
                 keyField.setVisible(true);
                 keyBox.setVisible(true);
             }
+            if ("AES".equals(chosen)) {
+                keyField.setEditable(false);
+                keyField.setText(AES.getDecodeKey());
+            }
         }
     }
 
     class CipherButtonListener implements ActionListener {
+
         private String encrypt(String type, String text, String key) {
             if (type.equals("caesar")) {
                 try {
                     int k = Integer.valueOf(key);
-                    return encryptCaesar(text,k);
+                    return encryptCaesar(text, k);
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
                 }
             } else if (type.equals("AES")) {
                 try {
                     AES.encrypt(text);
+                    return AES.getEncryptedMsg();
                 } catch (NoSuchAlgorithmException ex) {
                     ex.printStackTrace();
                 } catch (InvalidKeyException ex) {
@@ -142,6 +157,7 @@ class MessageBox extends JPanel {
             }
             return null;
         }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             // Bugg: markera krypterad text, hamna utanför index
@@ -154,15 +170,13 @@ class MessageBox extends JPanel {
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
                     }
-                    try {
-                        string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
-                                backup.substring(0, startEnc),
-                                String.valueOf(cipherBox.getSelectedItem()),
-                                keyString, encryptCaesar(backup.substring(startEnc,
-                                endEnc), Integer.valueOf(key)), backup.substring(endEnc));
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    }
+
+                    string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
+                            backup.substring(0, startEnc),
+                            String.valueOf(cipherBox.getSelectedItem()),
+                            keyString, encrypt(String.valueOf(cipherBox.getSelectedItem()), backup.substring(startEnc,
+                            endEnc), key), backup.substring(endEnc));
+
                     messageField.setText(string);
                 }
             } else {
@@ -170,7 +184,6 @@ class MessageBox extends JPanel {
             }
         }
     }
-
 
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
