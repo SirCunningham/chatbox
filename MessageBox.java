@@ -44,13 +44,6 @@ class MessageBox {
     int cipherStart;
     int cipherEnd;
 
-    
-    // Fix flexibility, add items not here!
-    // Possible to do ArrayList.toArray() to add items dynamically
-    // Use getSelected...
-
-
-
     DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
     JScrollPane listPane = new JScrollPane(list);
@@ -244,7 +237,6 @@ class MessageBox {
         @Override
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
-            // Use a state vector!!!
             switch (chosen) {
                 case "caesar":
                     toggleType(TYPE_CAESAR);
