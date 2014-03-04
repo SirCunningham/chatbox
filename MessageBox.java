@@ -11,6 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.html.HTMLEditorKit;
 
 class MessageBox extends JPanel {
 
@@ -49,6 +50,8 @@ class MessageBox extends JPanel {
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         cBox.setEditable(false);
+        cBox.setContentType("text/html");
+        cBox.setEditorKit(new HTMLEditorKit());
         cBox.setText("This is where it happens.");
         view.chatBoxes.add(cBox);
         JScrollPane scrollPane = new JScrollPane(cBox);
@@ -176,7 +179,7 @@ class MessageBox extends JPanel {
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
                     }
-                    string += String.format("%s&ltencrypted type=\"%s\"%s&gt%s&lt/encrypted&gt%s",
+                    string += String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
                             backup.substring(0, startEnc),
                             String.valueOf(cipherBox.getSelectedItem()),
                             keyString, encrypt(String.valueOf(cipherBox.getSelectedItem()), backup.substring(startEnc,
