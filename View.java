@@ -13,15 +13,9 @@ public class View {
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
     JPanel dialogPanel = new JPanel();
-    JPanel IPPanel = new JPanel();
-    JPanel portPanel = new JPanel();
-    JPanel passPanel = new JPanel();
-    JPanel startPanel = new JPanel();
-    JPanel tabPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
-    JPanel radioPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
@@ -43,7 +37,7 @@ public class View {
 
     // Possible to do ArrayList.toArray() to add items dynamically
     // Use getSelected...
-    String[] items = {"User 1", "User 2", "User 3", "User 4"};
+    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
     JList list = new JList(items);
     JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
@@ -70,6 +64,7 @@ public class View {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
 
         try {
             icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
@@ -93,14 +88,14 @@ public class View {
         passLabel.setVisible(false);
         passField.setVisible(false);
 
-        dialogPanel.add(radioPanel);
-        dialogPanel.add(IPPanel);
-        dialogPanel.add(portPanel);
-        dialogPanel.add(passPanel);
-        dialogPanel.add(tabPanel);
-        dialogPanel.add(startPanel);
-        tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
-
+        JPanel radioPanel = new JPanel();
+        JPanel IPPanel = new JPanel();
+        JPanel portPanel = new JPanel();
+        JPanel passPanel = new JPanel();
+        JPanel tabPanel = new JPanel();
+        JPanel startPanel = new JPanel();
+        radioPanel.add(clientButton);
+        radioPanel.add(serverButton);
         IPPanel.add(IPLabel);
         IPPanel.add(IPField);
         portPanel.add(portLabel);
@@ -112,6 +107,12 @@ public class View {
         tabPanel.add(tabLabel);
         tabPanel.add(tabField);
         startPanel.add(startButton);
+        dialogPanel.add(radioPanel);
+        dialogPanel.add(IPPanel);
+        dialogPanel.add(portPanel);
+        dialogPanel.add(passPanel);
+        dialogPanel.add(tabPanel);
+        dialogPanel.add(startPanel);
         
         filePanel.add(fileButton);
         filePanel.add(fileField);
@@ -123,8 +124,6 @@ public class View {
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         leftPanel.add(tabbedPane);
-        radioPanel.add(clientButton);
-        radioPanel.add(serverButton);
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);
