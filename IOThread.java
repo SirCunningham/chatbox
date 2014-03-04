@@ -128,14 +128,14 @@ public class IOThread implements Runnable {
             try {
                 if (!messageBox.messageField.getText().equals("")) {
                     if (!messageBox.keyRequestBox.isSelected()) {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s</text></message>",
+                        out.println(String.format("&ltmessage sender=\"%s\"&gt"
+                                + "&lttext color=\"%s\"&gt%s&lt/text&gt&lt/message&gt",
                                 messageBox.nameField.getText(), messageBox.color,
                                 messageBox.messageField.getText()));
                     }
                     else {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><keyrequest type=\"%s\"> %s</keyrequest></text></message>",
+                        out.println(String.format("&ltmessage sender=\"%s\"&gt"
+                                + "&lttext color=\"%s\"&gt&ltkeyrequest type=\"%s\"&gt %s&lt/keyrequest&gt&lt/text&gt&lt/message&gt",
                                 messageBox.nameField.getText(), messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
                                 messageBox.messageField.getText()));
