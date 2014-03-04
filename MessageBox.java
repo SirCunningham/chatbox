@@ -58,7 +58,30 @@ class MessageBox {
     
     public MessageBox(View view) {
         //Not here
-        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        list.setSelectionModel(new DefaultListSelectionModel() {
+
+            private static final long serialVersionUID = 1L;
+            boolean gestureStarted = false;
+
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                if (!gestureStarted) {
+                    if (isSelectedIndex(index0)) {
+                        super.removeSelectionInterval(index0, index1);
+                    } else {
+                        super.addSelectionInterval(index0, index1);
+                    }
+                }
+                gestureStarted = true;
+            }
+
+            @Override
+            public void setValueIsAdjusting(boolean isAdjusting) {
+                if (isAdjusting == false) {
+                    gestureStarted = false;
+                }
+            }
+        });
         int[] select = {1, 3};
         list.setSelectedIndices(select);
         rightPanel.add(list);
@@ -86,7 +109,7 @@ class MessageBox {
         
         cBox.setEditorKit(kit);
         cBox.setDocument(doc);
-        cBox.setText("This is where it happens.\n1\n2\n3\n4");
+        cBox.setText("This is where it happens.");
         JScrollPane scrollPane = new JScrollPane(cBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);
