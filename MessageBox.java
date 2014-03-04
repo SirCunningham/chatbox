@@ -28,6 +28,7 @@ class MessageBox extends JPanel {
     JLabel keyLabel = new JLabel("Key:");
     JTextField keyField = new JTextField("68", 5);
     JCheckBox keyBox = new JCheckBox("Send key", true);
+    JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     int startEnc;
     int endEnc;
@@ -73,6 +74,7 @@ class MessageBox extends JPanel {
         keyField.setVisible(false);
         keyField.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
+        keyRequestBox.setVisible(false);
         buttonPanel.add(sendButton);
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
@@ -80,6 +82,7 @@ class MessageBox extends JPanel {
         buttonPanel.add(keyLabel);
         buttonPanel.add(keyField);
         buttonPanel.add(keyBox);
+        buttonPanel.add(keyRequestBox);
         add(buttonPanel);
     }
 
@@ -114,12 +117,14 @@ class MessageBox extends JPanel {
                 keyLabel.setVisible(false);
                 keyField.setVisible(false);
                 keyBox.setVisible(false);
+                keyRequestBox.setVisible(false);
             } else {
                 cipherButton.setEnabled(true);
                 keyLabel.setVisible(true);
                 keyField.setVisible(true);
                 keyField.setEditable(true);
                 keyBox.setVisible(true);
+                keyRequestBox.setVisible(true);
             }
             if ("AES".equals(chosen)) {
                 keyField.setEditable(false);
