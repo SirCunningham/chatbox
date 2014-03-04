@@ -11,8 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.*;
 
 class MessageBox {
 
@@ -30,7 +29,7 @@ class MessageBox {
     Style style = messagePane.addStyle("Default Style", null);
     JButton sendButton = new JButton("Send message");
     JToggleButton cipherButton = new JToggleButton("Encrypt selected");
-    JLabel cipherLabel = new JLabel("Cryptosystem:");
+    JLabel cipherLabel = new JLabel("Encryption:");
     JComboBox cipherBox = new JComboBox(cipherString);
     JLabel keyLabel = new JLabel("Key:");
     JTextField keyField = new JTextField("68", 5);
@@ -58,12 +57,23 @@ class MessageBox {
     JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
     
+    JPanel filePanel = new JPanel();
+    JPanel fileButtonPanel = new JPanel();
+    IconButton fileButton = new IconButton("fileIcon.png");
+    JTextField fileField = new JTextField("filename.txt", 12);
+    JTextField descriptionField = new JTextField("File description (optional)",
+            25);
+    JButton sendFileButton = new JButton("Send to selected");
+    JButton receiveFileButton = new JButton("Receive [testing only!]");
+    JButton connectButton = new JButton("Disconnect [currently receive!]");
+    JComboBox fileEncryptions;
+    private String filePath;
+    
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     
     public MessageBox(View view) {
-        //Not here
         list.setSelectionModel(new DefaultListSelectionModel() {
 
             private static final long serialVersionUID = 1L;
@@ -94,6 +104,27 @@ class MessageBox {
         bootPanel.setVisible(false);
         rightPanel.add(listPane);
         rightPanel.add(bootPanel);
+        
+        fileButton.setBorder(BorderFactory.createEmptyBorder());
+        sendFileButton.setEnabled(false); //Enable when file chosen
+        fileEncryptions = new JComboBox(cipherString);
+        filePanel.add(fileButton);
+        filePanel.add(fileField);
+        filePanel.add(descriptionField);
+        fileButtonPanel.add(sendFileButton);
+        fileButtonPanel.add(receiveFileButton); //Testing only!
+        fileButtonPanel.add(connectButton); //Testing only!
+        fileButtonPanel.add(new JLabel("Encryption:"));
+        fileButtonPanel.add(fileEncryptions);
+        rightPanel.add(filePanel);
+        rightPanel.add(fileButtonPanel);
+        
+        fileField.addFocusListener(new FieldListener());
+        descriptionField.addFocusListener(new FieldListener());
+        sendFileButton.addActionListener(new SendButtonListener());
+        receiveFileButton.addActionListener(new ReceiveButtonListener());
+        fileButton.addActionListener(new FileButtonListener());
+        connectButton.addActionListener(new ConnectButtonListener());
         
         this.view = view;
         try {
@@ -325,6 +356,21 @@ class MessageBox {
         }
     }
 
+    public class FileButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser chooser = new JFileChooser();
+
+            int returnVal = chooser.showOpenDialog(view.frame);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                filePath = file.getAbsolutePath();
+                fileField.setText(file.getName());
+            }
+        }
+    }
+    
     class MessageListener implements KeyListener {
 
         @Override
@@ -340,6 +386,56 @@ class MessageBox {
 
         @Override
         public void keyReleased(KeyEvent e) {
+        }
+    }
+    
+    // Mottag fil med server
+    public class ReceiveButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileReceiver thr = new FileReceiver(Integer.parseInt(
+                        view.portField.getText()),
+                        fileField.getText());
+                thr.start();
+            } catch (Exception ex) {
+                System.err.println("Ett fel inträffade4: " + ex);
+            }
+        }
+    }
+    
+    // Skicka fil med klient
+    public class SendButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                FileSender thr = new FileSender(view.IPField.getText(),
+                        Integer.parseInt(view.portField.getText()),
+                        fileField.getText());
+                thr.start();
+            } catch (Exception ex) {
+                System.err.println("Ett fel inträffade2: " + ex);
+            }
+        }
+    }
+    
+    public class ConnectButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int reply = JOptionPane.showConfirmDialog(null,
+                    String.format("File name: %s\nFile description: %s\n"
+                    + "File size: unknown\nAccept file and kill?",
+                    fileField.getText(),
+                    descriptionField.getText()),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Hello killer!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Goodbye!");
+            }
         }
     }
 }
