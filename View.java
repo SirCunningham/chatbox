@@ -6,10 +6,7 @@ import javax.swing.*;
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
-    JPanel leftPanel = new JPanel();
-    JPanel rightPanel = new JPanel();
     JPanel dialogPanel = new JPanel();
-    JPanel fileColorExitPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
@@ -19,10 +16,8 @@ public class View {
     JTextField portField = new JTextField("4444", 24);
     JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
     JTextField tabField = new JTextField("Chat 1", 24);
-    JProgressBar progressBar = new JProgressBar();
 
     JButton startButton = new JButton("Join server");
-    IconButton closeButton = new IconButton("closeIcon.png");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -30,10 +25,7 @@ public class View {
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tabbedPane.setFocusable(false);
-        closeButton.setFocusPainted(false);
 
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
@@ -74,12 +66,7 @@ public class View {
         dialogPanel.add(tabPanel);
         dialogPanel.add(startPanel);
         
-        fileColorExitPanel.add(closeButton);
-        leftPanel.add(tabbedPane);
-        rightPanel.add(progressBar);
-        rightPanel.add(fileColorExitPanel);
-        frame.add(leftPanel, BorderLayout.CENTER);
-        frame.add(rightPanel, BorderLayout.EAST);
+        frame.add(tabbedPane, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
     }

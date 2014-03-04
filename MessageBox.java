@@ -66,6 +66,8 @@ class MessageBox {
     JButton sendFileButton = new JButton("Send to selected");
     JButton receiveFileButton = new JButton("Receive [testing only!]");
     JButton connectButton = new JButton("Disconnect [currently receive!]");
+    IconButton closeButton = new IconButton("closeIcon.png");
+    JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
     private String filePath;
     
@@ -107,6 +109,7 @@ class MessageBox {
         
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false); //Enable when file chosen
+        closeButton.setFocusPainted(false);
         fileEncryptions = new JComboBox(cipherString);
         filePanel.add(fileButton);
         filePanel.add(fileField);
@@ -116,8 +119,10 @@ class MessageBox {
         fileButtonPanel.add(connectButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
+        fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
+        rightPanel.add(progressBar); //Temporary only!
         
         fileField.addFocusListener(new FieldListener());
         descriptionField.addFocusListener(new FieldListener());
@@ -125,6 +130,7 @@ class MessageBox {
         receiveFileButton.addActionListener(new ReceiveButtonListener());
         fileButton.addActionListener(new FileButtonListener());
         connectButton.addActionListener(new ConnectButtonListener());
+        closeButton.addActionListener(new CloseButtonListener());
         
         this.view = view;
         try {
@@ -308,6 +314,23 @@ class MessageBox {
         }
     }
 
+    // Stäng av hela programmet
+    public class CloseButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
+                    + "want to quit?", "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "Good choice. "
+                        + "Everyone's finger can slip!");
+            }
+        }
+    }
+    
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
 
