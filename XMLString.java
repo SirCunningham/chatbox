@@ -28,6 +28,11 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
+    public String toHexColor() {
+        int index = xmlStr.indexOf("color");
+        String hexColor = xmlStr.substring(index + 7, index + 13);
+        return hexColor;
+    }
 
     public Color toColor() {
         int index = xmlStr.indexOf("color");

@@ -113,18 +113,21 @@ public class IOThread implements Runnable {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
-            HTMLEditorKit kit =(HTMLEditorKit) chatBox.getEditorKit();
+            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
             StyleSheet styleSheet = kit.getStyleSheet();
             HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc, doc.getLength(), msg,0,0,null);
+                kit.insertHTML(doc, doc.getLength(), msg,0,0,null);    //södjnasödalskdnas-ldk
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+
+
         } catch (BadLocationException e) {
             JOptionPane.showMessageDialog(null, "String insertion failed.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     public class SendMsgButtonListener implements ActionListener {

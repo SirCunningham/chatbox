@@ -58,7 +58,7 @@ class MessageBox extends JPanel {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         cBox.setEditable(false);
         cBox.setContentType("text/html");
-        HTMLEditorKit kit = new HTMLEditorKit();
+        xmlHTMLEditorKit kit = new xmlHTMLEditorKit();
         HTMLDocument doc = new HTMLDocument();
         
         cBox.setEditorKit(kit);
