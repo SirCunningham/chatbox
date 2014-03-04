@@ -41,12 +41,8 @@ class MessageBox extends JPanel {
         this.view = view;
         try {
             AES = new AESCrypto();
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchPaddingException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
