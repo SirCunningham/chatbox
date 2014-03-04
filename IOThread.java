@@ -137,7 +137,7 @@ public class IOThread implements Runnable {
                     if (!messageBox.keyRequestBox.isSelected()) {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s</text></message>",
-                                messageBox.nameField.getText(), messageBox.color,
+                                messageBox.namePane.getText(), messageBox.color,
                                 messageBox.messagePane.getText()));
                     }
                     else {
@@ -145,13 +145,13 @@ public class IOThread implements Runnable {
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\"> "
                                 + "%s</keyrequest></text></message>",
-                                messageBox.nameField.getText(), messageBox.color,
+                                messageBox.namePane.getText(), messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
                                 messageBox.messagePane.getText()));
                     }
                     appendToPane(
                             view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
-                            String.format("%s: %s", messageBox.nameField.getText(),
+                            String.format("%s: %s", messageBox.namePane.getText(),
                             messageBox.messagePane.getText()),
                             Color.decode("#" + messageBox.color));
                     messageBox.messagePane.setText("");

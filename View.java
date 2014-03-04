@@ -18,11 +18,12 @@ public class View {
     JPanel IPPanel = new JPanel();
     JPanel portPanel = new JPanel();
     JPanel passPanel = new JPanel();
+    JPanel startPanel = new JPanel();
     JPanel tabPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     JPanel fileColorExitPanel = new JPanel();
-    JPanel startPanel = new JPanel();
+    JPanel radioPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
@@ -95,12 +96,12 @@ public class View {
         passLabel.setVisible(false);
         passField.setVisible(false);
 
-        dialogPanel.add(startPanel);
+        dialogPanel.add(radioPanel);
         dialogPanel.add(IPPanel);
         dialogPanel.add(portPanel);
         dialogPanel.add(passPanel);
         dialogPanel.add(tabPanel);
-        dialogPanel.add(startButton);
+        dialogPanel.add(startPanel);
         tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
 
         chatBoxPanel.add(tabbedPane);
@@ -114,6 +115,8 @@ public class View {
         passPanel.add(passField);
         tabPanel.add(tabLabel);
         tabPanel.add(tabField);
+        startPanel.add(startButton);
+        
         filePanel.add(fileButton);
         filePanel.add(fileField);
         filePanel.add(descriptionField);
@@ -124,8 +127,8 @@ public class View {
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         leftPanel.add(chatBoxPanel);
-        startPanel.add(clientButton);
-        startPanel.add(serverButton);
+        radioPanel.add(clientButton);
+        radioPanel.add(serverButton);
         rightPanel.add(list);
         rightPanel.add(bootButton);
         rightPanel.add(filePanel);

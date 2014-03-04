@@ -16,11 +16,11 @@ import javax.swing.text.html.HTMLEditorKit;
 
 class MessageBox extends JPanel {
 
-    private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
+    private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     private AESCrypto AES;
     IconButton colorButton = new IconButton("colorIcon.png");
-    JTextField nameField = new JTextField("Dante", 8);
+    JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane();
     StyledDocument doc = messagePane.getStyledDocument();
     Style style = messagePane.addStyle("Default Style", null);
@@ -40,7 +40,11 @@ class MessageBox extends JPanel {
     String cipherMessage;
     int cipherStart;
     int cipherEnd;
-
+    
+    private static final int TYPE_NONE = 0;
+    private static final int TYPE_CAESAR = 1;
+    private static final int TYPE_AES = 2;
+    
     public MessageBox(View view) {
         this.view = view;
         try {
@@ -48,6 +52,7 @@ class MessageBox extends JPanel {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -67,13 +72,15 @@ class MessageBox extends JPanel {
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
-        nameField.addFocusListener(new FieldListener());
+        namePane.addFocusListener(new FieldListener());
+        namePane.setText("Dante");
+        ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
-        ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter());
+        ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
         messagePane.addFocusListener(new FieldListener());
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
-        messagePanel.add(nameField);
+        messagePanel.add(namePane);
         messagePanel.add(messagePane);
         add(messagePanel);
 
@@ -115,6 +122,15 @@ class MessageBox extends JPanel {
         String msg = new String(chars);
         return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
     }
+    
+    public void toggleType(int type) {
+        cipherButton.setEnabled(type != TYPE_NONE);
+        keyLabel.setVisible(type != TYPE_NONE);
+        keyField.setVisible(type != TYPE_NONE);
+        keyField.setEditable(type != TYPE_AES);
+        keyBox.setVisible(type != TYPE_NONE);
+        keyRequestBox.setVisible(type != TYPE_NONE);
+    }
 
     // Välj krypteringssystem
     class CipherBoxListener implements ItemListener {
@@ -123,23 +139,17 @@ class MessageBox extends JPanel {
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             // Use a state vector!!!
-            if ("None".equals(chosen)) {
-                cipherButton.setEnabled(false);
-                keyLabel.setVisible(false);
-                keyField.setVisible(false);
-                keyBox.setVisible(false);
-                keyRequestBox.setVisible(false);
-            } else {
-                cipherButton.setEnabled(true);
-                keyLabel.setVisible(true);
-                keyField.setVisible(true);
-                keyField.setEditable(true);
-                keyBox.setVisible(true);
-                keyRequestBox.setVisible(true);
-            }
-            if ("AES".equals(chosen)) {
-                keyField.setEditable(false);
-                keyField.setText(AES.getDecodeKey());
+            switch (chosen) {
+                case "caesar":
+                    toggleType(TYPE_CAESAR);
+                    keyField.setText("68");
+                    break;
+                case "AES":
+                    toggleType(TYPE_AES);
+                    keyField.setText(AES.getDecodeKey());
+                    break;
+                default:
+                    toggleType(TYPE_NONE);
             }
         }
     }
@@ -214,7 +224,7 @@ class MessageBox extends JPanel {
                     "Choose text color", view.chatBoxPanel.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
-                nameField.setForeground(colorObj);
+                namePane.setForeground(colorObj);
                 messagePane.setForeground(colorObj);
                 color = Integer.toHexString(colorObj.getRGB()).substring(2);
                 if (cipherButton.isSelected()) {
