@@ -24,7 +24,6 @@ public class Controller {
         view.tabField.addFocusListener(new FieldListener());
         view.startButton.addActionListener(new StartButtonListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
-        view.closeButton.addActionListener(new CloseButtonListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
@@ -123,23 +122,6 @@ public class Controller {
                 view.startButton.setText("Join server");
                 view.IPLabel.setEnabled(true);
                 view.IPField.setEnabled(true);
-            }
-        }
-    }
-
-    // Stäng av hela programmet
-    public class CloseButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
-                    + "want to quit?", "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            } else {
-                JOptionPane.showMessageDialog(null, "Good choice. "
-                        + "Everyone's finger can slip!");
             }
         }
     }

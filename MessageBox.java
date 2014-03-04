@@ -44,13 +44,6 @@ class MessageBox {
     int cipherStart;
     int cipherEnd;
 
-    
-    // Fix flexibility, add items not here!
-    // Possible to do ArrayList.toArray() to add items dynamically
-    // Use getSelected...
-
-
-
     DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
     JScrollPane listPane = new JScrollPane(list);
@@ -60,12 +53,13 @@ class MessageBox {
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     IconButton fileButton = new IconButton("fileIcon.png");
-    JTextField fileField = new JTextField("filename.txt", 12);
-    JTextField descriptionField = new JTextField("File description (optional)",
-            25);
+    JTextPane filePane = new JTextPane();
+    JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send to selected");
     JButton receiveFileButton = new JButton("Receive [testing only!]");
     JButton connectButton = new JButton("Disconnect [currently receive!]");
+    IconButton closeButton = new IconButton("closeIcon.png");
+    JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
     private String filePath;
     
@@ -106,25 +100,36 @@ class MessageBox {
         rightPanel.add(bootPanel);
         
         fileButton.setBorder(BorderFactory.createEmptyBorder());
-        sendFileButton.setEnabled(false); //Enable when file chosen
+        sendFileButton.setEnabled(false);
+        closeButton.setFocusPainted(false);
+        filePane.addFocusListener(new FieldListener());
+        filePane.setText("filename.txt");
+        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        descriptionPane.addFocusListener(new FieldListener());
+        descriptionPane.setText("File description (optional)");
+        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         fileEncryptions = new JComboBox(cipherString);
+        
         filePanel.add(fileButton);
-        filePanel.add(fileField);
-        filePanel.add(descriptionField);
+        filePanel.add(filePane);
+        filePanel.add(descriptionPane);
         fileButtonPanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
         fileButtonPanel.add(connectButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
+        fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
+        rightPanel.add(progressBar); //Temporary only!
         
-        fileField.addFocusListener(new FieldListener());
-        descriptionField.addFocusListener(new FieldListener());
+        filePane.addFocusListener(new FieldListener());
+        descriptionPane.addFocusListener(new FieldListener());
         sendFileButton.addActionListener(new SendButtonListener());
         receiveFileButton.addActionListener(new ReceiveButtonListener());
         fileButton.addActionListener(new FileButtonListener());
         connectButton.addActionListener(new ConnectButtonListener());
+        closeButton.addActionListener(new CloseButtonListener());
         
         this.view = view;
         try {
@@ -232,7 +237,6 @@ class MessageBox {
         @Override
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
-            // Use a state vector!!!
             switch (chosen) {
                 case "caesar":
                     toggleType(TYPE_CAESAR);
@@ -308,6 +312,23 @@ class MessageBox {
         }
     }
 
+    // Stäng av hela programmet
+    public class CloseButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
+                    + "want to quit?", "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "Good choice. "
+                        + "Everyone's finger can slip!");
+            }
+        }
+    }
+    
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
 
@@ -366,7 +387,8 @@ class MessageBox {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
-                fileField.setText(file.getName());
+                filePane.setText(file.getName());
+                sendFileButton.setEnabled(true);
             }
         }
     }
@@ -396,8 +418,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()),
-                        fileField.getText());
+                        view.portField.getText()), filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
@@ -413,7 +434,7 @@ class MessageBox {
             try {
                 FileSender thr = new FileSender(view.IPField.getText(),
                         Integer.parseInt(view.portField.getText()),
-                        fileField.getText());
+                        filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade2: " + ex);
@@ -428,8 +449,7 @@ class MessageBox {
             int reply = JOptionPane.showConfirmDialog(null,
                     String.format("File name: %s\nFile description: %s\n"
                     + "File size: unknown\nAccept file and kill?",
-                    fileField.getText(),
-                    descriptionField.getText()),
+                    filePane.getText(), descriptionPane.getText()),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 JOptionPane.showMessageDialog(null, "Hello killer!");
