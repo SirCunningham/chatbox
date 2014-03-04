@@ -219,8 +219,8 @@ class MessageBox extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            Color newColor = JColorChooser.showDialog(view.mainPanel,
-                    "Choose text color", view.mainPanel.getBackground());
+            Color newColor = JColorChooser.showDialog(view.frame,
+                    "Choose text color", view.frame.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
                 namePane.setForeground(colorObj);

@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
-    JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
     JPanel dialogPanel = new JPanel();
@@ -19,6 +18,8 @@ public class View {
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
+    JLabel IPLabel = new JLabel("IP:");
+    JLabel passLabel = new JLabel("Password:");
     JTextField IPField = new JTextField("127.0.0.1", 25);
     JTextField portField = new JTextField("4444", 24);
     JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
@@ -90,13 +91,13 @@ public class View {
         JPanel startPanel = new JPanel();
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
-        IPPanel.add(new JLabel("IP:"));
+        IPPanel.add(IPLabel);
         IPPanel.add(IPField);
         portPanel.add(new JLabel("Port:"));
         portPanel.add(portField);
         passPanel.add(new JLabel("Type:"));
         passPanel.add(serverOptions);
-        passPanel.add(new JLabel("Password:"));
+        passPanel.add(passLabel);
         passPanel.add(passField);
         tabPanel.add(new JLabel("Chat name:"));
         tabPanel.add(tabField);
@@ -124,8 +125,6 @@ public class View {
         rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar);
         rightPanel.add(fileColorExitPanel);
-        mainPanel.add(leftPanel);
-        mainPanel.add(rightPanel);
         frame.add(leftPanel, BorderLayout.CENTER);
         frame.add(rightPanel, BorderLayout.EAST);
         frame.pack();

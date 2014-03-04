@@ -197,7 +197,7 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
 
-            int returnVal = chooser.showOpenDialog(view.mainPanel);
+            int returnVal = chooser.showOpenDialog(view.frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
