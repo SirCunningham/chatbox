@@ -14,11 +14,14 @@ import javax.swing.text.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
-class MessageBox extends JPanel {
+class MessageBox {
 
     private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     private AESCrypto AES;
+    JPanel mainPanel = new JPanel();
+    JPanel leftPanel = new JPanel();
+    JPanel rightPanel = new JPanel();
     IconButton colorButton = new IconButton("colorIcon.png");
     JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane();
@@ -52,6 +55,11 @@ class MessageBox extends JPanel {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
         
         JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
@@ -66,7 +74,7 @@ class MessageBox extends JPanel {
         cBox.setText("This is where it happens.\n1\n2\n3\n4");
         JScrollPane scrollPane = new JScrollPane(cBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        add(scrollPane);
+        leftPanel.add(scrollPane);
 
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
@@ -81,7 +89,7 @@ class MessageBox extends JPanel {
         messagePanel.add(colorButton);
         messagePanel.add(namePane);
         messagePanel.add(messagePane);
-        add(messagePanel);
+        leftPanel.add(messagePanel);
 
         JPanel buttonPanel = new JPanel();
         cipherButton.setEnabled(false);
@@ -100,7 +108,7 @@ class MessageBox extends JPanel {
         buttonPanel.add(keyField);
         buttonPanel.add(keyBox);
         buttonPanel.add(keyRequestBox);
-        add(buttonPanel);
+        leftPanel.add(buttonPanel);
     }
 
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
