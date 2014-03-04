@@ -44,11 +44,26 @@ class MessageBox {
     int cipherStart;
     int cipherEnd;
     
+    // Fix flexibility, add items not here!
+    // Possible to do ArrayList.toArray() to add items dynamically
+    // Use getSelected...
+    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
+    JList list = new JList(items);
+    //Add confirmation dialog to button below, only unlocked if server!!
+    JButton bootButton = new JButton("Boot selected");
+    
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     
     public MessageBox(View view) {
+        //Not here
+        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        int[] select = {1, 3};
+        list.setSelectedIndices(select);
+        rightPanel.add(list);
+        rightPanel.add(bootButton);
+        
         this.view = view;
         try {
             AES = new AESCrypto();

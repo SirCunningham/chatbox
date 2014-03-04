@@ -30,15 +30,10 @@ public class View {
     JProgressBar progressBar = new JProgressBar();
     private String[] cipherString = {"None", "caesar", "AES", "RSA", "blowfish"};
 
-    // Possible to do ArrayList.toArray() to add items dynamically
-    // Use getSelected...
-    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
-    JList list = new JList(items);
     JButton startButton = new JButton("Join server");
     JButton connectButton = new JButton("Disconnect [currently: receive]");
     JButton sendButton = new JButton("Send to selected");
     JButton receiveButton = new JButton("Receive [testing only]");
-    JButton bootButton = new JButton("Boot selected"); //Add confirmation dialog, only unlocked if server!!
     IconButton fileButton = new IconButton("fileIcon.png");
     IconButton closeButton = new IconButton("closeIcon.png");
     JComboBox fileEncryptions;
@@ -71,10 +66,6 @@ public class View {
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
-
-        list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        int[] select = {1, 3};
-        list.setSelectedIndices(select);
 
         fileEncryptions = new JComboBox(cipherString);
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
@@ -119,8 +110,6 @@ public class View {
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
         leftPanel.add(tabbedPane);
-        rightPanel.add(list);
-        rightPanel.add(bootButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar);
