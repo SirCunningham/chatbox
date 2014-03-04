@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
-    JPanel chatBoxPanel = new JPanel();
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
@@ -67,7 +66,6 @@ public class View {
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         closeButton.setFocusPainted(false);
 
-        chatBoxPanel.setLayout(new BoxLayout(chatBoxPanel, BoxLayout.Y_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
@@ -103,7 +101,6 @@ public class View {
         dialogPanel.add(startPanel);
         tabbedPane.addTab("+", null, dialogPanel, "Create a new chat");
 
-        chatBoxPanel.add(tabbedPane);
         IPPanel.add(IPLabel);
         IPPanel.add(IPField);
         portPanel.add(portLabel);
@@ -125,7 +122,7 @@ public class View {
         fileColorExitPanel.add(connectButton);
         fileColorExitPanel.add(closeButton);
         //panel.add(receiveButton);
-        leftPanel.add(chatBoxPanel);
+        leftPanel.add(tabbedPane);
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         rightPanel.add(list);
