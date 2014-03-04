@@ -20,8 +20,7 @@ public class XMLString {
         this.xmlStr = xmlStr;
         try {
             AES = new AESCrypto();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException
-                | UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
     }
@@ -55,10 +54,7 @@ public class XMLString {
                     case "AES":
                         try {
                             msg += AES.decrypt(encryptedMsg, key);
-                        } catch (InvalidKeyException | IllegalBlockSizeException
-                                | BadPaddingException | UnsupportedEncodingException
-                                | NoSuchAlgorithmException | NoSuchPaddingException
-                                | DecoderException ex) {
+                        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
                             ex.printStackTrace();
                         }
                         break;
