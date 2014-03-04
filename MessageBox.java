@@ -44,13 +44,18 @@ class MessageBox {
     String cipherMessage;
     int cipherStart;
     int cipherEnd;
+
     
     // Fix flexibility, add items not here!
     // Possible to do ArrayList.toArray() to add items dynamically
     // Use getSelected...
+
+
+
     DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
-    //Add confirmation dialog to button below, only unlocked if server!!
+    JScrollPane listPane = new JScrollPane(list);
+    JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
     
     private static final int TYPE_NONE = 0;
@@ -83,10 +88,12 @@ class MessageBox {
                 }
             }
         });
-        int[] select = {1, 3};
-        list.setSelectedIndices(select);
-        rightPanel.add(list);
-        rightPanel.add(bootButton);
+        listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        bootButton.addActionListener(new BootButtonListener());
+        bootPanel.add(bootButton);
+        bootPanel.setVisible(false);
+        rightPanel.add(listPane);
+        rightPanel.add(bootPanel);
         
         this.view = view;
         try {
@@ -176,6 +183,18 @@ class MessageBox {
         keyRequestBox.setVisible(type != TYPE_NONE);
     }
 
+    class BootButtonListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            int i = list.getSelectedIndex();
+            while (i >= 0) {
+                String removed = (String) items.remove(i);
+                System.out.print(removed);
+                i = list.getSelectedIndex();
+            }
+        }
+    }
+    
     // Välj krypteringssystem
     class CipherBoxListener implements ItemListener {
 
@@ -197,7 +216,7 @@ class MessageBox {
             }
         }
     }
-
+    
     class CipherButtonListener implements ActionListener {
 
         private String encrypt(String type, String text, String key) {

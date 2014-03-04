@@ -28,6 +28,7 @@ public class Server implements Runnable {
         // Skapa socket för servern
         try {
             ServerSocket serverSocket = new ServerSocket(port);
+            messageBox.bootPanel.setVisible(true);
             // Lyssna efter klienter
             while (true) {
                 Socket clientSocket = null;
@@ -35,6 +36,7 @@ public class Server implements Runnable {
                 // 'IOThread', som sedan behandlar resten av kommunikationen
                 try {
                     clientSocket = serverSocket.accept();
+                    messageBox.items.addElement(clientSocket.getInetAddress());
                     Thread thr = new Thread(new IOThread(clientSocket, false, view, messageBox));
                     thr.start();
                 } catch (IOException e) {
