@@ -25,6 +25,7 @@ class MessageBox {
     IconButton colorButton = new IconButton("colorIcon.png");
     JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane();
+    JTextPane cBox = new JTextPane();
     StyledDocument doc = messagePane.getStyledDocument();
     Style style = messagePane.addStyle("Default Style", null);
     JButton sendButton = new JButton("Send message");
@@ -99,16 +100,14 @@ class MessageBox {
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         
-        JTextPane cBox = new JTextPane();
         DefaultCaret caret = (DefaultCaret) cBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         cBox.setEditable(false);
         cBox.setContentType("text/html");
         xmlHTMLEditorKit kit = new xmlHTMLEditorKit();
-        HTMLDocument doc = new HTMLDocument();
-        
+        HTMLDocument doc2 = new HTMLDocument();
         cBox.setEditorKit(kit);
-        cBox.setDocument(doc);
+        cBox.setDocument(doc2);
         cBox.setText("This is where it happens.");
         JScrollPane scrollPane = new JScrollPane(cBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

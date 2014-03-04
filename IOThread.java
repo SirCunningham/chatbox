@@ -110,10 +110,9 @@ public class IOThread implements Runnable {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
-
-            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
-            StyleSheet styleSheet = kit.getStyleSheet();
-            HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
+            
+            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.cBox.getEditorKit();
+            HTMLDocument doc = (HTMLDocument) messageBox.cBox.getDocument();
             try {
                 kit.insertHTML(doc, doc.getLength(), msg,0,0,null);    //södjnasödalskdnas-ldk
             } catch (IOException ex) {
