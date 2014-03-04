@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 
 public class View {
 
-    ArrayList<JTextPane> chatBoxes = new ArrayList<>();
     JFrame frame = new JFrame("Instant messaging program for pros");
     JPanel chatBoxPanel = new JPanel();
     JPanel mainPanel = new JPanel();

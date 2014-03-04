@@ -33,7 +33,7 @@ public class Controller {
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
-    public final JPanel createTabPanel() {        
+    public final JPanel createTabPanel() {
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
@@ -234,7 +234,6 @@ public class Controller {
             }
             view.tabbedPane.remove(index);
             tabButtons.remove(index);
-            view.chatBoxes.remove(index);
             for (TabButton button1 : tabButtons) {
                 if (button1.getIndex() > index) {
                     button1.setIndex(button1.getIndex() - 1);

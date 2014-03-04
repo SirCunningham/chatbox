@@ -63,8 +63,7 @@ class MessageBox extends JPanel {
         
         cBox.setEditorKit(kit);
         cBox.setDocument(doc);
-        cBox.setText("This is where it happens.");
-        view.chatBoxes.add(cBox);
+        cBox.setText("This is where it happens.\n1\n2\n3\n4");
         JScrollPane scrollPane = new JScrollPane(cBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane);

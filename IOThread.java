@@ -20,7 +20,7 @@ public class IOThread implements Runnable {
 
     // Fält för strömmar
     private PrintWriter out;
-    private BufferedReader in;  
+    private BufferedReader in;
     private Socket clientSocket;
     private View view;
     private MessageBox messageBox;
@@ -46,7 +46,7 @@ public class IOThread implements Runnable {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(messageBox.messagePane,
                     "ERROR: Failed to create an output stream", Color.RED);
             return;
         }
@@ -54,18 +54,18 @@ public class IOThread implements Runnable {
             in = new BufferedReader(new InputStreamReader(
                     clientSocket.getInputStream()));
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(messageBox.messagePane,
                     "ERROR: Failed to create an input stream", Color.RED);
             return;
         }
 
         // Kommer vi hit har anslutningen gått bra
         if (isClient) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(messageBox.messagePane,
                     "SUCCESS: Connection successful", Color.GREEN);
         } else {
             // Skriv ut IP-nummret från klienten
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(messageBox.messagePane,
                     String.format("SUCCESS: Connection established with %s",
                     clientSocket.getInetAddress()), Color.GREEN);
         }
@@ -76,19 +76,16 @@ public class IOThread implements Runnable {
             try {
                 String echo = in.readLine();
                 if (echo == null) {
-                    appendToPane(view.chatBoxes.get(
-                            view.tabbedPane.getSelectedIndex()),
+                    appendToPane(messageBox.messagePane,
                             String.format("INFO: %s disconnected",
                             clientSocket.getInetAddress()), Color.BLUE);
                     isNotRunnable = true;
                 } else {
-                    appendToPane(view.chatBoxes.get(
-                            view.tabbedPane.getSelectedIndex()), echo,
+                    appendToPane(messageBox.messagePane, echo,
                             new XMLString(echo).toColor());
                 }
             } catch (IOException e) {
-                appendToPane(view.chatBoxes.get(
-                        view.tabbedPane.getSelectedIndex()),
+                appendToPane(messageBox.messagePane,
                         "ERROR: Communication failed", Color.RED);
             }
         }
@@ -98,7 +95,7 @@ public class IOThread implements Runnable {
             out.close();
             clientSocket.close();
         } catch (IOException e) {
-            appendToPane(view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+            appendToPane(messageBox.messagePane,
                     "ERROR: Failed to close connection", Color.RED);
         }
     }
@@ -113,11 +110,11 @@ public class IOThread implements Runnable {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
-            HTMLEditorKit kit =(HTMLEditorKit) chatBox.getEditorKit();
+            HTMLEditorKit kit = (HTMLEditorKit) chatBox.getEditorKit();
             StyleSheet styleSheet = kit.getStyleSheet();
             HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc, doc.getLength(), msg,0,0,null);
+                kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -139,8 +136,7 @@ public class IOThread implements Runnable {
                                 + "<text color=\"%s\">%s</text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
                                 messageBox.messagePane.getText()));
-                    }
-                    else {
+                    } else {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\"> "
@@ -149,16 +145,14 @@ public class IOThread implements Runnable {
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
                                 messageBox.messagePane.getText()));
                     }
-                    appendToPane(
-                            view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+                    appendToPane(messageBox.messagePane,
                             String.format("%s: %s", messageBox.namePane.getText(),
                             messageBox.messagePane.getText()),
                             Color.decode("#" + messageBox.color));
                     messageBox.messagePane.setText("");
                 }
             } catch (Exception ex) {
-                appendToPane(
-                        view.chatBoxes.get(view.tabbedPane.getSelectedIndex()),
+                appendToPane(messageBox.messagePane,
                         "ERROR: Output stream failed", Color.RED);
             }
         }
