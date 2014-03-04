@@ -42,15 +42,15 @@ public class XMLString {
     public void handleString() {
         String msg = "";
         for (int i = 0; i < xmlStr.length(); i++) {
-            if (i == xmlStr.indexOf("<encrypted")) {
+            if (i == xmlStr.indexOf("&ltencrypted")) {
                 msg += xmlStr.substring(0, i);
                 xmlStr = xmlStr.substring(i + 10);
                 String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
-                        temp.indexOf(">") - 1);
-                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
-                        temp.indexOf("</encrypted>"));
+                        temp.indexOf("&gt") - 1);
+                String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
+                        temp.indexOf("&lt/encrypted&gt"));
                 if (type.equals("caesar")) {
                     msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
                 } else if (type.equals("AES")) {
@@ -72,7 +72,7 @@ public class XMLString {
                         ex.printStackTrace();
                     }
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("&lt/encrypted&gt") + 12);
                 i = 0;
             }
         }
