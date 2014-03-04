@@ -43,13 +43,12 @@ class MessageBox {
     String cipherMessage;
     int cipherStart;
     int cipherEnd;
-    
-    // Fix flexibility, add items not here!
-    // Possible to do ArrayList.toArray() to add items dynamically
-    // Use getSelected...
-    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
+
+    DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
+    JScrollPane listPane = new JScrollPane(list);
     //Add confirmation dialog to button below, only unlocked if server!!
+    JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
     
     private static final int TYPE_NONE = 0;
@@ -82,10 +81,29 @@ class MessageBox {
                 }
             }
         });
-        int[] select = {1, 3};
-        list.setSelectedIndices(select);
-        rightPanel.add(list);
-        rightPanel.add(bootButton);
+        listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        items.addElement("ID 1");
+        items.addElement("ID 2");
+        items.addElement("ID 3");
+        items.addElement("ID 4");
+        items.addElement("ID 5");
+        items.addElement("ID 6");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        items.addElement("ID 7");
+        bootButton.addActionListener(new BootButtonListener());
+        bootPanel.add(bootButton);
+        bootPanel.setVisible(false);
+        rightPanel.add(listPane);
+        rightPanel.add(bootPanel);
         
         this.view = view;
         try {
@@ -177,6 +195,18 @@ class MessageBox {
         keyRequestBox.setVisible(type != TYPE_NONE);
     }
 
+    class BootButtonListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            int i = list.getSelectedIndex();
+            while (i >= 0) {
+                String removed = (String) items.remove(i);
+                System.out.print(removed);
+                i = list.getSelectedIndex();
+            }
+        }
+    }
+    
     // Välj krypteringssystem
     class CipherBoxListener implements ItemListener {
 
@@ -198,7 +228,7 @@ class MessageBox {
             }
         }
     }
-
+    
     class CipherButtonListener implements ActionListener {
 
         private String encrypt(String type, String text, String key) {
