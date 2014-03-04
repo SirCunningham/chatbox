@@ -20,7 +20,7 @@ class MessageBox extends JPanel {
     private View view;
     private AESCrypto AES;
     IconButton colorButton = new IconButton("colorIcon.png");
-    JTextField nameField = new JTextField("Dante", 8);
+    JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane();
     StyledDocument doc = messagePane.getStyledDocument();
     Style style = messagePane.addStyle("Default Style", null);
@@ -72,13 +72,15 @@ class MessageBox extends JPanel {
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
-        nameField.addFocusListener(new FieldListener());
+        namePane.addFocusListener(new FieldListener());
+        namePane.setText("Dante");
+        ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
-        ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter());
+        ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
         messagePane.addFocusListener(new FieldListener());
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
-        messagePanel.add(nameField);
+        messagePanel.add(namePane);
         messagePanel.add(messagePane);
         add(messagePanel);
 
@@ -222,7 +224,7 @@ class MessageBox extends JPanel {
                     "Choose text color", view.chatBoxPanel.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
-                nameField.setForeground(colorObj);
+                namePane.setForeground(colorObj);
                 messagePane.setForeground(colorObj);
                 color = Integer.toHexString(colorObj.getRGB()).substring(2);
                 if (cipherButton.isSelected()) {
