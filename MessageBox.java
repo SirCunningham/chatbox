@@ -118,6 +118,7 @@ class MessageBox extends JPanel {
                 cipherButton.setEnabled(true);
                 keyLabel.setVisible(true);
                 keyField.setVisible(true);
+                keyField.setEditable(true);
                 keyBox.setVisible(true);
             }
             if ("AES".equals(chosen)) {
