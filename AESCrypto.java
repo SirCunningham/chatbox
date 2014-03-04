@@ -33,17 +33,9 @@ public class AESCrypto {
             } catch (DecoderException ex) {
                 ex.printStackTrace();
             }
-        } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
-        } catch (NoSuchPaddingException ex) {
-            ex.printStackTrace();
-        } catch (InvalidKeyException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
-        } catch (IllegalBlockSizeException ex) {
-            ex.printStackTrace();
-        } catch (BadPaddingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException
+                | InvalidKeyException | UnsupportedEncodingException
+                | IllegalBlockSizeException | BadPaddingException ex) {
             ex.printStackTrace();
         }
 
@@ -102,8 +94,7 @@ public class AESCrypto {
     }
 
     public static String keyToString(SecretKeySpec key) {
-        String decoded = Hex.encodeHexString(key.getEncoded());
-        return decoded;
+        return Hex.encodeHexString(key.getEncoded());
     }
 
     public static SecretKeySpec stringToKey(String key) throws DecoderException {
