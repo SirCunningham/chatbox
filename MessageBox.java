@@ -48,7 +48,7 @@ class MessageBox {
     // Fix flexibility, add items not here!
     // Possible to do ArrayList.toArray() to add items dynamically
     // Use getSelected...
-    String[] items = {"IP 1", "IP 2", "IP 3", "IP 4"};
+    DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
     //Add confirmation dialog to button below, only unlocked if server!!
     JButton bootButton = new JButton("Boot selected");

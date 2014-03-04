@@ -29,29 +29,36 @@ public class XMLString {
         return xmlStr;
     }
     public String toHexColor() {
-        int index = xmlStr.indexOf("color");
-        String hexColor = xmlStr.substring(index + 7, index + 13);
-        return hexColor;
+        if (xmlStr.indexOf("color")!=-1) {
+            int index = xmlStr.indexOf("color");
+            String hexColor = xmlStr.substring(index + 7, index + 13);
+            return hexColor;
+        }
+        return null;
     }
 
     public Color toColor() {
-        int index = xmlStr.indexOf("color");
-        String hexColor = xmlStr.substring(index + 7, index + 13);
-        return Color.decode("#" + hexColor);
+        if (xmlStr.indexOf("color")!=-1) {
+            int index = xmlStr.indexOf("color");
+            String hexColor = xmlStr.substring(index + 7, index + 13);
+            return Color.decode("#" + hexColor);
+        }
+        return null;
+
     }
 
     public void handleString() {
         String msg = "";
         for (int i = 0; i < xmlStr.length(); i++) {
-            if (i == xmlStr.indexOf("&ltencrypted")) {
+            if (i == xmlStr.indexOf("<encrypted")) {
                 msg += xmlStr.substring(0, i);
                 xmlStr = xmlStr.substring(i + 10);
                 String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
-                        temp.indexOf("&gt") - 1);
+                        temp.indexOf(">") - 1);
                 String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
-                        temp.indexOf("&lt/encrypted&gt"));
+                        temp.indexOf("</encrypted>"));
                 switch (type) {
                     case "caesar":
                         msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
@@ -64,7 +71,7 @@ public class XMLString {
                         }
                         break;
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("&lt/encrypted&gt") + 12);
+                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                 i = 0;
             }
         }
