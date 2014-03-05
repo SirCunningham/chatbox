@@ -456,7 +456,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()), filePane.getText());
+                        view.portPane.getText()), filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
@@ -470,8 +470,8 @@ class MessageBox {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                FileSender thr = new FileSender(view.IPField.getText(),
-                        Integer.parseInt(view.portField.getText()),
+                FileSender thr = new FileSender(view.IPPane.getText(),
+                        Integer.parseInt(view.portPane.getText()),
                         filePane.getText());
                 thr.start();
             } catch (Exception ex) {
