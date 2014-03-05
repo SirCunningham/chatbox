@@ -89,7 +89,7 @@ public class XMLString {
     public static String getSender(String xmlMsg) {
         int i = xmlMsg.indexOf("sender");
         String name = xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
-        return name.substring(0, 1).toUpperCase() + name.substring(1) + ":";
+        return name.substring(0, 1).toUpperCase() + name.substring(1) + ": ";
     }
     
     public static String showName(String xmlMsg) {
@@ -134,11 +134,6 @@ public class XMLString {
     public static String convertAngle(String hex) {
         hex = hex.replaceAll("<", "&lt ");
         hex = hex.replaceFirst(">", "&gt ");
-        for (int i=0; i<hex.length();++i) {
-            if (hex.substring(i,i+2).equals("&lt") || hex.substring(i,i+2).equals("&gt")) {
-                
-            }
-        }
         return hex;
     }
 }
