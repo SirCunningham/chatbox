@@ -47,25 +47,25 @@ public class IOThread implements Runnable {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#FF0000\">Failed to create an output stream </text></message>"));
+                    + "<text color=\"#FF0000\"> Failed to create an output stream </text></message>"));
             return;
         }
         try {
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#FF0000\">Failed to create an input stream </text></message>"));
+                    + "<text color=\"#FF0000\"> Failed to create an input stream </text></message>"));
             return;
         }
 
         // Kommer vi hit har anslutningen gått bra
         if (isClient) {
             appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00FF00\">Connection successful </text></message>"));
+                    + "<text color=\"#00FF00\"> Connection successful </text></message>"));
         } else {
             // Skriv ut IP-nummret från klienten
             appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00FF00\">Connection established with %s </text></message>", clientSocket.getInetAddress()));
+                    + "<text color=\"#00FF00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
         }
 
         // Här läser vi in klientens budskap
@@ -86,7 +86,7 @@ public class IOThread implements Runnable {
                 }
             } catch (IOException e) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#FF0000\">Communication failed </text></message>"));
+                        + "<text color=\"#FF0000\"> Communication failed </text></message>"));
             }
 
 
@@ -97,7 +97,7 @@ public class IOThread implements Runnable {
             clientSocket.close();
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#FF0000\">Failed to close connection </text></message>"));
+                    + "<text color=\"#FF0000\"> Failed to close connection </text></message>"));
         }
     }
 
