@@ -294,7 +294,7 @@ class MessageBox {
                     String text = getText.substring(cipherStart, cipherEnd);
                     String type = String.valueOf(cipherBox.getSelectedItem());
                     String key = keyField.getText();
-                    String keyString = new String();
+                    String keyString = "";
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
                     }
@@ -356,12 +356,11 @@ class MessageBox {
                 StyleConstants.setForeground(style, colorObj);
                 try {
                     doc.remove(0, message.length());
+                    doc.insertString(0, "I just changed to a new color: " + color, style);
+                    sendButton.doClick(); //do something else if no connection, or make it work solo!
                     doc.insertString(0, message, style);
-                    // Tillfällig hacklösning
-                    doc.insertString(0, " ", style);
-                    doc.remove(0, 1);
                     if (cipherButton.isSelected()) {
-                        String text = messagePane.getText().substring(cipherStart, cipherEnd);
+                        String text = message.substring(cipherStart, cipherEnd);
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
                         doc.insertString(cipherStart, text, style);
@@ -376,10 +375,15 @@ class MessageBox {
 
     // Markera textrutor
     class FieldListener implements FocusListener {
+        
+        private String name;
 
         @Override
         public void focusGained(FocusEvent e) {
             JTextComponent source = (JTextComponent) e.getSource();
+            if (source == namePane) {
+                name = namePane.getText();
+            }
             source.selectAll();
         }
 
@@ -389,8 +393,18 @@ class MessageBox {
             if (source == messagePane && !cipherButton.isSelected()) {
                 cipherStart = source.getSelectionStart();
                 cipherEnd = source.getSelectionEnd();
-            }
+            } else if (source == namePane) {
+                String message = messagePane.getText();
+                try {
+                    doc.remove(0, message.length());
+                    doc.insertString(0, "I just switched from my old name: " + name, style);
+                    sendButton.doClick(); //do something else if no connection, or make it work solo!
+                    doc.insertString(0, message, style);
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
             source.select(0, 0);
+            }
         }
     }
 
