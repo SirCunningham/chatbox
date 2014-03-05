@@ -21,7 +21,7 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
     }
     
     public void keyRequest(String html) {
-        if (html.indexOf("<keyrequest>")== -1) {
+        if (html.indexOf("</keyrequest>")!=-1) {
             int reply = JOptionPane.showConfirmDialog(null,
                     String.format("%s sends a keyrequest of type ",
                     XMLString.getSender(html)),

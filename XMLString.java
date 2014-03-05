@@ -34,9 +34,12 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
+    /*
     public static String getKeyRequestType(String xmlString) {
         
     }
+     * 
+     */
     
     public String toHexColor() {
         if (xmlStr.indexOf("color")!=-1) {
