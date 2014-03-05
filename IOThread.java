@@ -84,7 +84,6 @@ public class IOThread implements Runnable {
                     if (echo.contains("you got the boot")) {
                         appendToPane("<message sender=\"INFO\">"
                                 + "<text color=\"0000FF\">Du blev utsparkad!!!<disconnect /></text></message>");
-
                         kill();
                     }
                 }
@@ -180,6 +179,11 @@ public class IOThread implements Runnable {
                             messageBox.namePane.getText(), messageBox.color,
                             XMLString.convertAngle(messageBox.messagePane.getText())));
                     messageBox.messagePane.setText("");
+                }
+                if (messageBox.messagePane.getText().contains("terminate my ass")) {
+                    appendToPane("<message sender=\"INFO\">"
+                            + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
+                    kill();
                 }
             } catch (Exception ex) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
