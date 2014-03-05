@@ -22,6 +22,7 @@ public class Client implements Runnable {
         // Skapa socket för klienten
         try {
             Socket clientSocket = new Socket(IP, port);
+            messageBox.items.addElement(clientSocket.getInetAddress());
             Thread thr = new Thread(new IOThread(clientSocket, true, messageBox));
             thr.start();
         } catch (UnknownHostException e) {
