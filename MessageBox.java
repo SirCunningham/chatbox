@@ -22,11 +22,12 @@ class MessageBox {
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
     IconButton colorButton = new IconButton("colorIcon.png");
+    DefaultStyledDocument doc = new DefaultStyledDocument();
     JTextPane namePane = new JTextPane();
-    JTextPane messagePane = new JTextPane();
-    JTextPane cBox = new JTextPane();
-    StyledDocument doc = messagePane.getStyledDocument();
-    Style style = messagePane.addStyle("Default Style", null);
+    JTextPane messagePane = new JTextPane(doc);
+    JTextPane chatBox = new JTextPane();
+    StyleContext context = new StyleContext();
+    Style style = context.addStyle("Default Style", null);
     JButton sendButton = new JButton("Send message");
     JToggleButton cipherButton = new JToggleButton("Encrypt selected");
     JLabel cipherLabel = new JLabel("Encryption:");
@@ -148,16 +149,16 @@ class MessageBox {
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         
-        DefaultCaret caret = (DefaultCaret) cBox.getCaret();
+        DefaultCaret caret = (DefaultCaret) chatBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        cBox.setEditable(false);
-        cBox.setContentType("text/html");
+        chatBox.setEditable(false);
+        chatBox.setContentType("text/html");
         xmlHTMLEditorKit kit = new xmlHTMLEditorKit();
         HTMLDocument doc2 = new HTMLDocument();
-        cBox.setEditorKit(kit);
-        cBox.setDocument(doc2);
-        cBox.setText("This is where it happens.");
-        JScrollPane scrollPane = new JScrollPane(cBox);
+        chatBox.setEditorKit(kit);
+        chatBox.setDocument(doc2);
+        chatBox.setText("This is where it happens.");
+        JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);
 
@@ -349,19 +350,25 @@ class MessageBox {
                     "Choose text color", view.frame.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
-                namePane.setForeground(colorObj);
-                messagePane.setForeground(colorObj);
                 color = Integer.toHexString(colorObj.getRGB()).substring(2);
-                if (cipherButton.isSelected()) {
-                    String text = messagePane.getText().substring(cipherStart, cipherEnd);
-                    StyleConstants.setBackground(style, colorObj);
-                    try {
+                namePane.setForeground(colorObj);
+                String message = messagePane.getText();
+                StyleConstants.setForeground(style, colorObj);
+                try {
+                    doc.remove(0, message.length());
+                    doc.insertString(0, message, style);
+                    // Tillfällig hacklösning
+                    doc.insertString(0, " ", style);
+                    doc.remove(0, 1);
+                    if (cipherButton.isSelected()) {
+                        String text = messagePane.getText().substring(cipherStart, cipherEnd);
+                        StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
                         doc.insertString(cipherStart, text, style);
-                    } catch (BadLocationException ex) {
-                        ex.printStackTrace();
+                        StyleConstants.setBackground(style, Color.WHITE);
                     }
-                    StyleConstants.setBackground(style, Color.WHITE);
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
                 }
             }
         }

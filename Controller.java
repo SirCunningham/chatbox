@@ -80,11 +80,9 @@ public class Controller {
             try {
                 int port = Integer.parseInt(view.portField.getText());
                 if (view.serverButton.isSelected()) {
-                    view.startButton.setBackground(Color.RED);
                     Thread thr = new Thread(new Server(port, view, messageBox));
                     thr.start();
                 } else {
-                    view.startButton.setBackground(Color.GREEN);
                     Thread thr = new Thread(new Client(view.IPField.getText(),
                             port, view, messageBox));
                     thr.start();
@@ -103,7 +101,6 @@ public class Controller {
                     view.tabbedPane.setSelectedIndex(index);
                     tabCount += 1;
                     view.tabField.setText("Chat " + String.valueOf(tabCount));
-                    view.startButton.setBackground(null);
                 }
             }
         }
