@@ -53,6 +53,7 @@ public class Controller {
         gbc.gridx++;
         gbc.weightx = 0;
         pnlTab.add(btnClose, gbc);
+        System.out.println(btnClose.getParent() == pnlTab);
         return pnlTab;
     }
 
@@ -148,17 +149,9 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             TabButton button = (TabButton) e.getSource();
-            int index = button.getIndex();
-            if (index == view.tabbedPane.getTabCount() - 2 && index != 0) {
-                view.tabbedPane.setSelectedIndex(index - 1);
-            }
+            Container parent = button.getParent();
+            int index = view.tabbedPane.indexOfTabComponent(parent);
             view.tabbedPane.remove(index);
-            tabButtons.remove(index);
-            for (TabButton button1 : tabButtons) {
-                if (button1.getIndex() > index) {
-                    button1.setIndex(button1.getIndex() - 1);
-                }
-            }
         }
     }
 }

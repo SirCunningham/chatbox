@@ -28,6 +28,7 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
+    
     public String toHexColor() {
         if (xmlStr.indexOf("color")!=-1) {
             int index = xmlStr.indexOf("color");

@@ -8,8 +8,9 @@ import java.security.spec.*;
 import javax.crypto.spec.*;
 import java.math.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
-public class Test {
+public class Test extends ArrayList {
 
     public static void main(String[] args) {
         String test = "";
