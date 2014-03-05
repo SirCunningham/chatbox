@@ -18,7 +18,8 @@ public class Test extends ArrayList {
     
     public static void main(String[] args) {
         String test = "";
-        String test2 = "";
+        String test2 = "3686c9af32225647c73cd4de1e7771022d423b33f14cc58cab6429fb8ea38099";
+        System.out.println(test2.length());
         String xmlString = "<message>HELLO!</message> ";                
 
         try {
@@ -31,18 +32,26 @@ public class Test extends ArrayList {
         String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\">&sdgsf;fetstil&dfgdfg;Detta är inte krypterat</fetstil> "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
-        String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\">asdasd<kursiv>asdasd</kursiv></text></message>";
+        String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
         System.out.println(removeBoldEmphTags(xmlTest2));
         System.out.println(isError(xmlTest));
-        for (String str : xmlTest.split("&*;")) {
-            System.out.println(str);
-        }
+        System.out.println(getKeyRequestType(xmlTest2));
     }
     public Test() {
         allowedTags.add("message");
         allowedTags.add("test");
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
+    }
+    
+    public static String getKeyRequestType(String xmlStr) {
+        String[] strings = xmlStr.split("keyrequest type=");
+        for (String str : strings) {
+            if (str.indexOf("</keyrequest>")!=-1) {
+                return str.substring(1, str.indexOf(">")-1);
+            }
+        }
+        return null;
     }
     
     public static String removeBoldEmphTags(String hex) {

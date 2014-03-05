@@ -23,7 +23,7 @@ public class IOThread implements Runnable {
     private BufferedReader in;
     private Socket clientSocket;
     private View view;
-    private MessageBox messageBox;
+    public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
 
@@ -100,13 +100,16 @@ public class IOThread implements Runnable {
                     + "<text color=\"#FF0000\"> Failed to close connection </text></message>"));
         }
     }
+    public MessageBox getMessageBox() {
+        return messageBox;
+    }
 
     public void kill() {
         isNotRunnable = true;
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-    private void appendToPane(String msg) {
+    public void appendToPane(String msg) {
         try {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
@@ -115,7 +118,7 @@ public class IOThread implements Runnable {
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
-                kit.insertHTML(doc, doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -126,7 +129,6 @@ public class IOThread implements Runnable {
         }
 
     }
-
     public class SendMsgButtonListener implements ActionListener {
 
         @Override

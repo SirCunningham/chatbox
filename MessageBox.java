@@ -17,7 +17,7 @@ class MessageBox {
 
     private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
-    private AESCrypto AES;
+    public AESCrypto AES;
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
@@ -42,15 +42,14 @@ class MessageBox {
     Color colorObj = Color.BLACK;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String cipherMessage;
+    String caesarKey = new String("68");             //Ceasar och AES
     int cipherStart;
     int cipherEnd;
-
     DefaultListModel items = new DefaultListModel();
     JList list = new JList(items);
     JScrollPane listPane = new JScrollPane(list);
     JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
-    
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     IconButton fileButton = new IconButton("fileIcon.png");
@@ -64,11 +63,10 @@ class MessageBox {
     JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
     private String filePath;
-    
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
-    
+
     public MessageBox(View view) {
         list.setSelectionModel(new DefaultListSelectionModel() {
 
@@ -100,7 +98,7 @@ class MessageBox {
         bootPanel.setVisible(false);
         rightPanel.add(listPane);
         rightPanel.add(bootPanel);
-        
+
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
@@ -114,7 +112,7 @@ class MessageBox {
         descriptionPane.setText("File description (optional)");
         ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         fileEncryptions = new JComboBox(cipherString);
-        
+
         filePanel.add(fileButton);
         filePanel.add(filePane);
         filePanel.add(fileSizePane);
@@ -128,7 +126,7 @@ class MessageBox {
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
         rightPanel.add(progressBar); //Temporary only!
-        
+
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
         sendFileButton.addActionListener(new SendButtonListener());
@@ -136,19 +134,20 @@ class MessageBox {
         fileButton.addActionListener(new FileButtonListener());
         connectButton.addActionListener(new ConnectButtonListener());
         closeButton.addActionListener(new CloseButtonListener());
-        
+
         this.view = view;
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
-        
+
         DefaultCaret caret = (DefaultCaret) chatBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         chatBox.setEditable(false);
@@ -202,6 +201,16 @@ class MessageBox {
         leftPanel.add(buttonPanel);
     }
 
+    public String getKey(String type) {
+        if (type.equals("caesar")) {
+            return caesarKey;
+        }
+        if (type.equals("AES")) {
+            return AES.getDecodeKey();
+        }
+        return null;
+    }
+
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
@@ -220,7 +229,7 @@ class MessageBox {
         String msg = new String(chars);
         return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
     }
-    
+
     public void toggleType(int type) {
         cipherButton.setEnabled(type != TYPE_NONE);
         keyLabel.setVisible(type != TYPE_NONE);
@@ -240,7 +249,7 @@ class MessageBox {
             }
         }
     }
-    
+
     // Välj krypteringssystem
     class CipherBoxListener implements ItemListener {
 
@@ -261,7 +270,7 @@ class MessageBox {
             }
         }
     }
-    
+
     class CipherButtonListener implements ActionListener {
 
         private String encrypt(String type, String text, String key) {
@@ -276,9 +285,7 @@ class MessageBox {
                     try {
                         AES.encrypt(text);
                         return AES.getEncryptedMsg();
-                    } catch (NoSuchAlgorithmException | InvalidKeyException
-                            | UnsupportedEncodingException | IllegalBlockSizeException
-                            | BadPaddingException | NoSuchPaddingException ex) {
+                    } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
                         ex.printStackTrace();
                     }
                     break;
@@ -339,7 +346,6 @@ class MessageBox {
         }
     }
 
-    
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
 
@@ -375,7 +381,7 @@ class MessageBox {
 
     // Markera textrutor
     class FieldListener implements FocusListener {
-        
+
         private String name;
 
         @Override
@@ -403,7 +409,7 @@ class MessageBox {
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
-            source.select(0, 0);
+                source.select(0, 0);
             }
         }
     }
@@ -424,7 +430,7 @@ class MessageBox {
             }
         }
     }
-    
+
     class MessageListener implements KeyListener {
 
         @Override
@@ -442,7 +448,7 @@ class MessageBox {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     // Mottag fil med server
     public class ReceiveButtonListener implements ActionListener {
 
@@ -457,7 +463,7 @@ class MessageBox {
             }
         }
     }
-    
+
     // Skicka fil med klient
     public class SendButtonListener implements ActionListener {
 
@@ -473,7 +479,7 @@ class MessageBox {
             }
         }
     }
-    
+
     public class ConnectButtonListener implements ActionListener {
 
         @Override
