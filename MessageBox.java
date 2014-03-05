@@ -42,7 +42,7 @@ class MessageBox {
     Color colorObj = Color.BLACK;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String cipherMessage;
-    String caesarKey = Math.random() * 100;
+    String caesarKey = Integer.toString((int) (Math.random() * 72 + 1));
     int cipherStart;
     int cipherEnd;
     DefaultListModel items = new DefaultListModel();
