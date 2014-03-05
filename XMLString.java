@@ -100,9 +100,8 @@ public class XMLString {
     }
     
     public static String getSender(String xmlMsg) {
-        int i = xmlMsg.indexOf("sender");
-        String name = xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
-        return name.substring(0, 1).toUpperCase() + name.substring(1) + ": ";
+        int index = xmlMsg.indexOf("sender");
+        return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
     }
     
     public static String showName(String xmlMsg) {
