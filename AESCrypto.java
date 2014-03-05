@@ -12,6 +12,10 @@ public class AESCrypto {
     private Cipher AEScipher;
     private SecretKeySpec AESkey;
     private String hexDecodeKey;
+    private byte[] cipherData;
+    private String msg;
+    private String encMsg;
+
 
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {

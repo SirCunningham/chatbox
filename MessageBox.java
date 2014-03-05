@@ -480,13 +480,13 @@ class MessageBox {
             }
             /*
             try {
-                FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portPane.getText()), filePane.getText());
-                thr.start();
+            FileReceiver thr = new FileReceiver(Integer.parseInt(
+            view.portPane.getText()), filePane.getText());
+            thr.start();
             } catch (Exception ex) {
-                System.err.println("Ett fel inträffade4: " + ex);
+            System.err.println("Ett fel inträffade4: " + ex);
             }
-            */
+             */
         }
     }
 
@@ -513,14 +513,14 @@ class MessageBox {
             }
             /*
             try {
-                FileSender thr = new FileSender(view.IPPane.getText(),
-                        Integer.parseInt(view.portPane.getText()),
-                        filePane.getText());
-                thr.start();
+            FileSender thr = new FileSender(view.IPPane.getText(),
+            Integer.parseInt(view.portPane.getText()),
+            filePane.getText());
+            thr.start();
             } catch (Exception ex) {
-                System.err.println("Ett fel inträffade2: " + ex);
+            System.err.println("Ett fel inträffade2: " + ex);
             }
-            */
+             */
         }
     }
 }

@@ -17,6 +17,7 @@ public class XMLString {
     private String xmlStr;
     private AESCrypto AES;
     private ArrayList<String> allowedTags;
+
     public XMLString(String xmlStr) {
         this.xmlStr = xmlStr;
         allowedTags = new ArrayList<String>();
@@ -34,7 +35,7 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
-    
+
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("<encrypted type=\"");
         for (String str : strings) {
@@ -55,7 +56,6 @@ public class XMLString {
         return null;
     }
 
-    
     public String toHexColor() {
         if (xmlStr.indexOf("color") != -1) {
             int index = xmlStr.indexOf("color");
@@ -63,6 +63,16 @@ public class XMLString {
             return hexColor;
         }
         return null;
+    }
+
+    public Color toColor() {
+        if (xmlStr.indexOf("color") != -1) {
+            int index = xmlStr.indexOf("color");
+            String hexColor = xmlStr.substring(index + 7, index + 13);
+            return Color.decode("#" + hexColor);
+        }
+        return null;
+
     }
 
     public static String removeBoldEmphTags(String hex) {
@@ -75,41 +85,43 @@ public class XMLString {
 
     public void handleString() {
         String msg = "";
-        for (int i = 0; i < xmlStr.length(); i++) {
-            if (i == xmlStr.indexOf("<encrypted")) {
-                msg += xmlStr.substring(0, i);
-                xmlStr = xmlStr.substring(i + 10);
-                String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
-                String type = temp.substring(0, temp.indexOf("\""));
-                String key = temp.substring(temp.indexOf("key") + 5,
-                        temp.indexOf(">") - 1);
-                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
-                        temp.indexOf("</encrypted>"));
-                switch (type) {
-                    case "caesar":
-                        msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
-                        break;
-                    case "AES":
-                        try {
-                            msg += AES.decrypt(encryptedMsg, key);
-                        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
-                            ex.printStackTrace();
-                        }
-                        break;
+        if (xmlStr.indexOf("<encrypted") != -1) {
+            for (int i = 0; i < xmlStr.length(); i++) {
+                if (i == xmlStr.indexOf("<encrypted")) {
+                    msg += xmlStr.substring(0, i);
+                    xmlStr = xmlStr.substring(i + 10);
+                    String temp = xmlStr.substring(xmlStr.indexOf("\"") + 1);
+                    String type = temp.substring(0, temp.indexOf("\""));
+                    String key = temp.substring(temp.indexOf("key") + 5,
+                            temp.indexOf(">") - 1);
+                    String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
+                            temp.indexOf("</encrypted>"));
+                    switch (type) {
+                        case "caesar":
+                            msg += decryptCaesar(encryptedMsg, Integer.valueOf(key));
+                            break;
+                        case "AES":
+                            try {
+                                msg += AES.decrypt(encryptedMsg, key);
+                            } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
+                    }
+                    xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                    i = 0;
                 }
-                xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
-                i = 0;
             }
         }
         msg += xmlStr;
         xmlStr = msg;
     }
-    
+
     public static String getSender(String xmlMsg) {
         int index = xmlMsg.indexOf("sender");
         return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
     }
-    
+
     public static String showName(String xmlMsg) {
         int i = xmlMsg.indexOf(">");
         for (int k = i + 1; k < xmlMsg.length(); ++k) {
@@ -149,6 +161,7 @@ public class XMLString {
         String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
         return s;
     }
+
     public static String convertAngle(String hex) {
         hex = hex.replaceAll("&", "&amp;");
         hex = hex.replaceAll("<", "&lt;");

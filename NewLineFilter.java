@@ -4,15 +4,15 @@ import java.awt.*;
 import javax.swing.text.*;
 
 class NewLineFilter extends DocumentFilter {
-    
+
     private int charLimit;
     private boolean notOnlyNumbers;
-    
+
     public NewLineFilter(int charLimit, boolean notOnlyNumbers) {
         this.charLimit = charLimit;
         this.notOnlyNumbers = notOnlyNumbers;
     }
-    
+
     public NewLineFilter(int charLimit) {
         this(charLimit, true);
     }
