@@ -266,6 +266,9 @@ class MessageBox {
                     keyField.setText(AES.getDecodeKey());
                     break;
                 default:
+                    if (cipherButton.isSelected()) {
+                        cipherButton.doClick();
+                    }
                     toggleType(TYPE_NONE);
             }
         }
@@ -399,7 +402,10 @@ class MessageBox {
             if (source == messagePane && !cipherButton.isSelected()) {
                 cipherStart = source.getSelectionStart();
                 cipherEnd = source.getSelectionEnd();
-            } else if (source == namePane) {
+            } else if (source == namePane && !name.equals(namePane.getText())) {
+                if (namePane.getText().isEmpty()) {
+                    namePane.setText("Nomen nescio");
+                }
                 String message = messagePane.getText();
                 try {
                     doc.remove(0, message.length());
@@ -456,7 +462,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()), filePane.getText());
+                        view.portPane.getText()), filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
@@ -470,8 +476,8 @@ class MessageBox {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                FileSender thr = new FileSender(view.IPField.getText(),
-                        Integer.parseInt(view.portField.getText()),
+                FileSender thr = new FileSender(view.IPPane.getText(),
+                        Integer.parseInt(view.portPane.getText()),
                         filePane.getText());
                 thr.start();
             } catch (Exception ex) {

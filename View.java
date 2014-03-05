@@ -2,6 +2,7 @@ package chatbox;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.*;
 
 public class View {
 
@@ -12,10 +13,10 @@ public class View {
     ButtonGroup buttonGroup = new ButtonGroup();
     JLabel IPLabel = new JLabel("IP:");
     JLabel passLabel = new JLabel("Password:");
-    JTextField IPField = new JTextField("127.0.0.1", 29);
-    JTextField portField = new JTextField("4444", 28);
-    JTextField passField = new JPasswordField("4hfJ/dc.5t", 11);
-    JTextField tabField = new JTextField("Chat 1", 24);
+    JTextPane IPPane = new JTextPane();
+    JTextPane portPane = new JTextPane();
+    JTextPane passPane = new JTextPane();
+    JTextPane tabPane = new JTextPane();
 
     JButton startButton = new JButton("Join server");
     JComboBox serverOptions;
@@ -35,12 +36,22 @@ public class View {
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
+        
+        IPPane.setText("127.0.0.1");
+        ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
+        portPane.setText("4444");
+        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
+        passPane.enableInputMethods(false); // Möjligt att göra säkrare, t.ex. JPasswordField
+        passPane.setText("4hfJ/dc.5t");
+        ((AbstractDocument) passPane.getDocument()).setDocumentFilter(new NewLineFilter(36));
+        tabPane.setText("Chat 1");
+        ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));
 
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);
 
         passLabel.setVisible(false);
-        passField.setVisible(false);
+        passPane.setVisible(false);
 
         JPanel radioPanel = new JPanel();
         JPanel IPPanel = new JPanel();
@@ -53,17 +64,17 @@ public class View {
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         IPPanel.add(IPLabel);
-        IPPanel.add(IPField);
+        IPPanel.add(IPPane);
         portPanel.add(new JLabel("Port:"));
-        portPanel.add(portField);
+        portPanel.add(portPane);
         passPanel.add(new JLabel("Type:"));
         passPanel.add(serverOptions);
         invisibleContainer1.add(passLabel);
-        invisibleContainer2.add(passField);
+        invisibleContainer2.add(passPane);
         passPanel.add(invisibleContainer1);
         passPanel.add(invisibleContainer2);
         tabPanel.add(new JLabel("Chat name:"));
-        tabPanel.add(tabField);
+        tabPanel.add(tabPane);
         startPanel.add(startButton);
         dialogPanel.add(radioPanel);
         dialogPanel.add(IPPanel);

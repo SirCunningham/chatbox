@@ -7,6 +7,7 @@ import javax.swing.event.*;
 import java.io.*;
 import java.util.*;
 import javax.imageio.ImageIO;
+import javax.swing.text.*;
 
 public class Controller {
 
@@ -17,12 +18,19 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        view.IPField.addFocusListener(new FieldListener());
-        view.portField.addFocusListener(new FieldListener());
-        view.passField.addFocusListener(new FieldListener());
-        view.tabField.addFocusListener(new FieldListener());
+        view.IPPane.addFocusListener(new FieldListener());
+        view.IPPane.addKeyListener(new StartListener());
+        view.portPane.addFocusListener(new FieldListener());
+        view.portPane.addKeyListener(new StartListener());
+        view.passPane.addFocusListener(new FieldListener());
+        view.passPane.addKeyListener(new StartListener());
+        view.tabPane.addFocusListener(new FieldListener());
+        view.tabPane.addKeyListener(new StartListener());
         view.startButton.addActionListener(new StartButtonListener());
+        view.startButton.addKeyListener(new StartListener());
+        view.clientButton.addKeyListener(new StartListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
+        view.serverButton.addKeyListener(new StartListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
@@ -36,7 +44,7 @@ public class Controller {
         
         JPanel tabPanel = new JPanel(new GridBagLayout());
         tabPanel.setOpaque(false);
-        JLabel tabLabel = new JLabel(view.tabField.getText() + " ");
+        JLabel tabLabel = new JLabel(view.tabPane.getText() + " ");
         JButton closeButton = new JButton(icon);
         closeButton.setContentAreaFilled(false);
         closeButton.setOpaque(false);
@@ -59,13 +67,13 @@ public class Controller {
 
         @Override
         public void focusGained(FocusEvent e) {
-            JTextField source = (JTextField) e.getSource();
+            JTextComponent source = (JTextComponent) e.getSource();
             source.selectAll();
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            JTextField source = (JTextField) e.getSource();
+            JTextComponent source = (JTextComponent) e.getSource();
             source.select(0, 0);
         }
     }
@@ -78,12 +86,12 @@ public class Controller {
             boolean success = true;
             MessageBox messageBox = new MessageBox(view);
             try {
-                int port = Integer.parseInt(view.portField.getText());
+                int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
                     Thread thr = new Thread(new Server(port, view, messageBox));
                     thr.start();
                 } else {
-                    Thread thr = new Thread(new Client(view.IPField.getText(),
+                    Thread thr = new Thread(new Client(view.IPPane.getText(),
                             port, view, messageBox));
                     thr.start();
                     clients.add(thr);
@@ -96,11 +104,11 @@ public class Controller {
                     //kill idling threads here!
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
-                            view.tabField.getText(), index);
+                            view.tabPane.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
                     tabCount += 1;
-                    view.tabField.setText("Chat " + String.valueOf(tabCount));
+                    view.tabPane.setText("Chat " + String.valueOf(tabCount));
                 }
             }
         }
@@ -113,11 +121,11 @@ public class Controller {
             if (view.serverButton.isSelected()) {
                 view.startButton.setText("Create server");
                 view.IPLabel.setEnabled(false);
-                view.IPField.setEnabled(false);
+                view.IPPane.setEnabled(false);
             } else {
                 view.startButton.setText("Join server");
                 view.IPLabel.setEnabled(true);
-                view.IPField.setEnabled(true);
+                view.IPPane.setEnabled(true);
             }
         }
     }
@@ -130,10 +138,10 @@ public class Controller {
                     view.serverOptions.getSelectedItem());
             if ("Protected".equals(chosen) || "Secret".equals(chosen)) {
                 view.passLabel.setVisible(true);
-                view.passField.setVisible(true);
+                view.passPane.setVisible(true);
             } else {
                 view.passLabel.setVisible(false);
-                view.passField.setVisible(false);
+                view.passPane.setVisible(false);
             }
         }
     }
@@ -145,6 +153,24 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
+        }
+    }
+    
+    class StartListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                view.startButton.doClick();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
         }
     }
 }
