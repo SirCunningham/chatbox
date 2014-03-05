@@ -20,7 +20,7 @@ public class FileReceiver extends Thread {
 
     public void run() {
 
-// Setup server socket:
+        // Setup server socket:
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -28,7 +28,7 @@ public class FileReceiver extends Thread {
             System.exit(1);
         }
 
-// Listen for client connection:
+        // Listen for client connection:
         try {
             clientSocket = serverSocket.accept();
         } catch (IOException e) {
@@ -38,7 +38,7 @@ public class FileReceiver extends Thread {
 
         System.out.printf("Accept successful on port %d\n", port);
 
-// Setup input stream from socket
+        // Setup input stream from socket
         try {
             in = clientSocket.getInputStream();
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public class FileReceiver extends Thread {
 
         System.out.println("getInputStream successful\n");
 
-// Setup output stream for file
+        // Setup output stream for file
         try {
             out = new FileOutputStream(new File(file)); // creates file even if out is empty!
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class FileReceiver extends Thread {
 
         System.out.println("Finished writing file");
 
-// Clean up
+        // Clean up
         try {
             in.close();
             out.close();

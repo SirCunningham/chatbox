@@ -147,8 +147,7 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton button = (JButton) e.getSource();
-            Container parent = button.getParent();
-            int index = view.tabbedPane.indexOfTabComponent(parent);
+            int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
         }
     }
