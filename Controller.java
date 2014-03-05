@@ -97,11 +97,11 @@ public class Controller {
                     clients.add(thr);
                 }
             } catch (Exception ex) {
+                // Let the bad ones come here!
                 success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
             } finally {
                 if (success) {
-                    //kill idling threads here!
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -150,6 +150,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // Kill thread(s) here by sending something!
             JButton button = (JButton) e.getSource();
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);

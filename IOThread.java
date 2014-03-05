@@ -73,6 +73,7 @@ public class IOThread implements Runnable {
         // Om klienten kopplar ner gör vi det också, och avslutar tråden
         while (!isNotRunnable) {
             try {
+                System.out.println("Still alive");
                 String echo = in.readLine();
                 if (echo == null) {
                     isNotRunnable = true;
@@ -155,33 +156,35 @@ public class IOThread implements Runnable {
         public void actionPerformed(ActionEvent e) {
             // Skicka och visa i textrutan
             try {
-                if (!messageBox.messagePane.getText().equals("")) {
+                String message = messageBox.messagePane.getText();
+                String name = messageBox.namePane.getText();
+                if (!message.isEmpty()) {
                     if (!messageBox.keyRequestBox.isSelected()) {
                         hasSentKeyRequest = false;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s </text></message>",
-                                messageBox.namePane.getText(), messageBox.color,
-                                XMLString.convertAngle(messageBox.messagePane.getText())));
+                                name, messageBox.color,
+                                XMLString.convertAngle(message)));
                     } else {
                         hasSentKeyRequest = true;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\">"
                                 + "%s</keyrequest></text></message>",
-                                messageBox.namePane.getText(), messageBox.color,
+                                name, messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
-                                XMLString.convertAngle(messageBox.messagePane.getText())));
+                                XMLString.convertAngle(message)));
                         timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
                         timer.start();
 
                     }
                     appendToPane(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
-                            messageBox.namePane.getText(), messageBox.color,
-                            XMLString.convertAngle(messageBox.messagePane.getText())));
+                            name, messageBox.color,
+                            XMLString.convertAngle(message)));
                     messageBox.messagePane.setText("");
                 }
-                if (messageBox.messagePane.getText().contains("terminate my ass")) {
+                if (message.contains("terminate my ass")) {
                     appendToPane("<message sender=\"INFO\">"
                             + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
                     kill();
