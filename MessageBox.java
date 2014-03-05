@@ -328,6 +328,8 @@ class MessageBox {
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
                     }
+                } else {
+                    cipherButton.doClick();
                 }
             } else {
                 String text = messagePane.getText().substring(cipherStart, cipherEnd);

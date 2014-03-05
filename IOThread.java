@@ -155,6 +155,7 @@ public class IOThread implements Runnable {
                 String message;
                 if (messageBox.cipherButton.isSelected()) {
                     message = messageBox.cipherMessage;
+                    messageBox.cipherButton.doClick();
                 } else {
                     message = messageBox.messagePane.getText();
                 }
