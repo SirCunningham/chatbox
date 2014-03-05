@@ -78,6 +78,23 @@ public class XMLString {
         msg += xmlStr;
         xmlStr = msg;
     }
+    
+    public static String getSender(String xmlMsg) {
+        int i = xmlMsg.indexOf("sender");
+        String name = xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
+        return name.substring(0, 1).toUpperCase() + name.substring(1) + ": ";
+    }
+    
+    public static String showName(String xmlMsg) {
+        int i = xmlMsg.indexOf(">");
+        for (int k = i + 1; k < xmlMsg.length(); ++k) {
+            if (xmlMsg.substring(k, k + 1).equals(">")) {
+                xmlMsg = xmlMsg.substring(0, k + 1) + getSender(xmlMsg) + xmlMsg.substring(k + 2);
+                return xmlMsg;
+            }
+        }
+        return null;
+    }
 
     public static String decryptCaesar(String text, int shift) {
         text = hexToString(text);

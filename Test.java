@@ -24,38 +24,25 @@ public class Test {
         String xmlTest = "<message sender=\"dante\"> <text color=\"asdfasf\"> Detta är inte krypterat "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
-        System.out.println(test);
+        System.out.println(showName(xmlTest));
         System.out.println(decryptCaesar(test, 5));
         System.out.println(getSender(xmlTest));
-        String encMsg;
-        /*
-        try {
-        encMsg = encryptAES("89asdfasdfasdffsdfsdfdsffffffffd", "nyckel");
-        System.out.println(encMsg);
-        String msg = decryptAES(encMsg, "nyckel");
-        System.out.println(msg);
-        } catch (NoSuchAlgorithmException ex) {
-        ex.printStackTrace();
-        } catch (NoSuchPaddingException ex) {
-        ex.printStackTrace();
-        } catch (InvalidKeyException ex) {
-        ex.printStackTrace();
-        } catch (IllegalBlockSizeException ex) {
-        ex.printStackTrace();
-        } catch (BadPaddingException ex) {
-        ex.printStackTrace();
-        } catch (InvalidKeySpecException ex) {
-        ex.printStackTrace();
-        } catch (UnsupportedEncodingException ex) {
-        ex.printStackTrace();
-        }
-         * 
-         */
     }
     
     public static String getSender(String xmlMsg) {
         int i = xmlMsg.indexOf("sender");
-        return xmlMsg.substring(i+8,xmlMsg.indexOf(">")-1);
+        String name = xmlMsg.substring(i+8,xmlMsg.indexOf(">")-1);
+        return name.substring(0,1).toUpperCase()+name.substring(1)+":";
+    }
+    public static String showName(String xmlMsg) {
+        int i = xmlMsg.indexOf(">");
+        for (int k=i+1; k<xmlMsg.length();++k) {
+            if (xmlMsg.substring(k,k+1).equals(">")) {
+                xmlMsg=xmlMsg.substring(0,k+1)+getSender(xmlMsg)+xmlMsg.substring(k+2);
+                return xmlMsg;
+            }
+        }
+        return null;
     }
 
     public static String handleString(String xmlMsg) {

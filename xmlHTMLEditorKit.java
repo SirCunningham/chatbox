@@ -7,12 +7,12 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 public class xmlHTMLEditorKit extends HTMLEditorKit {
-    
+    //Måste förbättras
     public void insertHTML(HTMLDocument doc, int offset, String html, 
             int popDepth, int pushDepth, HTML.Tag insertTag) throws 
             BadLocationException, IOException {
         String color = new XMLString(html).toHexColor();
-        super.insertHTML(doc, offset, "<font color=\""+color+"\">"+html+
+        super.insertHTML(doc, offset, "<font color=\""+color+"\">"+XMLString.showName(html)+
                 "</font>", popDepth, pushDepth, insertTag);
     }
 }
