@@ -3,6 +3,8 @@ package chatbox;
 //Begränsa tabbarnas tjocklek!
 //Färg och backgrund på messagePane funkar inte alltid!
 //Lock for no name; scroll when error!!!
+//Kan inte skriva texten "&nbsp;"
+//Tomma namn fel!
 
 //Enter vid start
 //Lista för klienter!
