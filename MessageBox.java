@@ -462,28 +462,14 @@ class MessageBox {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String description = descriptionPane.getText();
-            if ("File description (optional)".equals(description)) {
-                description = "No description";
-            }
-            String fileData = String.format("File name: %s\nFile size: %s\n"
-                    + "File description: %s\nAccept file?", filePane.getText(),
-                    fileSizePane.getText(), description);
-            int reply = JOptionPane.showConfirmDialog(null, fileData,
-                    "Request file", JOptionPane.YES_NO_OPTION);
+            int reply = JOptionPane.showConfirmDialog(null, "<fileData>\nAccept file?",
+                    "File request", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                String message = messagePane.getText();
-                try {
-                    doc.remove(0, message.length());
-                    doc.insertString(0, "Filerequest: " + fileData, style);
-                    sendButton.doClick(); //do something else if no connection, or make it work solo!
-                    doc.insertString(0, message, style);
-                } catch (BadLocationException ex) {
-                    ex.printStackTrace();
-                }
+                JOptionPane.showMessageDialog(null, "Good for you!");
             } else {
-                JOptionPane.showMessageDialog(null, "You changed your mind!");
+                JOptionPane.showMessageDialog(null, "Your loss!");
             }
+            /*
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
                         view.portPane.getText()), filePane.getText());
@@ -491,6 +477,7 @@ class MessageBox {
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
             }
+            */
         }
     }
 
@@ -499,6 +486,23 @@ class MessageBox {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            String description = descriptionPane.getText();
+            if ("File description (optional)".equals(description)) {
+                description = "No description";
+            }
+            String fileData = String.format("File name: %s\nFile size: %s\n"
+                    + "File description: %s\nAccept file?", filePane.getText(),
+                    fileSizePane.getText(), description);
+            String message = messagePane.getText();
+            try {
+                doc.remove(0, message.length());
+                doc.insertString(0, "Filerequest: " + fileData, style);
+                sendButton.doClick(); //do something else if no connection, or make it work solo!
+                doc.insertString(0, message, style);
+            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+            }
+            /*
             try {
                 FileSender thr = new FileSender(view.IPPane.getText(),
                         Integer.parseInt(view.portPane.getText()),
@@ -507,6 +511,7 @@ class MessageBox {
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade2: " + ex);
             }
+            */
         }
     }
 }
