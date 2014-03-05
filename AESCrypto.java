@@ -1,15 +1,10 @@
 package chatbox;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.io.*;
 import javax.crypto.*;
 import java.security.*;
-import java.util.Arrays;
 import javax.crypto.spec.*;
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
 public class AESCrypto {
@@ -32,9 +27,7 @@ public class AESCrypto {
             } catch (DecoderException ex) {
                 ex.printStackTrace();
             }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException
-                | InvalidKeyException | UnsupportedEncodingException
-                | IllegalBlockSizeException | BadPaddingException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException ex) {
             ex.printStackTrace();
         }
 
@@ -48,14 +41,6 @@ public class AESCrypto {
         decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
         hexDecodeKey = keyToString(decodeKey);
         AEScipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-    }
-
-    public AESCrypto(String msg) throws NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException,
-            UnsupportedEncodingException, IllegalBlockSizeException,
-            BadPaddingException {
-        this();
-        encrypt(msg);
     }
 
     public String encrypt(String msg) throws NoSuchAlgorithmException,

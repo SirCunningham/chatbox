@@ -239,6 +239,16 @@ class MessageBox {
     class BootButtonListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
+            String message = messagePane.getText();
+            try {
+                doc.remove(0, message.length());
+                doc.insertString(0, "you got the boot", style);
+                sendButton.doClick(); //do something else if no connection, or make it work solo!
+                doc.insertString(0, message, style);
+            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+            }
+            
             int i = list.getSelectedIndex();
             while (i >= 0) {
                 String removed = (String) items.remove(i);
