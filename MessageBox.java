@@ -262,12 +262,12 @@ class MessageBox {
             switch (chosen) {
                 case "caesar":
                     toggleType(TYPE_CAESAR);
-                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
                     keyPane.setText(caesarKey);
                     break;
                 case "AES":
                     toggleType(TYPE_AES);
-                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
                     keyPane.setText(AES.getDecodeKey());
                     break;
                 default:
