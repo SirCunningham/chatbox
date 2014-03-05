@@ -54,6 +54,7 @@ class MessageBox {
     JPanel fileButtonPanel = new JPanel();
     IconButton fileButton = new IconButton("fileIcon.png");
     JTextPane filePane = new JTextPane();
+    JTextPane fileSizePane = new JTextPane();
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton receiveFileButton = new JButton("Receive [test!]");
@@ -105,6 +106,9 @@ class MessageBox {
         filePane.addFocusListener(new FieldListener());
         filePane.setText("filename.txt");
         ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        fileSizePane.setEditable(false);
+        fileSizePane.setText("0");
+        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
         descriptionPane.addFocusListener(new FieldListener());
         descriptionPane.setText("File description (optional)");
         ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
@@ -112,6 +116,7 @@ class MessageBox {
         
         filePanel.add(fileButton);
         filePanel.add(filePane);
+        filePanel.add(fileSizePane);
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
@@ -393,6 +398,7 @@ class MessageBox {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
                 filePane.setText(file.getName());
+                fileSizePane.setText(Integer.toString(filePath.length()) + " proprietaries");
                 sendFileButton.setEnabled(true);
             }
         }
@@ -423,7 +429,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()) + 13, filePane.getText());
+                        view.portField.getText()), filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
@@ -438,7 +444,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileSender thr = new FileSender(view.IPField.getText(),
-                        Integer.parseInt(view.portField.getText()) + 13,
+                        Integer.parseInt(view.portField.getText()),
                         filePane.getText());
                 thr.start();
             } catch (Exception ex) {

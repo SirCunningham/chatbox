@@ -18,7 +18,7 @@ public class FileSender extends Thread {
 
     public FileSender(String IP, int port, String file) {
         this.IP = IP;
-        this.port = port;
+        this.port = port + 13;
         this.file = file;
     }
 

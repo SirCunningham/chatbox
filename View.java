@@ -24,6 +24,8 @@ public class View {
     // Skapa GUI
     public View() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setPreferredSize(new Dimension(dim.width * 4 / 5, dim.height / 2));
         tabbedPane.setFocusable(false);
 
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
