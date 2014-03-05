@@ -14,7 +14,7 @@ public class FileReceiver extends Thread {
     private String file;
 
     public FileReceiver(int port, String file) {
-        this.port = port;
+        this.port = port + 13;
         this.file = file;
     }
 
