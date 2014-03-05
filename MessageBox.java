@@ -58,7 +58,6 @@ class MessageBox {
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton receiveFileButton = new JButton("Receive [test!]");
-    JButton connectButton = new JButton("Disc. [receive!]");
     IconButton closeButton = new IconButton("closeIcon.png");
     JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
@@ -119,7 +118,6 @@ class MessageBox {
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
-        fileButtonPanel.add(connectButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
@@ -132,7 +130,6 @@ class MessageBox {
         sendFileButton.addActionListener(new SendButtonListener());
         receiveFileButton.addActionListener(new ReceiveButtonListener());
         fileButton.addActionListener(new FileButtonListener());
-        connectButton.addActionListener(new ConnectButtonListener());
         closeButton.addActionListener(new CloseButtonListener());
 
         this.view = view;
@@ -465,6 +462,20 @@ class MessageBox {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            String description = descriptionPane.getText();
+            if ("File description (optional)".equals(description)) {
+                description = "No description";
+            }
+            int reply = JOptionPane.showConfirmDialog(null,
+                    String.format("File name: %s\nFile size: %s\n"
+                    + "File description: %s\nAccept file and kill?",
+                    filePane.getText(), fileSizePane.getText(), description),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Hello killer!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Goodbye!");
+            }
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
                         view.portPane.getText()), filePane.getText());
@@ -487,23 +498,6 @@ class MessageBox {
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade2: " + ex);
-            }
-        }
-    }
-
-    public class ConnectButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("File name: %s\nFile description: %s\n"
-                    + "File size: unknown\nAccept file and kill?",
-                    filePane.getText(), descriptionPane.getText()),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Hello killer!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Goodbye!");
             }
         }
     }
