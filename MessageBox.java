@@ -55,9 +55,9 @@ class MessageBox {
     IconButton fileButton = new IconButton("fileIcon.png");
     JTextPane filePane = new JTextPane();
     JTextPane descriptionPane = new JTextPane();
-    JButton sendFileButton = new JButton("Send to selected");
-    JButton receiveFileButton = new JButton("Receive [testing only!]");
-    JButton connectButton = new JButton("Disconnect [currently receive!]");
+    JButton sendFileButton = new JButton("Send file to selected");
+    JButton receiveFileButton = new JButton("Receive [test!]");
+    JButton connectButton = new JButton("Disc. [receive!]");
     IconButton closeButton = new IconButton("closeIcon.png");
     JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
@@ -113,7 +113,7 @@ class MessageBox {
         filePanel.add(fileButton);
         filePanel.add(filePane);
         filePanel.add(descriptionPane);
-        fileButtonPanel.add(sendFileButton);
+        filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
         fileButtonPanel.add(connectButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
@@ -169,13 +169,13 @@ class MessageBox {
         messagePanel.add(colorButton);
         messagePanel.add(namePane);
         messagePanel.add(messagePane);
+        messagePanel.add(sendButton);
         leftPanel.add(messagePanel);
 
         JPanel buttonPanel = new JPanel();
         JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
-        JPanel invisibleContainer4 = new JPanel(new GridLayout(1, 1));
         cipherButton.setEnabled(false);
         cipherButton.addActionListener(new CipherButtonListener());
         cipherBox.addItemListener(new CipherBoxListener());
@@ -183,19 +183,16 @@ class MessageBox {
         keyField.setVisible(false);
         keyField.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
-        keyRequestBox.setVisible(false);
-        buttonPanel.add(sendButton);
+        buttonPanel.add(keyRequestBox);
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
         buttonPanel.add(cipherBox);
         invisibleContainer1.add(keyLabel);
         invisibleContainer2.add(keyField);
         invisibleContainer3.add(keyBox);
-        invisibleContainer4.add(keyRequestBox);
         buttonPanel.add(invisibleContainer1);
         buttonPanel.add(invisibleContainer2);
         buttonPanel.add(invisibleContainer3);
-        buttonPanel.add(invisibleContainer4);
         leftPanel.add(buttonPanel);
     }
 
@@ -224,7 +221,6 @@ class MessageBox {
         keyField.setVisible(type != TYPE_NONE);
         keyField.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
-        keyRequestBox.setVisible(type != TYPE_NONE);
     }
 
     class BootButtonListener implements ActionListener {
@@ -427,7 +423,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
-                        view.portField.getText()), filePane.getText());
+                        view.portField.getText()) + 13, filePane.getText());
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade4: " + ex);
@@ -442,7 +438,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             try {
                 FileSender thr = new FileSender(view.IPField.getText(),
-                        Integer.parseInt(view.portField.getText()),
+                        Integer.parseInt(view.portField.getText()) + 13,
                         filePane.getText());
                 thr.start();
             } catch (Exception ex) {
