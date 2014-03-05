@@ -42,7 +42,7 @@ class MessageBox {
     Color colorObj = Color.BLACK;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String cipherMessage;
-    String caesarKey = new String("68");             //Ceasar och AES
+    String caesarKey = Math.random() * 100;
     int cipherStart;
     int cipherEnd;
     DefaultListModel items = new DefaultListModel();
@@ -186,7 +186,7 @@ class MessageBox {
         cipherBox.addItemListener(new CipherBoxListener());
         keyLabel.setVisible(false);
         ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
-        keyPane.setText("39");
+        keyPane.setText(caesarKey);
         keyPane.setVisible(false);
         keyPane.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
@@ -204,13 +204,14 @@ class MessageBox {
     }
 
     public String getKey(String type) {
-        if (type.equals("caesar")) {
-            return caesarKey;
+        switch (type) {
+            case "caesar":
+                return caesarKey;
+            case "AES":
+                return AES.getDecodeKey();
+            default:
+                return null;
         }
-        if (type.equals("AES")) {
-            return AES.getDecodeKey();
-        }
-        return null;
     }
 
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
@@ -262,7 +263,7 @@ class MessageBox {
                 case "caesar":
                     toggleType(TYPE_CAESAR);
                     ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
-                    keyPane.setText("68");
+                    keyPane.setText(caesarKey);
                     break;
                 case "AES":
                     toggleType(TYPE_AES);
