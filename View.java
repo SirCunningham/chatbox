@@ -38,14 +38,14 @@ public class View {
         clientButton.setSelected(true);
         
         IPPane.setText("127.0.0.1");
-        ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(64));
+        ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         portPane.setText("4444");
-        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(16));
+        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
         passPane.enableInputMethods(false); // Möjligt att göra säkrare, t.ex. JPasswordField
         passPane.setText("4hfJ/dc.5t");
-        ((AbstractDocument) passPane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        ((AbstractDocument) passPane.getDocument()).setDocumentFilter(new NewLineFilter(36));
         tabPane.setText("Chat 1");
-        ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));
 
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);
