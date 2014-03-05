@@ -2,6 +2,7 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
+    
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class IOThread implements Runnable {
     private BufferedReader in;
     private Socket clientSocket;
     private View view;
+    TypeTimer timer;
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
@@ -30,6 +32,8 @@ public class IOThread implements Runnable {
     // Konstruktor
     public IOThread(Socket sock, boolean client, View view, MessageBox messageBox) {
         clientSocket = sock;
+        timer = new TypeTimer(10*1000, new TimerListener(), null);
+        timer.setRepeats(false);
         this.view = view;
         this.messageBox = messageBox;
         this.isClient = client;
@@ -129,6 +133,10 @@ public class IOThread implements Runnable {
         }
 
     }
+    public class TimerListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        }
+    }
     public class SendMsgButtonListener implements ActionListener {
 
         @Override
@@ -142,6 +150,7 @@ public class IOThread implements Runnable {
                                 messageBox.namePane.getText(), messageBox.color,
                                 XMLString.convertAngle(messageBox.messagePane.getText())));
                     } else {
+                        timer.start();
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\">"

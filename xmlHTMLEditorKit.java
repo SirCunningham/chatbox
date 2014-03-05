@@ -18,6 +18,21 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
         keyRequest(html);
         this.thr = thr;
         this.html = html;
+        /*
+        if (thr.timer.isRunning()) {
+            if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
+                thr.timer.foundType(true);
+                thr.timer.stop();
+            }
+        }
+        if (!thr.timer.isRunning() && !thr.timer.isFound()) {
+            thr.appendToPane(String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\">Jag fick ingen nyckel av "
+                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
+                    + "detta!</text></message>",thr.messageBox.namePane.getText(),thr.messageBox.color, thr.timer.getType()));
+        }
+         * 
+         */
         super.insertHTML((HTMLDocument)thr.messageBox.chatBox.getDocument(), 
                 offset, "<font color=\""+color+"\">"+XMLString.showName(html)+
                 "</font>", popDepth, pushDepth, insertTag);

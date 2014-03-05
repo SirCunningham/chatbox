@@ -34,7 +34,7 @@ public class Test extends ArrayList {
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
         System.out.println(removeBoldEmphTags(xmlTest2));
-        System.out.println(isError(xmlTest));
+        System.out.println(getEncryptedType(xmlTest));
         System.out.println(getKeyRequestType(xmlTest2));
     }
     public Test() {
@@ -42,6 +42,15 @@ public class Test extends ArrayList {
         allowedTags.add("test");
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
+    }
+    public static String getEncryptedType(String xmlStr) {
+        String[] strings = xmlStr.split("<encrypted type=\"");
+        for (String str: strings) {
+            if (str.indexOf("</encrypted>")!=-1) {
+                return str.substring(0,str.indexOf("\""));
+            }
+        }
+        return null;
     }
     
     public static String getKeyRequestType(String xmlStr) {

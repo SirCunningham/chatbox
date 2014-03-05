@@ -34,6 +34,17 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
+    
+    public static String getEncryptedType(String xmlStr) {
+        String[] strings = xmlStr.split("<encrypted type=\"");
+        for (String str : strings) {
+            if (str.indexOf("</encrypted>") != -1) {
+                return str.substring(0, str.indexOf("\""));
+            }
+        }
+        return null;
+    }
+
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");
         for (String str : strings) {
