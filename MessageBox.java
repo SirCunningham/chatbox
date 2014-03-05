@@ -436,7 +436,7 @@ class MessageBox {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
                 filePane.setText(file.getName());
-                fileSizePane.setText(Integer.toString(filePath.length()) + " proprietaries");
+                fileSizePane.setText(Long.toString(file.length()) + " bytes");
                 sendFileButton.setEnabled(true);
             }
         }
