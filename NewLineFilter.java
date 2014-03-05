@@ -6,14 +6,24 @@ import javax.swing.text.*;
 class NewLineFilter extends DocumentFilter {
     
     private int charLimit;
+    private boolean notOnlyNumbers;
+    
+    public NewLineFilter(int charLimit, boolean notOnlyNumbers) {
+        this.charLimit = charLimit;
+        this.notOnlyNumbers = notOnlyNumbers;
+    }
     
     public NewLineFilter(int charLimit) {
-        this.charLimit = charLimit;
+        this(charLimit, true);
     }
 
     public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
         if ((fb.getDocument().getLength() + text.length()) <= charLimit) {
-            super.insertString(fb, offset, text.replaceAll("\\n", ""), attr);
+            if (notOnlyNumbers) {
+                super.insertString(fb, offset, text.replaceAll("\\n", ""), attr);
+            } else {
+                super.insertString(fb, offset, text.replaceAll("[^0-9]", ""), attr);
+            }
         } else {
             Toolkit.getDefaultToolkit().beep();
         }

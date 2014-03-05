@@ -33,7 +33,7 @@ class MessageBox {
     JLabel cipherLabel = new JLabel("Encryption:");
     JComboBox cipherBox = new JComboBox(cipherString);
     JLabel keyLabel = new JLabel("Key:");
-    JTextField keyField = new JTextField("68", 5);
+    JTextPane keyPane = new JTextPane();
     JCheckBox keyBox = new JCheckBox("Send key", true);
     JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
     int startEnc;
@@ -104,15 +104,15 @@ class MessageBox {
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
+        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         filePane.addFocusListener(new FieldListener());
         filePane.setText("filename.txt");
-        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
         fileSizePane.setEditable(false);
         fileSizePane.setText("0");
-        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
+        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         descriptionPane.addFocusListener(new FieldListener());
         descriptionPane.setText("File description (optional)");
-        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         fileEncryptions = new JComboBox(cipherString);
         
         filePanel.add(fileButton);
@@ -165,11 +165,11 @@ class MessageBox {
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
-        namePane.addFocusListener(new FieldListener());
-        namePane.setText("Dante");
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
+        namePane.setText("Dante");
+        namePane.addFocusListener(new FieldListener());
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
+        messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
         messagePane.addFocusListener(new FieldListener());
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
@@ -186,15 +186,17 @@ class MessageBox {
         cipherButton.addActionListener(new CipherButtonListener());
         cipherBox.addItemListener(new CipherBoxListener());
         keyLabel.setVisible(false);
-        keyField.setVisible(false);
-        keyField.addFocusListener(new FieldListener());
+        ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
+        keyPane.setText("39");
+        keyPane.setVisible(false);
+        keyPane.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
         buttonPanel.add(keyRequestBox);
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
         buttonPanel.add(cipherBox);
         invisibleContainer1.add(keyLabel);
-        invisibleContainer2.add(keyField);
+        invisibleContainer2.add(keyPane);
         invisibleContainer3.add(keyBox);
         buttonPanel.add(invisibleContainer1);
         buttonPanel.add(invisibleContainer2);
@@ -224,8 +226,8 @@ class MessageBox {
     public void toggleType(int type) {
         cipherButton.setEnabled(type != TYPE_NONE);
         keyLabel.setVisible(type != TYPE_NONE);
-        keyField.setVisible(type != TYPE_NONE);
-        keyField.setEditable(type != TYPE_AES);
+        keyPane.setVisible(type != TYPE_NONE);
+        keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
 
@@ -250,11 +252,13 @@ class MessageBox {
             switch (chosen) {
                 case "caesar":
                     toggleType(TYPE_CAESAR);
-                    keyField.setText("68");
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
+                    keyPane.setText("68");
                     break;
                 case "AES":
                     toggleType(TYPE_AES);
-                    keyField.setText(AES.getDecodeKey());
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
+                    keyPane.setText(AES.getDecodeKey());
                     break;
                 default:
                     if (cipherButton.isSelected()) {
@@ -296,7 +300,7 @@ class MessageBox {
                     String getText = messagePane.getText();
                     String text = getText.substring(cipherStart, cipherEnd);
                     String type = String.valueOf(cipherBox.getSelectedItem());
-                    String key = keyField.getText();
+                    String key = keyPane.getText();
                     String keyString = "";
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
