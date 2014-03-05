@@ -187,6 +187,7 @@ class MessageBox {
         keyLabel.setVisible(false);
         ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
         keyPane.setText(caesarKey);
+        keyPane.addFocusListener(new FieldListener());
         keyPane.setVisible(false);
         keyPane.addFocusListener(new FieldListener());
         keyBox.setVisible(false);

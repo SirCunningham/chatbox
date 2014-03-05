@@ -17,8 +17,8 @@ public class Test extends ArrayList {
     private ArrayList<String> allowedTags= new ArrayList<String>();
     
     public static void main(String[] args) {
-        String text = "123dsf";
-        System.out.println(text.replaceAll("\\D", ""));
+        String test = "123dsf";
+        System.out.println(test.replaceAll("\\D", ""));
         String test2 = "3686c9af32225647c73cd4de1e7771022d423b33f14cc58cab6429fb8ea38099";
         System.out.println(test2.length());
         String xmlString = "<message>HELLO!</message> ";                
