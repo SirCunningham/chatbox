@@ -22,7 +22,7 @@ class NewLineFilter extends DocumentFilter {
             if (notOnlyNumbers) {
                 super.insertString(fb, offset, text.replaceAll("\\n", ""), attr);
             } else {
-                super.insertString(fb, offset, text.replaceAll("[^0-9]", ""), attr);
+                super.insertString(fb, offset, text.replaceAll("\\D", ""), attr);
             }
         } else {
             Toolkit.getDefaultToolkit().beep();

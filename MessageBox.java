@@ -261,13 +261,13 @@ class MessageBox {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             switch (chosen) {
                 case "caesar":
-                    toggleType(TYPE_CAESAR);
                     ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
+                    toggleType(TYPE_CAESAR);
                     keyPane.setText(caesarKey);
                     break;
                 case "AES":
-                    toggleType(TYPE_AES);
                     ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
+                    toggleType(TYPE_AES);
                     keyPane.setText(AES.getDecodeKey());
                     break;
                 default:
