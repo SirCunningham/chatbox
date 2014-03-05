@@ -12,7 +12,6 @@ public class Controller {
 
     private View view;
     private ArrayList<Thread> clients = new ArrayList<>();
-    private ArrayList<TabButton> tabButtons = new ArrayList<>();
     private int tabCount = 1;
     private ImageIcon icon;
 
@@ -38,9 +37,9 @@ public class Controller {
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
         JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
-        TabButton btnClose = new TabButton(icon,
-                view.tabbedPane.getTabCount() - 2);
-        tabButtons.add(btnClose);
+        JButton btnClose = new JButton(icon);
+        btnClose.setContentAreaFilled(false);
+        btnClose.setOpaque(false);
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.addActionListener(new TabButtonListener());
 
@@ -53,7 +52,6 @@ public class Controller {
         gbc.gridx++;
         gbc.weightx = 0;
         pnlTab.add(btnClose, gbc);
-        System.out.println(btnClose.getParent() == pnlTab);
         return pnlTab;
     }
 
@@ -148,7 +146,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            TabButton button = (TabButton) e.getSource();
+            JButton button = (JButton) e.getSource();
             Container parent = button.getParent();
             int index = view.tabbedPane.indexOfTabComponent(parent);
             view.tabbedPane.remove(index);
