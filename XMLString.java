@@ -139,8 +139,9 @@ public class XMLString {
         return s;
     }
     public static String convertAngle(String hex) {
-        
         hex = hex.replaceAll("&", "&amp;");
+        hex = hex.replaceAll("<", "&lt;");
+        hex = hex.replaceAll(">", "&gt;");
         return hex;
     }
 }
