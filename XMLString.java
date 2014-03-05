@@ -34,12 +34,16 @@ public class XMLString {
     public String toText() {
         return xmlStr;
     }
-    /*
-    public static String getKeyRequestType(String xmlString) {
-        
+    public static String getKeyRequestType(String xmlStr) {
+        String[] strings = xmlStr.split("keyrequest type=");
+        for (String str : strings) {
+            if (str.indexOf("</keyrequest>") != -1) {
+                return str.substring(1, str.indexOf(">") - 1);
+            }
+        }
+        return null;
     }
-     * 
-     */
+
     
     public String toHexColor() {
         if (xmlStr.indexOf("color")!=-1) {
