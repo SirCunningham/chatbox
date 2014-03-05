@@ -22,15 +22,13 @@ public class IOThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private Socket clientSocket;
-    private View view;
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
 
     // Konstruktor
-    public IOThread(Socket sock, boolean client, View view, MessageBox messageBox) {
+    public IOThread(Socket sock, boolean client, MessageBox messageBox) {
         clientSocket = sock;
-        this.view = view;
         this.messageBox = messageBox;
         this.isClient = client;
         messageBox.sendButton.addActionListener(new SendMsgButtonListener());
