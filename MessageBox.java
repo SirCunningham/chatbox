@@ -216,7 +216,7 @@ class MessageBox {
             //Tag inte med control characters
             if (c >= 32 && c <= 127) {
                 int x = c - 32;
-                x += shift;
+                x = (x + shift) % 96;
                 if (x < 0) {
                     x += 96;
                 }
