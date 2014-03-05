@@ -53,6 +53,13 @@ public class XMLString {
         return null;
 
     }
+    public static String removeBoldEmphTags(String hex) {
+        hex = hex.replaceAll("<kursiv>", "");
+        hex = hex.replaceAll("</kursiv>", "");
+        hex = hex.replaceAll("<fetstil>", "");
+        hex = hex.replaceAll("</fetstil>", "");
+        return hex;
+    }
 
     public void handleString() {
         String msg = "";
@@ -97,7 +104,7 @@ public class XMLString {
         for (int k = i + 1; k < xmlMsg.length(); ++k) {
             if (xmlMsg.substring(k, k + 1).equals(">")) {
                 xmlMsg = xmlMsg.substring(0, k + 1) + getSender(xmlMsg) + xmlMsg.substring(k + 1);
-                return xmlMsg;
+                return removeBoldEmphTags(xmlMsg);
             }
         }
         return null;
@@ -132,7 +139,8 @@ public class XMLString {
         return s;
     }
     public static String convertAngle(String hex) {
-        hex = hex.replaceAll("&gt;", "&amp;gt;");
+        
+        hex = hex.replaceAll("&*;", "&amp;;");
         hex = hex.replaceAll("&gt", "&amp;gt");
         hex = hex.replaceAll("&lt;", "&amp;lt;");
         hex = hex.replaceAll("&lt", "&amp;lt");
