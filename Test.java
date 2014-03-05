@@ -1,6 +1,7 @@
 package chatbox;
 
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import javax.crypto.*;
 import java.security.*;
@@ -9,6 +10,8 @@ import javax.crypto.spec.*;
 import java.math.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Test extends ArrayList {
     private ArrayList<String> allowedTags= new ArrayList<String>();
@@ -16,6 +19,7 @@ public class Test extends ArrayList {
     public static void main(String[] args) {
         String test = "";
         String test2 = "";
+        String xmlString = "<message>HELLO!</message> ";                
 
         try {
             test = encryptCaesar("men det är detta", 5);
@@ -24,17 +28,29 @@ public class Test extends ArrayList {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
-        String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\"> Detta är inte krypterat "
+        String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\">&sdgsf;fetstil&dfgdfg;Detta är inte krypterat</fetstil> "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\">asdasd<kursiv>asdasd</kursiv></text></message>";
-        System.out.println(showName(xmlTest2));
+        System.out.println(removeBoldEmphTags(xmlTest2));
+        System.out.println(isError(xmlTest));
+        for (String str : xmlTest.split("&*;")) {
+            System.out.println(str);
+        }
     }
     public Test() {
         allowedTags.add("message");
         allowedTags.add("test");
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
+    }
+    
+    public static String removeBoldEmphTags(String hex) {
+        hex= hex.replaceAll("<kursiv>","");
+        hex =hex.replaceAll("</kursiv>", "");
+        hex = hex.replaceAll("<fetstil>", "");
+        hex = hex.replaceAll("</fetstil>", "");
+        return hex;
     }
     
     public static String getSender(String xmlMsg) {
@@ -51,6 +67,19 @@ public class Test extends ArrayList {
             }
         }
         return null;
+    }
+    private static Boolean isError(String test) {
+        Matcher m = Pattern.compile("\\<(.+?)\\>").matcher(test);
+        while (m.find()) {
+            if (m.group(1).matches("([a-zA-ZåäöÅÄÖ\\d]+) message=((\"([a-zA-Zåäö"
+                    + "ÅÄÖ\\d+])\")|(\'([a-zA-ZåäöÅÄÖ\\d+])"
+                    + "\'))") || m.group(1).matches("/[a-zA-zåäöÅÄÖ\\d]+")
+                    || m.group(1).matches("\\?(.+?)\\?")) {
+                return false;
+            }
+        }
+        System.out.println("Trasig kod: " + test);
+        return true;
     }
 
     public static String handleString(String xmlMsg) {
@@ -125,7 +154,7 @@ public class Test extends ArrayList {
         return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase();
     }
     //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
-
+    
     public static String hexToString(String hex) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {
