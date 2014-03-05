@@ -152,7 +152,12 @@ public class IOThread implements Runnable {
         public void actionPerformed(ActionEvent e) {
             // Skicka och visa i textrutan
             try {
-                String message = messageBox.messagePane.getText();
+                String message;
+                if (messageBox.cipherButton.isSelected()) {
+                    message = messageBox.cipherMessage;
+                } else {
+                    message = messageBox.messagePane.getText();
+                }
                 String name = messageBox.namePane.getText();
                 if (!message.isEmpty()) {
                     if (!messageBox.keyRequestBox.isSelected()) {
