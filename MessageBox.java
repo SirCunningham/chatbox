@@ -397,6 +397,9 @@ class MessageBox {
                 cipherStart = source.getSelectionStart();
                 cipherEnd = source.getSelectionEnd();
             } else if (source == namePane && !name.equals(namePane.getText())) {
+                if (namePane.getText().isEmpty()) {
+                    namePane.setText("Nomen nescio");
+                }
                 String message = messagePane.getText();
                 try {
                     doc.remove(0, message.length());
