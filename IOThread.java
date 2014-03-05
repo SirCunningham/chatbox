@@ -161,7 +161,6 @@ public class IOThread implements Runnable {
             try {
                 if (!messageBox.messagePane.getText().equals("")) {
                     if (!messageBox.keyRequestBox.isSelected()) {
-                        hasSentKeyRequest = false;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s </text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
