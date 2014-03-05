@@ -296,8 +296,7 @@ class MessageBox {
                     }
                 case "AES":
                     try {
-                        AES.encrypt(text);
-                        return AES.getEncryptedMsg();
+                        return AES.encrypt(text);
                     } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
                         ex.printStackTrace();
                     }

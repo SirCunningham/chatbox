@@ -10,36 +10,15 @@ import org.apache.commons.codec.binary.Hex;
 public class AESCrypto {
 
     private Cipher AEScipher;
-    private KeyGenerator AESgen;
     private SecretKeySpec AESkey;
-    private SecretKeySpec decodeKey;
     private String hexDecodeKey;
-    private byte[] cipherData;
-    private String msg;
-    private String encMsg;
-
-    public static void main(String[] args) {
-        try {
-            AESCrypto a = new AESCrypto();
-            a.encrypt("Hej!");
-            try {
-                a.decrypt(a.getEncryptedMsg(), a.getDecodeKey());
-            } catch (DecoderException ex) {
-                ex.printStackTrace();
-            }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException ex) {
-            ex.printStackTrace();
-        }
-
-    }
 
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
-        AESgen = KeyGenerator.getInstance("AES");
+        KeyGenerator AESgen = KeyGenerator.getInstance("AES");
         AESgen.init(256);
         AESkey = (SecretKeySpec) AESgen.generateKey();
-        decodeKey = new SecretKeySpec(AESkey.getEncoded(), "AES");
-        hexDecodeKey = keyToString(decodeKey);
+        hexDecodeKey = keyToString(new SecretKeySpec(AESkey.getEncoded(), "AES"));
         AEScipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     }
 
@@ -47,30 +26,15 @@ public class AESCrypto {
             InvalidKeyException, UnsupportedEncodingException,
             IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
         AEScipher.init(Cipher.ENCRYPT_MODE, AESkey);
-        cipherData = AEScipher.doFinal(msg.getBytes("UTF-8"));
-        this.msg = msg;
-        encMsg = byteArrayToHex(cipherData);
-        return encMsg;
+        return byteArrayToHex(AEScipher.doFinal(msg.getBytes("UTF-8")));
     }
 
     public String decrypt(String msg, String hexDecodeKey) throws
             InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException, UnsupportedEncodingException,
             NoSuchAlgorithmException, NoSuchPaddingException, DecoderException {
-        SecretKeySpec key = stringToKey(hexDecodeKey);
-        AEScipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] decryptedData = AEScipher.doFinal(hexToByteArray(msg));
-        encMsg = msg;
-        msg = new String(decryptedData);
-        return msg;
-    }
-
-    public String getEncryptedMsg() {
-        return encMsg;
-    }
-
-    public String getDecryptedMsg() {
-        return msg;
+        AEScipher.init(Cipher.DECRYPT_MODE, stringToKey(hexDecodeKey));
+        return new String(AEScipher.doFinal(hexToByteArray(msg)));
     }
 
     public String getDecodeKey() {
