@@ -22,12 +22,13 @@ public class Test extends ArrayList {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
-        String xmlTest = "<message sender=\"dante\"> <text color=\"asdfasf\"> Detta är inte krypterat "
+        String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\"> Detta är inte krypterat "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
-        System.out.println(showName(xmlTest));
+        String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\">asdasd<kursiv>asdasd</kursiv></text></message>";
+        System.out.println(showName(xmlTest2));
         System.out.println(decryptCaesar(test, 5));
-        System.out.println(getSender(xmlTest));
+        System.out.println(getSender(xmlTest2));
     }
     
     public static String getSender(String xmlMsg) {
@@ -39,7 +40,7 @@ public class Test extends ArrayList {
         int i = xmlMsg.indexOf(">");
         for (int k=i+1; k<xmlMsg.length();++k) {
             if (xmlMsg.substring(k,k+1).equals(">")) {
-                xmlMsg=xmlMsg.substring(0,k+1)+getSender(xmlMsg)+xmlMsg.substring(k+2);
+                xmlMsg=xmlMsg.substring(0,k+1)+getSender(xmlMsg)+xmlMsg.substring(k+1);
                 return xmlMsg;
             }
         }
