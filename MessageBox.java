@@ -332,6 +332,7 @@ class MessageBox {
             }
         }
     }
+
     
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {

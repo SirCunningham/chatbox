@@ -76,7 +76,7 @@ public class IOThread implements Runnable {
                 if (echo == null) {
                     isNotRunnable = true;
                     appendToPane(String.format("<message sender=\"INFO\">"
-                            + "<text color=\"0000FF\"> disconnected </text></message>"));
+                            + "<text color=\"0000FF\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
 
                     if (!isClient) {
                         messageBox.items.removeElement(clientSocket.getInetAddress());

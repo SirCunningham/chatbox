@@ -11,10 +11,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class Test extends ArrayList {
-
+    private ArrayList<String> allowedTags= new ArrayList<String>();
+    
     public static void main(String[] args) {
         String test = "";
         String test2 = "";
+
         try {
             test = encryptCaesar("men det är detta", 5);
             test2 = encryptCaesar("och även detta", 10);
@@ -27,8 +29,12 @@ public class Test extends ArrayList {
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\">asdasd<kursiv>asdasd</kursiv></text></message>";
         System.out.println(showName(xmlTest2));
-        System.out.println(decryptCaesar(test, 5));
-        System.out.println(getSender(xmlTest2));
+    }
+    public Test() {
+        allowedTags.add("message");
+        allowedTags.add("test");
+        allowedTags.add("kursiv");
+        allowedTags.add("fetstil");
     }
     
     public static String getSender(String xmlMsg) {
