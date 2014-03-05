@@ -19,7 +19,6 @@ public class AESCrypto {
     private SecretKeySpec AESkey;
     private SecretKeySpec decodeKey;
     private String hexDecodeKey;
-    private String decodeKey64;
     private byte[] cipherData;
     private String msg;
     private String encMsg;

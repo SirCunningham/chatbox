@@ -24,7 +24,6 @@ public class IOThread implements Runnable {
     private BufferedReader in;
     private Socket clientSocket;
 
-    private View view;
     TypeTimer timer;
     public MessageBox messageBox;
     private boolean isClient;
@@ -35,7 +34,6 @@ public class IOThread implements Runnable {
         clientSocket = sock;
         timer = new TypeTimer(10*1000, new TimerListener(), null);
         timer.setRepeats(false);
-        this.view = view;
         this.messageBox = messageBox;
         this.isClient = client;
         messageBox.sendButton.addActionListener(new SendMsgButtonListener());
