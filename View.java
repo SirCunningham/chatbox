@@ -12,9 +12,9 @@ public class View {
     ButtonGroup buttonGroup = new ButtonGroup();
     JLabel IPLabel = new JLabel("IP:");
     JLabel passLabel = new JLabel("Password:");
-    JTextField IPField = new JTextField("127.0.0.1", 25);
-    JTextField portField = new JTextField("4444", 24);
-    JTextField passField = new JPasswordField("4hfJ/dc.5t", 24);
+    JTextField IPField = new JTextField("127.0.0.1", 29);
+    JTextField portField = new JTextField("4444", 28);
+    JTextField passField = new JPasswordField("4hfJ/dc.5t", 11);
     JTextField tabField = new JTextField("Chat 1", 24);
 
     JButton startButton = new JButton("Join server");
@@ -46,6 +46,8 @@ public class View {
         JPanel passPanel = new JPanel();
         JPanel tabPanel = new JPanel();
         JPanel startPanel = new JPanel();
+        JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
+        JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         IPPanel.add(IPLabel);
@@ -54,8 +56,10 @@ public class View {
         portPanel.add(portField);
         passPanel.add(new JLabel("Type:"));
         passPanel.add(serverOptions);
-        passPanel.add(passLabel);
-        passPanel.add(passField);
+        invisibleContainer1.add(passLabel);
+        invisibleContainer2.add(passField);
+        passPanel.add(invisibleContainer1);
+        passPanel.add(invisibleContainer2);
         tabPanel.add(new JLabel("Chat name:"));
         tabPanel.add(tabField);
         startPanel.add(startButton);

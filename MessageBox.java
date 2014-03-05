@@ -172,6 +172,10 @@ class MessageBox {
         leftPanel.add(messagePanel);
 
         JPanel buttonPanel = new JPanel();
+        JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
+        JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
+        JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
+        JPanel invisibleContainer4 = new JPanel(new GridLayout(1, 1));
         cipherButton.setEnabled(false);
         cipherButton.addActionListener(new CipherButtonListener());
         cipherBox.addItemListener(new CipherBoxListener());
@@ -184,10 +188,14 @@ class MessageBox {
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
         buttonPanel.add(cipherBox);
-        buttonPanel.add(keyLabel);
-        buttonPanel.add(keyField);
-        buttonPanel.add(keyBox);
-        buttonPanel.add(keyRequestBox);
+        invisibleContainer1.add(keyLabel);
+        invisibleContainer2.add(keyField);
+        invisibleContainer3.add(keyBox);
+        invisibleContainer4.add(keyRequestBox);
+        buttonPanel.add(invisibleContainer1);
+        buttonPanel.add(invisibleContainer2);
+        buttonPanel.add(invisibleContainer3);
+        buttonPanel.add(invisibleContainer4);
         leftPanel.add(buttonPanel);
     }
 

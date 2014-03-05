@@ -125,7 +125,6 @@ public class Controller {
         }
     }
 
-    //Gör så att den tomma platsen ockuperas!
     public class ServerOptionsListener implements ItemListener {
 
         @Override
