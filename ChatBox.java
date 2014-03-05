@@ -1,7 +1,7 @@
 package chatbox;
 
 //Begränsa tabbarnas tjocklek! Enter vid start!
-//Tomma namn fel! Fel namn vid avslutning!
+//Fel namn vid avslutning (sitt eget istället för annans)!
 //Fel färger vid varningar!
 //Lista för klienter!
 public class ChatBox {

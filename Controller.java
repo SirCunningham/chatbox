@@ -18,11 +18,18 @@ public class Controller {
     public Controller(View view) {
         this.view = view;
         view.IPField.addFocusListener(new FieldListener());
+        view.IPField.addKeyListener(new StartListener());
         view.portField.addFocusListener(new FieldListener());
+        view.portField.addKeyListener(new StartListener());
         view.passField.addFocusListener(new FieldListener());
+        view.passField.addKeyListener(new StartListener());
         view.tabField.addFocusListener(new FieldListener());
+        view.tabField.addKeyListener(new StartListener());
         view.startButton.addActionListener(new StartButtonListener());
+        view.startButton.addKeyListener(new StartListener());
+        view.clientButton.addKeyListener(new StartListener());
         view.serverButton.addChangeListener(new ServerButtonListener());
+        view.serverButton.addKeyListener(new StartListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
     }
 
@@ -145,6 +152,24 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
+        }
+    }
+    
+    class StartListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                view.startButton.doClick();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
         }
     }
 }
