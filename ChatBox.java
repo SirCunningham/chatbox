@@ -2,7 +2,6 @@ package chatbox;
 
 //Begränsa tabbarnas tjocklek!
 //Färg och backgrund på messagePane funkar inte alltid!
-//Kan inte skicka HTML-kod (t.ex. "&gt;")!
 //Lock for no name; scroll when error!!!
 
 //Enter vid start

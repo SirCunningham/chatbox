@@ -132,8 +132,12 @@ public class XMLString {
         return s;
     }
     public static String convertAngle(String hex) {
+        hex = hex.replaceAll("&gt;", "&amp;gt;");
+        hex = hex.replaceAll("&gt", "&amp;gt");
+        hex = hex.replaceAll("&lt;", "&amp;lt;");
+        hex = hex.replaceAll("&lt", "&amp;lt");
         hex = hex.replaceAll("<", "&lt;");
-        hex = hex.replaceFirst(">", "&gt;");
+        hex = hex.replaceAll(">", "&gt;");
         return hex;
     }
 }
