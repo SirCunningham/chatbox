@@ -257,6 +257,9 @@ class MessageBox {
                     keyField.setText(AES.getDecodeKey());
                     break;
                 default:
+                    if (cipherButton.isSelected()) {
+                        cipherButton.doClick();
+                    }
                     toggleType(TYPE_NONE);
             }
         }
@@ -393,7 +396,7 @@ class MessageBox {
             if (source == messagePane && !cipherButton.isSelected()) {
                 cipherStart = source.getSelectionStart();
                 cipherEnd = source.getSelectionEnd();
-            } else if (source == namePane) {
+            } else if (source == namePane && !name.equals(namePane.getText())) {
                 String message = messagePane.getText();
                 try {
                     doc.remove(0, message.length());
