@@ -86,6 +86,11 @@ public class IOThread implements Runnable {
                     }
                 } else {
                     appendToPane(echo);
+                    if (echo.contains("you got the boot")) {
+                        appendToPane("<message sender=\"INFO\">"
+                            + "<text color=\"0000FF\">Du blev utsparkad!!!<disconnect /></text></message>");
+                        kill();
+                    }
                 }
             } catch (IOException e) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
