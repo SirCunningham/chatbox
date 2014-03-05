@@ -19,9 +19,11 @@ public class TypeTimer extends Timer {
     public void setType(String type) {
         this.type = type;
     }
+
     public void foundType(boolean foundtype) {
-        this.foundType=foundtype;
+        this.foundType = foundtype;
     }
+
     public boolean isFound() {
         return foundType;
     }

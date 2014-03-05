@@ -2,7 +2,7 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
-    
+
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class IOThread implements Runnable {
     private Socket clientSocket;
     private View view;
     TypeTimer timer;
-    boolean hasSentKeyRequest=false;
+    boolean hasSentKeyRequest = false;
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
@@ -33,9 +33,8 @@ public class IOThread implements Runnable {
     // Konstruktor
     public IOThread(Socket sock, boolean client, MessageBox messageBox) {
         clientSocket = sock;
-        timer = new TypeTimer(10*1000, new TimerListener(), null);
+        timer = new TypeTimer(10 * 1000, new TimerListener(), null);
         timer.setRepeats(false);
-        this.view = view;
         this.messageBox = messageBox;
         this.isClient = client;
         messageBox.sendButton.addActionListener(new SendMsgButtonListener());
@@ -88,6 +87,11 @@ public class IOThread implements Runnable {
                     }
                 } else {
                     appendToPane(echo);
+                    if (echo.contains("you got the boot")) {
+                        appendToPane("<message sender=\"INFO\">"
+                                + "<text color=\"0000FF\">Du blev utsparkad!!!<disconnect /></text></message>");
+                        kill();
+                    }
                 }
             } catch (IOException e) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
@@ -105,6 +109,7 @@ public class IOThread implements Runnable {
                     + "<text color=\"#FF0000\"> Failed to close connection </text></message>"));
         }
     }
+
     public MessageBox getMessageBox() {
         return messageBox;
     }
@@ -133,14 +138,23 @@ public class IOThread implements Runnable {
         }
 
     }
+
     public class TimerListener implements ActionListener {
+
         public void actionPerformed(ActionEvent e) {
+            out.println(String.format("<message sender=\"%s\">"
+                    + "<text color=\"%s\">Jag fick ingen nyckel av "
+                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
+                    + "detta!</text></message>",
+                    messageBox.namePane.getText(), messageBox.color, timer.getType()));
+
             appendToPane(String.format("<message sender=\"%s\">"
                     + "<text color=\"%s\">Jag fick ingen nyckel av "
                     + "typen %s inom en minut och antar nu att ni inte har implementerat "
                     + "detta!</text></message>", messageBox.namePane.getText(), messageBox.color, timer.getType()));
         }
     }
+
     public class SendMsgButtonListener implements ActionListener {
 
         @Override
@@ -149,12 +163,13 @@ public class IOThread implements Runnable {
             try {
                 if (!messageBox.messagePane.getText().equals("")) {
                     if (!messageBox.keyRequestBox.isSelected()) {
+                        hasSentKeyRequest = false;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s </text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
                                 XMLString.convertAngle(messageBox.messagePane.getText())));
                     } else {
-                        hasSentKeyRequest=true;
+                        hasSentKeyRequest = true;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\">"
@@ -175,6 +190,26 @@ public class IOThread implements Runnable {
             } catch (Exception ex) {
                 appendToPane(String.format("<message sender=\"ERROR\">"
                         + "<text color=\"#FF0000\">Output stream failed</text></message>"));
+            }
+        }
+    }
+    public void keyRequest(String html) {
+        if (html.indexOf("</keyrequest>") != -1) {
+            int reply = JOptionPane.showConfirmDialog(null,
+                    String.format("%s sends a keyrequest of type %s.\n Send key?",
+                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                appendToPane(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
+                        messageBox.namePane.getText(), messageBox.color,
+                        messageBox.getKey(XMLString.getKeyRequestType(html)),
+                        XMLString.getKeyRequestType(html)));
+                out.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
+                        messageBox.namePane.getText(), messageBox.color,
+                        messageBox.getKey(XMLString.getKeyRequestType(html)),
+                        XMLString.getKeyRequestType(html)));
             }
         }
     }

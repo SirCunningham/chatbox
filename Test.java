@@ -14,14 +14,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Test extends ArrayList {
-    private ArrayList<String> allowedTags= new ArrayList<String>();
-    
+
+    private ArrayList<String> allowedTags = new ArrayList<String>();
+
     public static void main(String[] args) {
         String test = "123dsf";
         System.out.println(test.replaceAll("\\D", ""));
         String test2 = "3686c9af32225647c73cd4de1e7771022d423b33f14cc58cab6429fb8ea38099";
         System.out.println(test2.length());
-        String xmlString = "<message>HELLO!</message> ";                
+        String xmlString = "<message>HELLO!</message> ";
 
         try {
             test = encryptCaesar("men det är detta", 5);
@@ -35,60 +36,64 @@ public class Test extends ArrayList {
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
         System.out.println(handleString("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>"));
+                + "<text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>"));
         System.out.println(removeBoldEmphTags(xmlTest2));
         System.out.println(getEncryptedType(xmlTest));
         System.out.println(getKeyRequestType(xmlTest2));
     }
+
     public Test() {
         allowedTags.add("message");
         allowedTags.add("test");
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
     }
+
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("<encrypted type=\"");
-        for (String str: strings) {
-            if (str.indexOf("</encrypted>")!=-1) {
-                return str.substring(0,str.indexOf("\""));
+        for (String str : strings) {
+            if (str.indexOf("</encrypted>") != -1) {
+                return str.substring(0, str.indexOf("\""));
             }
         }
         return null;
     }
-    
+
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");
         for (String str : strings) {
-            if (str.indexOf("</keyrequest>")!=-1) {
-                return str.substring(1, str.indexOf(">")-1);
+            if (str.indexOf("</keyrequest>") != -1) {
+                return str.substring(1, str.indexOf(">") - 1);
             }
         }
         return null;
     }
-    
+
     public static String removeBoldEmphTags(String hex) {
-        hex= hex.replaceAll("<kursiv>","");
-        hex =hex.replaceAll("</kursiv>", "");
+        hex = hex.replaceAll("<kursiv>", "");
+        hex = hex.replaceAll("</kursiv>", "");
         hex = hex.replaceAll("<fetstil>", "");
         hex = hex.replaceAll("</fetstil>", "");
         return hex;
     }
-    
+
     public static String getSender(String xmlMsg) {
         int i = xmlMsg.indexOf("sender");
-        String name = xmlMsg.substring(i+8,xmlMsg.indexOf(">")-1);
-        return name.substring(0,1).toUpperCase()+name.substring(1)+":";
+        String name = xmlMsg.substring(i + 8, xmlMsg.indexOf(">") - 1);
+        return name.substring(0, 1).toUpperCase() + name.substring(1) + ":";
     }
+
     public static String showName(String xmlMsg) {
         int i = xmlMsg.indexOf(">");
-        for (int k=i+1; k<xmlMsg.length();++k) {
-            if (xmlMsg.substring(k,k+1).equals(">")) {
-                xmlMsg=xmlMsg.substring(0,k+1)+getSender(xmlMsg)+xmlMsg.substring(k+1);
+        for (int k = i + 1; k < xmlMsg.length(); ++k) {
+            if (xmlMsg.substring(k, k + 1).equals(">")) {
+                xmlMsg = xmlMsg.substring(0, k + 1) + getSender(xmlMsg) + xmlMsg.substring(k + 1);
                 return xmlMsg;
             }
         }
         return null;
     }
+
     private static Boolean isError(String test) {
         Matcher m = Pattern.compile("\\<(.+?)\\>").matcher(test);
         while (m.find()) {
@@ -103,6 +108,7 @@ public class Test extends ArrayList {
         return true;
     }
     //"<message sender=\"%s\"><text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>"
+
     public static String handleString(String xmlMsg) {
         String msg = "";
         for (int i = 0; i < xmlMsg.length(); i++) {
@@ -175,7 +181,7 @@ public class Test extends ArrayList {
         return String.format("%x", new BigInteger(1, msg.getBytes("utf-8"))).toUpperCase();
     }
     //stackoverflow.com/questions/15749475/java-string-hex-to-string-ascii-with-accentuation
-    
+
     public static String hexToString(String hex) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         for (int i = 0; i < hex.length(); i += 2) {

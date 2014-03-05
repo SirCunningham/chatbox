@@ -19,27 +19,9 @@ public class AESCrypto {
     private SecretKeySpec AESkey;
     private SecretKeySpec decodeKey;
     private String hexDecodeKey;
-    private String decodeKey64;
     private byte[] cipherData;
     private String msg;
     private String encMsg;
-
-    public static void main(String[] args) {
-        try {
-            AESCrypto a = new AESCrypto();
-            a.encrypt("Hej!");
-            try {
-                a.decrypt(a.getEncryptedMsg(), a.getDecodeKey());
-            } catch (DecoderException ex) {
-                ex.printStackTrace();
-            }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException
-                | InvalidKeyException | UnsupportedEncodingException
-                | IllegalBlockSizeException | BadPaddingException ex) {
-            ex.printStackTrace();
-        }
-
-    }
 
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {

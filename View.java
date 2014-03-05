@@ -17,7 +17,6 @@ public class View {
     JTextPane portPane = new JTextPane();
     JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
     JTextPane tabPane = new JTextPane();
-
     JButton startButton = new JButton("Join server");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -36,7 +35,7 @@ public class View {
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
-        
+
         ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         IPPane.setText("127.0.0.1");
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
@@ -79,7 +78,7 @@ public class View {
         dialogPanel.add(passPanel);
         dialogPanel.add(tabPanel);
         dialogPanel.add(startPanel);
-        
+
         frame.add(tabbedPane, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);

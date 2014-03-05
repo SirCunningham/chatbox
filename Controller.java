@@ -41,7 +41,7 @@ public class Controller {
             System.err.println("Filen kunde inte hittas");
             e.printStackTrace();
         }
-        
+
         JPanel tabPanel = new JPanel(new GridBagLayout());
         tabPanel.setOpaque(false);
         JLabel tabLabel = new JLabel(view.tabPane.getText() + " ");
@@ -77,7 +77,7 @@ public class Controller {
             source.select(0, 0);
         }
     }
-    
+
     // Starta klient eller server
     public class StartButtonListener implements ActionListener {
 
@@ -155,7 +155,7 @@ public class Controller {
             view.tabbedPane.remove(index);
         }
     }
-    
+
     class StartListener implements KeyListener {
 
         @Override
