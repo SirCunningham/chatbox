@@ -185,9 +185,6 @@ class MessageBox {
         cipherButton.addActionListener(new CipherButtonListener());
         cipherBox.addItemListener(new CipherBoxListener());
         keyLabel.setVisible(false);
-        ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
-        keyPane.setText(caesarKey);
-        keyPane.addFocusListener(new FieldListener());
         keyPane.setVisible(false);
         keyPane.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
@@ -262,7 +259,6 @@ class MessageBox {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             switch (chosen) {
                 case "caesar":
-                    // Filter does not work here, what is the difference with messagePane?
                     ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
                     toggleType(TYPE_CAESAR);
                     keyPane.setText(caesarKey);
@@ -423,6 +419,8 @@ class MessageBox {
                     ex.printStackTrace();
                 }
                 source.select(0, 0);
+            } else if (source == keyPane) {
+                source.setText(source.getText());
             }
         }
     }
