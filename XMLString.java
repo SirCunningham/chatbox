@@ -82,7 +82,6 @@ public class XMLString {
                 i = 0;
             }
         }
-        
         msg += xmlStr;
         xmlStr = msg;
     }
@@ -131,5 +130,15 @@ public class XMLString {
         }
         String s = new String(baos.toByteArray(), Charset.forName("UTF-8"));
         return s;
+    }
+    public static String convertAngle(String hex) {
+        hex = hex.replaceAll("<", "&lt ");
+        hex = hex.replaceFirst(">", "&gt ");
+        for (int i=0; i<hex.length();++i) {
+            if (hex.substring(i,i+2).equals("&lt") || hex.substring(i,i+2).equals("&gt")) {
+                
+            }
+        }
+        return hex;
     }
 }

@@ -138,7 +138,7 @@ public class IOThread implements Runnable {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s </text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
-                                messageBox.messagePane.getText()));
+                                XMLString.convertAngle(messageBox.messagePane.getText())));
                     } else {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
@@ -146,12 +146,12 @@ public class IOThread implements Runnable {
                                 + "%s</keyrequest></text></message>",
                                 messageBox.namePane.getText(), messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
-                                messageBox.messagePane.getText()));
+                                XMLString.convertAngle(messageBox.messagePane.getText())));
                     }
                     appendToPane(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
                             messageBox.namePane.getText(), messageBox.color,
-                            messageBox.messagePane.getText()));
+                            XMLString.convertAngle(messageBox.messagePane.getText())));
                     messageBox.messagePane.setText("");
                 }
             } catch (Exception ex) {
