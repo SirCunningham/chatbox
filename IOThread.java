@@ -73,7 +73,6 @@ public class IOThread implements Runnable {
         // Om klienten kopplar ner gör vi det också, och avslutar tråden
         while (!isNotRunnable) {
             try {
-                System.out.println("Still alive");
                 String echo = in.readLine();
                 if (echo == null) {
                     isNotRunnable = true;
