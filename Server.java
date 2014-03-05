@@ -14,12 +14,10 @@ import javax.swing.*;
 public class Server implements Runnable {
 
     private int port;
-    private View view;
     private MessageBox messageBox;
 
-    public Server(int port, View view, MessageBox messageBox) {
+    public Server(int port, MessageBox messageBox) {
         this.port = port;
-        this.view = view;
         this.messageBox = messageBox;
     }
 
@@ -37,7 +35,7 @@ public class Server implements Runnable {
                 try {
                     clientSocket = serverSocket.accept();
                     messageBox.items.addElement(clientSocket.getInetAddress());
-                    Thread thr = new Thread(new IOThread(clientSocket, false, view, messageBox));
+                    Thread thr = new Thread(new IOThread(clientSocket, false, messageBox));
                     thr.start();
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,

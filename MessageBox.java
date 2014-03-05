@@ -33,7 +33,7 @@ class MessageBox {
     JLabel cipherLabel = new JLabel("Encryption:");
     JComboBox cipherBox = new JComboBox(cipherString);
     JLabel keyLabel = new JLabel("Key:");
-    JTextField keyField = new JTextField("68", 5);
+    JTextPane keyPane = new JTextPane();
     JCheckBox keyBox = new JCheckBox("Send key", true);
     JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
     int startEnc;
@@ -42,7 +42,7 @@ class MessageBox {
     Color colorObj = Color.BLACK;
     String color = Integer.toHexString(Color.BLACK.getRGB()).substring(2);
     String cipherMessage;
-    String caesarKey = new String("68");             //Ceasar och AES
+    String caesarKey = Integer.toString((int) (Math.random() * 72 + 1));
     int cipherStart;
     int cipherEnd;
     DefaultListModel items = new DefaultListModel();
@@ -58,7 +58,6 @@ class MessageBox {
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton receiveFileButton = new JButton("Receive [test!]");
-    JButton connectButton = new JButton("Disc. [receive!]");
     IconButton closeButton = new IconButton("closeIcon.png");
     JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
@@ -102,15 +101,15 @@ class MessageBox {
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
+        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         filePane.addFocusListener(new FieldListener());
         filePane.setText("filename.txt");
-        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
+        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
         fileSizePane.setEditable(false);
         fileSizePane.setText("0");
-        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
+        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         descriptionPane.addFocusListener(new FieldListener());
         descriptionPane.setText("File description (optional)");
-        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
         fileEncryptions = new JComboBox(cipherString);
 
         filePanel.add(fileButton);
@@ -119,7 +118,6 @@ class MessageBox {
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
-        fileButtonPanel.add(connectButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
@@ -132,7 +130,6 @@ class MessageBox {
         sendFileButton.addActionListener(new SendButtonListener());
         receiveFileButton.addActionListener(new ReceiveButtonListener());
         fileButton.addActionListener(new FileButtonListener());
-        connectButton.addActionListener(new ConnectButtonListener());
         closeButton.addActionListener(new CloseButtonListener());
 
         this.view = view;
@@ -164,11 +161,11 @@ class MessageBox {
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
-        namePane.addFocusListener(new FieldListener());
-        namePane.setText("Dante");
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
+        namePane.setText("Dante");
+        namePane.addFocusListener(new FieldListener());
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
+        messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
         messagePane.addFocusListener(new FieldListener());
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
@@ -185,15 +182,15 @@ class MessageBox {
         cipherButton.addActionListener(new CipherButtonListener());
         cipherBox.addItemListener(new CipherBoxListener());
         keyLabel.setVisible(false);
-        keyField.setVisible(false);
-        keyField.addFocusListener(new FieldListener());
+        keyPane.setVisible(false);
+        keyPane.addFocusListener(new FieldListener());
         keyBox.setVisible(false);
         buttonPanel.add(keyRequestBox);
         buttonPanel.add(cipherButton);
         buttonPanel.add(cipherLabel);
         buttonPanel.add(cipherBox);
         invisibleContainer1.add(keyLabel);
-        invisibleContainer2.add(keyField);
+        invisibleContainer2.add(keyPane);
         invisibleContainer3.add(keyBox);
         buttonPanel.add(invisibleContainer1);
         buttonPanel.add(invisibleContainer2);
@@ -202,13 +199,14 @@ class MessageBox {
     }
 
     public String getKey(String type) {
-        if (type.equals("caesar")) {
-            return caesarKey;
+        switch (type) {
+            case "caesar":
+                return caesarKey;
+            case "AES":
+                return AES.getDecodeKey();
+            default:
+                return null;
         }
-        if (type.equals("AES")) {
-            return AES.getDecodeKey();
-        }
-        return null;
     }
 
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
@@ -233,8 +231,8 @@ class MessageBox {
     public void toggleType(int type) {
         cipherButton.setEnabled(type != TYPE_NONE);
         keyLabel.setVisible(type != TYPE_NONE);
-        keyField.setVisible(type != TYPE_NONE);
-        keyField.setEditable(type != TYPE_AES);
+        keyPane.setVisible(type != TYPE_NONE);
+        keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
 
@@ -258,12 +256,14 @@ class MessageBox {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             switch (chosen) {
                 case "caesar":
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
                     toggleType(TYPE_CAESAR);
-                    keyField.setText("68");
+                    keyPane.setText(caesarKey);
                     break;
                 case "AES":
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
                     toggleType(TYPE_AES);
-                    keyField.setText(AES.getDecodeKey());
+                    keyPane.setText(AES.getDecodeKey());
                     break;
                 default:
                     if (cipherButton.isSelected()) {
@@ -303,7 +303,7 @@ class MessageBox {
                     String getText = messagePane.getText();
                     String text = getText.substring(cipherStart, cipherEnd);
                     String type = String.valueOf(cipherBox.getSelectedItem());
-                    String key = keyField.getText();
+                    String key = keyPane.getText();
                     String keyString = "";
                     if (keyBox.isSelected()) {
                         keyString = String.format(" key=\"%s\"", key);
@@ -416,6 +416,8 @@ class MessageBox {
                     ex.printStackTrace();
                 }
                 source.select(0, 0);
+            } else if (source == keyPane) {
+                source.setText(source.getText());
             }
         }
     }
@@ -431,7 +433,7 @@ class MessageBox {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
                 filePane.setText(file.getName());
-                fileSizePane.setText(Integer.toString(filePath.length()) + " proprietaries");
+                fileSizePane.setText(Long.toString(file.length()) + " bytes");
                 sendFileButton.setEnabled(true);
             }
         }
@@ -460,6 +462,20 @@ class MessageBox {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            String description = descriptionPane.getText();
+            if ("File description (optional)".equals(description)) {
+                description = "No description";
+            }
+            int reply = JOptionPane.showConfirmDialog(null,
+                    String.format("File name: %s\nFile size: %s\n"
+                    + "File description: %s\nAccept file and kill?",
+                    filePane.getText(), fileSizePane.getText(), description),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Hello killer!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Goodbye!");
+            }
             try {
                 FileReceiver thr = new FileReceiver(Integer.parseInt(
                         view.portPane.getText()), filePane.getText());
@@ -482,23 +498,6 @@ class MessageBox {
                 thr.start();
             } catch (Exception ex) {
                 System.err.println("Ett fel inträffade2: " + ex);
-            }
-        }
-    }
-
-    public class ConnectButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("File name: %s\nFile description: %s\n"
-                    + "File size: unknown\nAccept file and kill?",
-                    filePane.getText(), descriptionPane.getText()),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Hello killer!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Goodbye!");
             }
         }
     }

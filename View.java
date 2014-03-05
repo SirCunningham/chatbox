@@ -15,7 +15,7 @@ public class View {
     JLabel passLabel = new JLabel("Password:");
     JTextPane IPPane = new JTextPane();
     JTextPane portPane = new JTextPane();
-    JTextPane passPane = new JTextPane();
+    JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
     JTextPane tabPane = new JTextPane();
 
     JButton startButton = new JButton("Join server");
@@ -37,15 +37,12 @@ public class View {
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
         
-        IPPane.setText("127.0.0.1");
         ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
-        portPane.setText("4444");
+        IPPane.setText("127.0.0.1");
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
-        passPane.enableInputMethods(false); // Möjligt att göra säkrare, t.ex. JPasswordField
-        passPane.setText("4hfJ/dc.5t");
-        ((AbstractDocument) passPane.getDocument()).setDocumentFilter(new NewLineFilter(36));
-        tabPane.setText("Chat 1");
+        portPane.setText("4444");
         ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));
+        tabPane.setText("Chat 1");
 
         String[] stringOptions = {"Public", "Protected", "Private", "Secret"};
         serverOptions = new JComboBox(stringOptions);

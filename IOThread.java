@@ -23,6 +23,7 @@ public class IOThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private Socket clientSocket;
+
     private View view;
     TypeTimer timer;
     public MessageBox messageBox;
@@ -30,7 +31,7 @@ public class IOThread implements Runnable {
     private volatile boolean isNotRunnable;
 
     // Konstruktor
-    public IOThread(Socket sock, boolean client, View view, MessageBox messageBox) {
+    public IOThread(Socket sock, boolean client, MessageBox messageBox) {
         clientSocket = sock;
         timer = new TypeTimer(10*1000, new TimerListener(), null);
         timer.setRepeats(false);

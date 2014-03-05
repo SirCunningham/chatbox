@@ -88,11 +88,11 @@ public class Controller {
             try {
                 int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
-                    Thread thr = new Thread(new Server(port, view, messageBox));
+                    Thread thr = new Thread(new Server(port, messageBox));
                     thr.start();
                 } else {
                     Thread thr = new Thread(new Client(view.IPPane.getText(),
-                            port, view, messageBox));
+                            port, messageBox));
                     thr.start();
                     clients.add(thr);
                 }
