@@ -319,8 +319,8 @@ class MessageBox {
                     }
                     try {
                         cipherMessage = String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
-                                getText.substring(0, cipherStart), type, keyString,
-                                encrypt(type, text, key), getText.substring(cipherEnd));
+                                XMLString.convertAngle(getText.substring(0, cipherStart)), type, keyString,
+                                XMLString.convertAngle(encrypt(type, text, key)), XMLString.convertAngle(getText.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
                         doc.insertString(cipherStart, text, style);

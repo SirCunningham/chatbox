@@ -182,7 +182,7 @@ public class IOThread implements Runnable {
                     appendToPane(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
                             name, messageBox.color,
-                            XMLString.convertAngle(message)));
+                            message));
                     messageBox.messagePane.setText("");
                 }
                 if (message.contains("terminate my ass")) {
