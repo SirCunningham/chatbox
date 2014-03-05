@@ -261,6 +261,7 @@ class MessageBox {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             switch (chosen) {
                 case "caesar":
+                    // Filter does not work here, what is the difference with messagePane?
                     ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
                     toggleType(TYPE_CAESAR);
                     keyPane.setText(caesarKey);
