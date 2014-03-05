@@ -34,25 +34,25 @@ public class Controller {
             e.printStackTrace();
         }
         
-        JPanel pnlTab = new JPanel(new GridBagLayout());
-        pnlTab.setOpaque(false);
-        JLabel lblTitle = new JLabel(view.tabField.getText() + " ");
-        JButton btnClose = new JButton(icon);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setOpaque(false);
-        btnClose.setPreferredSize(new Dimension(12, 12));
-        btnClose.addActionListener(new TabButtonListener());
+        JPanel tabPanel = new JPanel(new GridBagLayout());
+        tabPanel.setOpaque(false);
+        JLabel tabLabel = new JLabel(view.tabField.getText() + " ");
+        JButton closeButton = new JButton(icon);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setOpaque(false);
+        closeButton.setPreferredSize(new Dimension(12, 12));
+        closeButton.addActionListener(new TabButtonListener());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1;
-        pnlTab.add(lblTitle, gbc);
+        tabPanel.add(tabLabel, gbc);
 
         gbc.gridx++;
         gbc.weightx = 0;
-        pnlTab.add(btnClose, gbc);
-        return pnlTab;
+        tabPanel.add(closeButton, gbc);
+        return tabPanel;
     }
 
     public class FieldListener implements FocusListener {
