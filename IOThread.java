@@ -115,9 +115,6 @@ public class IOThread implements Runnable {
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     public void appendToPane(String msg) {
         try {
-            XMLString XMLMsg = new XMLString(msg);
-            XMLMsg.handleString();
-            msg = XMLMsg.toText();
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {

@@ -30,12 +30,11 @@ public class Test extends ArrayList {
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
-        String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\">&sdgsf;fetstil&dfgdfg;Detta är inte krypterat</fetstil> "
+        String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\">Detta är inte krypterat "
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
-        System.out.println(handleString("<message sender=\"%s\">"
-                + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\"> </encrypted></text></message>"));
+        System.out.println(handleString(xmlTest));
         System.out.println(removeBoldEmphTags(xmlTest2));
         System.out.println(getEncryptedType(xmlTest));
         System.out.println(getKeyRequestType(xmlTest2));
@@ -113,7 +112,7 @@ public class Test extends ArrayList {
         for (int i = 0; i < xmlMsg.length(); i++) {
             if (i == xmlMsg.indexOf("<encrypted")) {
                 msg += xmlMsg.substring(0, i);
-                xmlMsg = xmlMsg.substring(i + 10);
+                xmlMsg = xmlMsg.substring(i);
                 String temp = xmlMsg.substring(xmlMsg.indexOf("\"") + 1);
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
