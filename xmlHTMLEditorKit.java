@@ -15,29 +15,23 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
             int popDepth, int pushDepth, HTML.Tag insertTag) throws 
             BadLocationException, IOException {
         String color = new XMLString(html).toHexColor();
-        keyRequest(html);
         this.thr = thr;
         this.html = html;
-        /*
+        keyRequest(html);
+        super.insertHTML((HTMLDocument)thr.messageBox.chatBox.getDocument(), 
+                offset, "<font color=\""+color+"\">"+XMLString.showName(html)+
+                "</font>", popDepth, pushDepth, insertTag);
+        
         if (thr.timer.isRunning()) {
+            System.out.println(thr.timer.getType());
+            System.out.println(XMLString.getEncryptedType(html));
             if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
                 thr.timer.foundType(true);
                 thr.timer.stop();
             }
         }
-        if (!thr.timer.isRunning() && !thr.timer.isFound()) {
-            thr.appendToPane(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">Jag fick ingen nyckel av "
-                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
-                    + "detta!</text></message>",thr.messageBox.namePane.getText(),thr.messageBox.color, thr.timer.getType()));
-        }
-         * 
-         */
-        super.insertHTML((HTMLDocument)thr.messageBox.chatBox.getDocument(), 
-                offset, "<font color=\""+color+"\">"+XMLString.showName(html)+
-                "</font>", popDepth, pushDepth, insertTag);
     }
-    
+
     public void keyRequest(String html) {
         if (html.indexOf("</keyrequest>")!=-1) {
             int reply = JOptionPane.showConfirmDialog(null,
@@ -46,18 +40,12 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 thr.appendToPane(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>",
+                                + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\"> </encrypted></text></message>",
                                 thr.messageBox.namePane.getText(), thr.messageBox.color,
                                 thr.messageBox.getKey(XMLString.getKeyRequestType(html)),
                                 XMLString.getKeyRequestType(html)));
             } else {
             }
         }
-    }
-    public void setHTML(String html) {
-        this.html=html;
-    }
-    public String getHTML() {
-        return html;
     }
 }

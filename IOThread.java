@@ -23,9 +23,9 @@ public class IOThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private Socket clientSocket;
-
     private View view;
     TypeTimer timer;
+    boolean hasSentKeyRequest=false;
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
@@ -119,7 +119,6 @@ public class IOThread implements Runnable {
             XMLString XMLMsg = new XMLString(msg);
             XMLMsg.handleString();
             msg = XMLMsg.toText();
-
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
@@ -136,6 +135,10 @@ public class IOThread implements Runnable {
     }
     public class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            appendToPane(String.format("<message sender=\"%s\">"
+                    + "<text color=\"%s\">Jag fick ingen nyckel av "
+                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
+                    + "detta!</text></message>", messageBox.namePane.getText(), messageBox.color, timer.getType()));
         }
     }
     public class SendMsgButtonListener implements ActionListener {
@@ -151,7 +154,7 @@ public class IOThread implements Runnable {
                                 messageBox.namePane.getText(), messageBox.color,
                                 XMLString.convertAngle(messageBox.messagePane.getText())));
                     } else {
-                        timer.start();
+                        hasSentKeyRequest=true;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\">"
@@ -159,6 +162,9 @@ public class IOThread implements Runnable {
                                 messageBox.namePane.getText(), messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
                                 XMLString.convertAngle(messageBox.messagePane.getText())));
+                        timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
+                        timer.start();
+
                     }
                     appendToPane(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",

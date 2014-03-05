@@ -34,6 +34,8 @@ public class Test extends ArrayList {
                 + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
                 + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
+        System.out.println(handleString("<message sender=\"%s\">"
+                                + "<text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>"));
         System.out.println(removeBoldEmphTags(xmlTest2));
         System.out.println(getEncryptedType(xmlTest));
         System.out.println(getKeyRequestType(xmlTest2));
@@ -100,7 +102,7 @@ public class Test extends ArrayList {
         System.out.println("Trasig kod: " + test);
         return true;
     }
-
+    //"<message sender=\"%s\"><text color=\"%s\"><encrypted key=%s type=%s> </encrypted></text></message>"
     public static String handleString(String xmlMsg) {
         String msg = "";
         for (int i = 0; i < xmlMsg.length(); i++) {
