@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -15,9 +16,14 @@ public class XMLString {
 
     private String xmlStr;
     private AESCrypto AES;
-
+    private ArrayList<String> allowedTags;
     public XMLString(String xmlStr) {
         this.xmlStr = xmlStr;
+        allowedTags = new ArrayList<String>();
+        allowedTags.add("message");
+        allowedTags.add("test");
+        allowedTags.add("kursiv");
+        allowedTags.add("fetstil");
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
@@ -58,7 +64,7 @@ public class XMLString {
                 String type = temp.substring(0, temp.indexOf("\""));
                 String key = temp.substring(temp.indexOf("key") + 5,
                         temp.indexOf(">") - 1);
-                String encryptedMsg = temp.substring(temp.indexOf("&gt") + 1,
+                String encryptedMsg = temp.substring(temp.indexOf(">") + 1,
                         temp.indexOf("</encrypted>"));
                 switch (type) {
                     case "caesar":
@@ -76,6 +82,7 @@ public class XMLString {
                 i = 0;
             }
         }
+        
         msg += xmlStr;
         xmlStr = msg;
     }

@@ -8,3 +8,4 @@ public class ChatBox {
         new Controller(new View());
     }
 }
+    
