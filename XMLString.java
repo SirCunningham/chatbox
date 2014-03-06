@@ -88,7 +88,7 @@ public class XMLString {
         if (hex.matches("<fetstil>.*</fetstil>")) {
             hex = hex.replaceAll("<(|/)fetstil>", "");
         }
-        hex = hex.replaceAll("<(\\w*.)>.*</\1>", "");
+        hex = hex.replaceAll("<(\\w*.)>.*</\1>", ""); //Tveksamt
         return hex;
     }
 
