@@ -539,12 +539,12 @@ class MessageBox {
     public class xmlHTMLEditorKit extends HTMLEditorKit {
         //Måste förbättras
 
-        public void insertHTML(IOThread2 thr, int offset, String html,
+        public void insertHTML(IOThread2 thr, MessageBox messageBox, int offset, String html,
                 int popDepth, int pushDepth, HTML.Tag insertTag) throws
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
             thr.keyRequest(html);
-            super.insertHTML((HTMLDocument) thr.messageBox.chatBox.getDocument(),
+            super.insertHTML((HTMLDocument) messageBox.chatBox.getDocument(),
                     offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
                     + "</font>", popDepth, pushDepth, insertTag);
 
@@ -554,7 +554,7 @@ class MessageBox {
                 System.out.println(XMLString.getEncryptedType(html));
                 if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
                     thr.timer.stop();
-                    thr.messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
+                    messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
                 }
             }
         }

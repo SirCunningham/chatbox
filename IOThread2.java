@@ -22,7 +22,7 @@ public class IOThread2 implements Runnable {
     private Socket clientSocket;
     TypeTimer timer;
     boolean hasSentKeyRequest = false;
-    public MessageBox messageBox;
+    private MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
     // Konstruktor
@@ -104,7 +104,7 @@ public class IOThread2 implements Runnable {
             MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
-                kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML(this, messageBox, doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
