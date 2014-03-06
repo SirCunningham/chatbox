@@ -2,25 +2,22 @@ package chatbox;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.*;
 
 class IOThread extends Thread {
 
-    private String clientName;
+    private String clientName = "@NN";
     private BufferedReader is;
     private PrintStream os;
     private Socket clientSocket;
-    private final IOThread[] threads;
-    private int maxClientsCount;
+    private LinkedList<IOThread> threads;
 
-    public IOThread(Socket clientSocket, IOThread[] threads) {
+    public IOThread(Socket clientSocket, LinkedList<IOThread> threads) {
         this.clientSocket = clientSocket;
         this.threads = threads;
-        maxClientsCount = threads.length;
     }
 
     public void run() {
-        int maxClientsCount1 = this.maxClientsCount;
-        IOThread[] threads1 = this.threads;
 
         try {
             // Skapa input- och outputströmmar
@@ -42,15 +39,12 @@ class IOThread extends Thread {
             os.println("Welcome " + name
                     + " to our chat room.\nTo leave enter /quit in a new line.");
             synchronized (this) {
-                for (int i = 0; i < maxClientsCount1; i++) {
-                    if (threads1[i] != null && threads1[i] == this) {
+                for (IOThread thread : threads) {
+                    if (thread == this) {
                         clientName = "@" + name;
                         break;
-                    }
-                }
-                for (int i = 0; i < maxClientsCount1; i++) {
-                    if (threads1[i] != null && threads1[i] != this) {
-                        threads1[i].os.println("*** A new user " + name
+                    } else {
+                        thread.os.println("*** A new user " + name
                                 + " entered the chat room !!! ***");
                     }
                 }
@@ -70,14 +64,12 @@ class IOThread extends Thread {
                         words[1] = words[1].trim();
                         if (!words[1].isEmpty()) {
                             synchronized (this) {
-                                for (int i = 0; i < maxClientsCount1; i++) {
-                                    if (threads1[i] != null && threads1[i] != this
-                                            && threads1[i].clientName != null
-                                            && threads1[i].clientName.equals(words[0])) {
-                                        threads1[i].os.println("<" + name + "> " + words[1]);
-                                        
+                                for (IOThread thread : threads) {
+                                    if (thread != this && thread.clientName.equals(words[0])) {
+                                        thread.os.println("<" + name + "> " + words[1]);
+
                                         // Visa att meddelandet har skickats
-                                        this.os.println(">" + name + "> " + words[1]);
+                                        this.os.println("<" + name + "> " + words[1]);
                                         break;
                                     }
                                 }
@@ -87,19 +79,16 @@ class IOThread extends Thread {
                 } else {
                     // Skicka publika meddelanden
                     synchronized (this) {
-                        for (int i = 0; i < maxClientsCount1; i++) {
-                            if (threads1[i] != null && threads1[i].clientName != null) {
-                                threads1[i].os.println("<" + name + "> " + line);
-                            }
+                        for (IOThread thread : threads) {
+                            thread.os.println("<" + name + "> " + line);
                         }
                     }
                 }
             }
             synchronized (this) {
-                for (int i = 0; i < maxClientsCount1; i++) {
-                    if (threads1[i] != null && threads1[i] != this
-                            && threads1[i].clientName != null) {
-                        threads1[i].os.println("*** The user " + name
+                for (IOThread thread : threads) {
+                    if (thread != this) {
+                        thread.os.println("*** The user " + name
                                 + " is leaving the chat room !!! ***");
                     }
                 }
@@ -108,11 +97,7 @@ class IOThread extends Thread {
             
             // Lämna plats för nya klienter
             synchronized (this) {
-                for (int i = 0; i < maxClientsCount1; i++) {
-                    if (threads1[i] == this) {
-                        threads1[i] = null;
-                    }
-                }
+                threads.remove(this);
             }
             is.close();
             os.close();

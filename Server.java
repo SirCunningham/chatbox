@@ -2,16 +2,17 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import javax.swing.*;
 
 public class Server {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private final IOThread[] threads;
+    private LinkedList<IOThread> threads;
     
     // Lägg till frame för meddelandena!!!
-    public Server(int portNumber, int maxClientsCount, MessageBox messagebox) {
+    public Server(int portNumber, MessageBox messagebox) {
 
         // Starta socket för servern
         try {
@@ -24,7 +25,6 @@ public class Server {
         }
 
         // Skapa tråd för varje klient
-        threads = new IOThread[maxClientsCount];
         if (serverSocket != null) {
             while (true) {
                 // Gör det möjligt att avsluta när tabben stängs ned!!!
@@ -34,20 +34,7 @@ public class Server {
                 try {
                     clientSocket = serverSocket.accept();
                     // add messageBox.items.addElement(clientSocket.getInetAddress()); later!!!
-                    int i = 0;
-                    for (i = 0; i < maxClientsCount; i++) {
-                        if (threads[i] == null) {
-                            (threads[i] = new IOThread(clientSocket, threads)).start();
-                            break;
-                        }
-                    }
-                    if (i == maxClientsCount) {
-                        // HTML-kod!!! Maybe this part can be removed!!!
-                        try (PrintStream os = new PrintStream(clientSocket.getOutputStream())) {
-                            os.println("Server too busy. Try later.");
-                        }
-                        clientSocket.close();
-                    }
+                    threads.addLast(new IOThread(clientSocket, threads));
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, String.format("Accept failed "
                             + "on port %d.", portNumber), "Error message",
