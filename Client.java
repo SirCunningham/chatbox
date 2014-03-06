@@ -27,7 +27,7 @@ public class Client implements Runnable {
         try {
             clientSocket = new Socket(host, port);
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            o = new PrintWriter(clientSocket.getOutputStream());
+            o = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (UnknownHostException e) {
             messageBox.success = false;
             JOptionPane.showMessageDialog(null, "Don't know about host.",
@@ -51,8 +51,14 @@ public class Client implements Runnable {
                         o.println(messageBox.getMessage());
                     }
                 }
+                class SendFileButtonListener implements ActionListener {
+                    public void actionPerformed(ActionEvent e) {
+                        
+                    }
+                }
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 messageBox.sendButton.addActionListener(sendButtonListener);
+                messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
                 while ((responseLine = i.readLine()) != null) {
                     messageBox.appendToPane(responseLine);
                     if (responseLine.indexOf("*** Bye") != -1) {
