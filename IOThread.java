@@ -1,217 +1,123 @@
 package chatbox;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
+class IOThread extends Thread {
 
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.NoSuchPaddingException;
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.event.*;
-import javax.swing.text.html.HTMLDocument;
-
-/**
- * Tråd för input- och outputströmmar
- */
-public class IOThread implements Runnable {
-
-    // Fält för strömmar
-    private PrintWriter out;
-    private BufferedReader in;
+    private String clientName;
+    private DataInputStream is;
+    private PrintStream os;
     private Socket clientSocket;
-    TypeTimer timer;
-    boolean hasSentKeyRequest = false;
-    public MessageBox messageBox;
-    private boolean isClient;
-    private volatile boolean isNotRunnable;
-    // Konstruktor
-    public IOThread(Socket sock, boolean client, MessageBox messageBox) {
-        clientSocket = sock;
-        timer = new TypeTimer(10 * 1000, new TimerListener(), null);
-        timer.setRepeats(false);
-        this.messageBox = messageBox;
-        this.isClient = client;
-        messageBox.sendButton.addActionListener(new SendMsgButtonListener());
+    private final IOThread[] threads;
+    private int maxClientsCount;
+
+    public IOThread(Socket clientSocket, IOThread[] threads) {
+        this.clientSocket = clientSocket;
+        this.threads = threads;
+        maxClientsCount = threads.length;
     }
 
-    @Override
     public void run() {
+        int maxClientsCount1 = this.maxClientsCount;
+        IOThread[] threads1 = this.threads;
 
-        // Vi kör tills vi är klara
-        isNotRunnable = false;
-
-        // Anslut läs- och skrivströmmarna
         try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to create an output stream </text></message>"));
-            return;
-        }
-        try {
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to create an input stream </text></message>"));
-            return;
-        }
-
-        // Kommer vi hit har anslutningen gått bra
-        if (isClient) {
-            appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection successful </text></message>"));
-        } else {
-            // Skriv ut IP-nummret från klienten
-            appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
-        }
-
-        // Här läser vi in klientens budskap
-        // Om klienten kopplar ner gör vi det också, och avslutar tråden
-        while (!isNotRunnable) {
-            try {
-                String echo = in.readLine();
-                if (echo == null) {
-                    isNotRunnable = true;
-                    appendToPane(String.format("<message sender=\"INFO\">"
-                            + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
-                    messageBox.items.removeElement(clientSocket.getInetAddress());
+            // Skapa input- och outputströmmar
+            is = new DataInputStream(clientSocket.getInputStream());
+            os = new PrintStream(clientSocket.getOutputStream());
+            String name;
+            while (true) {
+                os.println("Enter your name.");
+                name = is.readLine();
+                // Integrera med GUI!!!
+                if (name.isEmpty()) {
+                    break;
                 } else {
-                    appendToPane(echo);
-                    if (echo.contains("you got the boot")) {
-                        appendToPane("<message sender=\"INFO\">"
-                                + "<text color=\"0000FF\">Du blev utsparkad!!!<disconnect /></text></message>");
-                        kill();
-                    }
+                    os.println("The name should not be empty.");
                 }
-            } catch (IOException e) {
-                appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#ff0000\"> Communication failed </text></message>"));
             }
 
+            // Ge välkomstmeddelande
+            os.println("Welcome " + name
+                    + " to our chat room.\nTo leave enter /quit in a new line.");
+            synchronized (this) {
+                for (int i = 0; i < maxClientsCount1; i++) {
+                    if (threads1[i] != null && threads1[i] == this) {
+                        clientName = "@" + name;
+                        break;
+                    }
+                }
+                for (int i = 0; i < maxClientsCount1; i++) {
+                    if (threads1[i] != null && threads1[i] != this) {
+                        threads1[i].os.println("*** A new user " + name
+                                + " entered the chat room !!! ***");
+                    }
+                }
+            }
 
-        }
-        try {
-            out.close();
-            in.close();
+            // Starta konversationen
+            while (true) {
+                String line = is.readLine();
+                if (line.startsWith("/quit")) {
+                    break;
+                }
+                
+                // Skicka privata meddelanden
+                if (line.startsWith("@")) {
+                    String[] words = line.split("\\s", 2);
+                    if (words.length > 1 && words[1] != null) {
+                        words[1] = words[1].trim();
+                        if (!words[1].isEmpty()) {
+                            synchronized (this) {
+                                for (int i = 0; i < maxClientsCount1; i++) {
+                                    if (threads1[i] != null && threads1[i] != this
+                                            && threads1[i].clientName != null
+                                            && threads1[i].clientName.equals(words[0])) {
+                                        threads1[i].os.println("<" + name + "> " + words[1]);
+                                        
+                                        // Visa att meddelandet har skickats
+                                        this.os.println(">" + name + "> " + words[1]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // Skicka publika meddelanden
+                    synchronized (this) {
+                        for (int i = 0; i < maxClientsCount1; i++) {
+                            if (threads1[i] != null && threads1[i].clientName != null) {
+                                threads1[i].os.println("<" + name + "> " + line);
+                            }
+                        }
+                    }
+                }
+            }
+            synchronized (this) {
+                for (int i = 0; i < maxClientsCount1; i++) {
+                    if (threads1[i] != null && threads1[i] != this
+                            && threads1[i].clientName != null) {
+                        threads1[i].os.println("*** The user " + name
+                                + " is leaving the chat room !!! ***");
+                    }
+                }
+            }
+            os.println("*** Bye " + name + " ***");
+            
+            // Lämna plats för nya klienter
+            synchronized (this) {
+                for (int i = 0; i < maxClientsCount1; i++) {
+                    if (threads1[i] == this) {
+                        threads1[i] = null;
+                    }
+                }
+            }
+            is.close();
+            os.close();
             clientSocket.close();
         } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to close connection </text></message>"));
-        }
-    }
-
-    public MessageBox getMessageBox() {
-        return messageBox;
-    }
-
-    public void kill() {
-        isNotRunnable = true;
-    }
-
-    // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-    public void appendToPane(String msg) {
-        try {
-            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
-            HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
-            try {
-                kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-        } catch (BadLocationException e) {
-            JOptionPane.showMessageDialog(null, "String insertion failed.",
-                    "Error message", JOptionPane.ERROR_MESSAGE);
-        }
-
-    }
-
-    public class TimerListener implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            out.println(String.format("<message sender=\"%s\">"
-                    + "<text color=\"%s\">Jag fick ingen nyckel av "
-                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
-                    + "detta!</text></message>",
-                    messageBox.namePane.getText(), messageBox.color, timer.getType()));
-
-            appendToPane(String.format("<message sender=\"%s\">"
-                    + "<text color=\"%s\">Jag fick ingen nyckel av "
-                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
-                    + "detta!</text></message>", messageBox.namePane.getText(), messageBox.color, timer.getType()));
-        }
-    }
-
-    public class SendMsgButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Skicka och visa i textrutan
-            try {
-                String message;
-                if (messageBox.cipherButton.isSelected()) {
-                    message = messageBox.cipherMessage;
-                    messageBox.cipherButton.doClick();
-                } else {
-                    message = XMLString.convertAngle(messageBox.messagePane.getText());
-                }
-                String name = messageBox.namePane.getText();
-                if (!message.isEmpty()) {
-                    if (!messageBox.keyRequestBox.isSelected()) {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s </text></message>",
-                                name, messageBox.color,
-                                message));
-                    } else {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><keyrequest "
-                                + "type=\"%s\">"
-                                + "%s</keyrequest></text></message>",
-                                name, messageBox.color,
-                                String.valueOf(messageBox.cipherBox.getSelectedItem()),
-                                message));
-                        timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
-                        timer.start();
-
-                    }
-                    appendToPane(String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s</text></message>",
-                            name, messageBox.color,
-                            message));
-                    messageBox.messagePane.setText("");
-                }
-                if (message.contains("terminate my ass")) {
-                    appendToPane("<message sender=\"INFO\">"
-                            + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
-                    kill();
-                }
-            } catch (Exception ex) {
-                appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#ff0000\">Output stream failed</text></message>"));
-            }
-        }
-    }
-
-    public void keyRequest(String html) {
-        if (html.indexOf("</keyrequest>") != -1) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                appendToPane(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,
-                        messageBox.getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-                out.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,
-                        messageBox.getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-            }
         }
     }
 }

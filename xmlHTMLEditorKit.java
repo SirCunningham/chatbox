@@ -11,7 +11,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 public class xmlHTMLEditorKit extends HTMLEditorKit {
     //Måste förbättras
-    public void insertHTML(IOThread thr, int offset, String html,
+    public void insertHTML(IOThread2 thr, int offset, String html,
             int popDepth, int pushDepth, HTML.Tag insertTag) throws
             BadLocationException, IOException {
         String color = new XMLString(html).toHexColor();

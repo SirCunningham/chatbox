@@ -89,10 +89,10 @@ public class Controller {
             try {
                 int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
-                    Thread thr = new Thread(new Server(port, messageBox));
+                    Thread thr = new Thread(new Server2(port, messageBox));
                     thr.start();
                 } else {
-                    Thread thr = new Thread(new Client(view.IPPane.getText(),
+                    Thread thr = new Thread(new Client2(view.IPPane.getText(),
                             port, messageBox));
                     thr.start();
                 }

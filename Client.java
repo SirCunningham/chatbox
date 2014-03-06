@@ -1,30 +1,28 @@
 package chatbox;
 
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
-// Kill client when the server disconnects to avoid duplicates!!
 public class Client implements Runnable {
 
-    private String IP;
-    private int port;
     private MessageBox messageBox;
+    private String text;
+    private Socket clientSocket;
+    private PrintStream os;
+    private BufferedReader is;
+    private boolean closed = false;
 
-    public Client(String IP, int port, MessageBox messageBox) {
-        this.IP = IP;
-        this.port = port;
+    public Client(String host, int portNumber, MessageBox messageBox) {
         this.messageBox = messageBox;
-    }
+        this.messageBox.sendButton.addActionListener(new SendMsgButtonListener());
 
-    @Override
-    public void run() {
-        // Skapa socket för klienten
+        // Starta socket för klienten
         try {
-            Socket clientSocket = new Socket(IP, port);
-            messageBox.items.addElement(clientSocket.getInetAddress());
-            Thread thr = new Thread(new IOThread(clientSocket, true, messageBox));
-            thr.start();
+            clientSocket = new Socket(host, portNumber);
+            os = new PrintStream(clientSocket.getOutputStream());
+            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, "Don't know about host.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
@@ -32,6 +30,54 @@ public class Client implements Runnable {
             JOptionPane.showMessageDialog(null,
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Kommunicera med servern
+        if (clientSocket != null && os != null && is != null) {
+            try {
+                // Skapa tråd för att läsa från servern
+                new Thread(new Client(host, portNumber, this.messageBox)).start();
+                // Skicka data till servern
+                while (!closed) {
+                    //Do something useful or sleep?
+                }
+                os.close();
+                is.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                // Fixa felmeddelanden!!!
+                System.err.println("IOException:  " + e);
+            }
+        }
+    }
+
+    // Skapa tråd för att läsa från servern
+    public void run() {
+
+        // Håll uppkopplingen tills servern vill avbryta den
+        String responseLine;
+        try {
+            while ((responseLine = is.readLine()) != null) {
+                System.out.println(responseLine);
+                if (responseLine.indexOf("*** Bye") != -1) {
+                    break;
+                }
+            }
+            closed = true;
+        } catch (IOException e) {
+            // Fixa felmeddelanden!!!
+            System.err.println("IOException:  " + e);
+        }
+    }
+    
+    public class SendMsgButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            os.println(messageBox.messagePane.getText());
+            messageBox.messagePane.setText("");
+
         }
     }
 }

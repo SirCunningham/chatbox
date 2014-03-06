@@ -4,51 +4,62 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
-/**
- * Detta program startar en server som lyssnar på
- * en viss port
- *
- * En ny tråd startas för varje anslutande klient
- * och programmet körs till det stängs av utifrån
- */
-public class Server implements Runnable {
+public class Server {
 
-    private int port;
-    private MessageBox messageBox;
+    private ServerSocket serverSocket;
+    private Socket clientSocket;
+    private final IOThread[] threads;
+    
+    // Lägg till frame för meddelandena!!!
+    public Server(int portNumber, int maxClientsCount, MessageBox messagebox) {
 
-    public Server(int port, MessageBox messageBox) {
-        this.port = port;
-        this.messageBox = messageBox;
-    }
-
-    public void run() {
-
-        // Skapa socket för servern
+        // Starta socket för servern
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            messageBox.bootPanel.setVisible(true);
-            // Lyssna efter klienter
+            serverSocket = new ServerSocket(portNumber);
+            // add messageBox.bootPanel.setVisible(true); to some premier client!!!
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
+                    + "on port %d.", portNumber), "Error message",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Skapa tråd för varje klient
+        threads = new IOThread[maxClientsCount];
+        if (serverSocket != null) {
             while (true) {
-                Socket clientSocket = null;
-                // Varje gång en klient ansluter startas en ny tråd av typen
-                // 'IOThread', som sedan behandlar resten av kommunikationen
+                // Gör det möjligt att avsluta när tabben stängs ned!!!
+                if (5 < 4) {
+                    break;
+                }
                 try {
                     clientSocket = serverSocket.accept();
-                    messageBox.items.addElement(clientSocket.getInetAddress());
-                    Thread thr = new Thread(new IOThread(clientSocket, false, messageBox));
-                    thr.start();
+                    // add messageBox.items.addElement(clientSocket.getInetAddress()); later!!!
+                    int i = 0;
+                    for (i = 0; i < maxClientsCount; i++) {
+                        if (threads[i] == null) {
+                            (threads[i] = new IOThread(clientSocket, threads)).start();
+                            break;
+                        }
+                    }
+                    if (i == maxClientsCount) {
+                        // HTML-kod!!! Maybe this part can be removed!!!
+                        try (PrintStream os = new PrintStream(clientSocket.getOutputStream())) {
+                            os.println("Server too busy. Try later.");
+                        }
+                        clientSocket.close();
+                    }
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null,
-                            String.format("Accept failed "
-                            + "on port %d.", port), "Error message",
+                    JOptionPane.showMessageDialog(null, String.format("Accept failed "
+                            + "on port %d.", portNumber), "Error message",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
-            // serverSocket.close(); if we ever reach this, close with tab?
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
-                    + "on port %d.", port), "Error message",
-                    JOptionPane.ERROR_MESSAGE);
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Could not close server", "Error message",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }
