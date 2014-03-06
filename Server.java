@@ -10,8 +10,9 @@ public class Server {
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
+    private final Object lock = new Object();
     
-    // Lägg till frame för meddelandena!!!
+    // lägg till frame för meddelandena!!!
     public Server(int portNumber, MessageBox messagebox) {
 
         // Starta socket för servern
@@ -27,14 +28,16 @@ public class Server {
         // Skapa tråd för varje klient
         if (serverSocket != null) {
             while (true) {
-                // Gör det möjligt att avsluta när tabben stängs ned!!!
+                // gör det möjligt att avsluta när tabben stängs ned!!!
                 if (5 < 4) {
                     break;
                 }
                 try {
                     clientSocket = serverSocket.accept();
                     // add messageBox.items.addElement(clientSocket.getInetAddress()); later!!!
-                    threads.addLast(new IOThread(clientSocket, threads));
+                    synchronized (lock) {
+                        threads.addLast(new IOThread(clientSocket, threads, lock));
+                    }
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, String.format("Accept failed "
                             + "on port %d.", portNumber), "Error message",

@@ -11,10 +11,13 @@ class IOThread extends Thread {
     private PrintWriter o;
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
+    private final Object lock;
 
-    public IOThread(Socket clientSocket, LinkedList<IOThread> threads) {
+    public IOThread(Socket clientSocket, LinkedList<IOThread> threads,
+            Object lock) {
         this.clientSocket = clientSocket;
         this.threads = threads;
+        this.lock = lock;
     }
 
     public void run() {
@@ -38,7 +41,7 @@ class IOThread extends Thread {
             // Ge välkomstmeddelande
             o.println("Welcome " + name
                     + " to our chat room.\nTo leave enter /quit in a new line.");
-            synchronized (this) {
+            synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread == this) {
                         clientName = "@" + name;
@@ -63,7 +66,7 @@ class IOThread extends Thread {
                     if (words.length > 1 && words[1] != null) {
                         words[1] = words[1].trim();
                         if (!words[1].isEmpty()) {
-                            synchronized (this) {
+                            synchronized (lock) {
                                 for (IOThread thread : threads) {
                                     if (thread != this && thread.clientName.equals(words[0])) {
                                         thread.o.println("<" + name + "> " + words[1]);
@@ -78,14 +81,14 @@ class IOThread extends Thread {
                     }
                 } else {
                     // Skicka publika meddelanden
-                    synchronized (this) {
+                    synchronized (lock) {
                         for (IOThread thread : threads) {
                             thread.o.println("<" + name + "> " + line);
                         }
                     }
                 }
             }
-            synchronized (this) {
+            synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread != this) {
                         thread.o.println("*** The user " + name
@@ -96,7 +99,7 @@ class IOThread extends Thread {
             o.println("*** Bye " + name + " ***");
             
             // Lämna plats för nya klienter
-            synchronized (this) {
+            synchronized (lock) {
                 threads.remove(this);
             }
             i.close();
