@@ -10,11 +10,18 @@ public class Client implements Runnable {
     private BufferedReader i;
     private PrintWriter o;
     private MessageBox messageBox;
+    private String host;
+    private int port;
     private Socket clientSocket;
-    private volatile boolean closed = false;
 
     public Client(String host, int port, final MessageBox messageBox) {
+        this.host = host;
+        this.port = port;
         this.messageBox = messageBox;
+    }
+
+    // Skapa tråd för att läsa från servern
+    public void run() {
 
         // Starta socket för klienten
         try {
@@ -31,52 +38,16 @@ public class Client implements Runnable {
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println("A0");
 
-        // Kommunicera med servern
-        if (clientSocket != null && i != null && o != null) {
-            try {
-                System.out.println("AA");
-                
-                // Skapa tråd för att läsa från servern
-                new Thread(new Client(host, port, messageBox)).start();
-                
-                System.out.println("AB");
-                
-                // Skapa lyssnare för att skicka till servern
-                class SendButtonListener implements ActionListener {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println("AC");
-                        o.println(messageBox.getMessage());
-                    }
-                }
-                SendButtonListener sendButtonListener = new SendButtonListener();
-                messageBox.sendButton.addActionListener(sendButtonListener);
-                
-                // Avsluta uppkopplingen när det blir dags
-                while (!closed) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                messageBox.sendButton.setEnabled(false);
-                messageBox.sendButton.removeActionListener(sendButtonListener);
-                i.close();
-                o.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                // fixa felmeddelanden!!!
-                System.err.println("IOException:  " + e);
+        // Skapa lyssnare för att skicka till servern
+        class SendButtonListener implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                o.println(messageBox.getMessage());
             }
         }
-    }
-
-    // Skapa tråd för att läsa från servern
-    public void run() {
+        SendButtonListener sendButtonListener = new SendButtonListener();
+        messageBox.sendButton.addActionListener(sendButtonListener);
 
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
@@ -88,7 +59,11 @@ public class Client implements Runnable {
                         break;
                     }
                 }
-                closed = true;
+                messageBox.sendButton.setEnabled(false);
+                messageBox.sendButton.removeActionListener(sendButtonListener);
+                i.close();
+                o.close();
+                clientSocket.close();
             } catch (IOException e) {
                 // fixa felmeddelanden!!!
                 System.err.println("IOException:  " + e);

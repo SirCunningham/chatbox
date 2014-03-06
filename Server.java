@@ -11,10 +11,18 @@ public class Server implements Runnable {
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
     private final Object lock = new Object();
+    private int port;
+    private MessageBox messageBox;
     
     // lägg till frame för meddelandena!!!
     public Server(int port, MessageBox messageBox) {
-
+        this.port = port;
+        this.messageBox = messageBox;
+    }
+    
+    // Lyssna efter klienter
+    public void run() {
+        
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
@@ -25,15 +33,6 @@ public class Server implements Runnable {
                     + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
         }
-        
-        // Börja lyssna efter klienter
-        if (serverSocket != null) {
-            new Thread(new Server(port, messageBox)).start();
-        }
-        
-    }
-        
-    public void run() {
 
         // Skapa tråd för varje klient
         threads = new LinkedList<>();
