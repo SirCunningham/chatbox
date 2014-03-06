@@ -1,5 +1,4 @@
 package chatbox;
-
 import java.io.*;
 import java.net.*;
 
@@ -157,7 +156,7 @@ public class IOThread implements Runnable {
                     message = messageBox.cipherMessage;
                     messageBox.cipherButton.doClick();
                 } else {
-                    message = messageBox.messagePane.getText();
+                    message = XMLString.convertAngle(messageBox.messagePane.getText());
                 }
                 String name = messageBox.namePane.getText();
                 if (!message.isEmpty()) {
@@ -165,7 +164,7 @@ public class IOThread implements Runnable {
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\">%s </text></message>",
                                 name, messageBox.color,
-                                XMLString.convertAngle(message)));
+                                message));
                     } else {
                         hasSentKeyRequest = true;
                         out.println(String.format("<message sender=\"%s\">"
@@ -174,7 +173,7 @@ public class IOThread implements Runnable {
                                 + "%s</keyrequest></text></message>",
                                 name, messageBox.color,
                                 String.valueOf(messageBox.cipherBox.getSelectedItem()),
-                                XMLString.convertAngle(message)));
+                                message));
                         timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
                         timer.start();
 
@@ -182,7 +181,7 @@ public class IOThread implements Runnable {
                     appendToPane(String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
                             name, messageBox.color,
-                            XMLString.convertAngle(message)));
+                            message));
                     messageBox.messagePane.setText("");
                 }
                 if (message.contains("terminate my ass")) {

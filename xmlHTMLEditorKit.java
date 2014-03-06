@@ -9,6 +9,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 public class xmlHTMLEditorKit extends HTMLEditorKit {
     //Måste förbättras
+
     public void insertHTML(IOThread thr, int offset, String html,
             int popDepth, int pushDepth, HTML.Tag insertTag) throws
             BadLocationException, IOException {
@@ -28,5 +29,4 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
             }
         }
     }
-
 }
