@@ -13,7 +13,7 @@ public class Server {
     private final Object lock = new Object();
     
     // lägg till frame för meddelandena!!!
-    public Server(int portNumber, MessageBox messagebox) {
+    public Server(int portNumber) {
 
         // Starta socket för servern
         try {
@@ -28,7 +28,7 @@ public class Server {
         // Skapa tråd för varje klient
         if (serverSocket != null) {
             while (true) {
-                // gör det möjligt att avsluta när tabben stängs ned!!!
+                // gör det möjligt att avsluta när tabben stängs ned i controller/messageBox!!!
                 if (5 < 4) {
                     break;
                 }

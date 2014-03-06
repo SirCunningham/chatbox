@@ -501,6 +501,25 @@ class MessageBox {
              */
         }
     }
+    // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
+
+    public void appendToPane(String msg) {
+
+        try {
+            MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
+            HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
+            try {
+                kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        } catch (BadLocationException e) {
+            JOptionPane.showMessageDialog(null, "String insertion failed.",
+                    "Error message", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
 
     // Skicka fil med klient
     public class SendButtonListener implements ActionListener {
@@ -515,6 +534,8 @@ class MessageBox {
                     + "File description: %s\nAccept file?", filePane.getText(),
                     fileSizePane.getText(), description);
             String message = messagePane.getText();
+            appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+                    namePane.getText(), filePane.getText(),fileSizePane.getText(), description));
             try {
                 doc.remove(0, message.length());
                 doc.insertString(0, "Filerequest: " + fileData, style);
@@ -539,7 +560,7 @@ class MessageBox {
     public class xmlHTMLEditorKit extends HTMLEditorKit {
         //Måste förbättras
 
-        public void insertHTML(IOThread2 thr, MessageBox messageBox, int offset, String html,
+        public void insertHTML(MessageBox messageBox, int offset, String html,
                 int popDepth, int pushDepth, HTML.Tag insertTag) throws
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
@@ -552,7 +573,7 @@ class MessageBox {
                 super.insertHTML((HTMLDocument) messageBox.chatBox.getDocument(),
                         offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
             }
-
+            /*
             if (thr.timer.isRunning()) {
                 System.out.println(thr.timer.getType());
                 System.out.println(html);
@@ -562,6 +583,8 @@ class MessageBox {
                     messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
                 }
             }
+             * 
+             */
         }
     }
 }

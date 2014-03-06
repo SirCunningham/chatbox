@@ -104,7 +104,7 @@ public class IOThread2 implements Runnable {
             MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
-                kit.insertHTML(this, messageBox, doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML(messageBox, doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
