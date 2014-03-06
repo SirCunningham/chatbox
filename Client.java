@@ -38,6 +38,7 @@ public class Client implements Runnable {
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
         }
+
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
         if (clientSocket != null && i != null && o != null) {

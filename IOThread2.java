@@ -104,7 +104,7 @@ public class IOThread2 implements Runnable {
             MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
-                kit.insertHTML(messageBox, doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML( doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -114,7 +114,7 @@ public class IOThread2 implements Runnable {
                     "Error message", JOptionPane.ERROR_MESSAGE);
         }
 
-    }       
+    } 
 
     public class TimerListener implements ActionListener {
 

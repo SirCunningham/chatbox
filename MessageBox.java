@@ -510,7 +510,7 @@ class MessageBox {
             MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML(doc.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -534,8 +534,8 @@ class MessageBox {
             messagePane.setText("");
             String name = namePane.getText();
             if (!message.isEmpty()) {
-                System.out.println("Hej");
                 if (!keyRequestBox.isSelected()) {
+                    System.out.println("Hek");
                     return String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s </text></message>",
                             name, color,
@@ -618,17 +618,17 @@ class MessageBox {
     public class xmlHTMLEditorKit extends HTMLEditorKit {
         //Måste förbättras
 
-        public void insertHTML(MessageBox messageBox, int offset, String html,
+        public void insertHTML(int offset, String html,
                 int popDepth, int pushDepth, HTML.Tag insertTag) throws
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
             //thr.keyRequest(html);
             if (XMLString.isCorrect(html)) {
-                super.insertHTML((HTMLDocument) messageBox.chatBox.getDocument(),
+                super.insertHTML((HTMLDocument) chatBox.getDocument(),
                         offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
                         + "</font>", popDepth, pushDepth, insertTag);
             } else {
-                super.insertHTML((HTMLDocument) messageBox.chatBox.getDocument(),
+                super.insertHTML((HTMLDocument) chatBox.getDocument(),
                         offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
             }
             /*
