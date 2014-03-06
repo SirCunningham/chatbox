@@ -6,6 +6,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -65,6 +66,7 @@ class MessageBox {
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
+    HashMap<String, String> nameToKey = new HashMap<>();
 
     public MessageBox(View view) {
         list.setSelectionModel(new DefaultListSelectionModel() {
@@ -162,7 +164,7 @@ class MessageBox {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        namePane.setText("Dante");
+        namePane.setText("Ron Paul");
         namePane.addFocusListener(new FieldListener());
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
@@ -297,7 +299,9 @@ class MessageBox {
                 case "AES":
                     try {
                         return AES.encrypt(text);
-                    } catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
+                    } catch (NoSuchAlgorithmException | InvalidKeyException |
+                            UnsupportedEncodingException |
+                            IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
                         ex.printStackTrace();
                     }
                     break;
@@ -318,9 +322,12 @@ class MessageBox {
                         keyString = String.format(" key=\"%s\"", key);
                     }
                     try {
-                        cipherMessage = String.format("%s<encrypted type=\"%s\"%s>%s</encrypted>%s",
-                                XMLString.convertAngle(getText.substring(0, cipherStart)), type, keyString,
-                                XMLString.convertAngle(encrypt(type, text, key)), XMLString.convertAngle(getText.substring(cipherEnd)));
+                        cipherMessage = String.format("%s<encrypted type="
+                                + "\"%s\"%s>%s</encrypted>%s",
+                                XMLString.convertAngle(getText.substring(0,
+                                cipherStart)), type, keyString,
+                                XMLString.convertAngle(encrypt(type, text, key)), XMLString.convertAngle(
+                                getText.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
                         doc.insertString(cipherStart, text, style);
@@ -332,7 +339,8 @@ class MessageBox {
                     cipherButton.doClick();
                 }
             } else {
-                String text = messagePane.getText().substring(cipherStart, cipherEnd);
+                String text = messagePane.getText().substring(cipherStart,
+                        cipherEnd);
                 try {
                     doc.remove(cipherStart, cipherEnd - cipherStart);
                     doc.insertString(cipherStart, text, style);
