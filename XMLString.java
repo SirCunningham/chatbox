@@ -32,7 +32,6 @@ public class XMLString {
         }
     }
     
-
     public String toText() {
         return xmlStr;
     }

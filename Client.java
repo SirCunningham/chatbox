@@ -36,7 +36,7 @@ public class Client implements Runnable {
         if (clientSocket != null && os != null && is != null) {
             try {
                 // Skapa tråd för att läsa från servern
-                new myThread(new Client(host, portNumber, this.messageBox)).start();
+                new Thread(new Client(host, portNumber, this.messageBox)).start();
                 // Skicka data till servern
                 while (!closed) {
                     //Do something useful or sleep?

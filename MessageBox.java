@@ -543,7 +543,7 @@ class MessageBox {
                 int popDepth, int pushDepth, HTML.Tag insertTag) throws
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
-            thr.keyRequest(html);
+            //thr.keyRequest(html);
             if (XMLString.isCorrect(html)) {
                 super.insertHTML((HTMLDocument) messageBox.chatBox.getDocument(),
                         offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
