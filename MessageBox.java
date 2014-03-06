@@ -544,9 +544,15 @@ class MessageBox {
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
             thr.keyRequest(html);
-            super.insertHTML((HTMLDocument) thr.messageBox.chatBox.getDocument(),
-                    offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
-                    + "</font>", popDepth, pushDepth, insertTag);
+            if (XMLString.isCorrect(html)) {
+                super.insertHTML((HTMLDocument) thr.messageBox.chatBox.getDocument(),
+                        offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
+                        + "</font>", popDepth, pushDepth, insertTag);
+            } else {
+                super.insertHTML((HTMLDocument) thr.messageBox.chatBox.getDocument(),
+                        offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
+            }
+
 
             if (thr.timer.isRunning()) {
                 System.out.println(thr.timer.getType());
