@@ -542,7 +542,7 @@ class MessageBox {
 
     public String getMessage() {
         try {
-            String message;
+            String message="";
             if (cipherButton.isSelected()) {
                 message = cipherMessage;
                 cipherButton.doClick();
@@ -555,7 +555,7 @@ class MessageBox {
                 if (!keyRequestBox.isSelected()) {
                     System.out.println("Hej");
                     return String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s </text></message>",
+                            + "<text color=\"%s\">%s</text></message>",
                             name, color,
                             message);
                 }
@@ -661,6 +661,7 @@ class MessageBox {
             }
              * 
              */
+            
         }
     }
 }

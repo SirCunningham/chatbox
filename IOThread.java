@@ -28,27 +28,27 @@ class IOThread extends Thread {
             o = new PrintWriter(clientSocket.getOutputStream(),true);
             String name;
             while (true) {
-                o.println("Enter your name.");
+                o.println("<message sender=system>Enter your name.</message>");
                 name = i.readLine();
                     // Integrera med GUI, behövs nog inte här!!!
                 if (!name.isEmpty()) {
                     break;
                 } else {
-                    o.println("The name should not be empty.");
+                    o.println("<message sender=system>The name should not be empty.</message>");
                 }
             }
 
             // Ge välkomstmeddelande
-            o.println("Welcome " + name
-                    + " to our chat room.\nTo leave enter /quit in a new line.");
+            o.println("<message sender=system> Welcome " + name
+                    + " to our chat room.\nTo leave enter /quit in a new line.</message>");
             synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread == this) {
                         clientName = "@" + name;
                         break;
                     } else {
-                        thread.o.println("*** A new user " + name
-                                + " entered the chat room !!! ***");
+                        thread.o.println("<message sender=system>*** A new user " + name
+                                + " entered the chat room !!! ***</message>");
                     }
                 }
             }
@@ -91,12 +91,12 @@ class IOThread extends Thread {
             synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread != this) {
-                        thread.o.println("*** The user " + name
-                                + " is leaving the chat room !!! ***");
+                        thread.o.println("<message sender=system>*** The user " + name
+                                + " is leaving the chat room !!! ***</message>");
                     }
                 }
             }
-            o.println("*** Bye " + name + " ***");
+            o.println("<message sender=system>*** Bye " + name + " ***</message>");
             
             // Lämna plats för nya klienter
             synchronized (lock) {
