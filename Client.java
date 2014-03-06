@@ -45,10 +45,10 @@ public class Client implements Runnable {
             try {
                 // Skapa lyssnare för att skicka till servern
                 class SendButtonListener implements ActionListener {
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String msg = messageBox.getMessage();
+                        System.out.println(msg);
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
@@ -64,6 +64,7 @@ public class Client implements Runnable {
                 messageBox.sendButton.addActionListener(sendButtonListener);
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
                 while ((responseLine = i.readLine()) != null) {
+                    System.out.println(responseLine);
                     messageBox.appendToPane(responseLine);
                     if (responseLine.indexOf("*** Bye") != -1) {
                         break;
