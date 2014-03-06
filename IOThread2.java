@@ -30,6 +30,8 @@ public class IOThread2 implements Runnable {
     // Konstruktor
     public IOThread2(Socket sock, boolean client, MessageBox messageBox,
             InputStream i, OutputStream o) {
+        this.i = i;
+        this.o = o;
         clientSocket = sock;
         timer = new TypeTimer(10 * 1000, new TimerListener(), null);
         timer.setRepeats(false);
