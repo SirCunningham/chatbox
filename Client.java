@@ -43,6 +43,7 @@ public class Client implements Runnable {
         class SendButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("hej");
                 o.println(messageBox.getMessage());
             }
         }
