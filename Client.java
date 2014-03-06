@@ -10,13 +10,13 @@ public class Client implements Runnable {
     private BufferedReader i;
     private PrintWriter o;
     private BufferedReader in;
-    private PrintWriter out;
+    private MessageBox messageBox;
     private Socket clientSocket;
     private boolean closed = false;
 
-    public Client(String host, int portNumber, BufferedReader in, PrintWriter out) {
+    public Client(String host, int portNumber, BufferedReader in, MessageBox messageBox) {
         this.in = in;
-        this.out = out;
+        this.messageBox = messageBox;
 
         // Starta socket för klienten
         try {
@@ -36,11 +36,15 @@ public class Client implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa tråd för att läsa från servern
-                new Thread(new Client(host, portNumber, in, out)).start();
+                new Thread(new Client(host, portNumber, in, messageBox)).start();
 
                 // Skicka data till servern
                 while (!closed) {
-                    o.println(in.readLine());
+                    // add some listener instead!
+                    String sendLine = messageBox.getMessage();
+                    if (!sendLine.isEmpty()) {
+                        o.println(sendLine);
+                    }
                 }
                 i.close();
                 o.close();
@@ -59,7 +63,7 @@ public class Client implements Runnable {
         String responseLine;
         try {
             while ((responseLine = i.readLine()) != null) {
-                out.println(responseLine);
+                messageBox.appendToPane(responseLine);
                 if (responseLine.indexOf("*** Bye") != -1) {
                     break;
                 }
