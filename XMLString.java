@@ -31,11 +31,18 @@ public class XMLString {
             ex.printStackTrace();
         }
     }
+    
 
     public String toText() {
         return xmlStr;
     }
-
+    
+    public static boolean isCorrect(String xmlStr) {
+        if (!xmlStr.matches("<message .*>.*</message>")) {
+            return false;
+        }
+        return true;
+    }
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {
