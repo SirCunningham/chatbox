@@ -6,7 +6,7 @@ import java.net.Socket;
 class IOThread extends Thread {
 
     private String clientName;
-    private DataInputStream is;
+    private BufferedReader is;
     private PrintStream os;
     private Socket clientSocket;
     private final IOThread[] threads;
@@ -24,7 +24,7 @@ class IOThread extends Thread {
 
         try {
             // Skapa input- och outputströmmar
-            is = new DataInputStream(clientSocket.getInputStream());
+            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             os = new PrintStream(clientSocket.getOutputStream());
             String name;
             while (true) {
