@@ -425,8 +425,10 @@ class MessageBox {
                 cipherEnd = source.getSelectionEnd();
             } else if (source == namePane && !name.equals(namePane.getText())) {
                 if (namePane.getText().isEmpty()) {
-                    //Check that name is new, too!
                     namePane.setText("Nomen nescio");
+                    if (name.equals("Nomen nescio")) {
+                        return;
+                    }
                 }
                 String message = messagePane.getText();
                 try {
