@@ -534,6 +534,7 @@ class MessageBox {
             messagePane.setText("");
             String name = namePane.getText();
             if (!message.isEmpty()) {
+                System.out.println("Hej");
                 if (!keyRequestBox.isSelected()) {
                     return String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s </text></message>",
