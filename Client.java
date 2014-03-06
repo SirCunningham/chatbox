@@ -60,9 +60,15 @@ public class Client implements Runnable {
                         o.println(messageBox.getFileMessage());
                     }
                 }
+                class closeButtonListener implements ActionListener {
+                    public void actionPerformed(ActionEvent e) {
+                        o.println(messageBox.getQuitMessage());
+                    }
+                }
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 messageBox.sendButton.addActionListener(sendButtonListener);
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
+                messageBox.closeButton.addActionListener(new closeButtonListener());
                 while ((responseLine = i.readLine()) != null) {
                     System.out.println(responseLine);
                     messageBox.appendToPane(responseLine);

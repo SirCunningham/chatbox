@@ -363,6 +363,7 @@ class MessageBox {
                     + "want to quit?", "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
+                
                 System.exit(0);
             } else {
                 JOptionPane.showMessageDialog(null, "Good choice. "
@@ -541,6 +542,10 @@ class MessageBox {
          */
         return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
                 namePane.getText(), filePane.getText(), fileSizePane.getText(), description);
+    }
+    
+    public String getQuitMessage() {
+        return String.format("<message sender=\"%s\"><text color=\"%s\"></text><disconnect /></message>", namePane.getText(),color);
     }
 
     public String getMessage() {
