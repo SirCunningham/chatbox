@@ -114,7 +114,7 @@ public class IOThread2 implements Runnable {
                     "Error message", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
+    }       
 
     public class TimerListener implements ActionListener {
 
