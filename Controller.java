@@ -5,14 +5,14 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
-import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
 
 public class Controller {
 
     private View view;
-    private ArrayList<Thread> clients = new ArrayList<>();
+    private MessageBox[] messageBoxes;
+    private JButton[] indices;
     private int tabCount = 1;
     private ImageIcon icon;
 
@@ -50,6 +50,7 @@ public class Controller {
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
         closeButton.addActionListener(new TabButtonListener());
+        indices[tabCount - 1] = closeButton;
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -94,7 +95,6 @@ public class Controller {
                     Thread thr = new Thread(new Client(view.IPPane.getText(),
                             port, messageBox));
                     thr.start();
-                    clients.add(thr);
                 }
             } catch (Exception ex) {
                 // Let the bad ones come here!
@@ -102,6 +102,7 @@ public class Controller {
                 System.err.println("Ett fel inträffade1: " + ex);
             } finally {
                 if (success) {
+                    messageBoxes[tabCount - 1] = messageBox;
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -150,10 +151,10 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Kill thread(s) here by sending something!
             JButton button = (JButton) e.getSource();
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
+            // Look up index at indices[], then kill thread at messageboxes[]!
         }
     }
 
