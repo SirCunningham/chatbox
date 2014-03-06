@@ -36,7 +36,7 @@ public class Client implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa tråd för att läsa från servern
-                new myThread(new Client(host, portNumber, in, out)).start();
+                new Thread(new Client(host, portNumber, in, out)).start();
                 // Skicka data till servern
                 while (!closed) {
                     o.println(in.readLine());
@@ -45,7 +45,7 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                // Fixa felmeddelanden!!!
+                // fixa felmeddelanden!!!
                 System.err.println("IOException:  " + e);
             }
         }
@@ -57,7 +57,7 @@ public class Client implements Runnable {
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
         try {
-            while ((responseLine = is.readLine()) != null) {
+            while ((responseLine = i.readLine()) != null) {
                 out.println(responseLine);
                 if (responseLine.indexOf("*** Bye") != -1) {
                     break;
@@ -65,19 +65,8 @@ public class Client implements Runnable {
             }
             closed = true;
         } catch (IOException e) {
-            // Fixa felmeddelanden!!!
+            // fixa felmeddelanden!!!
             System.err.println("IOException:  " + e);
-        }
-    }
-    
-    public class SendMsgButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            
-            os.println(messageBox.messagePane.getText());
-            messageBox.messagePane.setText("");
-
         }
     }
 }
