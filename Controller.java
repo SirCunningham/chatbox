@@ -88,6 +88,7 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             final MessageBox messageBox = new MessageBox(view);
+            messageBox.success = true;
             try {
                 final String host = view.IPPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());

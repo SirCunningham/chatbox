@@ -17,7 +17,7 @@ import javax.swing.text.html.*;
 
 class MessageBox {
 
-    boolean success = true;
+    volatile boolean success = true;
     private String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     public AESCrypto AES;
