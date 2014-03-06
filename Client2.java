@@ -23,7 +23,8 @@ public class Client2 implements Runnable {
         try {
             Socket clientSocket = new Socket(IP, port);
             messageBox.items.addElement(clientSocket.getInetAddress());
-            Thread thr = new Thread(new IOThread2(clientSocket, true, messageBox));
+            Thread thr = new Thread(new IOThread2(clientSocket, true, messageBox,
+                    clientSocket.getInputStream(), clientSocket.getOutputStream()));
             thr.start();
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, "Don't know about host.",
