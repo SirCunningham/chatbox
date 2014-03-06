@@ -37,7 +37,7 @@ public class XMLString {
     }
 
     public static String getEncryptedType(String xmlStr) {
-        String[] strings = xmlStr.split("<encrypted type=\"");
+        String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {
             if (str.indexOf("</encrypted>") != -1) {
                 return str.substring(0, str.indexOf("\""));

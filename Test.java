@@ -31,13 +31,13 @@ public class Test extends ArrayList {
             ex.printStackTrace();
         }
         String xmlTest = "<message sender=\"dante\"><text color=\"asdfasf\">Detta är inte krypterat "
-                + "<encrypted type=\"caesar\" key=\"5\">" + test + "</encrypted>"
-                + "<encrypted type=\"caesar\" key=\"10\">" + test2 + "</encrypted></text></message>";
+                + "<encrypted key=\"5\" type=\"caesar\">" + test + "</encrypted>"
+                +"</text></message>";
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
-        System.out.println(handleString(xmlTest));
-        System.out.println(removeBoldEmphTags(xmlTest2));
+        //System.out.println(handleString(xmlTest));
+        //System.out.println(removeBoldEmphTags(xmlTest2));
         System.out.println(getEncryptedType(xmlTest));
-        System.out.println(getKeyRequestType(xmlTest2));
+        //System.out.println(getKeyRequestType(xmlTest2));
     }
 
     public Test() {
@@ -48,7 +48,7 @@ public class Test extends ArrayList {
     }
 
     public static String getEncryptedType(String xmlStr) {
-        String[] strings = xmlStr.split("<encrypted type=\"");
+        String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {
             if (str.indexOf("</encrypted>") != -1) {
                 return str.substring(0, str.indexOf("\""));

@@ -18,6 +18,7 @@ public class View {
     JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
     JTextPane userName = new JTextPane();
     JTextPane tabPane = new JTextPane();
+    
     JButton startButton = new JButton("Join server");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();

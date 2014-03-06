@@ -19,12 +19,12 @@ public class IOThread implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private Socket clientSocket;
-    private View view;
     TypeTimer timer;
     boolean hasSentKeyRequest = false;
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
+
 
     // Konstruktor
     public IOThread(Socket sock, boolean client, MessageBox messageBox) {
@@ -166,7 +166,6 @@ public class IOThread implements Runnable {
                                 name, messageBox.color,
                                 message));
                     } else {
-                        hasSentKeyRequest = true;
                         out.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><keyrequest "
                                 + "type=\"%s\">"
