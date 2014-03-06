@@ -55,7 +55,7 @@ public class Controller {
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
         closeButton.addActionListener(new TabButtonListener());
-        indices.add(tabCount - 1,closeButton);
+        indices.add(closeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -112,7 +112,7 @@ public class Controller {
                 System.err.println("Ett fel inträffade1: " + ex);
             } finally {
                 if (messageBox.success) {
-                    messageBoxes.add(tabCount - 1,messageBox);
+                    messageBoxes.add(messageBox);
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -164,7 +164,9 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
-            // Look up index at indices[], then kill thread at messageboxes[]!
+            if ((index = indices.indexOf(button)) != -1) {
+                //messageBoxes.get(index).kill();
+            }
         }
     }
 
