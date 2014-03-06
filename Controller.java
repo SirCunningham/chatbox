@@ -97,13 +97,13 @@ public class Controller {
                         public void run() {
                             new Server(port);
                         }
-                    });
+                    }).start();
                 }
                 new Thread(new Runnable() {
                     public void run() {
                         new Client(host, port, messageBox);
                     }
-                });
+                }).start();
             } catch (Exception ex) {
                 // Let the bad ones come here!
                 success = false;

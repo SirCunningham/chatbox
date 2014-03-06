@@ -29,18 +29,24 @@ public class Client implements Runnable {
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
         }
+        System.out.println("A0");
 
         // Kommunicera med servern
         if (clientSocket != null && i != null && o != null) {
             try {
+                System.out.println("AA");
+                
                 // Skapa tråd för att läsa från servern
                 new Thread(new Client(host, port, messageBox)).start();
+                
+                System.out.println("AB");
                 
                 // Skapa lyssnare för att skicka till servern
                 class SendButtonListener implements ActionListener {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        System.out.println("AC");
                         o.println(messageBox.getMessage());
                     }
                 }
