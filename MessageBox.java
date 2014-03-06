@@ -521,6 +521,23 @@ class MessageBox {
         }
 
     }
+    public String getFileMessage() {
+        String description = descriptionPane.getText();
+        if ("File description (optional)".equals(description)) {
+            description = "No description";
+        }
+        String fileData = String.format("File name: %s\nFile size: %s\n"
+                + "File description: %s\nAccept file?", filePane.getText(),
+                fileSizePane.getText(), description);
+        String message = messagePane.getText();
+        /*
+        appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+                namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
+         * 
+         */
+        return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+                namePane.getText(), filePane.getText(), fileSizePane.getText(), description);
+    }
 
     public String getMessage() {
         try {

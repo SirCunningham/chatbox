@@ -53,7 +53,7 @@ public class Client implements Runnable {
                 }
                 class SendFileButtonListener implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
-                        
+                        o.println(messageBox.getFileMessage());
                     }
                 }
                 SendButtonListener sendButtonListener = new SendButtonListener();
