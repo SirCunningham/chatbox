@@ -29,7 +29,7 @@ public class Server implements Runnable {
             // add messageBox.bootPanel.setVisible(true); to some premier client!!!
         } catch (IOException e) {
             messageBox.success = false;
-            JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
+            JOptionPane.showMessageDialog(null, String.format("Could not listen "
                     + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -44,20 +44,21 @@ public class Server implements Runnable {
                 }
                 try {
                     clientSocket = serverSocket.accept();
-                    // add messageBox.items.addElement(clientSocket.getInetAddress()); later!!!
+                    // add messageBox.items.addElement(clientSocket.getInetAddress()); in client!!!
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();
                     }
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, String.format("Accept failed "),
-                            "Error message", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, String.format("Accept failed "
+                            + "on port %d.", port), "Error message",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Could not close server", "Error message",
+                JOptionPane.showMessageDialog(null, "Could not close server.", "Error message",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
