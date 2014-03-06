@@ -66,7 +66,7 @@ class MessageBox {
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
-    HashMap<String, String> nameToKey = new HashMap<>();
+    HashMap<String, String[]> nameToKey = new HashMap<>();
 
     public MessageBox(View view) {
         list.setSelectionModel(new DefaultListSelectionModel() {

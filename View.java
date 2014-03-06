@@ -16,6 +16,7 @@ public class View {
     JTextPane IPPane = new JTextPane();
     JTextPane portPane = new JTextPane();
     JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
+    JTextPane userName = new JTextPane();
     JTextPane tabPane = new JTextPane();
     JButton startButton = new JButton("Join server");
     JComboBox serverOptions;
@@ -40,6 +41,8 @@ public class View {
         IPPane.setText("127.0.0.1");
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
         portPane.setText("4444");
+        ((AbstractDocument) userName.getDocument()).setDocumentFilter(new NewLineFilter(24));
+        userName.setText("Ron Paul");
         ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));
         tabPane.setText("Chat 1");
 
@@ -53,6 +56,7 @@ public class View {
         JPanel IPPanel = new JPanel();
         JPanel portPanel = new JPanel();
         JPanel passPanel = new JPanel();
+        JPanel userPanel = new JPanel();
         JPanel tabPanel = new JPanel();
         JPanel startPanel = new JPanel();
         JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
@@ -69,6 +73,8 @@ public class View {
         invisibleContainer2.add(passPane);
         passPanel.add(invisibleContainer1);
         passPanel.add(invisibleContainer2);
+        userPanel.add(new JLabel("Username:"));
+        userPanel.add(userName);
         tabPanel.add(new JLabel("Chat name:"));
         tabPanel.add(tabPane);
         startPanel.add(startButton);
@@ -76,6 +82,7 @@ public class View {
         dialogPanel.add(IPPanel);
         dialogPanel.add(portPanel);
         dialogPanel.add(passPanel);
+        dialogPanel.add(userPanel);
         dialogPanel.add(tabPanel);
         dialogPanel.add(startPanel);
 
