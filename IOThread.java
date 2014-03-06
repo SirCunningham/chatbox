@@ -27,7 +27,7 @@ class IOThread extends Thread {
             while (true) {
                 o.println("Enter your name.");
                 name = i.readLine();
-                // Integrera med GUI!!!
+                // Integrera med GUI, behövs nog inte här!!!
                 if (name.isEmpty()) {
                     break;
                 } else {
