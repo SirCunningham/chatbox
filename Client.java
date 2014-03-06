@@ -9,13 +9,11 @@ public class Client implements Runnable {
 
     private BufferedReader i;
     private PrintWriter o;
-    private BufferedReader in;
     private MessageBox messageBox;
     private Socket clientSocket;
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
-    public Client(String host, int portNumber, BufferedReader in, MessageBox messageBox) {
-        this.in = in;
+    public Client(String host, int portNumber, final MessageBox messageBox) {
         this.messageBox = messageBox;
 
         // Starta socket för klienten
@@ -36,16 +34,29 @@ public class Client implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa tråd för att läsa från servern
-                new Thread(new Client(host, portNumber, in, messageBox)).start();
+                new Thread(new Client(host, portNumber, messageBox)).start();
+                
+                // Skapa lyssnare för att skicka till servern
+                class SendButtonListener implements ActionListener {
 
-                // Skicka data till servern
-                while (!closed) {
-                    // add some listener instead!
-                    String sendLine = messageBox.getMessage();
-                    if (!sendLine.isEmpty()) {
-                        o.println(sendLine);
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        o.println(messageBox.getMessage());
                     }
                 }
+                SendButtonListener sendButtonListener = new SendButtonListener();
+                messageBox.sendButton.addActionListener(sendButtonListener);
+                
+                // Avsluta uppkopplingen när det blir dags
+                while (!closed) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                messageBox.sendButton.setEnabled(false);
+                messageBox.sendButton.removeActionListener(sendButtonListener);
                 i.close();
                 o.close();
                 clientSocket.close();

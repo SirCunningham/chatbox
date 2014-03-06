@@ -130,8 +130,8 @@ class MessageBox {
 
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
-        sendFileButton.addActionListener(new SendButtonListener());
-        receiveFileButton.addActionListener(new ReceiveButtonListener());
+        sendFileButton.addActionListener(new SendFileButtonListener());
+        receiveFileButton.addActionListener(new ReceiveFileButtonListener());
         fileButton.addActionListener(new FileButtonListener());
         closeButton.addActionListener(new CloseButtonListener());
 
@@ -479,7 +479,7 @@ class MessageBox {
     }
 
     // Mottag fil med server
-    public class ReceiveButtonListener implements ActionListener {
+    public class ReceiveFileButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -501,8 +501,8 @@ class MessageBox {
              */
         }
     }
-    // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
 
+    // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     public void appendToPane(String msg) {
 
         try {
@@ -577,7 +577,7 @@ class MessageBox {
     }
 
     // Skicka fil med klient
-    public class SendButtonListener implements ActionListener {
+    public class SendFileButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
