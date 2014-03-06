@@ -95,13 +95,13 @@ public class Controller {
                 if (view.serverButton.isSelected()) {
                     new Thread(new Runnable() {
                         public void run() {
-                            new Server(port, messageBox);
+                            new Thread(new Server(port, messageBox)).start();
                         }
                     }).start();
                 }
                 new Thread(new Runnable() {
                     public void run() {
-                        new Client(host, port, messageBox);
+                        new Thread(new Client(host, port, messageBox)).start();
                     }
                 }).start();
             } catch (Exception ex) {
