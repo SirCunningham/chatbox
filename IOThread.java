@@ -25,13 +25,13 @@ class IOThread extends Thread {
         try {
             // Skapa input- och outputströmmar
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            o = new PrintWriter(clientSocket.getOutputStream());
+            o = new PrintWriter(clientSocket.getOutputStream(),true);
             String name;
             while (true) {
                 o.println("Enter your name.");
                 name = i.readLine();
                     // Integrera med GUI, behövs nog inte här!!!
-                if (name.isEmpty()) {
+                if (!name.isEmpty()) {
                     break;
                 } else {
                     o.println("The name should not be empty.");

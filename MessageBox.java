@@ -521,6 +521,7 @@ class MessageBox {
         }
 
     }
+
     public String getFileMessage() {
         String description = descriptionPane.getText();
         if ("File description (optional)".equals(description)) {
@@ -532,7 +533,7 @@ class MessageBox {
         String message = messagePane.getText();
         /*
         appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
+        namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
          * 
          */
         return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
@@ -552,7 +553,7 @@ class MessageBox {
             String name = namePane.getText();
             if (!message.isEmpty()) {
                 if (!keyRequestBox.isSelected()) {
-                    System.out.println("Hek");
+                    System.out.println("Hej");
                     return String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s </text></message>",
                             name, color,
@@ -582,9 +583,9 @@ class MessageBox {
             }
             /*
             if (message.contains("terminate my ass")) {
-                appendToPane("<message sender=\"INFO\">"
-                        + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
-                //kill();
+            appendToPane("<message sender=\"INFO\">"
+            + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
+            //kill();
             }
              * 
              */
@@ -640,13 +641,13 @@ class MessageBox {
                 BadLocationException, IOException {
             String color = new XMLString(html).toHexColor();
             //thr.keyRequest(html);
-            if (XMLString.isCorrect(html)) {
-                super.insertHTML((HTMLDocument) chatBox.getDocument(),
-                        offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
-                        + "</font>", popDepth, pushDepth, insertTag);
-            } else {
-                super.insertHTML((HTMLDocument) chatBox.getDocument(),
-                        offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
+
+            super.insertHTML((HTMLDocument) chatBox.getDocument(),
+                    offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
+                    + "</font>", popDepth, pushDepth, insertTag);
+            /*else {
+            super.insertHTML((HTMLDocument) chatBox.getDocument(),
+            offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
             }
             /*
             if (thr.timer.isRunning()) {

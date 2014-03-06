@@ -48,7 +48,11 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(messageBox.getMessage());
+                        String msg = messageBox.getMessage();
+                        if (!msg.equals("")) {
+                            o.println(msg);
+                        }
+
                     }
                 }
                 class SendFileButtonListener implements ActionListener {
