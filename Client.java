@@ -72,17 +72,19 @@ public class Client implements Runnable {
 
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
-        try {
-            while ((responseLine = i.readLine()) != null) {
-                messageBox.appendToPane(responseLine);
-                if (responseLine.indexOf("*** Bye") != -1) {
-                    break;
+        if (clientSocket != null && i != null && o != null) {
+            try {
+                while ((responseLine = i.readLine()) != null) {
+                    messageBox.appendToPane(responseLine);
+                    if (responseLine.indexOf("*** Bye") != -1) {
+                        break;
+                    }
                 }
+                closed = true;
+            } catch (IOException e) {
+                // fixa felmeddelanden!!!
+                System.err.println("IOException:  " + e);
             }
-            closed = true;
-        } catch (IOException e) {
-            // fixa felmeddelanden!!!
-            System.err.println("IOException:  " + e);
         }
     }
 }

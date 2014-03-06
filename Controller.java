@@ -88,21 +88,29 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean success = true;
-            MessageBox messageBox = new MessageBox(view);
+            final MessageBox messageBox = new MessageBox(view);
             try {
-                String host = view.IPPane.getText();
-                int port = Integer.parseInt(view.portPane.getText());
+                final String host = view.IPPane.getText();
+                final int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
-                    new Thread(new Server(port)).start();
+                    new Thread(new Runnable() {
+                        public void run() {
+                            new Server(port);
+                        }
+                    });
                 }
-                new Thread(new Client(host, port, messageBox)).start();
+                new Thread(new Runnable() {
+                    public void run() {
+                        new Client(host, port, messageBox);
+                    }
+                });
             } catch (Exception ex) {
                 // Let the bad ones come here!
                 success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
             } finally {
                 if (success) {
-                    messageBoxes.add(tabCount-1,messageBox);
+                    messageBoxes.add(tabCount - 1,messageBox);
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
