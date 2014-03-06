@@ -94,8 +94,8 @@ public class IOThread implements Runnable {
 
         }
         try {
-            in.close();
             out.close();
+            in.close();
             clientSocket.close();
         } catch (IOException e) {
             appendToPane(String.format("<message sender=\"ERROR\">"
