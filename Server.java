@@ -47,6 +47,7 @@ public class Server implements Runnable {
                     // add messageBox.items.addElement(clientSocket.getInetAddress()); later!!!
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
+                        threads.getLast().start();
                     }
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, String.format("Accept failed "),
