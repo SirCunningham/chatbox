@@ -38,22 +38,20 @@ public class Client implements Runnable {
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Skapa lyssnare för att skicka till servern
-        class SendButtonListener implements ActionListener {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("hej");
-                o.println(messageBox.getMessage());
-            }
-        }
-        SendButtonListener sendButtonListener = new SendButtonListener();
-        messageBox.sendButton.addActionListener(sendButtonListener);
-
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
         if (clientSocket != null && i != null && o != null) {
             try {
+                // Skapa lyssnare för att skicka till servern
+                class SendButtonListener implements ActionListener {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        o.println(messageBox.getMessage());
+                    }
+                }
+                SendButtonListener sendButtonListener = new SendButtonListener();
+                messageBox.sendButton.addActionListener(sendButtonListener);
                 while ((responseLine = i.readLine()) != null) {
                     messageBox.appendToPane(responseLine);
                     if (responseLine.indexOf("*** Bye") != -1) {
