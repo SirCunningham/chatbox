@@ -13,13 +13,14 @@ public class Server implements Runnable {
     private final Object lock = new Object();
     
     // lägg till frame för meddelandena!!!
-    public Server(int port) {
+    public Server(int port, MessageBox messageBox) {
 
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
             // add messageBox.bootPanel.setVisible(true); to some premier client!!!
         } catch (IOException e) {
+            messageBox.success = false;
             JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
                     + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
@@ -27,7 +28,7 @@ public class Server implements Runnable {
         
         // Börja lyssna efter klienter
         if (serverSocket != null) {
-            new Thread(new Server(port)).start();
+            new Thread(new Server(port, messageBox)).start();
         }
         
     }

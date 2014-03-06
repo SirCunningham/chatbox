@@ -22,9 +22,11 @@ public class Client implements Runnable {
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream());
         } catch (UnknownHostException e) {
+            messageBox.success = false;
             JOptionPane.showMessageDialog(null, "Don't know about host.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
+            messageBox.success = false;
             JOptionPane.showMessageDialog(null,
                     "Couldn't get I/O for the connection "
                     + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
