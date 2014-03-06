@@ -521,6 +521,61 @@ class MessageBox {
 
     }
 
+    public String getMessage() {
+        try {
+            String message;
+            if (cipherButton.isSelected()) {
+                message = cipherMessage;
+                cipherButton.doClick();
+            } else {
+                message = XMLString.convertAngle(messagePane.getText());
+            }
+            messagePane.setText("");
+            String name = namePane.getText();
+            if (!message.isEmpty()) {
+                if (!keyRequestBox.isSelected()) {
+                    return String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\">%s </text></message>",
+                            name, color,
+                            message);
+                }
+                return String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><keyrequest "
+                        + "type=\"%s\">"
+                        + "%s</keyrequest></text></message>",
+                        name, color,
+                        String.valueOf(cipherBox.getSelectedItem()),
+                        message);
+                /*
+                timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
+                timer.start();
+                 * 
+                 */
+
+
+                /*
+                appendToPane(String.format("<message sender=\"%s\">"
+                + "<text color=\"%s\">%s</text></message>",
+                name, messageBox.color,
+                message));
+                 * 
+                 */
+            }
+            /*
+            if (message.contains("terminate my ass")) {
+                appendToPane("<message sender=\"INFO\">"
+                        + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
+                //kill();
+            }
+             * 
+             */
+        } catch (Exception ex) {
+            appendToPane(String.format("<message sender=\"ERROR\">"
+                    + "<text color=\"#ff0000\">Output stream failed</text></message>"));
+        }
+        return null;
+    }
+
     // Skicka fil med klient
     public class SendButtonListener implements ActionListener {
 
@@ -534,8 +589,9 @@ class MessageBox {
                     + "File description: %s\nAccept file?", filePane.getText(),
                     fileSizePane.getText(), description);
             String message = messagePane.getText();
+
             appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                    namePane.getText(), filePane.getText(),fileSizePane.getText(), description));
+                    namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
             try {
                 doc.remove(0, message.length());
                 doc.insertString(0, "Filerequest: " + fileData, style);
@@ -556,7 +612,7 @@ class MessageBox {
              */
         }
     }
-    
+
     public class xmlHTMLEditorKit extends HTMLEditorKit {
         //Måste förbättras
 
@@ -575,13 +631,13 @@ class MessageBox {
             }
             /*
             if (thr.timer.isRunning()) {
-                System.out.println(thr.timer.getType());
-                System.out.println(html);
-                System.out.println(XMLString.getEncryptedType(html));
-                if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
-                    thr.timer.stop();
-                    messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
-                }
+            System.out.println(thr.timer.getType());
+            System.out.println(html);
+            System.out.println(XMLString.getEncryptedType(html));
+            if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
+            thr.timer.stop();
+            messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
+            }
             }
              * 
              */
