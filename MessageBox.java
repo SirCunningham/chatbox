@@ -642,7 +642,7 @@ class MessageBox {
         public void insertHTML(int offset, String html,
                 int popDepth, int pushDepth, HTML.Tag insertTag) throws
                 BadLocationException, IOException {
-            String color = new XMLString(html).toHexColor();
+            String color = XMLString.toHexColor(html);
             //thr.keyRequest(html);
 
             super.insertHTML((HTMLDocument) chatBox.getDocument(),

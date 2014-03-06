@@ -62,7 +62,7 @@ public class XMLString {
         return null;
     }
 
-    public String toHexColor() {
+    public static String toHexColor(String xmlStr) {
         if (xmlStr.indexOf("color") != -1) {
             int index = xmlStr.indexOf("color");
             String hexColor = xmlStr.substring(index + 8, index + 14);
