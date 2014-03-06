@@ -90,15 +90,12 @@ public class Controller {
             boolean success = true;
             MessageBox messageBox = new MessageBox(view);
             try {
+                String host = view.IPPane.getText();
                 int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
-                    Thread thr = new Thread(new Server2(port, messageBox));
-                    thr.start();
-                } else {
-                    Thread thr = new Thread(new Client2(view.IPPane.getText(),
-                            port, messageBox));
-                    thr.start();
+                    new Thread(new Server(port)).start();
                 }
+                new Thread(new Client(host, port, messageBox)).start();
             } catch (Exception ex) {
                 // Let the bad ones come here!
                 success = false;

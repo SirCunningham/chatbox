@@ -13,12 +13,12 @@ public class Client implements Runnable {
     private Socket clientSocket;
     private volatile boolean closed = false;
 
-    public Client(String host, int portNumber, final MessageBox messageBox) {
+    public Client(String host, int port, final MessageBox messageBox) {
         this.messageBox = messageBox;
 
         // Starta socket för klienten
         try {
-            clientSocket = new Socket(host, portNumber);
+            clientSocket = new Socket(host, port);
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream());
         } catch (UnknownHostException e) {
@@ -34,7 +34,7 @@ public class Client implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa tråd för att läsa från servern
-                new Thread(new Client(host, portNumber, messageBox)).start();
+                new Thread(new Client(host, port, messageBox)).start();
                 
                 // Skapa lyssnare för att skicka till servern
                 class SendButtonListener implements ActionListener {

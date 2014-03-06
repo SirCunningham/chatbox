@@ -5,7 +5,7 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 
-public class Server {
+public class Server implements Runnable {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
@@ -13,19 +13,29 @@ public class Server {
     private final Object lock = new Object();
     
     // lägg till frame för meddelandena!!!
-    public Server(int portNumber) {
+    public Server(int port) {
 
         // Starta socket för servern
         try {
-            serverSocket = new ServerSocket(portNumber);
+            serverSocket = new ServerSocket(port);
             // add messageBox.bootPanel.setVisible(true); to some premier client!!!
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
-                    + "on port %d.", portNumber), "Error message",
+                    + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
         }
+        
+        // Börja lyssna efter klienter
+        if (serverSocket != null) {
+            new Thread(new Server(port)).start();
+        }
+        
+    }
+        
+    public void run() {
 
         // Skapa tråd för varje klient
+        threads = new LinkedList<>();
         if (serverSocket != null) {
             while (true) {
                 // gör det möjligt att avsluta när tabben stängs ned i controller/messageBox!!!
@@ -39,9 +49,8 @@ public class Server {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                     }
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, String.format("Accept failed "
-                            + "on port %d.", portNumber), "Error message",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, String.format("Accept failed "),
+                            "Error message", JOptionPane.ERROR_MESSAGE);
                 }
             }
             try {
