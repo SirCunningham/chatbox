@@ -35,8 +35,8 @@ public class Client implements Runnable {
         } catch (IOException e) {
             messageBox.success = false;
             JOptionPane.showMessageDialog(null,
-                    "Couldn't get I/O for the connection "
-                    + "to host.", "Error message", JOptionPane.ERROR_MESSAGE);
+                    "Couldn't get I/O for the connection to host.",
+                    "Error message", JOptionPane.ERROR_MESSAGE);
         }
 
         // Håll uppkopplingen tills servern vill avbryta den
@@ -76,8 +76,10 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                // fixa felmeddelanden!!!
-                System.err.println("IOException:  " + e);
+                messageBox.success = false;
+                JOptionPane.showMessageDialog(null,
+                        "Couldn't get I/O for closing the streams.",
+                        "Error message", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
