@@ -41,7 +41,8 @@ public class Server2 implements Runnable {
                 try {
                     clientSocket = serverSocket.accept();
                     messageBox.items.addElement(clientSocket.getInetAddress());
-                    IOThread2 client = new IOThread2(clientSocket, false, messageBox);
+                    IOThread2 client = new IOThread2(clientSocket, false, messageBox,
+                            clientSocket.getInputStream(), clientSocket.getOutputStream());
                     clients.add(client);
                     Thread thr = new Thread(client);
                     thr.start();

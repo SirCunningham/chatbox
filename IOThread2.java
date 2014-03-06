@@ -17,6 +17,8 @@ import javax.swing.text.html.HTMLDocument;
 public class IOThread2 implements Runnable {
 
     // Fält för strömmar
+    private InputStream i;
+    private OutputStream o;
     private PrintWriter out;
     private BufferedReader in;
     private Socket clientSocket;
@@ -26,7 +28,8 @@ public class IOThread2 implements Runnable {
     private boolean isClient;
     private volatile boolean isNotRunnable;
     // Konstruktor
-    public IOThread2(Socket sock, boolean client, MessageBox messageBox) {
+    public IOThread2(Socket sock, boolean client, MessageBox messageBox,
+            InputStream i, OutputStream o) {
         clientSocket = sock;
         timer = new TypeTimer(10 * 1000, new TimerListener(), null);
         timer.setRepeats(false);
@@ -42,20 +45,8 @@ public class IOThread2 implements Runnable {
         isNotRunnable = false;
 
         // Anslut läs- och skrivströmmarna
-        try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to create an output stream </text></message>"));
-            return;
-        }
-        try {
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to create an input stream </text></message>"));
-            return;
-        }
+        out = new PrintWriter(o, true);
+        in = new BufferedReader(new InputStreamReader(i));
 
         // Kommer vi hit har anslutningen gått bra
         if (isClient) {
