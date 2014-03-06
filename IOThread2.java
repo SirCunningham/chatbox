@@ -2,14 +2,12 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
-
-
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.NoSuchPaddingException;
-import javax.swing.*;
-import javax.swing.text.*;
 import java.awt.event.*;
-import javax.swing.text.html.HTMLDocument;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.*;
 
 /**
  * Tråd för input- och outputströmmar
@@ -95,10 +93,6 @@ public class IOThread2 implements Runnable {
         }
     }
 
-    public MessageBox getMessageBox() {
-        return messageBox;
-    }
-
     public void kill() {
         isNotRunnable = true;
     }
@@ -107,7 +101,7 @@ public class IOThread2 implements Runnable {
     public void appendToPane(String msg) {
 
         try {
-            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
+            MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
             HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
             try {
                 kit.insertHTML(this, doc.getLength(), msg, 0, 0, null);
