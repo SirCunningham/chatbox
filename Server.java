@@ -44,6 +44,7 @@ public class Server implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
+            // serverSocket.close(); if we ever reach this, close with tab?
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, String.format("Couldn't listen "
                     + "on port %d.", port), "Error message",
