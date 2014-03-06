@@ -7,8 +7,8 @@ import java.util.*;
 class IOThread extends Thread {
 
     private String clientName = "@NN";
-    private BufferedReader is;
-    private PrintStream os;
+    private BufferedReader i;
+    private PrintWriter o;
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
 
@@ -21,22 +21,22 @@ class IOThread extends Thread {
 
         try {
             // Skapa input- och outputströmmar
-            is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            os = new PrintStream(clientSocket.getOutputStream());
+            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            o = new PrintWriter(clientSocket.getOutputStream());
             String name;
             while (true) {
-                os.println("Enter your name.");
-                name = is.readLine();
+                o.println("Enter your name.");
+                name = i.readLine();
                 // Integrera med GUI!!!
                 if (name.isEmpty()) {
                     break;
                 } else {
-                    os.println("The name should not be empty.");
+                    o.println("The name should not be empty.");
                 }
             }
 
             // Ge välkomstmeddelande
-            os.println("Welcome " + name
+            o.println("Welcome " + name
                     + " to our chat room.\nTo leave enter /quit in a new line.");
             synchronized (this) {
                 for (IOThread thread : threads) {
@@ -44,7 +44,7 @@ class IOThread extends Thread {
                         clientName = "@" + name;
                         break;
                     } else {
-                        thread.os.println("*** A new user " + name
+                        thread.o.println("*** A new user " + name
                                 + " entered the chat room !!! ***");
                     }
                 }
@@ -52,7 +52,7 @@ class IOThread extends Thread {
 
             // Starta konversationen
             while (true) {
-                String line = is.readLine();
+                String line = i.readLine();
                 if (line.startsWith("/quit")) {
                     break;
                 }
@@ -66,10 +66,10 @@ class IOThread extends Thread {
                             synchronized (this) {
                                 for (IOThread thread : threads) {
                                     if (thread != this && thread.clientName.equals(words[0])) {
-                                        thread.os.println("<" + name + "> " + words[1]);
+                                        thread.o.println("<" + name + "> " + words[1]);
 
                                         // Visa att meddelandet har skickats
-                                        this.os.println("<" + name + "> " + words[1]);
+                                        this.o.println("<" + name + "> " + words[1]);
                                         break;
                                     }
                                 }
@@ -80,7 +80,7 @@ class IOThread extends Thread {
                     // Skicka publika meddelanden
                     synchronized (this) {
                         for (IOThread thread : threads) {
-                            thread.os.println("<" + name + "> " + line);
+                            thread.o.println("<" + name + "> " + line);
                         }
                     }
                 }
@@ -88,19 +88,19 @@ class IOThread extends Thread {
             synchronized (this) {
                 for (IOThread thread : threads) {
                     if (thread != this) {
-                        thread.os.println("*** The user " + name
+                        thread.o.println("*** The user " + name
                                 + " is leaving the chat room !!! ***");
                     }
                 }
             }
-            os.println("*** Bye " + name + " ***");
+            o.println("*** Bye " + name + " ***");
             
             // Lämna plats för nya klienter
             synchronized (this) {
                 threads.remove(this);
             }
-            is.close();
-            os.close();
+            i.close();
+            o.close();
             clientSocket.close();
         } catch (IOException e) {
         }
