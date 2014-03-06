@@ -2,6 +2,7 @@ package chatbox;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -15,10 +16,15 @@ public class Server2 implements Runnable {
 
     private int port;
     private MessageBox messageBox;
+    ArrayList<IOThread2> clients;
 
     public Server2(int port, MessageBox messageBox) {
         this.port = port;
         this.messageBox = messageBox;
+        clients = new ArrayList<>();
+    }
+    public ArrayList<IOThread2> getClients() {
+        return clients;
     }
 
     public void run() {
@@ -35,7 +41,9 @@ public class Server2 implements Runnable {
                 try {
                     clientSocket = serverSocket.accept();
                     messageBox.items.addElement(clientSocket.getInetAddress());
-                    Thread thr = new Thread(new IOThread2(clientSocket, false, messageBox));
+                    IOThread2 client = new IOThread2(clientSocket, false, messageBox);
+                    clients.add(client);
+                    Thread thr = new Thread(client);
                     thr.start();
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,

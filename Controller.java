@@ -5,19 +5,22 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
 
 public class Controller {
 
     private View view;
-    private MessageBox[] messageBoxes;
-    private JButton[] indices;
+    private ArrayList<MessageBox> messageBoxes;
+    private ArrayList<JButton> indices;
     private int tabCount = 1;
     private ImageIcon icon;
 
     public Controller(View view) {
         this.view = view;
+        messageBoxes = new ArrayList<>();
+        indices = new ArrayList<>();
         view.IPPane.addFocusListener(new FieldListener());
         view.IPPane.addKeyListener(new StartListener());
         view.portPane.addFocusListener(new FieldListener());
@@ -50,7 +53,7 @@ public class Controller {
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
         closeButton.addActionListener(new TabButtonListener());
-        indices[tabCount - 1] = closeButton;
+        indices.add(tabCount - 1,closeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -102,7 +105,7 @@ public class Controller {
                 System.err.println("Ett fel inträffade1: " + ex);
             } finally {
                 if (success) {
-                    messageBoxes[tabCount - 1] = messageBox;
+                    messageBoxes.add(tabCount-1,messageBox);
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
