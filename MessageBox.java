@@ -595,7 +595,7 @@ class MessageBox {
             appendToPane(String.format("<message sender=\"ERROR\">"
                     + "<text color=\"#ff0000\">Output stream failed</text></message>"));
         }
-        return null;
+        return "";
     }
 
     // Skicka fil med klient
