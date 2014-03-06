@@ -20,9 +20,9 @@ public class XMLString {
 
     public XMLString(String xmlStr) {
         this.xmlStr = xmlStr;
-        allowedTags = new ArrayList<String>();
+        allowedTags = new ArrayList<>();
         allowedTags.add("message");
-        allowedTags.add("test");
+        allowedTags.add("text");
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
         try {
@@ -82,10 +82,12 @@ public class XMLString {
     }
 
     public static String removeBoldEmphTags(String hex) {
-        hex = hex.replaceAll("<kursiv>", "");
-        hex = hex.replaceAll("</kursiv>", "");
-        hex = hex.replaceAll("<fetstil>", "");
-        hex = hex.replaceAll("</fetstil>", "");
+        if (hex.matches("<kursiv>.*</kursiv>")) {
+            hex = hex.replaceAll("<(|/)kursiv>", "");
+        }
+        if (hex.matches("<fetstil>.*</fetstil>")) {
+            hex = hex.replaceAll("<(|/)fetstil>", "");
+        }
         return hex;
     }
 
