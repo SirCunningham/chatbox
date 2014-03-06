@@ -21,39 +21,48 @@ class IOThread extends Thread {
     }
 
     public void run() {
-
         try {
             // Skapa input- och outputströmmar
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream(),true);
+
             String name;
+            /*
             while (true) {
-                o.println("<message sender=system>Enter your name.</message>");
                 name = i.readLine();
                     // Integrera med GUI, behövs nog inte här!!!
                 if (!name.isEmpty()) {
                     break;
                 } else {
-                    o.println("<message sender=system>The name should not be empty.</message>");
+                    
                 }
             }
+             * 
+             */
 
             // Ge välkomstmeddelande
+            /*
             o.println("<message sender=system> Welcome " + name
                     + " to our chat room.\nTo leave enter /quit in a new line.</message>");
+             * 
+             */
+
+            /*
             synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread == this) {
                         clientName = "@" + name;
                         break;
                     } else {
-                        thread.o.println("<message sender=system>*** A new user " + name
+                        thread.o.println("<message sender=system>*** A new user "
                                 + " entered the chat room !!! ***</message>");
                     }
                 }
             }
+             * 
+             */
 
-            // Starta konversationen
+
             while (true) {
                 String line = i.readLine();
                 if (line.startsWith("/quit")) {
@@ -62,6 +71,7 @@ class IOThread extends Thread {
                 
                 // Skicka privata meddelanden
                 if (line.startsWith("@")) {
+                    /*
                     String[] words = line.split("\\s", 2);
                     if (words.length > 1 && words[1] != null) {
                         words[1] = words[1].trim();
@@ -79,11 +89,13 @@ class IOThread extends Thread {
                             }
                         }
                     }
+                     * 
+                     */
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOThread thread : threads) {
-                            thread.o.println("<" + name + "> " + line);
+                            thread.o.println(line);
                         }
                     }
                 }
@@ -91,17 +103,18 @@ class IOThread extends Thread {
             synchronized (lock) {
                 for (IOThread thread : threads) {
                     if (thread != this) {
-                        thread.o.println("<message sender=system>*** The user " + name
-                                + " is leaving the chat room !!! ***</message>");
+                        //thread.o.println("<message sender=system>*** The user " + name
+                                //+ " is leaving the chat room !!! ***</message>");
                     }
                 }
             }
-            o.println("<message sender=system>*** Bye " + name + " ***</message>");
+            //o.println("<message sender=system>*** Bye " + name + " ***</message>");
             
             // Lämna plats för nya klienter
             synchronized (lock) {
                 threads.remove(this);
             }
+
             i.close();
             o.close();
             clientSocket.close();
