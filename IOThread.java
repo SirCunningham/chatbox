@@ -1,4 +1,5 @@
 package chatbox;
+
 import java.io.*;
 import java.net.*;
 
@@ -24,8 +25,6 @@ public class IOThread implements Runnable {
     public MessageBox messageBox;
     private boolean isClient;
     private volatile boolean isNotRunnable;
-
-
     // Konstruktor
     public IOThread(Socket sock, boolean client, MessageBox messageBox) {
         clientSocket = sock;

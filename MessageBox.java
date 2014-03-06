@@ -6,6 +6,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -66,7 +67,7 @@ class MessageBox {
     private static final int TYPE_NONE = 0;
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
-    HashMap<String, String[]> nameToKey = new HashMap<>();
+    HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
 
     public MessageBox(View view) {
         list.setSelectionModel(new DefaultListSelectionModel() {

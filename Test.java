@@ -36,15 +36,26 @@ public class Test extends ArrayList {
         String xmlTest2 = "<message sender=\"dante\"><text color=\"FF0000\"> <keyrequest type=\"AES\">asdasdasdasd</keyrequest></text></message>";
         //System.out.println(handleString(xmlTest));
         //System.out.println(removeBoldEmphTags(xmlTest2));
-        System.out.println(getEncryptedType(xmlTest));
+        System.out.println(isCorrect(xmlTest));
+        
+        //System.out.println(xmlTest.matches(".*<encrypted key=.* type=.*>"));
         //System.out.println(getKeyRequestType(xmlTest2));
     }
 
     public Test() {
         allowedTags.add("message");
-        allowedTags.add("test");
-        allowedTags.add("kursiv");
+        allowedTags.add("text");
         allowedTags.add("fetstil");
+        allowedTags.add("kursiv");
+        allowedTags.add("encrypted");
+        allowedTags.add("keyrequest");
+    }
+    public static boolean isCorrect(String xmlStr) {
+        for (String str : xmlStr.split("<*>")) {
+            System.out.println(str);
+        }
+        return true;
+
     }
 
     public static String getEncryptedType(String xmlStr) {

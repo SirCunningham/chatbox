@@ -16,7 +16,6 @@ public class AESCrypto {
     private String msg;
     private String encMsg;
 
-
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {
         KeyGenerator AESgen = KeyGenerator.getInstance("AES");
