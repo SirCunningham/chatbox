@@ -127,7 +127,7 @@ class MessageBox {
         fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
-        rightPanel.add(progressBar); //Temporary only!
+        rightPanel.add(progressBar); //Temporary only - add to dialog!
 
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
