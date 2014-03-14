@@ -11,16 +11,14 @@ import javax.swing.text.*;
 
 public class Controller {
 
-    private View view;
-    private ArrayList<MessageBox> messageBoxes;
-    private ArrayList<JButton> indices;
+    private final View view;
+    private final ArrayList<MessageBox> messageBoxes = new ArrayList<>();
+    private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private ImageIcon icon;
 
     public Controller(View view) {
         this.view = view;
-        messageBoxes = new ArrayList<>();
-        indices = new ArrayList<>();
         view.IPPane.addFocusListener(new FieldListener());
         view.IPPane.addKeyListener(new StartListener());
         view.portPane.addFocusListener(new FieldListener());
@@ -96,17 +94,19 @@ public class Controller {
                 final int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
                     new Thread(new Runnable() {
+                        @Override
                         public void run() {
                             new Thread(new Server(port, messageBox)).start();
                         }
                     }).start();
                 }
                 new Thread(new Runnable() {
+                    @Override
                     public void run() {
                         new Thread(new Client(host, port, messageBox)).start();
                     }
                 }).start();
-            } catch (Exception ex) {
+            } catch (NumberFormatException ex) {
                 // Let the bad ones come here!
                 messageBox.success = false;
                 System.err.println("Ett fel inträffade1: " + ex);
