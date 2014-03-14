@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.*;
@@ -15,15 +14,15 @@ import javax.swing.text.html.*;
 public class IOThread2 implements Runnable {
 
     // Fält för strömmar
-    private InputStream i;
-    private OutputStream o;
+    private final InputStream i;
+    private final OutputStream o;
     private PrintWriter out;
     private BufferedReader in;
-    private Socket clientSocket;
+    private final Socket clientSocket;
     TypeTimer timer;
     boolean hasSentKeyRequest = false;
-    private MessageBox messageBox;
-    private boolean isClient;
+    private final MessageBox messageBox;
+    private final boolean isClient;
     private volatile boolean isNotRunnable;
     // Konstruktor
     public IOThread2(Socket sock, boolean client, MessageBox messageBox,
@@ -118,6 +117,7 @@ public class IOThread2 implements Runnable {
 
     public class TimerListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             out.println(String.format("<message sender=\"%s\">"
                     + "<text color=\"%s\">Jag fick ingen nyckel av "

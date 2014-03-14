@@ -9,12 +9,9 @@ import org.apache.commons.codec.binary.Hex;
 
 public class AESCrypto {
 
-    private Cipher AEScipher;
-    private SecretKeySpec AESkey;
-    private String hexDecodeKey;
-    private byte[] cipherData;
-    private String msg;
-    private String encMsg;
+    private final Cipher AEScipher;
+    private final SecretKeySpec AESkey;
+    private final String hexDecodeKey;
 
     public AESCrypto() throws NoSuchAlgorithmException, NoSuchPaddingException,
             UnsupportedEncodingException {

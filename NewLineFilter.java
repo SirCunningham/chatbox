@@ -17,6 +17,7 @@ class NewLineFilter extends DocumentFilter {
         this(charLimit, true);
     }
 
+    @Override
     public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
         if ((fb.getDocument().getLength() + text.length()) <= charLimit) {
             if (notOnlyNumbers) {
@@ -29,6 +30,7 @@ class NewLineFilter extends DocumentFilter {
         }
     }
 
+    @Override
     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
         if ((fb.getDocument().getLength() + text.length()) <= charLimit) {
             super.replace(fb, offset, length, text.replaceAll("\\n", ""), attr);

@@ -18,7 +18,7 @@ import javax.swing.text.html.*;
 class MessageBox {
 
     volatile boolean success = true;
-    private String[] cipherString = {"None", "caesar", "AES"};
+    private final String[] cipherString = {"None", "caesar", "AES"};
     private View view;
     public AESCrypto AES;
     JPanel mainPanel = new JPanel();
@@ -243,6 +243,7 @@ class MessageBox {
 
     class BootButtonListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             String message = messagePane.getText();
             try {
@@ -512,9 +513,9 @@ class MessageBox {
 
         try {
             MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
-            HTMLDocument doc = (HTMLDocument) chatBox.getDocument();
+            HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc.getLength(), msg, 0, 0, null);
+                kit.insertHTML(doc1.getLength(), msg, 0, 0, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -550,7 +551,7 @@ class MessageBox {
 
     public String getMessage() {
         try {
-            String message="";
+            String message;
             if (cipherButton.isSelected()) {
                 message = cipherMessage;
                 cipherButton.doClick();

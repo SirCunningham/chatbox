@@ -6,11 +6,11 @@ import java.util.*;
 
 class IOThread extends Thread {
 
-    private String clientName = "@NN";
+    private final String clientName = "@NN";
     private BufferedReader i;
     private PrintWriter o;
-    private Socket clientSocket;
-    private LinkedList<IOThread> threads;
+    private final Socket clientSocket;
+    private final LinkedList<IOThread> threads;
     private final Object lock;
 
     public IOThread(Socket clientSocket, LinkedList<IOThread> threads,
@@ -20,6 +20,7 @@ class IOThread extends Thread {
         this.lock = lock;
     }
 
+    @Override
     public void run() {
         try {
             // Skapa input- och outputströmmar

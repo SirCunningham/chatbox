@@ -37,11 +37,9 @@ public class XMLString {
     }
     
     public static boolean isCorrect(String xmlStr) {
-        if (!xmlStr.matches("<message .*>.*</message>")) {
-            return false;
-        }
-        return true;
+        return xmlStr.matches("<message .*>.*</message>");
     }
+    
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {

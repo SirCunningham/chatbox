@@ -11,8 +11,8 @@ public class Server implements Runnable {
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
     private final Object lock = new Object();
-    private int port;
-    private MessageBox messageBox;
+    private final int port;
+    private final MessageBox messageBox;
     
     // lägg till frame för meddelandena!!!
     public Server(int port, MessageBox messageBox) {
@@ -21,6 +21,7 @@ public class Server implements Runnable {
     }
     
     // Lyssna efter klienter
+    @Override
     public void run() {
         
         // Starta socket för servern

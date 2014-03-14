@@ -9,9 +9,9 @@ public class Client implements Runnable {
 
     private BufferedReader i;
     private PrintWriter o;
-    private MessageBox messageBox;
-    private String host;
-    private int port;
+    private final MessageBox messageBox;
+    private final String host;
+    private final int port;
     private Socket clientSocket;
 
     public Client(String host, int port, final MessageBox messageBox) {
@@ -21,6 +21,7 @@ public class Client implements Runnable {
     }
 
     // Skapa tråd för att läsa från servern
+    @Override
     public void run() {
 
         // Starta socket för klienten
@@ -56,11 +57,13 @@ public class Client implements Runnable {
                     }
                 }
                 class SendFileButtonListener implements ActionListener {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(messageBox.getFileMessage());
                     }
                 }
                 class closeButtonListener implements ActionListener {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(messageBox.getQuitMessage());
                     }

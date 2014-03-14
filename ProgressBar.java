@@ -29,8 +29,9 @@ public class ProgressBar extends JFrame {
 
     //to iterate so that it looks like progress bar  
     public void iterate() {
-        SwingWorker worker = new SwingWorker<Object, Object>() {
-
+        SwingWorker worker;
+        worker = new SwingWorker<Object, Object>() {
+            
             @Override
             protected Object doInBackground() throws Exception {
                 while (num < 2000) {

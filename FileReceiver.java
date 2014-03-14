@@ -10,14 +10,15 @@ public class FileReceiver extends Thread {
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private int n;
-    private int port;
-    private String file;
+    private final int port;
+    private final String file;
 
     public FileReceiver(int port, String file) {
         this.port = port + 13;
         this.file = file;
     }
 
+    @Override
     public void run() {
 
         // Setup server socket:
@@ -51,7 +52,7 @@ public class FileReceiver extends Thread {
         // Setup output stream for file
         try {
             out = new FileOutputStream(new File(file)); // creates file even if out is empty!
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             System.err.println("File outputstream failed: " + e);
             System.exit(1);
         }

@@ -12,9 +12,9 @@ public class FileSender extends Thread {
     private long fileSize;
     private long sentBytes;
     private File inFile;
-    private String IP;
-    private int port;
-    private String file;
+    private final String IP;
+    private final int port;
+    private final String file;
 
     public FileSender(String IP, int port, String file) {
         this.IP = IP;
@@ -22,6 +22,7 @@ public class FileSender extends Thread {
         this.file = file;
     }
 
+    @Override
     public void run() {
 
         try {
