@@ -124,7 +124,7 @@ public class Controller {
                 }
             } catch (NumberFormatException ex) {
                 messageBox.success = false;
-                JOptionPane.showMessageDialog(null, "Port is not a small number!",
+                JOptionPane.showMessageDialog(view.frame, "Port is not a small number!",
                         "Error message", JOptionPane.ERROR_MESSAGE);
             } finally {
                 if (messageBox.success) {
