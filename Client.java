@@ -83,8 +83,9 @@ public class Client implements Runnable {
                 messageBox.closeButton.addActionListener(new closeButtonListener());
                 while ((responseLine = i.readLine()) != null) {
                     keyRequest(responseLine);
-                    messageBox.appendToPane(XMLString.removeKeyRequest(responseLine));  //Skicka inte keyrequest till sig själv!
-                    if (responseLine.indexOf("*** Bye") != -1) {
+                    messageBox.appendToPane(
+                            XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
+                    if (responseLine.indexOf("*** Bye") != -1) {                                          
                         break;
                     }
                 }
