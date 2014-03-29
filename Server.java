@@ -13,17 +13,17 @@ public class Server implements Runnable {
     private final Object lock = new Object();
     private final int port;
     private final MessageBox messageBox;
-    
-    // lägg till frame för meddelandena!!!
+
+    // lägg till frame för meddelandena eller gör det någon annanstans!!!
     public Server(int port, MessageBox messageBox) {
         this.port = port;
         this.messageBox = messageBox;
     }
-    
+
     // Lyssna efter klienter
     @Override
     public void run() {
-        
+
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
@@ -34,9 +34,9 @@ public class Server implements Runnable {
                     JOptionPane.ERROR_MESSAGE);
         }
 
-        // Skapa tråd för varje klient
-        threads = new LinkedList<>();
         if (serverSocket != null) {
+            // Skapa tråd för varje klient
+            threads = new LinkedList<>();
             while (true) {
                 // gör det möjligt att avsluta när tabben stängs ned i controller/messageBox!!!
                 if (5 < 4) {
@@ -44,7 +44,6 @@ public class Server implements Runnable {
                 }
                 try {
                     clientSocket = serverSocket.accept();
-                    // add messageBox.items.addElement(clientSocket.getInetAddress()); in client!!!
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();

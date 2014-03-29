@@ -5,6 +5,11 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
+// add messageBox.items.addElement(clientSocket.getInetAddress()); when
+// *new user is connected (certain msg comes)
+// *user changes name
+// Gör detta här eller i IOThread!
+
 public class Client implements Runnable {
 
     private BufferedReader i;
