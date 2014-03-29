@@ -102,7 +102,7 @@ class IOThread extends Thread {
                                     //Skapa timer
                                 }
                             } else {
-                                thread.o.println(XMLString.removeKeyRequest(line));  //Skicka inte keyrequest till sig själv
+                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line)));  //Skicka inte key- eller filerequest till sig själv
                             }
                         }
                     }
