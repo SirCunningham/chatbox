@@ -10,6 +10,7 @@ public class TypeTimer extends Timer {
 
     TypeTimer(int delay, ActionListener listener, String type) {
         super(delay, listener);
+        this.setRepeats(false);
     }
 
     public String getType() {
