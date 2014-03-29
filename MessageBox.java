@@ -167,7 +167,7 @@ class MessageBox {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        String name = view.userName.getText();
+        String name = view.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
         namePane.addFocusListener(new FieldListener());
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
