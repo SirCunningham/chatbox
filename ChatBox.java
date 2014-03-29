@@ -2,9 +2,8 @@ package chatbox;
 
 //Fel namn vid avslutning (sitt eget istället för annans)!
 //Color switch does not work when encrypted!!! Scroll does not always work - and lags!
-//Block client after disconnect (no new posts), and fix controller so that client can't start first!
+//Block client after disconnect - no new posts possible!
 //Skicka <disconnect> med servern till en klient som blir kickad?
-//Starta ej om något går fel, t.ex. två servrar på samma port.
 
 public class ChatBox {
 

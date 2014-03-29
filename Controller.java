@@ -88,7 +88,6 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             final MessageBox messageBox = new MessageBox(view);
-            messageBox.success = true;
             try {
                 final String host = view.IPPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());
@@ -96,21 +95,35 @@ public class Controller {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new Thread(new Server(port, messageBox)).start();
+                            new Thread(new Server(port, messageBox,
+                                    view.frame)).start();
                         }
                     }).start();
                     messageBox.bootPanel.setVisible(true);
-                }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Thread(new Client(host, port, messageBox)).start();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
                     }
-                }).start();
+                }
+                if (messageBox.success) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(new Client(host, port, messageBox,
+                                    view.frame)).start();
+                        }
+                    }).start();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             } catch (NumberFormatException ex) {
-                // Let the bad ones come here!
                 messageBox.success = false;
-                System.err.println("Ett fel inträffade1: " + ex);
+                JOptionPane.showMessageDialog(null, "Port is not a small number!",
+                        "Error message", JOptionPane.ERROR_MESSAGE);
             } finally {
                 if (messageBox.success) {
                     messageBoxes.add(messageBox);
@@ -119,8 +132,7 @@ public class Controller {
                             view.tabPane.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
-                    tabCount += 1;
-                    view.tabPane.setText("Chat " + String.valueOf(tabCount));
+                    view.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }
         }
@@ -166,7 +178,9 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
-                //messageBoxes.get(index).kill();
+                messageBoxes.get(index).alive = false;
+                messageBoxes.remove(index);
+                indices.remove(index);
             }
         }
     }
