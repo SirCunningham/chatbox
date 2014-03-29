@@ -129,7 +129,7 @@ public class Client implements Runnable {
                         messageBox.namePane.getText(), messageBox.color, messageBox.messagePane.getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</filerespnse></text></message>",
+                        + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
                         messageBox.namePane.getText(), messageBox.color,messageBox.messagePane.getText()));
             }
         }
