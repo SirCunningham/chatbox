@@ -52,6 +52,9 @@ public class XMLString {
     public static String removeKeyRequest(String xmlStr) {
         return xmlStr.replaceAll("<keyrequest.*>.*</keyrequest>", "");
     }
+    public static String removeFileRequest(String xmlStr) {
+        return xmlStr.replaceAll("<filerequest.*>.*</filerequest>","");
+    }
     
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");

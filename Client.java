@@ -83,8 +83,9 @@ public class Client implements Runnable {
                 messageBox.closeButton.addActionListener(new closeButtonListener());
                 while ((responseLine = i.readLine()) != null) {
                     keyRequest(responseLine);
-                    messageBox.appendToPane(XMLString.removeKeyRequest(responseLine));  //Skicka inte keyrequest till sig själv!
-                    if (responseLine.indexOf("*** Bye") != -1) {
+                    messageBox.appendToPane(
+                            XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
+                    if (responseLine.indexOf("*** Bye") != -1) {                                          
                         break;
                     }
                 }
@@ -119,7 +120,7 @@ public class Client implements Runnable {
 
     public void fileRequest(String html) {
         if (html.indexOf("</filrequest>") != -1) {
-            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Send key?",
+            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
