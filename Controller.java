@@ -173,7 +173,7 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
-                //messageBoxes.get(index).kill();
+                messageBoxes.get(index).kill = true;
             }
         }
     }
