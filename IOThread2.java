@@ -182,24 +182,4 @@ public class IOThread2 implements Runnable {
         }
     }
 
-    public void keyRequest(String html) {
-        if (html.indexOf("</keyrequest>") != -1) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                appendToPane(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,
-                        messageBox.getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-                out.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,
-                        messageBox.getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-            }
-        }
-    }
 }
