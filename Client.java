@@ -9,7 +9,6 @@ import javax.swing.*;
 // *new user is connected (certain msg comes)
 // *user changes name
 // Gör detta här eller i IOThread!
-
 public class Client implements Runnable {
 
     private Socket clientSocket;
@@ -115,6 +114,23 @@ public class Client implements Runnable {
                         messageBox.namePane.getText(), messageBox.color,
                         messageBox.getKey(XMLString.getKeyRequestType(html)),
                         XMLString.getKeyRequestType(html)));
+            }
+        }
+    }
+
+    public void fileRequest(String html) {
+        if (html.indexOf("</filrequest>") != -1) {
+            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Send key?",
+                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                o.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><fileresponse reply=\"yes\" port=\"" + (port + 13) + "\">%s</filerespnse></text></message>",
+                        messageBox.namePane.getText(), messageBox.color, messageBox.messagePane.getText()));
+            } else {
+                o.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
+                        messageBox.namePane.getText(), messageBox.color,messageBox.messagePane.getText()));
             }
         }
     }
