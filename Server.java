@@ -15,7 +15,7 @@ public class Server implements Runnable {
     private final MessageBox messageBox;
     private final JFrame frame;
 
-    public Server(int port, MessageBox messageBox, JFrame frame) {
+    public Server(int port, final MessageBox messageBox, JFrame frame) {
         this.port = port;
         this.messageBox = messageBox;
         this.frame = frame;

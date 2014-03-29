@@ -110,14 +110,20 @@ public class Controller {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new Thread(new Client(host, port, messageBox)).start();
+                            new Thread(new Client(host, port, messageBox,
+                                    view.frame)).start();
                         }
                     }).start();
                 }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             } catch (NumberFormatException ex) {
                 messageBox.success = false;
-                JOptionPane.showMessageDialog(null, "Port is not a small number!", "Error message",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Port is not a small number!",
+                        "Error message", JOptionPane.ERROR_MESSAGE);
             } finally {
                 if (messageBox.success) {
                     messageBoxes.add(messageBox);

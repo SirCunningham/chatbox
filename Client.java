@@ -12,17 +12,20 @@ import javax.swing.*;
 
 public class Client implements Runnable {
 
+    private Socket clientSocket;
     private BufferedReader i;
     private PrintWriter o;
-    private final MessageBox messageBox;
     private final String host;
     private final int port;
-    private Socket clientSocket;
+    private final MessageBox messageBox;
+    private final JFrame frame;
 
-    public Client(String host, int port, final MessageBox messageBox) {
+    public Client(String host, int port, final MessageBox messageBox,
+            JFrame frame) {
         this.host = host;
         this.port = port;
         this.messageBox = messageBox;
+        this.frame = frame;
     }
 
     // Skapa tråd för att läsa från servern
@@ -36,11 +39,11 @@ public class Client implements Runnable {
             o = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (UnknownHostException e) {
             messageBox.success = false;
-            JOptionPane.showMessageDialog(null, "Don't know about host.",
+            JOptionPane.showMessageDialog(frame, "Don't know about host.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
             messageBox.success = false;
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(frame,
                     "Couldn't get I/O for the connection to host.",
                     "Error message", JOptionPane.ERROR_MESSAGE);
         }
@@ -91,7 +94,7 @@ public class Client implements Runnable {
                 clientSocket.close();
             } catch (IOException e) {
                 messageBox.success = false;
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(frame,
                         "Couldn't get I/O for closing the streams.",
                         "Error message", JOptionPane.ERROR_MESSAGE);
             }
