@@ -95,7 +95,8 @@ public class Controller {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new Thread(new Server(port, messageBox)).start();
+                            new Thread(new Server(port, messageBox,
+                                    view.frame)).start();
                         }
                     }).start();
                     messageBox.bootPanel.setVisible(true);

@@ -13,11 +13,12 @@ public class Server implements Runnable {
     private final Object lock = new Object();
     private final int port;
     private final MessageBox messageBox;
+    private final JFrame frame;
 
-    // lägg till frame för meddelandena eller gör det någon annanstans!!!
-    public Server(int port, MessageBox messageBox) {
+    public Server(int port, MessageBox messageBox, JFrame frame) {
         this.port = port;
         this.messageBox = messageBox;
+        this.frame = frame;
     }
 
     // Lyssna efter klienter
@@ -29,7 +30,7 @@ public class Server implements Runnable {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             messageBox.success = false;
-            JOptionPane.showMessageDialog(null, String.format("Could not listen "
+            JOptionPane.showMessageDialog(frame, String.format("Could not listen "
                     + "on port %d.", port), "Error message",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -49,7 +50,7 @@ public class Server implements Runnable {
                         threads.getLast().start();
                     }
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, String.format("Accept failed "
+                    JOptionPane.showMessageDialog(frame, String.format("Accept failed "
                             + "on port %d.", port), "Error message",
                             JOptionPane.ERROR_MESSAGE);
                 }
@@ -57,7 +58,7 @@ public class Server implements Runnable {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Could not close server.", "Error message",
+                JOptionPane.showMessageDialog(frame, "Could not close server.", "Error message",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
