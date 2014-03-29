@@ -120,7 +120,7 @@ public class Client implements Runnable {
 
     public void fileRequest(String html) {
         if (html.indexOf("</filrequest>") != -1) {
-            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Send key?",
+            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
