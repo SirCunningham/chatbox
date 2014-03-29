@@ -99,6 +99,7 @@ public class Controller {
                             new Thread(new Server(port, messageBox)).start();
                         }
                     }).start();
+                    messageBox.bootPanel.setVisible(true);
                 }
                 new Thread(new Runnable() {
                     @Override
