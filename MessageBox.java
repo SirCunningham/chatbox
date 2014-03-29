@@ -570,8 +570,8 @@ class MessageBox {
                 }
                 return String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><keyrequest "
-                        + "type=\"%s\">"
-                        + "</keyrequest>%s</text></message>",
+                        + "type=\"%s\">%s"
+                        + "</keyrequest></text></message>",
                         name, color,
                         String.valueOf(cipherBox.getSelectedItem()),message);
                 /*

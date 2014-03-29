@@ -85,7 +85,6 @@ public class Client implements Runnable {
                 while ((responseLine = i.readLine()) != null) {
                     keyRequest(responseLine);
                     messageBox.appendToPane(XMLString.removeKeyRequest(responseLine));  //Skicka inte keyrequest till sig själv!
-                    System.out.println(XMLString.removeKeyRequest(responseLine));
                     if (responseLine.indexOf("*** Bye") != -1) {
                         break;
                     }
