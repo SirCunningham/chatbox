@@ -40,6 +40,7 @@ public class IOThread2 implements Runnable {
     @Override
     public void run() {
 
+        /* DETTA ÄR FLYTTAT INKL. appendToPane
         // Vi kör tills vi är klara
         isNotRunnable = false;
 
@@ -56,6 +57,8 @@ public class IOThread2 implements Runnable {
             appendToPane(String.format("<message sender=\"SUCCESS\">"
                     + "<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
         }
+         * 
+         */
 
         // Här läser vi in klientens budskap
         // Om klienten kopplar ner gör vi det också, och avslutar tråden
@@ -82,6 +85,7 @@ public class IOThread2 implements Runnable {
 
 
         }
+        /* FLYTTAT
         try {
             out.close();
             in.close();
@@ -90,6 +94,8 @@ public class IOThread2 implements Runnable {
             appendToPane(String.format("<message sender=\"ERROR\">"
                     + "<text color=\"#ff0000\"> Failed to close connection </text></message>"));
         }
+         * 
+         */
     }
 
     public void kill() {

@@ -132,6 +132,8 @@ public class Controller {
                         "Error message", JOptionPane.ERROR_MESSAGE);
             } finally {
                 if (messageBox.success) {
+                    messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
+                    + "<text color=\"#00ff00\"> Connection successful </text></message>"));
                     messageBoxes.add(messageBox);
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,

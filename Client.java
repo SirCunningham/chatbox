@@ -94,7 +94,6 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                messageBox.success = false;
                 JOptionPane.showMessageDialog(frame,
                         "Couldn't get I/O for closing the streams.",
                         "Error message", JOptionPane.ERROR_MESSAGE);
