@@ -49,7 +49,6 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String msg = messageBox.getMessage();
-                        //System.out.println(msg);
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
@@ -73,7 +72,6 @@ public class Client implements Runnable {
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
                 messageBox.closeButton.addActionListener(new closeButtonListener());
                 while ((responseLine = i.readLine()) != null) {
-                    //System.out.println(responseLine);
                     messageBox.appendToPane(responseLine);
                     if (responseLine.indexOf("*** Bye") != -1) {
                         break;
