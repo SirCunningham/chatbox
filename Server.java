@@ -28,7 +28,7 @@ public class Server implements Runnable {
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
-            serverSocket.setSoTimeout(250);
+            serverSocket.setSoTimeout(100);
         } catch (IOException e) {
             messageBox.success = false;
             JOptionPane.showMessageDialog(frame, String.format("Could not "
