@@ -100,11 +100,11 @@ public class Controller {
                         }
                     }).start();
                     messageBox.bootPanel.setVisible(true);
-                }
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
                 if (messageBox.success) {
                     new Thread(new Runnable() {
@@ -178,7 +178,7 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
-                messageBoxes.get(index).kill = true;
+                messageBoxes.get(index).alive = false;
                 messageBoxes.remove(index);
                 indices.remove(index);
             }

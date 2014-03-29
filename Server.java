@@ -38,10 +38,7 @@ public class Server implements Runnable {
         // Skapa tråd för varje klient
         if (serverSocket != null) {
             threads = new LinkedList<>();
-            while (true) {
-                if (messageBox.kill) {
-                    break;
-                }
+            while (messageBox.alive) {
                 try {
                     clientSocket = serverSocket.accept();
                     synchronized (lock) {
