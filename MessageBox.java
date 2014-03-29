@@ -54,6 +54,7 @@ class MessageBox {
     JScrollPane listPane = new JScrollPane(list);
     JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
+    JPanel infoPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
     IconButton fileButton = new IconButton("fileIcon.png");
@@ -98,10 +99,13 @@ class MessageBox {
         });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
+        JLabel infoLabel = new JLabel("Port: " + view.portPane.getText());
+        infoPanel.add(infoLabel);
         bootPanel.add(bootButton);
         bootPanel.setVisible(false);
         rightPanel.add(listPane);
         rightPanel.add(bootPanel);
+        rightPanel.add(infoPanel);
 
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false);

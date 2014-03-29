@@ -75,7 +75,7 @@ public class View {
         passPanel.add(invisibleContainer2);
         namePanel.add(new JLabel("Username:"));
         namePanel.add(namePane);
-        tabPanel.add(new JLabel("Chat name:"));
+        tabPanel.add(new JLabel("Chatroom name:"));
         tabPanel.add(tabPane);
         startPanel.add(startButton);
         dialogPanel.add(radioPanel);
