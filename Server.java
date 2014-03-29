@@ -28,6 +28,7 @@ public class Server implements Runnable {
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(250);
         } catch (IOException e) {
             messageBox.success = false;
             JOptionPane.showMessageDialog(frame, String.format("Could not "
@@ -45,13 +46,13 @@ public class Server implements Runnable {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();
                     }
+                } catch (SocketTimeoutException e) {
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(frame, String.format("Accept "
                             + "failed on port %d.", port), "Error message",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
-            System.out.print("I'm successfully killed!");
             try {
                 serverSocket.close();
             } catch (IOException e) {
