@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
+import java.util.Random.*;
 
 public class Controller {
 
@@ -16,6 +17,7 @@ public class Controller {
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private ImageIcon icon;
+    private Random rand = new Random();
 
     public Controller(View view) {
         this.view = view;
@@ -25,8 +27,8 @@ public class Controller {
         view.portPane.addKeyListener(new StartListener());
         view.passPane.addFocusListener(new FieldListener());
         view.passPane.addKeyListener(new StartListener());
-        view.userName.addFocusListener(new FieldListener());
-        view.userName.addKeyListener(new StartListener());
+        view.namePane.addFocusListener(new FieldListener());
+        view.namePane.addKeyListener(new StartListener());
         view.tabPane.addFocusListener(new FieldListener());
         view.tabPane.addKeyListener(new StartListener());
         view.startButton.addActionListener(new StartButtonListener());
@@ -132,6 +134,7 @@ public class Controller {
                             view.tabPane.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
+                    view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }
@@ -178,6 +181,7 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
+                // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
                 messageBoxes.remove(index);
                 indices.remove(index);
