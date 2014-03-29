@@ -162,7 +162,7 @@ class MessageBox {
         HTMLDocument doc2 = new HTMLDocument();
         chatBox.setEditorKit(kit);
         chatBox.setDocument(doc2);
-        chatBox.setText("This is where it happens.");
+        chatBox.setText("This is where it happens."); // add color!?
         JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);

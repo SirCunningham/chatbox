@@ -101,7 +101,11 @@ public class Controller {
                                     view.frame)).start();
                         }
                     }).start();
+                    // add color here!
+                    messageBox.chatBox.setText("This is where it happens. "
+                            + "Waiting for others to connect.");
                     messageBox.bootPanel.setVisible(true);
+                    // beror på datorkraft, bättre implementation möjlig?
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException ex) {
