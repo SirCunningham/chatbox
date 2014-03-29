@@ -46,6 +46,7 @@ public class Client implements Runnable {
             try {
                 // Skapa lyssnare för att skicka till servern
                 class SendButtonListener implements ActionListener {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String msg = messageBox.getMessage();
@@ -56,12 +57,14 @@ public class Client implements Runnable {
                     }
                 }
                 class SendFileButtonListener implements ActionListener {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(messageBox.getFileMessage());
                     }
                 }
                 class closeButtonListener implements ActionListener {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(messageBox.getQuitMessage());
@@ -72,7 +75,9 @@ public class Client implements Runnable {
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
                 messageBox.closeButton.addActionListener(new closeButtonListener());
                 while ((responseLine = i.readLine()) != null) {
-                    messageBox.appendToPane(responseLine);
+                    keyRequest(responseLine);
+                    messageBox.appendToPane(XMLString.removeKeyRequest(responseLine));  //Skicka inte keyrequest till sig själv!
+                    System.out.println(XMLString.removeKeyRequest(responseLine));
                     if (responseLine.indexOf("*** Bye") != -1) {
                         break;
                     }
@@ -87,6 +92,22 @@ public class Client implements Runnable {
                 JOptionPane.showMessageDialog(null,
                         "Couldn't get I/O for closing the streams.",
                         "Error message", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void keyRequest(String html) {
+        if (html.indexOf("</keyrequest>") != -1) {
+            int reply = JOptionPane.showConfirmDialog(null,
+                    String.format("%s sends a keyrequest of type %s.\n Send key?",
+                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                    "Kill", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                o.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\">Här kommer nyckeln!<encrypted key=\"%s\" type=\"%s\"></encrypted></text></message>",
+                        messageBox.namePane.getText(), messageBox.color,
+                        messageBox.getKey(XMLString.getKeyRequestType(html)),
+                        XMLString.getKeyRequestType(html)));
             }
         }
     }

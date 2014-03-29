@@ -570,10 +570,9 @@ class MessageBox {
                 return String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><keyrequest "
                         + "type=\"%s\">"
-                        + "%s</keyrequest></text></message>",
+                        + "</keyrequest>%s</text></message>",
                         name, color,
-                        String.valueOf(cipherBox.getSelectedItem()),
-                        message);
+                        String.valueOf(cipherBox.getSelectedItem()),message);
                 /*
                 timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
                 timer.start();
@@ -603,29 +602,8 @@ class MessageBox {
         }
         return "";
     }
-    /*
-    public void keyRequest(String html) {
-        if (html.indexOf("</keyrequest>") != -1) {
-            int reply = JOptionPane.showConfirmDialog(null,
-                    String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                appendToPane(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        namePane.getText(), color,
-                        getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-                out.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><encrypted key=\"%s\" type=\"%s\">Här kommer nyckeln!</encrypted></text></message>",
-                        namePane.getText(), color,
-                        getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
-            }
-        }
-    }
-     * 
-     */
+    
+
 
     // Skicka fil med klient
     public class SendFileButtonListener implements ActionListener {
