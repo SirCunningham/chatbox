@@ -114,11 +114,11 @@ public class Controller {
                                     view.frame)).start();
                         }
                     }).start();
-                }
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             } catch (NumberFormatException ex) {
                 messageBox.success = false;
