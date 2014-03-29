@@ -27,7 +27,6 @@ public class Server implements Runnable {
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
-            // add messageBox.bootPanel.setVisible(true); to some premier client!!!
         } catch (IOException e) {
             messageBox.success = false;
             JOptionPane.showMessageDialog(null, String.format("Could not listen "
