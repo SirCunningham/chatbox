@@ -49,7 +49,10 @@ public class XMLString {
         }
         return null;
     }
-
+    public static String removeKeyRequest(String xmlStr) {
+        return xmlStr.replaceAll("<keyrequest.*>.*</keyrequest>", "");
+    }
+    
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");
         for (String str : strings) {

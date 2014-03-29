@@ -571,10 +571,9 @@ class MessageBox {
                 return String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><keyrequest "
                         + "type=\"%s\">"
-                        + "%s</keyrequest></text></message>",
+                        + "</keyrequest>%s</text></message>",
                         name, color,
-                        String.valueOf(cipherBox.getSelectedItem()),
-                        message);
+                        String.valueOf(cipherBox.getSelectedItem()),message);
                 /*
                 timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
                 timer.start();
@@ -604,6 +603,8 @@ class MessageBox {
         }
         return "";
     }
+    
+
 
     // Skicka fil med klient
     public class SendFileButtonListener implements ActionListener {
