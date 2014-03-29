@@ -132,8 +132,7 @@ public class Controller {
                             view.tabPane.getText(), index);
                     view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     view.tabbedPane.setSelectedIndex(index);
-                    tabCount += 1;
-                    view.tabPane.setText("Chat " + String.valueOf(tabCount));
+                    view.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }
         }
@@ -179,7 +178,6 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
-                // fel index!!
                 messageBoxes.get(index).kill = true;
                 messageBoxes.remove(index);
                 indices.remove(index);
