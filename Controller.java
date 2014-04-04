@@ -87,6 +87,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // move server and client to their classes, initialize before run!
             final MessageBox messageBox = new MessageBox(view);
 
             try {
@@ -148,7 +149,9 @@ public class Controller {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                             + "<text color=\"#00ff00\"> Connection successful </text></message>"));
-
+                    // send this to others!
+                    //messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
+                    //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                     addUser2(String.format("%s (%s)",messageBox.getName(), messageBox.getIP()));
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,

@@ -71,6 +71,9 @@ public class Client implements Runnable {
                         break;
                     }
                 }
+                // send to others instead!?
+                messageBox.appendToPane(String.format("<message sender=\"INFO\">"
+                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
                 messageBox.sendButton.setEnabled(false);
                 messageBox.sendButton.removeActionListener(sendButtonListener);
                 i.close();
