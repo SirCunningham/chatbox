@@ -29,6 +29,8 @@ public class Controller {
         view.portPane.addKeyListener(new StartListener());
         view.passPane.addFocusListener(new FieldListener());
         view.passPane.addKeyListener(new StartListener());
+        view.requestPane.addFocusListener(new FieldListener());
+        view.requestPane.addKeyListener(new StartListener());
         view.namePane.addFocusListener(new FieldListener());
         view.namePane.addKeyListener(new StartListener());
         view.tabPane.addFocusListener(new FieldListener());
