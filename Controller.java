@@ -16,11 +16,11 @@ import java.util.Random.*;
 public class Controller {
 
     private final View view;
-    private final ArrayList<MessageBox> messageBoxes = new ArrayList<>();
+    private volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private Random rand = new Random();
-    private Object lock;
+    private Object lock = new Object();
 
     public Controller(View view) {
         this.view = view;
@@ -149,7 +149,6 @@ public class Controller {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                             + "<text color=\"#00ff00\"> Connection successful </text></message>"));
 
-                    messageBoxes.add(messageBox);
                     addUser2(String.format("%s (%s)",messageBox.getName(), messageBox.getIP()));
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
@@ -230,6 +229,7 @@ public class Controller {
                 // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
                 messageBoxes.remove(index);
+                System.out.println(messageBoxes.size());
                 indices.remove(index);
             }
         }
