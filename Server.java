@@ -7,15 +7,17 @@ import javax.swing.*;
 
 public class Server implements Runnable {
 
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-    private LinkedList<IOThread> threads;
-    private final Object lock = new Object();
+    private final ServerSocket serverSocket;
     private final int port;
     private final MessageBox messageBox;
     private final JFrame frame;
+    private final Object lock = new Object();
+    private Socket clientSocket;
+    private LinkedList<IOThread> threads;
 
-    public Server(int port, final MessageBox messageBox, JFrame frame) {
+    public Server(ServerSocket serverSocket, int port,
+            final MessageBox messageBox, JFrame frame) {
+        this.serverSocket = serverSocket;
         this.port = port;
         this.messageBox = messageBox;
         this.frame = frame;
@@ -24,23 +26,11 @@ public class Server implements Runnable {
     // Lyssna efter klienter
     @Override
     public void run() {
-
-        // Starta socket för servern
-        try {
-            serverSocket = new ServerSocket(port);
-            serverSocket.setSoTimeout(100);
-        } catch (IOException e) {
-            messageBox.success = false;
-            JOptionPane.showMessageDialog(frame, String.format("Could not "
-                    + "listen on port %d.", port), "Error message",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-
-        // Skapa tråd för varje klient
         if (serverSocket != null) {
             threads = new LinkedList<>();
             while (messageBox.alive) {
                 try {
+                    // Skapa tråd för varje klient
                     clientSocket = serverSocket.accept();
                     messageBox.items.addElement(clientSocket.toString());
                     synchronized (lock) {
