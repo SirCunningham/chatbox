@@ -77,7 +77,7 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                messageBox.showError("Couldn't get I/O for closing the streams.");
+                messageBox.showError("Failed to close connection.");
             }
         }
     }

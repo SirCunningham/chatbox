@@ -21,16 +21,15 @@ public class Server implements Runnable {
         this.messageBox = messageBox;
     }
 
-    // Lyssna efter klienter
     @Override
     public void run() {
         if (serverSocket != null) {
             threads = new LinkedList<>();
+            // Lyssna efter klienter
             while (messageBox.alive) {
                 try {
-                    // Skapa tråd för varje klient
                     clientSocket = serverSocket.accept();
-                    //messageBox.items.addElement(clientSocket.toString());
+                    // Skapa tråd för varje klient
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();
@@ -44,7 +43,7 @@ public class Server implements Runnable {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                messageBox.showError("Could not close server.");
+                messageBox.showError("Failed to close server.");
             }
         }
     }

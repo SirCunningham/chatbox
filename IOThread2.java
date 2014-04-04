@@ -40,26 +40,6 @@ public class IOThread2 implements Runnable {
     @Override
     public void run() {
 
-        /* DETTA ÄR FLYTTAT INKL. appendToPane
-        // Vi kör tills vi är klara
-        isNotRunnable = false;
-
-        // Anslut läs- och skrivströmmarna
-        out = new PrintWriter(o, true);
-        in = new BufferedReader(new InputStreamReader(i));
-
-        // Kommer vi hit har anslutningen gått bra
-        if (isClient) {
-            appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection successful </text></message>"));
-        } else {
-            // Skriv ut IP-nummret från klienten
-            appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
-        }
-         * 
-         */
-
         // Här läser vi in klientens budskap
         // Om klienten kopplar ner gör vi det också, och avslutar tråden
         while (!isNotRunnable) {
@@ -85,21 +65,6 @@ public class IOThread2 implements Runnable {
 
 
         }
-        /* FLYTTAT
-        try {
-            out.close();
-            in.close();
-            clientSocket.close();
-        } catch (IOException e) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\"> Failed to close connection </text></message>"));
-        }
-         * 
-         */
-    }
-
-    public void kill() {
-        isNotRunnable = true;
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
