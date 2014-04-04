@@ -67,25 +67,6 @@ public class IOThread2 implements Runnable {
         }
     }
 
-    // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-    public void appendToPane(String msg) {
-
-        try {
-            MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) messageBox.chatBox.getEditorKit();
-            HTMLDocument doc = (HTMLDocument) messageBox.chatBox.getDocument();
-            try {
-                kit.insertHTML( doc.getLength(), msg, 0, 0, null);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-        } catch (BadLocationException e) {
-            JOptionPane.showMessageDialog(null, "String insertion failed.",
-                    "Error message", JOptionPane.ERROR_MESSAGE);
-        }
-
-    } 
-
     public class TimerListener implements ActionListener {
 
         @Override
