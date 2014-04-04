@@ -1,6 +1,5 @@
 package chatbox;
 
-
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -100,6 +99,7 @@ public class Controller {
                         serverSocket = new ServerSocket(port);
                         serverSocket.setSoTimeout(100);
                         new Thread(new Runnable() {
+
                             @Override
                             public void run() {
                                 new Thread(new Server(serverSocket, port,
@@ -126,6 +126,7 @@ public class Controller {
                         i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         o = new PrintWriter(clientSocket.getOutputStream(), true);
                         new Thread(new Runnable() {
+
                             @Override
                             public void run() {
                                 new Thread(new Client(clientSocket, i, o, port,
@@ -161,7 +162,7 @@ public class Controller {
                     } catch (IOException ex) {
                         messageBox.showError("Bilden kunde inte hittas");
                     }
-                    
+
                     view.tabbedPane.setSelectedIndex(index);
                     view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
@@ -180,6 +181,7 @@ public class Controller {
         }
 
     }
+
     private void addUser2(MessageBox messageBox) {
         for (MessageBox msgBox : messageBoxes) {
             if (!msgBox.items.contains(messageBox)) {
@@ -247,8 +249,26 @@ public class Controller {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                view.startButton.doClick();
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER:
+                    view.startButton.doClick();
+                    break;
+                case KeyEvent.VK_KP_LEFT:
+                case KeyEvent.VK_LEFT:
+                    view.clientButton.setSelected(true);
+                    view.startButton.setText("Join server");
+                    view.IPLabel.setEnabled(true);
+                    view.IPPane.setEnabled(true);
+                    break;
+                case KeyEvent.VK_KP_RIGHT:
+                case KeyEvent.VK_RIGHT:
+                    view.serverButton.setSelected(true);
+                    view.startButton.setText("Create server");
+                    view.IPLabel.setEnabled(false);
+                    view.IPPane.setEnabled(false);
+                    break;
+                default:
+                    break;
             }
         }
 
