@@ -15,7 +15,7 @@ import java.util.Random.*;
 public class Controller {
 
     private final View view;
-    private volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
+    static volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private Random rand = new Random();

@@ -51,7 +51,6 @@ public class Client implements Runnable {
                         o.println(messageBox.getFileMessage());
                     }
                 }
-                
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
                     // stäng av alla tabbar, gör detta i varje tabb!

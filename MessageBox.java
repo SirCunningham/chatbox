@@ -273,15 +273,16 @@ class MessageBox {
                 doc.insertString(0, 
                         String.format("%s got the boot",
                         msgBox.getName()), style);
-                sendButton.doClick(); //do something else if no connection, or make it work solo!
+                sendButton.doClick();                  //Do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
-                msgBox.alive = false;
+                msgBox.alive = false;                  //Döda klienten
+                for (MessageBox mBox : Controller.messageBoxes) {
+                    mBox.items.removeElement(msgBox);
+                }
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }
             while (i >= 0) {
-                MessageBox removed = (MessageBox) items.remove(i);
-                System.out.print(removed);
                 i = list.getSelectedIndex();
             }
         }
