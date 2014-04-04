@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 // fix left and right arrows for radio buttons!
+// byt IP till host
 
 public class View {
 

@@ -99,8 +99,10 @@ class MessageBox {
         });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
-        JLabel infoLabel = new JLabel("Port: " + view.portPane.getText());
-        infoPanel.add(infoLabel);
+        JLabel infoLabel1 = new JLabel("IP: " + view.IPPane.getText());
+        JLabel infoLabel2 = new JLabel("Port: " + view.portPane.getText());
+        infoPanel.add(infoLabel1);
+        infoPanel.add(infoLabel2);
         bootPanel.add(bootButton);
         bootPanel.setVisible(false);
         rightPanel.add(listPane);
