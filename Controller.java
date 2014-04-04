@@ -229,7 +229,7 @@ public class Controller {
                 // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
                 for (MessageBox msgBox : messageBoxes) {
-                    msgBox.items.removeElement(messageBoxes.get(index).items);
+                    msgBox.items.removeElement(messageBoxes.get(index).getNameIP());
                 }
                 messageBoxes.remove(index);
 

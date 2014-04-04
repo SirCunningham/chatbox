@@ -11,6 +11,7 @@ import javax.swing.text.html.*;
 /**
  * Tråd för input- och outputströmmar
  */
+
 public class IOThread2 implements Runnable {
 
     // Fält för strömmar
@@ -135,3 +136,4 @@ public class IOThread2 implements Runnable {
     }
 
 }
+
