@@ -162,6 +162,7 @@ class MessageBox {
         HTMLDocument doc2 = new HTMLDocument();
         chatBox.setEditorKit(kit);
         chatBox.setDocument(doc2);
+        chatBox.addKeyListener(new TabListener());
         chatBox.setText("This is where it happens."); // add color!?
         JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -506,6 +507,42 @@ class MessageBox {
         public void keyReleased(KeyEvent e) {
         }
     }
+    
+    class TabListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int index = view.tabbedPane.getSelectedIndex();
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER:
+                    sendButton.doClick();
+                    break;
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_KP_LEFT:
+                case KeyEvent.VK_LEFT:
+                    if (index > 0) {
+                        view.tabbedPane.setSelectedIndex(index - 1);
+                    }
+                    break;
+                case KeyEvent.VK_D:
+                case KeyEvent.VK_KP_RIGHT:
+                case KeyEvent.VK_RIGHT:
+                    view.tabbedPane.setSelectedIndex(index + 1);
+                    break;
+                default:
+                    break;
+            }
+            messagePane.requestFocusInWindow();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+    }
 
     // Mottag fil med server
     public class ReceiveFileButtonListener implements ActionListener {
@@ -625,8 +662,6 @@ class MessageBox {
         System.out.println("Shouldn't be here!");
         return "";
     }
-    
-
 
     // Skicka fil med klient
     public class SendFileButtonListener implements ActionListener {

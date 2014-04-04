@@ -3,7 +3,6 @@ package chatbox;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.swing.*;
 
 public class Server implements Runnable {
 

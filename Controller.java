@@ -233,7 +233,6 @@ public class Controller {
             int index = view.tabbedPane.indexOfTabComponent(button.getParent());
             view.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
-                // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
                 for (MessageBox msgBox : messageBoxes) {
                     msgBox.items.removeElement(messageBoxes.get(index));

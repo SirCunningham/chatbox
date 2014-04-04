@@ -53,7 +53,7 @@ public class Client implements Runnable {
                 }
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
-
+                    // stäng av alla tabbar, gör detta i varje tabb!
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int reply = JOptionPane.showConfirmDialog(messageBox.view.frame,

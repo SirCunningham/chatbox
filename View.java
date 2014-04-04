@@ -15,9 +15,11 @@ public class View {
     ButtonGroup buttonGroup = new ButtonGroup();
     JLabel IPLabel = new JLabel("IP:");
     JLabel passLabel = new JLabel("Password:");
+    JLabel requestLabel = new JLabel("Request:");
     JTextPane IPPane = new JTextPane();
     JTextPane portPane = new JTextPane();
     JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
+    JTextField requestPane = new JTextField("Let me in!", 15);
     JTextPane namePane = new JTextPane();
     JTextPane tabPane = new JTextPane();
     JButton startButton = new JButton("Join server");
@@ -55,11 +57,15 @@ public class View {
 
         passLabel.setVisible(false);
         passPane.setVisible(false);
+        
+        requestLabel.setVisible(false);
+        requestPane.setVisible(false);
 
         JPanel radioPanel = new JPanel();
         JPanel IPPanel = new JPanel();
         JPanel portPanel = new JPanel();
         JPanel passPanel = new JPanel();
+        JPanel requestPanel = new JPanel();
         JPanel namePanel = new JPanel();
         JPanel tabPanel = new JPanel();
         JPanel startPanel = new JPanel();
@@ -75,8 +81,12 @@ public class View {
         passPanel.add(serverOptions);
         invisibleContainer1.add(passLabel);
         invisibleContainer2.add(passPane);
+        invisibleContainer3.add(requestLabel);
+        invisibleContainer4.add(requestPane);
         passPanel.add(invisibleContainer1);
         passPanel.add(invisibleContainer2);
+        passPanel.add(invisibleContainer3);
+        passPanel.add(invisibleContainer4);
         namePanel.add(new JLabel("Username:"));
         namePanel.add(namePane);
         tabPanel.add(new JLabel("Chatroom name:"));
