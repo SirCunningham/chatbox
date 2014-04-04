@@ -42,6 +42,7 @@ public class Server implements Runnable {
             while (messageBox.alive) {
                 try {
                     clientSocket = serverSocket.accept();
+                    messageBox.items.addElement(clientSocket.toString());
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();

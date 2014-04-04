@@ -207,6 +207,9 @@ class MessageBox {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
+    public String getName() {
+        return namePane.getText();
+    }
 
     public String getKey(String type) {
         switch (type) {

@@ -107,6 +107,7 @@ public class Controller {
                     }
                 }
                 if (messageBox.success) {
+                    
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -114,6 +115,7 @@ public class Controller {
                                     view.frame)).start();
                         }
                     }).start();
+                    //messageBox.items.addElement(messageBox.getName());
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException ex) {
@@ -128,7 +130,9 @@ public class Controller {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                     + "<text color=\"#00ff00\"> Connection successful </text></message>"));
+                    
                     messageBoxes.add(messageBox);
+                    addUser(messageBox.getName());
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -142,6 +146,13 @@ public class Controller {
                     view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
+            }
+        }
+    }
+    public void addUser(String user) {
+        for (MessageBox msgBox : messageBoxes) {
+            if (!msgBox.items.contains(user)) {
+                msgBox.items.addElement(user);
             }
         }
     }
