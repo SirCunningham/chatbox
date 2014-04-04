@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
+// fix left and right arrows for radio buttons!
+
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");

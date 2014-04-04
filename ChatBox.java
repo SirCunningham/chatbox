@@ -1,7 +1,8 @@
 package chatbox;
 
 //Meddelande för utsparkning!
-//Color switch does not work when encrypted!!! Scroll does not always work - and lags!
+//Color switch does not work when encrypted, sends wrong message!!!
+//Scroll does not always work - and lags!
 //Block client after disconnect - no new posts possible!
 //Skicka <disconnect> med servern till en klient som blir kickad?
 
