@@ -11,42 +11,24 @@ import javax.swing.*;
 // Gör detta här eller i IOThread!
 public class Client implements Runnable {
 
-    private Socket clientSocket;
-    private BufferedReader i;
-    private PrintWriter o;
-    private final String host;
+    private final Socket clientSocket;
+    private final BufferedReader i;
+    private final PrintWriter o;
     private final int port;
     private final MessageBox messageBox;
-    private final JFrame frame;
 
-    public Client(String host, int port, final MessageBox messageBox,
-            JFrame frame) {
-        this.host = host;
+    public Client(Socket clientSocket, BufferedReader i, PrintWriter o,
+            int port, final MessageBox messageBox) {
+        this.clientSocket = clientSocket;
+        this.i = i;
+        this.o = o;
         this.port = port;
         this.messageBox = messageBox;
-        this.frame = frame;
     }
 
     // Skapa tråd för att läsa från servern
     @Override
     public void run() {
-
-        // Starta socket för klienten
-        try {
-            clientSocket = new Socket(host, port);
-            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            o = new PrintWriter(clientSocket.getOutputStream(), true);
-        } catch (UnknownHostException e) {
-            messageBox.success = false;
-            JOptionPane.showMessageDialog(frame, "Don't know about host.",
-                    "Error message", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException e) {
-            messageBox.success = false;
-            JOptionPane.showMessageDialog(frame,
-                    "Couldn't get I/O for the connection to host.",
-                    "Error message", JOptionPane.ERROR_MESSAGE);
-        }
-
         // Håll uppkopplingen tills servern vill avbryta den
         String responseLine;
         if (clientSocket != null && i != null && o != null) {
@@ -95,9 +77,7 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(frame,
-                        "Couldn't get I/O for closing the streams.",
-                        "Error message", JOptionPane.ERROR_MESSAGE);
+                messageBox.error("Couldn't get I/O for closing the streams.");
             }
         }
     }

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -90,30 +91,31 @@ public class Controller {
             try {
                 final String host = view.IPPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());
-                final Server server = new Server(port, messageBox,
-                        view.frame);
                 if (view.serverButton.isSelected()) {
-                    new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            new Thread(server).start();
-                        }
-                    }).start();
-                    
+                    // Starta socket för servern
+                    final ServerSocket serverSocket;
+                    try {
+                        serverSocket = new ServerSocket(port);
+                        serverSocket.setSoTimeout(100);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new Thread(new Server(serverSocket, port,
+                                        messageBox)).start();
+                            }
+                        }).start();
+                    } catch (IOException ex) {
+                        messageBox.success = false;
+                        messageBox.showError(String.format("Could not listen on port %d.",
+                                port));
+                    }
                     // add color here!
                     messageBox.chatBox.setText("This is where it happens. "
                             + "Waiting for others to connect.");
                     messageBox.bootPanel.setVisible(true);
-                    // beror på datorkraft, bättre implementation möjlig?
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-                    
                 }
                 if (messageBox.success) {
+<<<<<<< HEAD
 
                     new Thread(new Runnable() {
 
@@ -129,16 +131,41 @@ public class Controller {
                         }
                     }).start();
                     //messageBox.items.addElement(messageBox.getName());
+=======
+                    // Starta socket för klienten
+                    final Socket clientSocket;
+                    final BufferedReader i;
+                    final PrintWriter o;
+>>>>>>> 561cf0b4acd048496d4844ddf9a6d1fd6892a459
                     try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
+                        clientSocket = new Socket(host, port);
+                        i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        o = new PrintWriter(clientSocket.getOutputStream(), true);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new Thread(new Client(clientSocket, i, o, port,
+                                        messageBox)).start();
+                                //server.getMessageBoxes().add(messageBox);
+                                messageBoxes.add(messageBox);
+                                messageBox.items.addElement(messageBox.getName());
+                                //System.out.println(server.getMessageBoxes().size());
+                                //server.addUser(messageBox.getName());
+                                addUser(messageBox, messageBoxes);
+                            }
+                        }).start();
+                        //messageBox.items.addElement(messageBox.getName());
+                    } catch (UnknownHostException ex) {
+                        messageBox.success = false;
+                        messageBox.showError("Don't know about host.");
+                    } catch (IOException ex) {
+                        messageBox.success = false;
+                        messageBox.showError("Couldn't get I/O for the connection to host.");
                     }
                 }
             } catch (NumberFormatException ex) {
                 messageBox.success = false;
-                JOptionPane.showMessageDialog(view.frame, "Port is not a small number!",
-                        "Error message", JOptionPane.ERROR_MESSAGE);
+                messageBox.showError("Port is not a small number!");
             } finally {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
@@ -152,8 +179,7 @@ public class Controller {
                     try {
                         view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(view.frame, "Bilden kunde inte hittas",
-                                "Error message", JOptionPane.ERROR_MESSAGE);
+                        messageBox.showError("Bilden kunde inte hittas");
                     }
                     
                     view.tabbedPane.setSelectedIndex(index);
@@ -250,14 +276,14 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
+            int reply = JOptionPane.showConfirmDialog(view.frame, "Are you sure you "
                     + "want to quit?", "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
 
                 System.exit(0);
             } else {
-                JOptionPane.showMessageDialog(null, "Good choice. "
+                JOptionPane.showMessageDialog(view.frame, "Good choice. "
                         + "Everyone's finger can slip!");
             }
         }

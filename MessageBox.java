@@ -224,6 +224,11 @@ class MessageBox {
                 return null;
         }
     }
+    
+    public void showError(String text) {
+        JOptionPane.showMessageDialog(view.frame, text, "Error message",
+                JOptionPane.ERROR_MESSAGE);
+    }
 
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
