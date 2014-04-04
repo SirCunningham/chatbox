@@ -125,6 +125,9 @@ public class Controller {
                         clientSocket = new Socket(host, port);
                         i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         o = new PrintWriter(clientSocket.getOutputStream(), true);
+                        if (!view.serverButton.isSelected()) {
+                            o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", messageBox.getName()));
+                        }
                         new Thread(new Runnable() {
 
                             @Override

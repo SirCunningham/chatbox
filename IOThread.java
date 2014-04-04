@@ -97,9 +97,9 @@ class IOThread extends Thread {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOThread thread : threads) {
-                            if (thread != this) {
+                            if (thread != this && line != null) {
                                 thread.o.println(line);
-                                if (line != null && !line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
+                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
                                     //Skapa timer
                                 }
                             } else {
