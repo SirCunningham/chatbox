@@ -66,12 +66,13 @@ class IOThread extends Thread {
 
             while (true) {
                 String line = i.readLine();
-                if (line.startsWith("/quit")) {
+                System.out.println(line);
+                if (line == null) {
                     break;
                 }
                 
                 // Skicka privata meddelanden
-                if (line.startsWith("@")) {
+                if (line != null && line.startsWith("@")) {
                     /*
                     String[] words = line.split("\\s", 2);
                     if (words.length > 1 && words[1] != null) {
@@ -98,11 +99,14 @@ class IOThread extends Thread {
                         for (IOThread thread : threads) {
                             if (thread != this) {
                                 thread.o.println(line);
-                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
+                                if (line != null && !line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
                                     //Skapa timer
                                 }
                             } else {
-                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line)));  //Skicka inte key- eller filerequest till sig själv
+                                if (line!=null) {
+                                    thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
+                                }
+                                  
                             }
                         }
                     }
