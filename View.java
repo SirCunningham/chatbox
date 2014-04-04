@@ -74,6 +74,7 @@ public class View {
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer4 = new JPanel(new GridLayout(1, 1));
+        
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         IPPanel.add(IPLabel);
