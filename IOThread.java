@@ -98,7 +98,7 @@ class IOThread extends Thread {
                         for (IOThread thread : threads) {
                             if (thread != this) {
                                 thread.o.println(line);
-                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest
+                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
                                     //Skapa timer
                                 }
                             } else {
