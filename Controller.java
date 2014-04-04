@@ -113,9 +113,8 @@ public class Controller {
                         messageBox.showError(String.format("Could not listen on port %d.",
                                 port));
                     }
-                    // add color here!
-                    messageBox.chatBox.setText("This is where it happens. "
-                            + "Waiting for others to connect.");
+                    messageBox.appendToPane(String.format("<message sender=\"INFO\">"
+                            + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     messageBox.bootPanel.setVisible(true);
                 }
                 if (messageBox.success) {
@@ -154,7 +153,7 @@ public class Controller {
             } finally {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                            + "<text color=\"#00ff00\"> Connection successful </text></message>"));
+                            + "<text color=\"#00ff00\">Connection successful</text></message>"));
                     // send this to others!
                     //messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                     //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));

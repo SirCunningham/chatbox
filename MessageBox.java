@@ -163,7 +163,8 @@ class MessageBox {
         chatBox.setEditorKit(kit);
         chatBox.setDocument(doc2);
         chatBox.addKeyListener(new TabListener());
-        chatBox.setText("This is where it happens."); // add color!?
+        appendToPane(String.format("<message sender=\"INFO\">"
+                            + "<text color=\"#339966\">This is where it happens.</text></message>"));
         JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);
