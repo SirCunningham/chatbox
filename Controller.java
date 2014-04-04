@@ -123,7 +123,6 @@ public class Controller {
                                     view.frame)).start();
                             //server.getMessageBoxes().add(messageBox);
                             messageBoxes.add(messageBox);
-                            messageBox.items.addElement(messageBox.getName());
                             //System.out.println(server.getMessageBoxes().size());
                             //server.addUser(messageBox.getName());
                             addUser(messageBox, messageBoxes);
@@ -146,7 +145,7 @@ public class Controller {
                             + "<text color=\"#00ff00\"> Connection successful </text></message>"));
 
                     messageBoxes.add(messageBox);
-                    addUser2(messageBox.getName());
+                    addUser2(String.format("%s (%s)",messageBox.getName(),messageBox.getIP()));
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -167,8 +166,8 @@ public class Controller {
 
     public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
         for (MessageBox msgBox : msgBoxes) {
-            if (!messageBox.items.contains(msgBox.getName())) {
-                messageBox.items.addElement(msgBox.getName());
+            if (!messageBox.items.contains(String.format("%s (%s)", msgBox.getName(), msgBox.getIP()))) {
+                messageBox.items.addElement(String.format("%s (%s)", msgBox.getName(), msgBox.getIP()));
             }
         }
     }

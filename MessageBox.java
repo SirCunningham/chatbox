@@ -210,6 +210,9 @@ class MessageBox {
     public String getName() {
         return namePane.getText();
     }
+    public String getIP() {
+        return view.IPPane.getText();
+    }
 
     public String getKey(String type) {
         switch (type) {
