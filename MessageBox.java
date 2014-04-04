@@ -262,16 +262,18 @@ class MessageBox {
         @Override
         public void actionPerformed(ActionEvent e) {
             String message = messagePane.getText();
+            int i = list.getSelectedIndex();
             try {
                 doc.remove(0, message.length());
-                doc.insertString(0, "you got the boot", style);
+                String str = (String) items.getElementAt(i);
+                doc.insertString(0, 
+                        String.format("%s got the boot",
+                        str.substring(0,str.indexOf("(")-1)), style);  //Fungerar inte med namn som innehåller (
                 sendButton.doClick(); //do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }
-
-            int i = list.getSelectedIndex();
             while (i >= 0) {
                 String removed = (String) items.remove(i);
                 System.out.print(removed);
