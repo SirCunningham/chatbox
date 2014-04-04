@@ -52,7 +52,7 @@ public class Client implements Runnable {
                         o.println(messageBox.getFileMessage());
                     }
                 }
-                class closeButtonListener implements ActionListener {
+                class CloseButtonListener implements ActionListener {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -62,7 +62,7 @@ public class Client implements Runnable {
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 messageBox.sendButton.addActionListener(sendButtonListener);
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
-                messageBox.closeButton.addActionListener(new closeButtonListener());
+                messageBox.closeButton.addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && messageBox.alive) {
                     keyRequest(responseLine);
                     messageBox.appendToPane(
