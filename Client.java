@@ -46,17 +46,26 @@ public class Client implements Runnable {
                     }
                 }
                 class SendFileButtonListener implements ActionListener {
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(messageBox.getFileMessage());
                     }
                 }
+                // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(messageBox.getQuitMessage());
+                        int reply = JOptionPane.showConfirmDialog(messageBox.view.frame,
+                                "Are you sure you want to quit?", "Confirmation",
+                                JOptionPane.YES_NO_OPTION);
+                        if (reply == JOptionPane.YES_OPTION) {
+                            o.println(messageBox.getQuitMessage());
+                            System.exit(0);
+                        } else {
+                            JOptionPane.showMessageDialog(messageBox.view.frame,
+                                    "Good choice. Everyone's finger can slip!");
+                        }
                     }
                 }
                 SendButtonListener sendButtonListener = new SendButtonListener();

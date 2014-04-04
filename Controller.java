@@ -15,7 +15,7 @@ import java.util.Random.*;
 public class Controller {
 
     private final View view;
-    private volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
+    static volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private Random rand = new Random();
@@ -253,6 +253,7 @@ public class Controller {
                 case KeyEvent.VK_ENTER:
                     view.startButton.doClick();
                     break;
+                case KeyEvent.VK_A:
                 case KeyEvent.VK_KP_LEFT:
                 case KeyEvent.VK_LEFT:
                     view.clientButton.setSelected(true);
@@ -260,6 +261,7 @@ public class Controller {
                     view.IPLabel.setEnabled(true);
                     view.IPPane.setEnabled(true);
                     break;
+                case KeyEvent.VK_D:
                 case KeyEvent.VK_KP_RIGHT:
                 case KeyEvent.VK_RIGHT:
                     view.serverButton.setSelected(true);

@@ -20,7 +20,7 @@ class MessageBox {
     volatile boolean success = true;
     volatile boolean alive = true;
     private final String[] cipherString = {"None", "caesar", "AES"};
-    private View view;
+    public View view;
     public AESCrypto AES;
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
@@ -275,12 +275,13 @@ class MessageBox {
                 sendButton.doClick();                  //Do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
+                for (MessageBox mBox : Controller.messageBoxes) {
+                    mBox.items.removeElement(msgBox);
+                }
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }
             while (i >= 0) {
-                MessageBox removed = (MessageBox) items.remove(i);
-                System.out.print(removed);
                 i = list.getSelectedIndex();
             }
         }
@@ -567,7 +568,7 @@ class MessageBox {
     }
     
     public String getQuitMessage() {
-        return String.format("<message sender=\"%s\"><text color=\"%s\"></text><disconnect /></message>", namePane.getText(),color);
+        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", namePane.getText(),color);
     }
 
     public String getMessage() {
@@ -621,6 +622,7 @@ class MessageBox {
             appendToPane(String.format("<message sender=\"ERROR\">"
                     + "<text color=\"#ff0000\">Output stream failed</text></message>"));
         }
+        System.out.println("Shouldn't be here!");
         return "";
     }
     

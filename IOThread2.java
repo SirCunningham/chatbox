@@ -55,56 +55,6 @@ public class IOThread2 {
         }
     }
 
-    public class SendMsgButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Skicka och visa i textrutan
-            try {
-                String message;
-                if (messageBox.cipherButton.isSelected()) {
-                    message = messageBox.cipherMessage;
-                    messageBox.cipherButton.doClick();
-                } else {
-                    message = XMLString.convertAngle(messageBox.messagePane.getText());
-                }
-                String name = messageBox.namePane.getText();
-                if (!message.isEmpty()) {
-                    if (!messageBox.keyRequestBox.isSelected()) {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s </text></message>",
-                                name, messageBox.color,
-                                message));
-                    } else {
-                        out.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><keyrequest "
-                                + "type=\"%s\">"
-                                + "%s</keyrequest></text></message>",
-                                name, messageBox.color,
-                                String.valueOf(messageBox.cipherBox.getSelectedItem()),
-                                message));
-                        timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
-                        timer.start();
-
-                    }
-                    appendToPane(String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s</text></message>",
-                            name, messageBox.color,
-                            message));
-                    messageBox.messagePane.setText("");
-                }
-                if (message.contains("terminate my ass")) {
-                    appendToPane("<message sender=\"INFO\">"
-                            + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
-                    kill();
-                }
-            } catch (Exception ex) {
-                appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#ff0000\">Output stream failed</text></message>"));
-            }
-        }
-    }
-
 }
  * 
  */
