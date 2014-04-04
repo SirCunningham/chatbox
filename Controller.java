@@ -115,23 +115,7 @@ public class Controller {
                     messageBox.bootPanel.setVisible(true);
                 }
                 if (messageBox.success) {
-
-
-                    new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            new Thread(new Client(host, port, messageBox,
-                                    view.frame)).start();
-                            //server.getMessageBoxes().add(messageBox);
-                            messageBoxes.add(messageBox);
-                            //System.out.println(server.getMessageBoxes().size());
-                            //server.addUser(messageBox.getName());
-                            addUser(messageBox, messageBoxes);
-                        }
-                    }).start();
                     //messageBox.items.addElement(messageBox.getName());
-
                     // Starta socket för klienten
                     final Socket clientSocket;
                     final BufferedReader i;
@@ -146,15 +130,10 @@ public class Controller {
                             public void run() {
                                 new Thread(new Client(clientSocket, i, o, port,
                                         messageBox)).start();
-                                //server.getMessageBoxes().add(messageBox);
                                 messageBoxes.add(messageBox);
-                                messageBox.items.addElement(messageBox.getName());
-                                //System.out.println(server.getMessageBoxes().size());
-                                //server.addUser(messageBox.getName());
                                 addUser(messageBox, messageBoxes);
                             }
                         }).start();
-                        //messageBox.items.addElement(messageBox.getName());
                     } catch (UnknownHostException ex) {
                         messageBox.success = false;
                         messageBox.showError("Don't know about host.");
