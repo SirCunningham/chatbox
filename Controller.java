@@ -170,7 +170,7 @@ public class Controller {
         }
     }
 
-    public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
+    private void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
         synchronized (lock) {
             for (MessageBox msgBox : msgBoxes) {
                 //String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
@@ -181,7 +181,7 @@ public class Controller {
         }
 
     }
-    public void addUser2(String user) {
+    private void addUser2(String user) {
         for (MessageBox msgBox : messageBoxes) {
             if (!msgBox.items.contains(user)) {
                 msgBox.items.addElement(user);
