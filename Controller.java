@@ -219,6 +219,13 @@ public class Controller {
                 view.passLabel.setVisible(false);
                 view.passPane.setVisible(false);
             }
+            if ("Private".equals(chosen) || "Secret".equals(chosen)) {
+                view.requestLabel.setVisible(true);
+                view.requestPane.setVisible(true);
+            } else {
+                view.requestLabel.setVisible(false);
+                view.requestPane.setVisible(false);
+            }
         }
     }
 
