@@ -108,5 +108,3 @@ public class IOThread2 {
 }
  * 
  */
-
-

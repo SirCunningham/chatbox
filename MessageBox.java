@@ -207,8 +207,11 @@ class MessageBox {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
-    public String getNameIP() {
+    public String toString() {
         return String.format("%s (%s)",namePane.getText(), view.IPPane.getText());
+    }
+    public String getName() {
+        return namePane.getText();
     }
     public String getIP() {
         return view.IPPane.getText();
@@ -265,17 +268,17 @@ class MessageBox {
             int i = list.getSelectedIndex();
             try {
                 doc.remove(0, message.length());
-                String str = (String) items.getElementAt(i);
+                MessageBox msgBox = (MessageBox) items.getElementAt(i);
                 doc.insertString(0, 
                         String.format("%s got the boot",
-                        str.substring(0,str.indexOf("(")-1)), style);  //Does not work with names containing (
+                        msgBox.getName()), style);
                 sendButton.doClick(); //do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }
             while (i >= 0) {
-                String removed = (String) items.remove(i);
+                MessageBox removed = (MessageBox) items.remove(i);
                 System.out.print(removed);
                 i = list.getSelectedIndex();
             }
