@@ -274,6 +274,7 @@ class MessageBox {
                         msgBox.getName()), style);
                 sendButton.doClick(); //do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
+                msgBox.alive = false;
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }

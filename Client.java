@@ -72,7 +72,7 @@ public class Client implements Runnable {
                 messageBox.sendButton.addActionListener(sendButtonListener);
                 messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
                 messageBox.closeButton.addActionListener(new CloseButtonListener());
-                while ((responseLine = i.readLine()) != null) {
+                while ((responseLine = i.readLine()) != null && messageBox.alive) {
                     keyRequest(responseLine);
                     messageBox.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
@@ -81,6 +81,7 @@ public class Client implements Runnable {
                     }
                 }
                 // send to others instead!?
+                
                 messageBox.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
                 messageBox.sendButton.setEnabled(false);
