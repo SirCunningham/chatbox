@@ -537,8 +537,7 @@ class MessageBox {
             }
 
         } catch (BadLocationException e) {
-            JOptionPane.showMessageDialog(null, "String insertion failed.",
-                    "Error message", JOptionPane.ERROR_MESSAGE);
+            showError("String insertion failed.");
         }
 
     }
