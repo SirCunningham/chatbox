@@ -152,7 +152,7 @@ public class Controller {
                     // send this to others!
                     //messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                     //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
-                    addUser2(messageBox.getNameIP());
+                    addUser2(messageBox);
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -173,18 +173,17 @@ public class Controller {
     private void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
         synchronized (lock) {
             for (MessageBox msgBox : msgBoxes) {
-                //String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
-                if (!messageBox.items.contains(msgBox.getNameIP())) {
-                    messageBox.items.addElement(msgBox.getNameIP());
+                if (!messageBox.items.contains(msgBox)) {
+                    messageBox.items.addElement(msgBox);
                 }
             }
         }
 
     }
-    private void addUser2(String user) {
+    private void addUser2(MessageBox messageBox) {
         for (MessageBox msgBox : messageBoxes) {
-            if (!msgBox.items.contains(user)) {
-                msgBox.items.addElement(user);
+            if (!msgBox.items.contains(messageBox)) {
+                msgBox.items.addElement(messageBox);
             }
         }
     }
@@ -232,7 +231,7 @@ public class Controller {
                 // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
                 for (MessageBox msgBox : messageBoxes) {
-                    msgBox.items.removeElement(messageBoxes.get(index).getNameIP());
+                    msgBox.items.removeElement(messageBoxes.get(index));
                 }
                 messageBoxes.remove(index);
                 indices.remove(index);

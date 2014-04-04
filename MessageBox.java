@@ -207,7 +207,7 @@ class MessageBox {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
-    public String getNameIP() {
+    public String toString() {
         return String.format("%s (%s)",namePane.getText(), view.IPPane.getText());
     }
     public String getIP() {
@@ -265,7 +265,7 @@ class MessageBox {
             int i = list.getSelectedIndex();
             try {
                 doc.remove(0, message.length());
-                String str = (String) items.getElementAt(i);
+                String str = ((MessageBox) items.getElementAt(i)).toString();
                 doc.insertString(0, 
                         String.format("%s got the boot",
                         str.substring(0,str.indexOf("(")-1)), style);  //Does not work with names containing (
