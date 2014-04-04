@@ -11,8 +11,7 @@ import javax.swing.text.html.*;
 /**
  * Tråd för input- och outputströmmar
  */
-
-public class IOThread2 implements Runnable {
+public class IOThread2 {
 
     // Fält för strömmar
     private final InputStream i;
@@ -36,36 +35,6 @@ public class IOThread2 implements Runnable {
         this.messageBox = messageBox;
         this.isClient = client;
         messageBox.sendButton.addActionListener(new SendMsgButtonListener());
-    }
-
-    @Override
-    public void run() {
-
-        // Här läser vi in klientens budskap
-        // Om klienten kopplar ner gör vi det också, och avslutar tråden
-        while (!isNotRunnable) {
-            try {
-                String echo = in.readLine();
-                if (echo == null) {
-                    isNotRunnable = true;
-                    appendToPane(String.format("<message sender=\"INFO\">"
-                            + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
-                    messageBox.items.removeElement(clientSocket.getInetAddress());
-                } else {
-                    appendToPane(echo);
-                    if (echo.contains("you got the boot")) {
-                        appendToPane("<message sender=\"INFO\">"
-                                + "<text color=\"0000FF\">Du blev utsparkad!!!<disconnect /></text></message>");
-                        kill();
-                    }
-                }
-            } catch (IOException e) {
-                appendToPane(String.format("<message sender=\"ERROR\">"
-                        + "<text color=\"#ff0000\"> Communication failed </text></message>"));
-            }
-
-
-        }
     }
 
     public class TimerListener implements ActionListener {
