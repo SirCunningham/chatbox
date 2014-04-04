@@ -13,6 +13,7 @@ public class Server implements Runnable {
     private final Object lock = new Object();
     private final int port;
     private final MessageBox messageBox;
+    ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final JFrame frame;
 
     public Server(int port, final MessageBox messageBox, JFrame frame) {
@@ -42,7 +43,7 @@ public class Server implements Runnable {
             while (messageBox.alive) {
                 try {
                     clientSocket = serverSocket.accept();
-                    messageBox.items.addElement(clientSocket.toString());
+                    //messageBox.items.addElement(clientSocket.toString());
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();
@@ -62,4 +63,16 @@ public class Server implements Runnable {
             }
         }
     }
+    
+    public ArrayList<MessageBox> getMessageBoxes() {
+        return messageBoxes;
+    }
+    public void addUser(String user) {
+        for (MessageBox msgBox : messageBoxes) {
+            if (!msgBox.items.contains(user)) {
+                msgBox.items.addElement(user);
+            }
+        }
+    }
+
 }

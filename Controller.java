@@ -1,11 +1,13 @@
 package chatbox;
 
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
 import java.util.*;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
 import java.util.Random.*;
@@ -84,17 +86,21 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             final MessageBox messageBox = new MessageBox(view);
+
             try {
                 final String host = view.IPPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());
+                final Server server = new Server(port, messageBox,
+                        view.frame);
                 if (view.serverButton.isSelected()) {
                     new Thread(new Runnable() {
+
                         @Override
                         public void run() {
-                            new Thread(new Server(port, messageBox,
-                                    view.frame)).start();
+                            new Thread(server).start();
                         }
                     }).start();
+                    
                     // add color here!
                     messageBox.chatBox.setText("This is where it happens. "
                             + "Waiting for others to connect.");
@@ -105,14 +111,22 @@ public class Controller {
                     } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
+                    
                 }
                 if (messageBox.success) {
-                    
+
                     new Thread(new Runnable() {
+
                         @Override
                         public void run() {
                             new Thread(new Client(host, port, messageBox,
                                     view.frame)).start();
+                            //server.getMessageBoxes().add(messageBox);
+                            messageBoxes.add(messageBox);
+                            messageBox.items.addElement(messageBox.getName());
+                            //System.out.println(server.getMessageBoxes().size());
+                            //server.addUser(messageBox.getName());
+                            addUser(messageBox, messageBoxes);
                         }
                     }).start();
                     //messageBox.items.addElement(messageBox.getName());
@@ -129,10 +143,10 @@ public class Controller {
             } finally {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection successful </text></message>"));
-                    
+                            + "<text color=\"#00ff00\"> Connection successful </text></message>"));
+
                     messageBoxes.add(messageBox);
-                    addUser(messageBox.getName());
+                    addUser2(messageBox.getName());
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -140,8 +154,9 @@ public class Controller {
                         view.tabbedPane.setTabComponentAt(index, createTabPanel());
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(view.frame, "Bilden kunde inte hittas",
-                        "Error message", JOptionPane.ERROR_MESSAGE);
+                                "Error message", JOptionPane.ERROR_MESSAGE);
                     }
+                    
                     view.tabbedPane.setSelectedIndex(index);
                     view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
@@ -149,7 +164,15 @@ public class Controller {
             }
         }
     }
-    public void addUser(String user) {
+
+    public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
+        for (MessageBox msgBox : msgBoxes) {
+            if (!messageBox.items.contains(msgBox.getName())) {
+                messageBox.items.addElement(msgBox.getName());
+            }
+        }
+    }
+    public void addUser2(String user) {
         for (MessageBox msgBox : messageBoxes) {
             if (!msgBox.items.contains(user)) {
                 msgBox.items.addElement(user);
@@ -222,7 +245,7 @@ public class Controller {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 
