@@ -268,7 +268,7 @@ class MessageBox {
                 String str = (String) items.getElementAt(i);
                 doc.insertString(0, 
                         String.format("%s got the boot",
-                        str.substring(0,str.indexOf("(")-1)), style);  //Fungerar inte med namn som innehåller (
+                        str.substring(0,str.indexOf("(")-1)), style);  //Does not work with names containing (
                 sendButton.doClick(); //do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
