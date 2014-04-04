@@ -149,7 +149,7 @@ public class Controller {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
                             + "<text color=\"#00ff00\"> Connection successful </text></message>"));
 
-                    addUser2(String.format("%s (%s)",messageBox.getName(), messageBox.getIP()));
+                    addUser2(messageBox.getNameIP());
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -170,9 +170,9 @@ public class Controller {
     public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
         synchronized (lock) {
             for (MessageBox msgBox : msgBoxes) {
-                String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
-                if (!messageBox.items.contains(nameIP)) {
-                    messageBox.items.addElement(nameIP);
+                //String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
+                if (!messageBox.items.contains(msgBox.getNameIP())) {
+                    messageBox.items.addElement(msgBox.getNameIP());
                 }
             }
         }
@@ -228,7 +228,11 @@ public class Controller {
             if ((index = indices.indexOf(button)) != -1) {
                 // only kills after new client joins!!!
                 messageBoxes.get(index).alive = false;
+                for (MessageBox msgBox : messageBoxes) {
+                    msgBox.items.removeElement(messageBoxes.get(index).items);
+                }
                 messageBoxes.remove(index);
+
                 System.out.println(messageBoxes.size());
                 indices.remove(index);
             }

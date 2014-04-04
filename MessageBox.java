@@ -207,8 +207,8 @@ class MessageBox {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
-    public String getName() {
-        return namePane.getText();
+    public String getNameIP() {
+        return String.format("%s (%s)",namePane.getText(), view.IPPane.getText());
     }
     public String getIP() {
         return view.IPPane.getText();
