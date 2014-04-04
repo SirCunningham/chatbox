@@ -10,7 +10,6 @@ public class Server implements Runnable {
     private final ServerSocket serverSocket;
     private final int port;
     private final MessageBox messageBox;
-    ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final Object lock = new Object();
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
