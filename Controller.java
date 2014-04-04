@@ -29,6 +29,8 @@ public class Controller {
         view.portPane.addKeyListener(new StartListener());
         view.passPane.addFocusListener(new FieldListener());
         view.passPane.addKeyListener(new StartListener());
+        view.requestPane.addFocusListener(new FieldListener());
+        view.requestPane.addKeyListener(new StartListener());
         view.namePane.addFocusListener(new FieldListener());
         view.namePane.addKeyListener(new StartListener());
         view.tabPane.addFocusListener(new FieldListener());
@@ -221,6 +223,13 @@ public class Controller {
             } else {
                 view.passLabel.setVisible(false);
                 view.passPane.setVisible(false);
+            }
+            if ("Private".equals(chosen) || "Secret".equals(chosen)) {
+                view.requestLabel.setVisible(true);
+                view.requestPane.setVisible(true);
+            } else {
+                view.requestLabel.setVisible(false);
+                view.requestPane.setVisible(false);
             }
         }
     }

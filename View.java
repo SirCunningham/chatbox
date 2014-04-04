@@ -73,7 +73,10 @@ public class View {
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer4 = new JPanel(new GridLayout(1, 1));
+<<<<<<< HEAD
 
+=======
+>>>>>>> adbdcc23e4923390a355ce5f7b32fc6cbbfd38fb
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         IPPanel.add(IPLabel);
