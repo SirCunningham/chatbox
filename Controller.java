@@ -115,7 +115,7 @@ public class Controller {
                     messageBox.bootPanel.setVisible(true);
                 }
                 if (messageBox.success) {
-<<<<<<< HEAD
+
 
                     new Thread(new Runnable() {
 
@@ -131,12 +131,12 @@ public class Controller {
                         }
                     }).start();
                     //messageBox.items.addElement(messageBox.getName());
-=======
+
                     // Starta socket för klienten
                     final Socket clientSocket;
                     final BufferedReader i;
                     final PrintWriter o;
->>>>>>> 561cf0b4acd048496d4844ddf9a6d1fd6892a459
+
                     try {
                         clientSocket = new Socket(host, port);
                         i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
