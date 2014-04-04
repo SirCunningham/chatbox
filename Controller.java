@@ -20,6 +20,7 @@ public class Controller {
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private Random rand = new Random();
+    private Object lock;
 
     public Controller(View view) {
         this.view = view;
@@ -168,12 +169,15 @@ public class Controller {
     }
 
     public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
-        for (MessageBox msgBox : msgBoxes) {
-            String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
-            if (!messageBox.items.contains(nameIP)) {
-                messageBox.items.addElement(nameIP);
+        synchronized (lock) {
+            for (MessageBox msgBox : msgBoxes) {
+                String nameIP = String.format("%s (%s)", msgBox.getName(), msgBox.getIP());
+                if (!messageBox.items.contains(nameIP)) {
+                    messageBox.items.addElement(nameIP);
+                }
             }
         }
+
     }
     public void addUser2(String user) {
         for (MessageBox msgBox : messageBoxes) {

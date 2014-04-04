@@ -49,15 +49,4 @@ public class Server implements Runnable {
             }
         }
     }
-    
-    public ArrayList<MessageBox> getMessageBoxes() {
-        return messageBoxes;
-    }
-    public void addUser(String user) {
-        for (MessageBox msgBox : messageBoxes) {
-            if (!msgBox.items.contains(user)) {
-                msgBox.items.addElement(user);
-            }
-        }
-    }
 }
