@@ -232,8 +232,6 @@ public class Controller {
                     msgBox.items.removeElement(messageBoxes.get(index).getNameIP());
                 }
                 messageBoxes.remove(index);
-
-                System.out.println(messageBoxes.size());
                 indices.remove(index);
             }
         }
