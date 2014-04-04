@@ -10,17 +10,16 @@ public class Server implements Runnable {
     private final ServerSocket serverSocket;
     private final int port;
     private final MessageBox messageBox;
-    private final JFrame frame;
+    ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final Object lock = new Object();
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
 
     public Server(ServerSocket serverSocket, int port,
-            final MessageBox messageBox, JFrame frame) {
+            final MessageBox messageBox) {
         this.serverSocket = serverSocket;
         this.port = port;
         this.messageBox = messageBox;
-        this.frame = frame;
     }
 
     // Lyssna efter klienter
@@ -32,23 +31,32 @@ public class Server implements Runnable {
                 try {
                     // Skapa tråd för varje klient
                     clientSocket = serverSocket.accept();
-                    messageBox.items.addElement(clientSocket.toString());
+                    //messageBox.items.addElement(clientSocket.toString());
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();
                     }
                 } catch (SocketTimeoutException e) {
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(frame, String.format("Accept "
-                            + "failed on port %d.", port), "Error message",
-                            JOptionPane.ERROR_MESSAGE);
+                    messageBox.showError(String.format("Accept failed on port %d.",
+                            port));
                 }
             }
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(frame, "Could not close server.",
-                        "Error message", JOptionPane.ERROR_MESSAGE);
+                messageBox.showError("Could not close server.");
+            }
+        }
+    }
+    
+    public ArrayList<MessageBox> getMessageBoxes() {
+        return messageBoxes;
+    }
+    public void addUser(String user) {
+        for (MessageBox msgBox : messageBoxes) {
+            if (!msgBox.items.contains(user)) {
+                msgBox.items.addElement(user);
             }
         }
     }

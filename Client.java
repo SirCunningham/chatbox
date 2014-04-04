@@ -16,16 +16,14 @@ public class Client implements Runnable {
     private final PrintWriter o;
     private final int port;
     private final MessageBox messageBox;
-    private final JFrame frame;
 
     public Client(Socket clientSocket, BufferedReader i, PrintWriter o,
-            int port, final MessageBox messageBox, JFrame frame) {
+            int port, final MessageBox messageBox) {
         this.clientSocket = clientSocket;
         this.i = i;
         this.o = o;
         this.port = port;
         this.messageBox = messageBox;
-        this.frame = frame;
     }
 
     // Skapa tråd för att läsa från servern
@@ -79,9 +77,7 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(frame,
-                        "Couldn't get I/O for closing the streams.",
-                        "Error message", JOptionPane.ERROR_MESSAGE);
+                messageBox.error("Couldn't get I/O for closing the streams.");
             }
         }
     }

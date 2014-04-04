@@ -1,5 +1,6 @@
 package chatbox;
 
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -7,6 +8,7 @@ import javax.swing.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
 import java.util.Random.*;
@@ -85,6 +87,7 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             final MessageBox messageBox = new MessageBox(view);
+
             try {
                 final String host = view.IPPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());
@@ -98,7 +101,7 @@ public class Controller {
                             @Override
                             public void run() {
                                 new Thread(new Server(serverSocket, port,
-                                        messageBox, view.frame)).start();
+                                        messageBox)).start();
                             }
                         }).start();
                     } catch (IOException ex) {
@@ -124,7 +127,13 @@ public class Controller {
                             @Override
                             public void run() {
                                 new Thread(new Client(clientSocket, i, o, port,
-                                        messageBox, view.frame)).start();
+                                        messageBox)).start();
+                                //server.getMessageBoxes().add(messageBox);
+                                messageBoxes.add(messageBox);
+                                messageBox.items.addElement(messageBox.getName());
+                                //System.out.println(server.getMessageBoxes().size());
+                                //server.addUser(messageBox.getName());
+                                addUser(messageBox, messageBoxes);
                             }
                         }).start();
                         //messageBox.items.addElement(messageBox.getName());
@@ -142,10 +151,10 @@ public class Controller {
             } finally {
                 if (messageBox.success) {
                     messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    + "<text color=\"#00ff00\"> Connection successful </text></message>"));
-                    
+                            + "<text color=\"#00ff00\"> Connection successful </text></message>"));
+
                     messageBoxes.add(messageBox);
-                    addUser(messageBox.getName());
+                    addUser2(messageBox.getName());
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
@@ -154,6 +163,7 @@ public class Controller {
                     } catch (IOException ex) {
                         messageBox.showError("Bilden kunde inte hittas");
                     }
+                    
                     view.tabbedPane.setSelectedIndex(index);
                     view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
@@ -161,7 +171,15 @@ public class Controller {
             }
         }
     }
-    public void addUser(String user) {
+
+    public void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
+        for (MessageBox msgBox : msgBoxes) {
+            if (!messageBox.items.contains(msgBox.getName())) {
+                messageBox.items.addElement(msgBox.getName());
+            }
+        }
+    }
+    public void addUser2(String user) {
         for (MessageBox msgBox : messageBoxes) {
             if (!msgBox.items.contains(user)) {
                 msgBox.items.addElement(user);
@@ -234,7 +252,7 @@ public class Controller {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 

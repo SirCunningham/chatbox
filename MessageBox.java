@@ -525,7 +525,7 @@ class MessageBox {
     public void appendToPane(String msg) {
 
         try {
-            MessageBox.xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
+            xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
                 kit.insertHTML(doc1.getLength(), msg, 0, 0, null);
