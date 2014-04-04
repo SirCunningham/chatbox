@@ -19,6 +19,7 @@ public class View {
     JTextPane namePane = new JTextPane();
     JTextPane tabPane = new JTextPane();
     JButton startButton = new JButton("Join server");
+    IconButton closeButton = new IconButton("closeIcon.png");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -36,6 +37,7 @@ public class View {
         buttonGroup.add(clientButton);
         buttonGroup.add(serverButton);
         clientButton.setSelected(true);
+        closeButton.setFocusPainted(false);
 
         ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         IPPane.setText("127.0.0.1");
@@ -78,6 +80,7 @@ public class View {
         tabPanel.add(new JLabel("Chatroom name:"));
         tabPanel.add(tabPane);
         startPanel.add(startButton);
+        startPanel.add(closeButton);
         dialogPanel.add(radioPanel);
         dialogPanel.add(IPPanel);
         dialogPanel.add(portPanel);

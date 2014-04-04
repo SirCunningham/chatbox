@@ -16,7 +16,6 @@ public class Controller {
     private final ArrayList<MessageBox> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
-    private ImageIcon icon;
     private Random rand = new Random();
 
     public Controller(View view) {
@@ -37,16 +36,11 @@ public class Controller {
         view.serverButton.addChangeListener(new ServerButtonListener());
         view.serverButton.addKeyListener(new StartListener());
         view.serverOptions.addItemListener(new ServerOptionsListener());
+        view.closeButton.addActionListener(new CloseButtonListener());
     }
 
-    public final JPanel createTabPanel() {
-        try {
-            icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
-        } catch (IOException e) {
-            System.err.println("Filen kunde inte hittas");
-            e.printStackTrace();
-        }
-
+    public final JPanel createTabPanel() throws IOException {
+        ImageIcon icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
         JPanel tabPanel = new JPanel(new GridBagLayout());
         tabPanel.setOpaque(false);
         JLabel tabLabel = new JLabel(view.tabPane.getText() + " ");
@@ -138,7 +132,12 @@ public class Controller {
                     int index = view.tabbedPane.getTabCount() - 1;
                     view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
                             view.tabPane.getText(), index);
-                    view.tabbedPane.setTabComponentAt(index, createTabPanel());
+                    try {
+                        view.tabbedPane.setTabComponentAt(index, createTabPanel());
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(view.frame, "Bilden kunde inte hittas",
+                        "Error message", JOptionPane.ERROR_MESSAGE);
+                    }
                     view.tabbedPane.setSelectedIndex(index);
                     view.namePane.setText("User " + rand.nextInt(1000000000));
                     view.tabPane.setText("Chat " + String.valueOf(++tabCount));
@@ -210,6 +209,24 @@ public class Controller {
 
         @Override
         public void keyReleased(KeyEvent e) {
+        }
+    }
+    
+    // Stäng av hela programmet
+    public class CloseButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
+                    + "want to quit?", "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "Good choice. "
+                        + "Everyone's finger can slip!");
+            }
         }
     }
 }
