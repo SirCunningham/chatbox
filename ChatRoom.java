@@ -15,12 +15,12 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 
-class MessageBox {
+class ChatRoom {
 
     volatile boolean success = true;
     volatile boolean alive = true;
     private final String[] cipherString = {"None", "caesar", "AES"};
-    public View view;
+    public ChatCreator chatCreator;
     public AESCrypto AES;
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
@@ -72,7 +72,7 @@ class MessageBox {
     private static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
 
-    public MessageBox(View view) {
+    public ChatRoom(ChatCreator chatCreator) {
         list.setSelectionModel(new DefaultListSelectionModel() {
 
             private static final long serialVersionUID = 1L;
@@ -99,8 +99,8 @@ class MessageBox {
         });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
-        JLabel infoLabel1 = new JLabel("Host: " + view.hostPane.getText());
-        JLabel infoLabel2 = new JLabel("Port: " + view.portPane.getText());
+        JLabel infoLabel1 = new JLabel("Host: " + chatCreator.hostPane.getText());
+        JLabel infoLabel2 = new JLabel("Port: " + chatCreator.portPane.getText());
         infoPanel.add(infoLabel1);
         infoPanel.add(infoLabel2);
         bootPanel.add(bootButton);
@@ -143,7 +143,7 @@ class MessageBox {
         fileButton.addActionListener(new FileButtonListener());
         closeButton.addActionListener(new CloseButtonListener());
 
-        this.view = view;
+        this.chatCreator = chatCreator;
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
@@ -175,7 +175,7 @@ class MessageBox {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        String name = view.namePane.getText();
+        String name = chatCreator.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
         namePane.addFocusListener(new FieldListener());
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
@@ -212,13 +212,13 @@ class MessageBox {
         leftPanel.add(buttonPanel);
     }
     public String toString() {
-        return String.format("%s (%s)",namePane.getText(), view.hostPane.getText());
+        return String.format("%s (%s)",namePane.getText(), chatCreator.hostPane.getText());
     }
     public String getName() {
         return namePane.getText();
     }
     public String getIP() {
-        return view.hostPane.getText();
+        return chatCreator.hostPane.getText();
     }
 
     public String getKey(String type) {
@@ -233,7 +233,7 @@ class MessageBox {
     }
     
     public void showError(String text) {
-        JOptionPane.showMessageDialog(view.frame, text, "Error message",
+        JOptionPane.showMessageDialog(chatCreator.frame, text, "Error message",
                 JOptionPane.ERROR_MESSAGE);
     }
 
@@ -272,14 +272,14 @@ class MessageBox {
             int i = list.getSelectedIndex();
             try {
                 doc.remove(0, message.length());
-                MessageBox msgBox = (MessageBox) items.getElementAt(i);
+                ChatRoom msgBox = (ChatRoom) items.getElementAt(i);
                 doc.insertString(0, 
                         String.format("%s got the boot",
                         msgBox.getName()), style);
                 sendButton.doClick();                  //Do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
-                for (MessageBox mBox : Controller.messageBoxes) {
+                for (ChatRoom mBox : Controller.messageBoxes) {
                     mBox.items.removeElement(msgBox);
                 }
             } catch (BadLocationException ex) {
@@ -406,8 +406,8 @@ class MessageBox {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            Color newColor = JColorChooser.showDialog(view.frame,
-                    "Choose text color", view.frame.getBackground());
+            Color newColor = JColorChooser.showDialog(chatCreator.frame,
+                    "Choose text color", chatCreator.frame.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
                 color = Integer.toHexString(colorObj.getRGB()).substring(2);
@@ -482,7 +482,7 @@ class MessageBox {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
 
-            int returnVal = chooser.showOpenDialog(view.frame);
+            int returnVal = chooser.showOpenDialog(chatCreator.frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
@@ -519,7 +519,7 @@ class MessageBox {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            int index = view.tabbedPane.getSelectedIndex();
+            int index = chatCreator.tabbedPane.getSelectedIndex();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
                     sendButton.doClick();
@@ -528,13 +528,13 @@ class MessageBox {
                 case KeyEvent.VK_KP_LEFT:
                 case KeyEvent.VK_LEFT:
                     if (index > 0) {
-                        view.tabbedPane.setSelectedIndex(index - 1);
+                        chatCreator.tabbedPane.setSelectedIndex(index - 1);
                     }
                     break;
                 case KeyEvent.VK_D:
                 case KeyEvent.VK_KP_RIGHT:
                 case KeyEvent.VK_RIGHT:
-                    view.tabbedPane.setSelectedIndex(index + 1);
+                    chatCreator.tabbedPane.setSelectedIndex(index + 1);
                     break;
                 default:
                     break;
@@ -562,7 +562,7 @@ class MessageBox {
             /*
             try {
             FileReceiver thr = new FileReceiver(Integer.parseInt(
-            view.portPane.getText()), filePane.getText());
+            chatCreator.portPane.getText()), filePane.getText());
             thr.start();
             } catch (Exception ex) {
             System.err.println("Ett fel inträffade4: " + ex);
@@ -575,7 +575,7 @@ class MessageBox {
     public void appendToPane(String msg) {
 
         try {
-            xmlHTMLEditorKit kit = (MessageBox.xmlHTMLEditorKit) chatBox.getEditorKit();
+            xmlHTMLEditorKit kit = (ChatRoom.xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
                 kit.insertHTML(doc1.getLength(), msg, 0, 0, null);
@@ -636,7 +636,7 @@ class MessageBox {
                         name, color,
                         String.valueOf(cipherBox.getSelectedItem()),message);
                 /*
-                timer.setType(String.valueOf(messageBox.cipherBox.getSelectedItem()));
+                timer.setType(String.valueOf(chatRoom.cipherBox.getSelectedItem()));
                 timer.start();
                  * 
                  */
@@ -645,7 +645,7 @@ class MessageBox {
                 /*
                 appendToPane(String.format("<message sender=\"%s\">"
                 + "<text color=\"%s\">%s</text></message>",
-                name, messageBox.color,
+                name, chatRoom.color,
                 message));
                  * 
                  */
@@ -692,8 +692,8 @@ class MessageBox {
             }
             /*
             try {
-            FileSender thr = new FileSender(view.hostPane.getText(),
-            Integer.parseInt(view.portPane.getText()),
+            FileSender thr = new FileSender(chatCreator.hostPane.getText(),
+            Integer.parseInt(chatCreator.portPane.getText()),
             filePane.getText());
             thr.start();
             } catch (Exception ex) {
@@ -726,7 +726,7 @@ class MessageBox {
             System.out.println(XMLString.getEncryptedType(html));
             if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
             thr.timer.stop();
-            messageBox.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
+            chatRoom.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
             }
             }
              * 

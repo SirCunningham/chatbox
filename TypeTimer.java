@@ -42,12 +42,12 @@ public class TypeTimer extends Timer {
                     + "<text color=\"%s\">Jag fick ingen nyckel av "
                     + "typen %s inom en minut och antar nu att ni inte har implementerat "
                     + "detta!</text></message>",
-                    messageBox.namePane.getText(), messageBox.color, timer.getType()));
+                    chatRoom.namePane.getText(), chatRoom.color, timer.getType()));
 
             appendToPane(String.format("<message sender=\"%s\">"
                     + "<text color=\"%s\">Jag fick ingen nyckel av "
                     + "typen %s inom en minut och antar nu att ni inte har implementerat "
-                    + "detta!</text></message>", messageBox.namePane.getText(), messageBox.color, timer.getType()));
+                    + "detta!</text></message>", chatRoom.namePane.getText(), chatRoom.color, timer.getType()));
         }
     }
     **/

@@ -4,9 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class View {
+public class ChatCreator {
 
-    JFrame frame = new JFrame("Instant messaging program for pros");
+    JFrame frame = new JFrame("ChatBox - instant messaging for pros");
     JPanel dialogPanel = new JPanel();
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
@@ -26,7 +26,7 @@ public class View {
     JTabbedPane tabbedPane = new JTabbedPane();
 
     // Skapa GUI
-    public View() {
+    public ChatCreator() {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setPreferredSize(new Dimension(dim.width * 4 / 5, dim.height / 2));

@@ -8,16 +8,16 @@ public class Server implements Runnable {
 
     private final ServerSocket serverSocket;
     private final int port;
-    private final MessageBox messageBox;
+    private final ChatRoom chatRoom;
     private final Object lock = new Object();
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
 
     public Server(ServerSocket serverSocket, int port,
-            final MessageBox messageBox) {
+            final ChatRoom chatRoom) {
         this.serverSocket = serverSocket;
         this.port = port;
-        this.messageBox = messageBox;
+        this.chatRoom = chatRoom;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Server implements Runnable {
         if (serverSocket != null) {
             threads = new LinkedList<>();
             // Lyssna efter klienter
-            while (messageBox.alive) {
+            while (chatRoom.alive) {
                 try {
                     clientSocket = serverSocket.accept();
                     // Skapa tråd för varje klient
@@ -35,14 +35,14 @@ public class Server implements Runnable {
                     }
                 } catch (SocketTimeoutException e) {
                 } catch (IOException e) {
-                    messageBox.showError(String.format("Accept failed on port %d.",
+                    chatRoom.showError(String.format("Accept failed on port %d.",
                             port));
                 }
             }
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                messageBox.showError("Failed to close server.");
+                chatRoom.showError("Failed to close server.");
             }
         }
     }

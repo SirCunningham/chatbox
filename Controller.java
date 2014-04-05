@@ -14,41 +14,41 @@ import java.util.Random.*;
 
 public class Controller {
 
-    private final View view;
-    static volatile ArrayList<MessageBox> messageBoxes = new ArrayList<>();
+    private final ChatCreator chatCreator;
+    static volatile ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private Random rand = new Random();
     private Object lock = new Object();
 
-    public Controller(View view) {
-        this.view = view;
-        view.hostPane.addFocusListener(new FieldListener());
-        view.hostPane.addKeyListener(new StartListener());
-        view.portPane.addFocusListener(new FieldListener());
-        view.portPane.addKeyListener(new StartListener());
-        view.passPane.addFocusListener(new FieldListener());
-        view.passPane.addKeyListener(new StartListener());
-        view.requestPane.addFocusListener(new FieldListener());
-        view.requestPane.addKeyListener(new StartListener());
-        view.namePane.addFocusListener(new FieldListener());
-        view.namePane.addKeyListener(new StartListener());
-        view.tabPane.addFocusListener(new FieldListener());
-        view.tabPane.addKeyListener(new StartListener());
-        view.startButton.addActionListener(new StartButtonListener());
-        view.startButton.addKeyListener(new StartListener());
-        view.clientButton.addKeyListener(new StartListener());
-        view.serverButton.addChangeListener(new ServerButtonListener());
-        view.serverButton.addKeyListener(new StartListener());
-        view.serverOptions.addItemListener(new ServerOptionsListener());
-        view.closeButton.addActionListener(new CloseButtonListener());
+    public Controller(ChatCreator chatCreator) {
+        this.chatCreator = chatCreator;
+        chatCreator.hostPane.addFocusListener(new FieldListener());
+        chatCreator.hostPane.addKeyListener(new StartListener());
+        chatCreator.portPane.addFocusListener(new FieldListener());
+        chatCreator.portPane.addKeyListener(new StartListener());
+        chatCreator.passPane.addFocusListener(new FieldListener());
+        chatCreator.passPane.addKeyListener(new StartListener());
+        chatCreator.requestPane.addFocusListener(new FieldListener());
+        chatCreator.requestPane.addKeyListener(new StartListener());
+        chatCreator.namePane.addFocusListener(new FieldListener());
+        chatCreator.namePane.addKeyListener(new StartListener());
+        chatCreator.tabPane.addFocusListener(new FieldListener());
+        chatCreator.tabPane.addKeyListener(new StartListener());
+        chatCreator.startButton.addActionListener(new StartButtonListener());
+        chatCreator.startButton.addKeyListener(new StartListener());
+        chatCreator.clientButton.addKeyListener(new StartListener());
+        chatCreator.serverButton.addChangeListener(new ServerButtonListener());
+        chatCreator.serverButton.addKeyListener(new StartListener());
+        chatCreator.serverOptions.addItemListener(new ServerOptionsListener());
+        chatCreator.closeButton.addActionListener(new CloseButtonListener());
     }
 
     public final JPanel createTabPanel() throws IOException {
         ImageIcon icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
         JPanel tabPanel = new JPanel(new GridBagLayout());
         tabPanel.setOpaque(false);
-        JLabel tabLabel = new JLabel(view.tabPane.getText() + " ");
+        JLabel tabLabel = new JLabel(chatCreator.tabPane.getText() + " ");
         JButton closeButton = new JButton(icon);
         closeButton.setContentAreaFilled(false);
         closeButton.setOpaque(false);
@@ -89,13 +89,13 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             // move server and client to their classes, initialize before run!
-            final MessageBox messageBox = new MessageBox(view);
+            final ChatRoom chatRoom = new ChatRoom(chatCreator);
 
             try {
-                final String host = view.hostPane.getText();
-                final int port = Integer.parseInt(view.portPane.getText());
-                if (view.serverButton.isSelected()) {
-                    view.hostPane.setText("127.0.0.1");
+                final String host = chatCreator.hostPane.getText();
+                final int port = Integer.parseInt(chatCreator.portPane.getText());
+                if (chatCreator.serverButton.isSelected()) {
+                    chatCreator.hostPane.setText("127.0.0.1");
                     // Starta socket för servern
                     final ServerSocket serverSocket;
                     try {
@@ -106,19 +106,19 @@ public class Controller {
                             @Override
                             public void run() {
                                 new Thread(new Server(serverSocket, port,
-                                        messageBox)).start();
+                                        chatRoom)).start();
                             }
                         }).start();
                     } catch (IOException ex) {
-                        messageBox.success = false;
-                        messageBox.showError(String.format("Could not listen on port %d.",
+                        chatRoom.success = false;
+                        chatRoom.showError(String.format("Could not listen on port %d.",
                                 port));
                     }
-                    messageBox.appendToPane(String.format("<message sender=\"INFO\">"
+                    chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
-                    messageBox.bootPanel.setVisible(true);
+                    chatRoom.bootPanel.setVisible(true);
                 }
-                if (messageBox.success) {
+                if (chatRoom.success) {
                     // Starta socket för klienten
                     final Socket clientSocket;
                     final BufferedReader i;
@@ -127,70 +127,70 @@ public class Controller {
                         clientSocket = new Socket(host, port);
                         i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         o = new PrintWriter(clientSocket.getOutputStream(), true);
-                        if (!view.serverButton.isSelected()) {
-                            o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", messageBox.getName()));
+                        if (!chatCreator.serverButton.isSelected()) {
+                            o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
                         }
                         new Thread(new Runnable() {
 
                             @Override
                             public void run() {
                                 new Thread(new Client(clientSocket, i, o, port,
-                                        messageBox)).start();
-                                messageBoxes.add(messageBox);
-                                addUser(messageBox, messageBoxes);
+                                        chatRoom)).start();
+                                messageBoxes.add(chatRoom);
+                                addUser(chatRoom, messageBoxes);
                             }
                         }).start();
                     } catch (UnknownHostException ex) {
-                        messageBox.success = false;
-                        messageBox.showError("Don't know about host.");
+                        chatRoom.success = false;
+                        chatRoom.showError("Don't know about host.");
                     } catch (IOException ex) {
-                        messageBox.success = false;
-                        messageBox.showError("Couldn't get I/O for the connection to host.");
+                        chatRoom.success = false;
+                        chatRoom.showError("Couldn't get I/O for the connection to host.");
                     }
                 }
             } catch (NumberFormatException ex) {
-                messageBox.success = false;
-                messageBox.showError("Port is not a small number!");
+                chatRoom.success = false;
+                chatRoom.showError("Port is not a small number!");
             } finally {
-                if (messageBox.success) {
-                    messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
+                if (chatRoom.success) {
+                    chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
                             + "<text color=\"#00ff00\">Connection successful</text></message>"));
                     // send this to others!
-                    //messageBox.appendToPane(String.format("<message sender=\"SUCCESS\">"
+                    //chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
                     //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
-                    addUser2(messageBox);
-                    int index = view.tabbedPane.getTabCount() - 1;
-                    view.tabbedPane.insertTab(null, null, messageBox.mainPanel,
-                            view.tabPane.getText(), index);
+                    addUser2(chatRoom);
+                    int index = chatCreator.tabbedPane.getTabCount() - 1;
+                    chatCreator.tabbedPane.insertTab(null, null, chatRoom.mainPanel,
+                            chatCreator.tabPane.getText(), index);
                     try {
-                        view.tabbedPane.setTabComponentAt(index, createTabPanel());
+                        chatCreator.tabbedPane.setTabComponentAt(index, createTabPanel());
                     } catch (IOException ex) {
-                        messageBox.showError("Bilden kunde inte hittas");
+                        chatRoom.showError("Bilden kunde inte hittas");
                     }
 
-                    view.tabbedPane.setSelectedIndex(index);
-                    view.namePane.setText("User " + rand.nextInt(1000000000));
-                    view.tabPane.setText("Chat " + String.valueOf(++tabCount));
+                    chatCreator.tabbedPane.setSelectedIndex(index);
+                    chatCreator.namePane.setText("User " + rand.nextInt(1000000000));
+                    chatCreator.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }
         }
     }
 
-    private void addUser(MessageBox messageBox, ArrayList<MessageBox> msgBoxes) {
+    private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> msgBoxes) {
         synchronized (lock) {
-            for (MessageBox msgBox : msgBoxes) {
-                if (!messageBox.items.contains(msgBox)) {
-                    messageBox.items.addElement(msgBox);
+            for (ChatRoom msgBox : msgBoxes) {
+                if (!chatRoom.items.contains(msgBox)) {
+                    chatRoom.items.addElement(msgBox);
                 }
             }
         }
 
     }
 
-    private void addUser2(MessageBox messageBox) {
-        for (MessageBox msgBox : messageBoxes) {
-            if (!msgBox.items.contains(messageBox)) {
-                msgBox.items.addElement(messageBox);
+    private void addUser2(ChatRoom chatRoom) {
+        for (ChatRoom msgBox : messageBoxes) {
+            if (!msgBox.items.contains(chatRoom)) {
+                msgBox.items.addElement(chatRoom);
             }
         }
     }
@@ -199,14 +199,14 @@ public class Controller {
 
         @Override
         public void stateChanged(ChangeEvent e) {
-            if (view.serverButton.isSelected()) {
-                view.startButton.setText("Create server");
-                view.hostLabel.setEnabled(false);
-                view.hostPane.setEnabled(false);
+            if (chatCreator.serverButton.isSelected()) {
+                chatCreator.startButton.setText("Create server");
+                chatCreator.hostLabel.setEnabled(false);
+                chatCreator.hostPane.setEnabled(false);
             } else {
-                view.startButton.setText("Join server");
-                view.hostLabel.setEnabled(true);
-                view.hostPane.setEnabled(true);
+                chatCreator.startButton.setText("Join server");
+                chatCreator.hostLabel.setEnabled(true);
+                chatCreator.hostPane.setEnabled(true);
             }
         }
     }
@@ -216,20 +216,20 @@ public class Controller {
         @Override
         public void itemStateChanged(ItemEvent e) {
             String chosen = String.valueOf(
-                    view.serverOptions.getSelectedItem());
+                    chatCreator.serverOptions.getSelectedItem());
             if ("Protected".equals(chosen) || "Secret".equals(chosen)) {
-                view.passLabel.setVisible(true);
-                view.passPane.setVisible(true);
+                chatCreator.passLabel.setVisible(true);
+                chatCreator.passPane.setVisible(true);
             } else {
-                view.passLabel.setVisible(false);
-                view.passPane.setVisible(false);
+                chatCreator.passLabel.setVisible(false);
+                chatCreator.passPane.setVisible(false);
             }
             if ("Private".equals(chosen) || "Secret".equals(chosen)) {
-                view.requestLabel.setVisible(true);
-                view.requestPane.setVisible(true);
+                chatCreator.requestLabel.setVisible(true);
+                chatCreator.requestPane.setVisible(true);
             } else {
-                view.requestLabel.setVisible(false);
-                view.requestPane.setVisible(false);
+                chatCreator.requestLabel.setVisible(false);
+                chatCreator.requestPane.setVisible(false);
             }
         }
     }
@@ -239,11 +239,11 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton button = (JButton) e.getSource();
-            int index = view.tabbedPane.indexOfTabComponent(button.getParent());
-            view.tabbedPane.remove(index);
+            int index = chatCreator.tabbedPane.indexOfTabComponent(button.getParent());
+            chatCreator.tabbedPane.remove(index);
             if ((index = indices.indexOf(button)) != -1) {
                 messageBoxes.get(index).alive = false;
-                for (MessageBox msgBox : messageBoxes) {
+                for (ChatRoom msgBox : messageBoxes) {
                     msgBox.items.removeElement(messageBoxes.get(index));
                 }
                 messageBoxes.remove(index);
@@ -262,23 +262,23 @@ public class Controller {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ENTER:
-                    view.startButton.doClick();
+                    chatCreator.startButton.doClick();
                     break;
                 case KeyEvent.VK_A:
                 case KeyEvent.VK_KP_LEFT:
                 case KeyEvent.VK_LEFT:
-                    view.clientButton.setSelected(true);
-                    view.startButton.setText("Join server");
-                    view.hostLabel.setEnabled(true);
-                    view.hostPane.setEnabled(true);
+                    chatCreator.clientButton.setSelected(true);
+                    chatCreator.startButton.setText("Join server");
+                    chatCreator.hostLabel.setEnabled(true);
+                    chatCreator.hostPane.setEnabled(true);
                     break;
                 case KeyEvent.VK_D:
                 case KeyEvent.VK_KP_RIGHT:
                 case KeyEvent.VK_RIGHT:
-                    view.serverButton.setSelected(true);
-                    view.startButton.setText("Create server");
-                    view.hostLabel.setEnabled(false);
-                    view.hostPane.setEnabled(false);
+                    chatCreator.serverButton.setSelected(true);
+                    chatCreator.startButton.setText("Create server");
+                    chatCreator.hostLabel.setEnabled(false);
+                    chatCreator.hostPane.setEnabled(false);
                     break;
                 default:
                     break;
@@ -295,14 +295,14 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(view.frame, "Are you sure you "
+            int reply = JOptionPane.showConfirmDialog(chatCreator.frame, "Are you sure you "
                     + "want to quit?", "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
 
                 System.exit(0);
             } else {
-                JOptionPane.showMessageDialog(view.frame, "Good choice. "
+                JOptionPane.showMessageDialog(chatCreator.frame, "Good choice. "
                         + "Everyone's finger can slip!");
             }
         }

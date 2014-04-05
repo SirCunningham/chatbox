@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
-// add messageBox.items.addElement(clientSocket.getInetAddress()); when
+// add chatRoom.items.addElement(clientSocket.getInetAddress()); when
 // *new user is connected (certain msg comes)
 // *user changes name
 // Gör detta här eller i IOThread!
@@ -15,15 +15,15 @@ public class Client implements Runnable {
     private final BufferedReader i;
     private final PrintWriter o;
     private final int port;
-    private final MessageBox messageBox;
+    private final ChatRoom chatRoom;
 
     public Client(Socket clientSocket, BufferedReader i, PrintWriter o,
-            int port, final MessageBox messageBox) {
+            int port, final ChatRoom chatRoom) {
         this.clientSocket = clientSocket;
         this.i = i;
         this.o = o;
         this.port = port;
-        this.messageBox = messageBox;
+        this.chatRoom = chatRoom;
     }
 
     // Skapa tråd för att läsa från servern
@@ -38,7 +38,7 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = messageBox.getMessage();
+                        String msg = chatRoom.getMessage();
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
@@ -48,7 +48,7 @@ public class Client implements Runnable {
                 class SendFileButtonListener implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(messageBox.getFileMessage());
+                        o.println(chatRoom.getFileMessage());
                     }
                 }
                 // Stäng av hela programmet
@@ -56,25 +56,25 @@ public class Client implements Runnable {
                     // stäng av alla tabbar, gör detta i varje tabb!
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        int reply = JOptionPane.showConfirmDialog(messageBox.view.frame,
+                        int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
                                 "Are you sure you want to quit?", "Confirmation",
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
-                            o.println(messageBox.getQuitMessage());
+                            o.println(chatRoom.getQuitMessage());
                             System.exit(0);
                         } else {
-                            JOptionPane.showMessageDialog(messageBox.view.frame,
+                            JOptionPane.showMessageDialog(chatRoom.chatCreator.frame,
                                     "Good choice. Everyone's finger can slip!");
                         }
                     }
                 }
                 SendButtonListener sendButtonListener = new SendButtonListener();
-                messageBox.sendButton.addActionListener(sendButtonListener);
-                messageBox.sendFileButton.addActionListener(new SendFileButtonListener());
-                messageBox.closeButton.addActionListener(new CloseButtonListener());
-                while ((responseLine = i.readLine()) != null && messageBox.alive) {
+                chatRoom.sendButton.addActionListener(sendButtonListener);
+                chatRoom.sendFileButton.addActionListener(new SendFileButtonListener());
+                chatRoom.closeButton.addActionListener(new CloseButtonListener());
+                while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
-                    messageBox.appendToPane(
+                    chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
                     if (responseLine.indexOf("*** Bye") != -1) {                                          
                         break;
@@ -82,15 +82,15 @@ public class Client implements Runnable {
                 }
                 // send to others instead!?
                 
-                messageBox.appendToPane(String.format("<message sender=\"INFO\">"
-                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", messageBox.namePane.getText()));
-                messageBox.sendButton.setEnabled(false);
-                messageBox.sendButton.removeActionListener(sendButtonListener);
+                chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
+                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.namePane.getText()));
+                chatRoom.sendButton.setEnabled(false);
+                chatRoom.sendButton.removeActionListener(sendButtonListener);
                 i.close();
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                messageBox.showError("Failed to close connection.");
+                chatRoom.showError("Failed to close connection.");
             }
         }
     }
@@ -104,8 +104,8 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\">Här kommer nyckeln!<encrypted key=\"%s\" type=\"%s\"></encrypted></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,
-                        messageBox.getKey(XMLString.getKeyRequestType(html)),
+                        chatRoom.namePane.getText(), chatRoom.color,
+                        chatRoom.getKey(XMLString.getKeyRequestType(html)),
                         XMLString.getKeyRequestType(html)));
             }
         }
@@ -119,11 +119,11 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"yes\" port=\"" + (port + 13) + "\">%s</filerespnse></text></message>",
-                        messageBox.namePane.getText(), messageBox.color, messageBox.messagePane.getText()));
+                        chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
-                        messageBox.namePane.getText(), messageBox.color,messageBox.messagePane.getText()));
+                        chatRoom.namePane.getText(), chatRoom.color,chatRoom.messagePane.getText()));
             }
         }
     }
