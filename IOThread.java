@@ -25,7 +25,7 @@ class IOThread extends Thread {
         try {
             // Skapa input- och outputströmmar
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            o = new PrintWriter(clientSocket.getOutputStream(),true);
+            o = new PrintWriter(clientSocket.getOutputStream(), true);
 
             String name;
             /*
