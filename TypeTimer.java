@@ -29,3 +29,25 @@ public class TypeTimer extends Timer {
         return foundType;
     }
 }
+
+    /**
+    TypeTimer timer = new TypeTimer(10 * 1000, new TimerListener(), null);
+    timer.setRepeats(false);
+
+    public class TimerListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            out.println(String.format("<message sender=\"%s\">"
+                    + "<text color=\"%s\">Jag fick ingen nyckel av "
+                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
+                    + "detta!</text></message>",
+                    messageBox.namePane.getText(), messageBox.color, timer.getType()));
+
+            appendToPane(String.format("<message sender=\"%s\">"
+                    + "<text color=\"%s\">Jag fick ingen nyckel av "
+                    + "typen %s inom en minut och antar nu att ni inte har implementerat "
+                    + "detta!</text></message>", messageBox.namePane.getText(), messageBox.color, timer.getType()));
+        }
+    }
+    **/
