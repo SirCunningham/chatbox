@@ -99,7 +99,7 @@ class MessageBox {
         });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
-        JLabel infoLabel1 = new JLabel("IP: " + view.IPPane.getText());
+        JLabel infoLabel1 = new JLabel("Host: " + view.hostPane.getText());
         JLabel infoLabel2 = new JLabel("Port: " + view.portPane.getText());
         infoPanel.add(infoLabel1);
         infoPanel.add(infoLabel2);
@@ -212,13 +212,13 @@ class MessageBox {
         leftPanel.add(buttonPanel);
     }
     public String toString() {
-        return String.format("%s (%s)",namePane.getText(), view.IPPane.getText());
+        return String.format("%s (%s)",namePane.getText(), view.hostPane.getText());
     }
     public String getName() {
         return namePane.getText();
     }
     public String getIP() {
-        return view.IPPane.getText();
+        return view.hostPane.getText();
     }
 
     public String getKey(String type) {
@@ -692,7 +692,7 @@ class MessageBox {
             }
             /*
             try {
-            FileSender thr = new FileSender(view.IPPane.getText(),
+            FileSender thr = new FileSender(view.hostPane.getText(),
             Integer.parseInt(view.portPane.getText()),
             filePane.getText());
             thr.start();

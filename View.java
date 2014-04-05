@@ -4,9 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-// fix left and right arrows for radio buttons!
-// byt IP till host
-
 public class View {
 
     JFrame frame = new JFrame("Instant messaging program for pros");
@@ -14,10 +11,10 @@ public class View {
     JRadioButton clientButton = new JRadioButton("Client");
     JRadioButton serverButton = new JRadioButton("Server");
     ButtonGroup buttonGroup = new ButtonGroup();
-    JLabel IPLabel = new JLabel("IP:");
+    JLabel hostLabel = new JLabel("Host:");
     JLabel passLabel = new JLabel("Password:");
     JLabel requestLabel = new JLabel("Request:");
-    JTextPane IPPane = new JTextPane();
+    JTextPane hostPane = new JTextPane();
     JTextPane portPane = new JTextPane();
     JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
     JTextField requestPane = new JTextField("Let me in!", 15);
@@ -44,8 +41,8 @@ public class View {
         clientButton.setSelected(true);
         closeButton.setFocusPainted(false);
 
-        ((AbstractDocument) IPPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
-        IPPane.setText("127.0.0.1");
+        ((AbstractDocument) hostPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
+        hostPane.setText("127.0.0.1");
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
         portPane.setText("4444");
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));
@@ -63,10 +60,9 @@ public class View {
         requestPane.setVisible(false);
 
         JPanel radioPanel = new JPanel();
-        JPanel IPPanel = new JPanel();
+        JPanel hostPanel = new JPanel();
         JPanel portPanel = new JPanel();
         JPanel passPanel = new JPanel();
-        JPanel requestPanel = new JPanel();
         JPanel namePanel = new JPanel();
         JPanel tabPanel = new JPanel();
         JPanel startPanel = new JPanel();
@@ -77,8 +73,8 @@ public class View {
         
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
-        IPPanel.add(IPLabel);
-        IPPanel.add(IPPane);
+        hostPanel.add(hostLabel);
+        hostPanel.add(hostPane);
         portPanel.add(new JLabel("Port:"));
         portPanel.add(portPane);
         passPanel.add(new JLabel("Type:"));
@@ -98,7 +94,7 @@ public class View {
         startPanel.add(startButton);
         startPanel.add(closeButton);
         dialogPanel.add(radioPanel);
-        dialogPanel.add(IPPanel);
+        dialogPanel.add(hostPanel);
         dialogPanel.add(portPanel);
         dialogPanel.add(passPanel);
         dialogPanel.add(namePanel);

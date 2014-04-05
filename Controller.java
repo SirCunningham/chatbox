@@ -23,8 +23,8 @@ public class Controller {
 
     public Controller(View view) {
         this.view = view;
-        view.IPPane.addFocusListener(new FieldListener());
-        view.IPPane.addKeyListener(new StartListener());
+        view.hostPane.addFocusListener(new FieldListener());
+        view.hostPane.addKeyListener(new StartListener());
         view.portPane.addFocusListener(new FieldListener());
         view.portPane.addKeyListener(new StartListener());
         view.passPane.addFocusListener(new FieldListener());
@@ -92,9 +92,10 @@ public class Controller {
             final MessageBox messageBox = new MessageBox(view);
 
             try {
-                final String host = view.IPPane.getText();
+                final String host = view.hostPane.getText();
                 final int port = Integer.parseInt(view.portPane.getText());
                 if (view.serverButton.isSelected()) {
+                    view.hostPane.setText("127.0.0.1");
                     // Starta socket för servern
                     final ServerSocket serverSocket;
                     try {
@@ -200,12 +201,12 @@ public class Controller {
         public void stateChanged(ChangeEvent e) {
             if (view.serverButton.isSelected()) {
                 view.startButton.setText("Create server");
-                view.IPLabel.setEnabled(false);
-                view.IPPane.setEnabled(false);
+                view.hostLabel.setEnabled(false);
+                view.hostPane.setEnabled(false);
             } else {
                 view.startButton.setText("Join server");
-                view.IPLabel.setEnabled(true);
-                view.IPPane.setEnabled(true);
+                view.hostLabel.setEnabled(true);
+                view.hostPane.setEnabled(true);
             }
         }
     }
@@ -268,16 +269,16 @@ public class Controller {
                 case KeyEvent.VK_LEFT:
                     view.clientButton.setSelected(true);
                     view.startButton.setText("Join server");
-                    view.IPLabel.setEnabled(true);
-                    view.IPPane.setEnabled(true);
+                    view.hostLabel.setEnabled(true);
+                    view.hostPane.setEnabled(true);
                     break;
                 case KeyEvent.VK_D:
                 case KeyEvent.VK_KP_RIGHT:
                 case KeyEvent.VK_RIGHT:
                     view.serverButton.setSelected(true);
                     view.startButton.setText("Create server");
-                    view.IPLabel.setEnabled(false);
-                    view.IPPane.setEnabled(false);
+                    view.hostLabel.setEnabled(false);
+                    view.hostPane.setEnabled(false);
                     break;
                 default:
                     break;
