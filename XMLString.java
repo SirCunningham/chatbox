@@ -43,7 +43,7 @@ public class XMLString {
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {
-            if (str.indexOf("</encrypted>") != -1) {
+            if (str.contains("</encrypted>")) {
                 return str.substring(0, str.indexOf("\""));
             }
         }
@@ -59,7 +59,7 @@ public class XMLString {
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");
         for (String str : strings) {
-            if (str.indexOf("</keyrequest>") != -1) {
+            if (str.contains("</keyrequest>")) {
                 return str.substring(1, str.indexOf(">") - 1);
             }
         }
@@ -67,7 +67,7 @@ public class XMLString {
     }
 
     public static String toHexColor(String xmlStr) {
-        if (xmlStr.indexOf("color") != -1) {
+        if (xmlStr.contains("color")) {
             int index = xmlStr.indexOf("color");
             String hexColor = xmlStr.substring(index + 7, index + 13);
             return hexColor;
@@ -76,7 +76,7 @@ public class XMLString {
     }
 
     public Color toColor() {
-        if (xmlStr.indexOf("color") != -1) {
+        if (xmlStr.contains("color")) {
             int index = xmlStr.indexOf("color");
             String hexColor = xmlStr.substring(index + 7, index + 13);
             return Color.decode("#" + hexColor);
@@ -99,7 +99,7 @@ public class XMLString {
 
     public void handleString() {
         String msg = "";
-        if (xmlStr.indexOf("<encrypted") != -1) {
+        if (xmlStr.contains("<encrypted")) {
             for (int i = 0; i < xmlStr.length(); i++) {
                 if (i == xmlStr.indexOf("<encrypted")) {
                     msg += xmlStr.substring(0, i);

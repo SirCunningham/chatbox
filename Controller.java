@@ -18,8 +18,8 @@ public class Controller {
     static volatile ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
     private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
-    private Random rand = new Random();
-    private Object lock = new Object();
+    private final Random rand = new Random();
+    private final Object lock = new Object();
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;

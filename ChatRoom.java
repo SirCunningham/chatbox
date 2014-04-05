@@ -15,7 +15,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 
-class ChatRoom {
+final class ChatRoom {
 
     volatile boolean success = true;
     volatile boolean alive = true;
@@ -211,6 +211,7 @@ class ChatRoom {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
+    @Override
     public String toString() {
         return String.format("%s (%s)",namePane.getText(), chatCreator.hostPane.getText());
     }

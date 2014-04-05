@@ -76,7 +76,7 @@ public class Client implements Runnable {
                     keyRequest(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
-                    if (responseLine.indexOf("*** Bye") != -1) {                                          
+                    if (responseLine.contains("*** Bye")) {                                          
                         break;
                     }
                 }
@@ -96,7 +96,7 @@ public class Client implements Runnable {
     }
 
     public void keyRequest(String html) {
-        if (html.indexOf("</keyrequest>") != -1) {
+        if (html.contains("</keyrequest>")) {
             int reply = JOptionPane.showConfirmDialog(null,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
@@ -112,7 +112,7 @@ public class Client implements Runnable {
     }
 
     public void fileRequest(String html) {
-        if (html.indexOf("</filrequest>") != -1) {
+        if (html.contains("</filrequest>")) {
             int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);

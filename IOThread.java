@@ -72,7 +72,7 @@ class IOThread extends Thread {
                 }
                 
                 // Skicka privata meddelanden
-                if (line != null && line.startsWith("@")) {
+                if (line.startsWith("@")) {
                     /*
                     String[] words = line.split("\\s", 2);
                     if (words.length > 1 && words[1] != null) {
@@ -97,16 +97,13 @@ class IOThread extends Thread {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOThread thread : threads) {
-                            if (thread != this && line != null) {
+                            if (thread != this) {
                                 thread.o.println(line);
                                 if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
                                     //Skapa timer
                                 }
                             } else {
-                                if (line!=null) {
-                                    thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
-                                }
-                                  
+                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
                             }
                         }
                     }
