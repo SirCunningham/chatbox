@@ -131,7 +131,7 @@ public class Controller {
                         //Server.portServer.get(port).addChatRoom(chatRoom);
                         //Server.portServer.get(port).addUser(chatRoom);
                         //server.addChatRoom(chatRoom);  //wrong server
-                        //messageBoxes.add(chatRoom);
+                        messageBoxes.add(chatRoom);
                         //server.addUser(chatRoom);
                     } catch (UnknownHostException ex) {
                         chatRoom.success = false;
