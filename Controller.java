@@ -20,8 +20,6 @@ public class Controller {
     private int tabCount = 1;
     private final Random rand = new Random();
     private final Object lock = new Object();
-    private Server server;
-    private Client client;
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;
@@ -90,56 +88,25 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // move server and client to their classes, initialize before run!
-            ChatRoom chatRoom = new ChatRoom(chatCreator);
-            String host = chatCreator.hostPane.getText();
-            int port = Integer.parseInt(chatCreator.portPane.getText());
+            final ChatRoom chatRoom = new ChatRoom(chatCreator);
             try {
-                if (chatCreator.serverButton.isSelected()) {
+                final String host = chatCreator.hostPane.getText();
+                final int port = Integer.parseInt(chatCreator.portPane.getText());
+                final boolean isServer = chatCreator.serverButton.isSelected();
+                if (isServer) {
                     chatCreator.hostPane.setText("127.0.0.1");
-                    // Starta socket för servern
-                    ServerSocket serverSocket;
-                    try {
-                        serverSocket = new ServerSocket(port);
-                        serverSocket.setSoTimeout(100);
-                        server = new Server(serverSocket, port, chatRoom);
-                        new Thread(server).start();
-                    } catch (IOException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError(String.format("Could not listen on port %d.",
-                                port));
-                    }
+                        
+                    Server server = new Server(port, chatRoom);
+                    new Thread(server).start();
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
                 }
                 if (chatRoom.success) {
-                    // Starta socket för klienten
-                    Socket clientSocket;
-                    //BufferedReader i; Not used
-                    PrintWriter o;
-                    try {
-                        clientSocket = new Socket(host, port);
-                        //i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        o = new PrintWriter(clientSocket.getOutputStream(), true);
-                        if (!chatCreator.serverButton.isSelected()) {
-                            o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
-                        }
-                        new Thread(new Client(clientSocket, port,
-                                chatRoom)).start();
-                        //System.out.println(Server.portServer);
-                        //Server.portServer.get(port).addChatRoom(chatRoom);
-                        //Server.portServer.get(port).addUser(chatRoom);
-                        //server.addChatRoom(chatRoom);  //wrong server
-                        messageBoxes.add(chatRoom);
-                        //server.addUser(chatRoom);
-                    } catch (UnknownHostException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError("Don't know about host.");
-                    } catch (IOException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError("Couldn't get I/O for the connection to host.");
-                    }
+                    Client client = new Client(host, port, chatRoom, isServer);
+                    new Thread(client).start();
+                    messageBoxes.add(chatRoom);
+                    addUser(chatRoom, messageBoxes);
                 }
             } catch (NumberFormatException ex) {
                 chatRoom.success = false;
@@ -184,8 +151,6 @@ public class Controller {
         for (ChatRoom msgBox : messageBoxes) {
             if (!msgBox.items.contains(chatRoom)) {
                 msgBox.items.addElement(chatRoom);
-
-
             }
         }
     }
@@ -285,7 +250,7 @@ public class Controller {
         }
     }
 
-// Stäng av hela programmet
+    // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 
         @Override
