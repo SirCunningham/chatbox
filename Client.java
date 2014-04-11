@@ -3,7 +3,6 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
@@ -12,23 +11,36 @@ import javax.swing.*;
 // Gör detta här eller i IOThread!
 public class Client implements Runnable {
 
-    private final Socket clientSocket;
-    private final BufferedReader i;
-    private final PrintWriter o;
+    private Socket clientSocket;
+    private BufferedReader i;
+    private PrintWriter o;
+    private final String host;
     private final int port;
     private final ChatRoom chatRoom;
-    private ArrayList<ChatRoom> connectedChatRooms;
+    private final boolean isServer;
 
-    public Client(Socket clientSocket,
-            int port, final ChatRoom chatRoom) throws IOException {
-        this.clientSocket = clientSocket;
-        this.i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        this.o = new PrintWriter(clientSocket.getOutputStream(), true);
+    public Client(String host, int port, final ChatRoom chatRoom,
+            final boolean isServer) {
+        this.host = host;
         this.port = port;
         this.chatRoom = chatRoom;
-        connectedChatRooms = new ArrayList<>();
-        connectedChatRooms.add(chatRoom);
-
+        this.isServer = isServer;
+        
+        // Starta socket för klienten
+        try {
+            clientSocket = new Socket(host, port);
+            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            o = new PrintWriter(clientSocket.getOutputStream(), true);
+            if (!isServer) {
+                o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
+            }
+        } catch (UnknownHostException ex) {
+            chatRoom.success = false;
+            chatRoom.showError("Don't know about host.");
+        } catch (IOException ex) {
+            chatRoom.success = false;
+            chatRoom.showError("Couldn't get I/O for the connection to host.");
+        }
     }
 
     // Skapa tråd för att läsa från servern
