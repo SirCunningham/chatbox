@@ -91,14 +91,14 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             // move server and client to their classes, initialize before run!
-            final ChatRoom chatRoom = new ChatRoom(chatCreator);
-            final String host = chatCreator.hostPane.getText();
-            final int port = Integer.parseInt(chatCreator.portPane.getText());
+            ChatRoom chatRoom = new ChatRoom(chatCreator);
+            String host = chatCreator.hostPane.getText();
+            int port = Integer.parseInt(chatCreator.portPane.getText());
             try {
                 if (chatCreator.serverButton.isSelected()) {
                     chatCreator.hostPane.setText("127.0.0.1");
                     // Starta socket för servern
-                    final ServerSocket serverSocket;
+                    ServerSocket serverSocket;
                     try {
                         serverSocket = new ServerSocket(port);
                         serverSocket.setSoTimeout(100);
@@ -122,11 +122,11 @@ public class Controller {
                 if (chatRoom.success) {
                     // Starta socket för klienten
                     Socket clientSocket;
-                    BufferedReader i;
+                    //BufferedReader i; Not used
                     PrintWriter o;
                     try {
                         clientSocket = new Socket(host, port);
-                        i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        //i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         o = new PrintWriter(clientSocket.getOutputStream(), true);
                         if (!chatCreator.serverButton.isSelected()) {
                             o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
