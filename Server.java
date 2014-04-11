@@ -10,7 +10,6 @@ public class Server implements Runnable {
     private final int port;
     private final ChatRoom chatRoom;
     private ArrayList<ChatRoom> connectedChatRooms;
-    static Map<Integer, Server> portServer = new HashMap<>();
     private final Object lock = new Object();
     private final Object lock2 = new Object();
     private Socket clientSocket;
@@ -34,6 +33,7 @@ public class Server implements Runnable {
             while (chatRoom.alive) {
                 try {
                     clientSocket = serverSocket.accept();
+                    
                     // Skapa tråd för varje klient
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
@@ -52,9 +52,7 @@ public class Server implements Runnable {
             }
         }
     }
-    public Server getServer(int port) {
-        return portServer.get(port);
-    }
+
     public void addChatRoom(ChatRoom chatRoom) {
         connectedChatRooms.add(chatRoom);
     }
