@@ -103,13 +103,7 @@ public class Controller {
                         serverSocket = new ServerSocket(port);
                         serverSocket.setSoTimeout(100);
                         server = new Server(serverSocket, port, chatRoom);
-                        new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                new Thread(server).start();
-                            }
-                        }).start();
+                        new Thread(server).start();
                     } catch (IOException ex) {
                         chatRoom.success = false;
                         chatRoom.showError(String.format("Could not listen on port %d.",
