@@ -121,9 +121,9 @@ public class Controller {
                 }
                 if (chatRoom.success) {
                     // Starta socket för klienten
-                    final Socket clientSocket;
-                    final BufferedReader i;
-                    final PrintWriter o;
+                    Socket clientSocket;
+                    BufferedReader i;
+                    PrintWriter o;
                     try {
                         clientSocket = new Socket(host, port);
                         i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
