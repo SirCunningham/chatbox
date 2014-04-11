@@ -10,6 +10,7 @@ public class Server implements Runnable {
     private final int port;
     private final ChatRoom chatRoom;
     private ArrayList<ChatRoom> connectedChatRooms;
+    static Map<Integer, Server> portServer = new HashMap<>();
     private final Object lock = new Object();
     private final Object lock2 = new Object();
     private Socket clientSocket;
@@ -28,6 +29,7 @@ public class Server implements Runnable {
     public void run() {
         if (serverSocket != null) {
             threads = new LinkedList<>();
+            
             // Lyssna efter klienter
             while (chatRoom.alive) {
                 try {
@@ -49,6 +51,9 @@ public class Server implements Runnable {
                 chatRoom.showError("Failed to close server.");
             }
         }
+    }
+    public Server getServer(int port) {
+        return portServer.get(port);
     }
     public void addChatRoom(ChatRoom chatRoom) {
         connectedChatRooms.add(chatRoom);

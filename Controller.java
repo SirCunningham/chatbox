@@ -104,6 +104,7 @@ public class Controller {
                         serverSocket.setSoTimeout(100);
                         server = new Server(serverSocket, port, chatRoom);
                         new Thread(new Runnable() {
+
                             @Override
                             public void run() {
                                 new Thread(server).start();
@@ -130,17 +131,14 @@ public class Controller {
                         if (!chatCreator.serverButton.isSelected()) {
                             o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
                         }
-                        new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                new Thread(new Client(clientSocket, i, o, port,
-                                        chatRoom)).start();
-                                //server.addChatRoom(chatRoom);  //wrong server
-                                //messageBoxes.add(chatRoom);
-                                //server.addUser(chatRoom);
-                            }
-                        }).start();
+                        new Thread(new Client(clientSocket, port,
+                                chatRoom)).start();
+                        //System.out.println(Server.portServer);
+                        //Server.portServer.get(port).addChatRoom(chatRoom);
+                        //Server.portServer.get(port).addUser(chatRoom);
+                        //server.addChatRoom(chatRoom);  //wrong server
+                        //messageBoxes.add(chatRoom);
+                        //server.addUser(chatRoom);
                     } catch (UnknownHostException ex) {
                         chatRoom.success = false;
                         chatRoom.showError("Don't know about host.");
@@ -192,6 +190,8 @@ public class Controller {
         for (ChatRoom msgBox : messageBoxes) {
             if (!msgBox.items.contains(chatRoom)) {
                 msgBox.items.addElement(chatRoom);
+
+
             }
         }
     }
@@ -291,7 +291,7 @@ public class Controller {
         }
     }
 
-    // Stäng av hela programmet
+// Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 
         @Override

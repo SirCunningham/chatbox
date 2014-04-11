@@ -19,15 +19,16 @@ public class Client implements Runnable {
     private final ChatRoom chatRoom;
     private ArrayList<ChatRoom> connectedChatRooms;
 
-    public Client(Socket clientSocket, BufferedReader i, PrintWriter o,
-            int port, final ChatRoom chatRoom) {
+    public Client(Socket clientSocket,
+            int port, final ChatRoom chatRoom) throws IOException {
         this.clientSocket = clientSocket;
-        this.i = i;
-        this.o = o;
+        this.i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        this.o = new PrintWriter(clientSocket.getOutputStream(), true);
         this.port = port;
         this.chatRoom = chatRoom;
         connectedChatRooms = new ArrayList<>();
         connectedChatRooms.add(chatRoom);
+
     }
 
     // Skapa tråd för att läsa från servern
