@@ -3,6 +3,7 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
@@ -16,6 +17,7 @@ public class Client implements Runnable {
     private final PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
+    private ArrayList<ChatRoom> connectedChatRooms;
 
     public Client(Socket clientSocket, BufferedReader i, PrintWriter o,
             int port, final ChatRoom chatRoom) {
@@ -24,6 +26,8 @@ public class Client implements Runnable {
         this.o = o;
         this.port = port;
         this.chatRoom = chatRoom;
+        connectedChatRooms = new ArrayList<>();
+        connectedChatRooms.add(chatRoom);
     }
 
     // Skapa tråd för att läsa från servern

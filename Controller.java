@@ -20,6 +20,8 @@ public class Controller {
     private int tabCount = 1;
     private final Random rand = new Random();
     private final Object lock = new Object();
+    private Server server;
+    private Client client;
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;
@@ -90,10 +92,9 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             // move server and client to their classes, initialize before run!
             final ChatRoom chatRoom = new ChatRoom(chatCreator);
-
+            final String host = chatCreator.hostPane.getText();
+            final int port = Integer.parseInt(chatCreator.portPane.getText());
             try {
-                final String host = chatCreator.hostPane.getText();
-                final int port = Integer.parseInt(chatCreator.portPane.getText());
                 if (chatCreator.serverButton.isSelected()) {
                     chatCreator.hostPane.setText("127.0.0.1");
                     // Starta socket för servern
@@ -101,12 +102,11 @@ public class Controller {
                     try {
                         serverSocket = new ServerSocket(port);
                         serverSocket.setSoTimeout(100);
+                        server = new Server(serverSocket, port, chatRoom);
                         new Thread(new Runnable() {
-
                             @Override
                             public void run() {
-                                new Thread(new Server(serverSocket, port,
-                                        chatRoom)).start();
+                                new Thread(server).start();
                             }
                         }).start();
                     } catch (IOException ex) {
@@ -136,8 +136,9 @@ public class Controller {
                             public void run() {
                                 new Thread(new Client(clientSocket, i, o, port,
                                         chatRoom)).start();
-                                messageBoxes.add(chatRoom);
-                                addUser(chatRoom, messageBoxes);
+                                //server.addChatRoom(chatRoom);  //wrong server
+                                //messageBoxes.add(chatRoom);
+                                //server.addUser(chatRoom);
                             }
                         }).start();
                     } catch (UnknownHostException ex) {
