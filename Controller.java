@@ -5,12 +5,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
-import java.util.Random.*;
 
 public class Controller {
 

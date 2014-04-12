@@ -14,17 +14,13 @@ public class Client implements Runnable {
     private Socket clientSocket;
     private BufferedReader i;
     private PrintWriter o;
-    private final String host;
     private final int port;
     private final ChatRoom chatRoom;
-    private final boolean isServer;
 
     public Client(String host, int port, final ChatRoom chatRoom,
             final boolean isServer) {
-        this.host = host;
         this.port = port;
         this.chatRoom = chatRoom;
-        this.isServer = isServer;
         
         // Starta socket för klienten
         try {

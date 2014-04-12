@@ -9,9 +9,9 @@ public class Server implements Runnable {
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
+    private final Object lock = new Object();
     private final int port;
     private final ChatRoom chatRoom;
-    private final Object lock = new Object();
 
     public Server(int port, final ChatRoom chatRoom) {
         this.port = port;
@@ -21,7 +21,7 @@ public class Server implements Runnable {
         try {
             serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(100);
-        } catch (IOException ex) {
+        } catch (IOException e) {
             chatRoom.success = false;
             chatRoom.showError(String.format("Could not listen on port %d.",
                     port));
