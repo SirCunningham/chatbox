@@ -58,29 +58,39 @@ public class Client implements Runnable {
 
                     }
                 }
+                // finns redan i ChatRoom, onödig dubblering!
                 class SendFileButtonListener implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(chatRoom.getFileMessage());
                     }
                 }
+                
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
-                    // stäng av alla tabbar, gör detta i varje tabb!
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
                                 "Are you sure you want to quit?", "Confirmation",
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
-                            o.println(chatRoom.getQuitMessage());
-                            System.exit(0);
-                        } else {
-                            JOptionPane.showMessageDialog(chatRoom.chatCreator.frame,
-                                    "Good choice. Everyone's finger can slip!");
+                            // uppdatera messageBoxes!
+                            int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
+                            chatRoom.chatCreator.tabbedPane.remove(index);
+                            // annat index nedan??
+                            /**if ((index = indices.indexOf(button)) != -1) {
+                                messageBoxes.get(index).alive = false;
+                                for (ChatRoom msgBox : messageBoxes) {
+                                    msgBox.items.removeElement(messageBoxes.get(index));
+                                }
+                                chatRoom.messageBoxes.remove(index);
+                                indices.remove(index);
+                            }**/
                         }
                     }
                 }
+
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.sendButton.addActionListener(sendButtonListener);
                 chatRoom.sendFileButton.addActionListener(new SendFileButtonListener());
