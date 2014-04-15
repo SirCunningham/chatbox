@@ -141,7 +141,6 @@ final class ChatRoom {
         sendFileButton.addActionListener(new SendFileButtonListener());
         receiveFileButton.addActionListener(new ReceiveFileButtonListener());
         fileButton.addActionListener(new FileButtonListener());
-        closeButton.addActionListener(new CloseButtonListener());
 
         this.chatCreator = chatCreator;
         try {
@@ -379,24 +378,6 @@ final class ChatRoom {
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
-            }
-        }
-    }
-
-    // Stäng av hela programmet
-    public class CloseButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
-                    + "want to quit?", "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                
-                System.exit(0);
-            } else {
-                JOptionPane.showMessageDialog(null, "Good choice. "
-                        + "Everyone's finger can slip!");
             }
         }
     }
@@ -686,6 +667,7 @@ final class ChatRoom {
             try {
                 doc.remove(0, message.length());
                 doc.insertString(0, "Filerequest: " + fileData, style);
+                //denna knapp blev disabled någon gång - lokalisera detta fel!
                 sendButton.doClick(); //do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
