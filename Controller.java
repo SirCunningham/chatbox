@@ -250,7 +250,7 @@ public class Controller {
 
     // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
-        // skicka avslutningsmeddelande i varje tabb/chatt!
+        // skicka avslutningsmeddelande i varje tabb/chatt, flytta till tabb-closern!
 
         @Override
         public void actionPerformed(ActionEvent e) {
