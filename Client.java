@@ -76,7 +76,7 @@ public class Client implements Runnable {
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
                             o.println(chatRoom.getQuitMessage());
-                            // uppdatera messageBoxes!
+                            // uppdatera messageBoxes! alt: aktivera tab-x:et...
                             int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
                             chatRoom.chatCreator.tabbedPane.remove(index);
                             // annat index nedan??
