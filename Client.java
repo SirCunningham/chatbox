@@ -75,6 +75,7 @@ public class Client implements Runnable {
                                 "Are you sure you want to quit?", "Confirmation",
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
+                            o.println(chatRoom.getQuitMessage());
                             // uppdatera messageBoxes!
                             int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
                             chatRoom.chatCreator.tabbedPane.remove(index);
