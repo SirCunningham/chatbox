@@ -76,18 +76,8 @@ public class Client implements Runnable {
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
                             o.println(chatRoom.getQuitMessage());
-                            // uppdatera messageBoxes! alt: aktivera tab-x:et...
                             int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
-                            chatRoom.chatCreator.tabbedPane.remove(index);
-                            // annat index nedan??
-                            /**if ((index = indices.indexOf(button)) != -1) {
-                                messageBoxes.get(index).alive = false;
-                                for (ChatRoom msgBox : messageBoxes) {
-                                    msgBox.items.removeElement(messageBoxes.get(index));
-                                }
-                                chatRoom.messageBoxes.remove(index);
-                                indices.remove(index);
-                            }**/
+                            chatRoom.chatCreator.indices.get(index).doClick();
                         }
                     }
                 }

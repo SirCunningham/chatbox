@@ -1,6 +1,7 @@
 package chatbox;
 
 import java.awt.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
@@ -24,6 +25,9 @@ public class ChatCreator {
     IconButton closeButton = new IconButton("closeIcon.png");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
+    
+    final ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
+    final ArrayList<JButton> indices = new ArrayList<>();
 
     // Skapa GUI
     public ChatCreator() {

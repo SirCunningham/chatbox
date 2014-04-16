@@ -279,7 +279,7 @@ final class ChatRoom {
                 sendButton.doClick();                  //Do something else if no connection, or make it work solo!
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
-                for (ChatRoom mBox : Controller.messageBoxes) {
+                for (ChatRoom mBox : chatCreator.messageBoxes) {
                     mBox.items.removeElement(msgBox);
                 }
             } catch (BadLocationException ex) {

@@ -13,8 +13,6 @@ import javax.swing.text.*;
 public class Controller {
 
     private final ChatCreator chatCreator;
-    static volatile ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
-    private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private final Random rand = new Random();
     private final Object lock = new Object();
@@ -52,7 +50,7 @@ public class Controller {
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
         closeButton.addActionListener(new TabButtonListener());
-        indices.add(closeButton);
+        chatCreator.indices.add(closeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -103,8 +101,8 @@ public class Controller {
                 if (chatRoom.success) {
                     Client client = new Client(host, port, chatRoom, isServer);
                     new Thread(client).start();
-                    messageBoxes.add(chatRoom);
-                    addUser(chatRoom, messageBoxes);
+                    chatCreator.messageBoxes.add(chatRoom);
+                    addUser(chatRoom, chatCreator.messageBoxes);
                 }
             } catch (NumberFormatException ex) {
                 chatRoom.success = false;
@@ -146,7 +144,7 @@ public class Controller {
     }
 
     private void addUser2(ChatRoom chatRoom) {
-        for (ChatRoom msgBox : messageBoxes) {
+        for (ChatRoom msgBox : chatCreator.messageBoxes) {
             if (!msgBox.items.contains(chatRoom)) {
                 msgBox.items.addElement(chatRoom);
             }
@@ -199,13 +197,13 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = chatCreator.tabbedPane.indexOfTabComponent(button.getParent());
             chatCreator.tabbedPane.remove(index);
-            if ((index = indices.indexOf(button)) != -1) {
-                messageBoxes.get(index).alive = false;
-                for (ChatRoom msgBox : messageBoxes) {
-                    msgBox.items.removeElement(messageBoxes.get(index));
+            if ((index = chatCreator.indices.indexOf(button)) != -1) {
+                chatCreator.messageBoxes.get(index).alive = false;
+                for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                    msgBox.items.removeElement(chatCreator.messageBoxes.get(index));
                 }
-                messageBoxes.remove(index);
-                indices.remove(index);
+                chatCreator.messageBoxes.remove(index);
+                chatCreator.indices.remove(index);
             }
         }
     }
