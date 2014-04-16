@@ -116,8 +116,8 @@ public class Controller {
                     //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                     addUser2(chatRoom);
                     int index = chatCreator.tabbedPane.getTabCount() - 1;
-                    chatCreator.tabbedPane.insertTab(null, null, chatRoom.mainPanel,
-                            chatCreator.tabPane.getText(), index);
+                    chatCreator.tabbedPane.insertTab(chatCreator.tabPane.getText(),
+                            null, chatRoom.mainPanel, chatCreator.tabPane.getText(), index);
                     try {
                         chatCreator.tabbedPane.setTabComponentAt(index, createTabPanel());
                     } catch (IOException ex) {
@@ -260,7 +260,7 @@ public class Controller {
             }
             if (chatCreator.messageBoxes.isEmpty()) {
                 int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
-                        "Are you sure you want to exit the program?",
+                        "Are you sure you want to exit ChatBox?",
                         "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
                     System.exit(0);

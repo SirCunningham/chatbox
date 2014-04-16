@@ -71,14 +71,15 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        JButton button = (JButton) e.getSource();
+                        int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                         int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
-                                "Are you sure you want to quit?", "Confirmation",
-                                JOptionPane.YES_NO_OPTION);
+                                String.format("Are you sure you want to leave %s?",
+                                chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
+                                "Confirmation", JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
-                            o.println(chatRoom.getQuitMessage());
-                            JButton button = (JButton) e.getSource();
-                            int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                             chatRoom.chatCreator.indices.get(index).doClick();
+                            o.println(chatRoom.getQuitMessage());
                         }
                     }
                 }

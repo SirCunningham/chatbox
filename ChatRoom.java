@@ -212,7 +212,7 @@ final class ChatRoom {
     }
     @Override
     public String toString() {
-        return String.format("%s (%s)",namePane.getText(), chatCreator.hostPane.getText());
+        return String.format("%s (%s)", namePane.getText(), chatCreator.hostPane.getText());
     }
     public String getName() {
         return namePane.getText();
