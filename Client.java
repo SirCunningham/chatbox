@@ -76,7 +76,8 @@ public class Client implements Runnable {
                                 JOptionPane.YES_NO_OPTION);
                         if (reply == JOptionPane.YES_OPTION) {
                             o.println(chatRoom.getQuitMessage());
-                            int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
+                            JButton button = (JButton) e.getSource();
+                            int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                             chatRoom.chatCreator.indices.get(index).doClick();
                         }
                     }

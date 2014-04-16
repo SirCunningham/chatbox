@@ -248,18 +248,26 @@ public class Controller {
 
     // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
-        // skicka avslutningsmeddelande i varje tabb/chatt, flytta till tabb-closern!
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(chatCreator.frame, "Are you sure you "
-                    + "want to exit? All chatrooms will be destroyed.", "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            } else {
-                JOptionPane.showMessageDialog(chatCreator.frame, "Good choice. "
-                        + "Everyone's finger can slip!");
+            ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
+            for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                buggyCopy.add(msgBox);
+            }
+            for (ChatRoom msgBox : buggyCopy) {
+                msgBox.closeButton.doClick();
+            }
+            if (chatCreator.messageBoxes.isEmpty()) {
+                int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
+                        "Are you sure you want to exit the program?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+                    JOptionPane.showMessageDialog(chatCreator.frame,
+                            "Good choice. Everyone's finger can slip!");
+                }
             }
         }
     }
