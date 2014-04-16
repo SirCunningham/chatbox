@@ -71,15 +71,20 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        Object[] options = {"Yes", "No", "Exit ChatRoom"};
                         JButton button = (JButton) e.getSource();
                         int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
-                        int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
+                        int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
                                 String.format("Are you sure you want to leave %s?",
                                 chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
-                                "Confirmation", JOptionPane.YES_NO_OPTION);
+                                "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                         if (reply == JOptionPane.YES_OPTION) {
                             chatRoom.chatCreator.indices.get(index).doClick();
                             o.println(chatRoom.getQuitMessage());
+                        } else if (reply == JOptionPane.CANCEL_OPTION) {
+                            // kill all chatrooms automatically
+                            System.exit(0);
                         }
                     }
                 }
