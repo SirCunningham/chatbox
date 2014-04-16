@@ -63,8 +63,8 @@ final class ChatRoom {
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton receiveFileButton = new JButton("Receive [test!]");
+    JButton progressBarButton = new JButton("Progress [test!]");
     IconButton closeButton = new IconButton("closeIcon.png");
-    JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
     private String filePath;
     private static final int TYPE_NONE = 0;
@@ -129,17 +129,18 @@ final class ChatRoom {
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
+        fileButtonPanel.add(progressBarButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
-        rightPanel.add(progressBar); //Temporary only - add to dialog!
 
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
         sendFileButton.addActionListener(new SendFileButtonListener());
         receiveFileButton.addActionListener(new ReceiveFileButtonListener());
+        progressBarButton.addActionListener(new ProgressBarButtonListener());
         fileButton.addActionListener(new FileButtonListener());
 
         this.chatCreator = chatCreator;
@@ -283,7 +284,7 @@ final class ChatRoom {
                 doc.insertString(0, 
                         String.format("%s got the boot",
                         msgBox.getName()), style);
-                sendButton.doClick();                  //Do something else if no connection, or make it work solo!
+                sendButton.doClick();
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
                 for (ChatRoom mBox : chatCreator.messageBoxes) {
@@ -406,7 +407,7 @@ final class ChatRoom {
                 try {
                     doc.remove(0, message.length());
                     doc.insertString(0, "I just changed to a new color: " + color, style);
-                    sendButton.doClick(); //do something else if no connection, or make it work solo!
+                    sendButton.doClick();
                     doc.insertString(0, message, style);
                     if (cipherButton.isSelected()) {
                         String text = message.substring(cipherStart, cipherEnd);
@@ -453,7 +454,7 @@ final class ChatRoom {
                 try {
                     doc.remove(0, message.length());
                     doc.insertString(0, "I just switched from my old name: " + name, style);
-                    sendButton.doClick(); //do something else if no connection, or make it work solo!
+                    sendButton.doClick();
                     doc.insertString(0, message, style);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
@@ -559,6 +560,28 @@ final class ChatRoom {
             System.err.println("Ett fel inträffade4: " + ex);
             }
              */
+        }
+    }
+    
+    public class ProgressBarButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    }
+                    ProgressBar frame = new ProgressBar();
+                    frame.pack();
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                    frame.iterate();
+                }
+            });
         }
     }
 
@@ -676,8 +699,7 @@ final class ChatRoom {
             try {
                 doc.remove(0, message.length());
                 doc.insertString(0, "Filerequest: " + fileData, style);
-                //denna knapp blev disabled någon gång - lokalisera detta fel!
-                sendButton.doClick(); //do something else if no connection, or make it work solo!
+                sendButton.doClick();
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
                 ex.printStackTrace();

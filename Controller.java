@@ -197,6 +197,7 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = chatCreator.tabbedPane.indexOfTabComponent(button.getParent());
             chatCreator.tabbedPane.remove(index);
+            // behövs nytt index fortfarande?
             if ((index = chatCreator.indices.indexOf(button)) != -1) {
                 chatCreator.messageBoxes.get(index).alive = false;
                 for (ChatRoom msgBox : chatCreator.messageBoxes) {

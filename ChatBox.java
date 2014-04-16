@@ -6,6 +6,9 @@ package chatbox;
 //Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();"!?
 
 //Problems: tab switching does not work without server, no left end, no focus when click on tab
+//Trådbugg: ibland får nya klienter en tom rad vid intro
+//Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
+//Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
 
 public class ChatBox {
 

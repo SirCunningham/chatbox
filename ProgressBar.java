@@ -1,24 +1,22 @@
 package chatbox;
 
-import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-// Kandidat: https://stackoverflow.com/questions/447481/how-do-i-use-jprogressbar-to-display-file-copy-progress
 public class ProgressBar extends JFrame {
 
+    // beta status
+    // tutorial: http://docs.oracle.com/javase/tutorial/uiswing/components/progress.html
     JProgressBar current = new JProgressBar(0, 100);
     int num = 0;
 
     public ProgressBar() {
-        //exit button
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //exit button, read more: http://stackoverflow.com/questions/6084039/create-custom-operation-for-setdefaultcloseoperation
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         //create the panel to add the details
         JPanel pane = new JPanel();
         current.setValue(0);
@@ -35,9 +33,9 @@ public class ProgressBar extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 while (num < 2000) {
-//                    current.setValue(num);
+                    //current.setValue(num);
                     try {
-                        Thread.sleep(125);
+                        Thread.sleep(25);
                     } catch (InterruptedException e) {
                     }
                     num += 95;
@@ -59,25 +57,5 @@ public class ProgressBar extends JFrame {
             }
         });
         worker.execute();
-    }
-
-    //for testing the app
-    public static void main(String[] arguments) {
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                }
-                ProgressBar frame = new ProgressBar();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.iterate();
-            }
-        });
     }
 }
