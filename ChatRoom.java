@@ -263,6 +263,13 @@ final class ChatRoom {
         keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
+    
+    public void disableChat() {
+        // disable more!!
+        namePane.setEnabled(false);
+        messagePane.setEnabled(false);
+        sendButton.setEnabled(false);
+    }
 
     class BootButtonListener implements ActionListener {
 
@@ -511,6 +518,8 @@ final class ChatRoom {
                 case KeyEvent.VK_LEFT:
                     if (index > 0) {
                         chatCreator.tabbedPane.setSelectedIndex(index - 1);
+                    } else {
+                        // refocus tab 0, but how? same problem as focus in general...
                     }
                     break;
                 case KeyEvent.VK_D:
