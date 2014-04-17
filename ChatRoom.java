@@ -279,15 +279,15 @@ final class ChatRoom {
             int i = list.getSelectedIndex();
             try {
                 doc.remove(0, message.length());
-                ChatRoom msgBox = (ChatRoom) items.getElementAt(i);
+                ChatRoom room = (ChatRoom) items.getElementAt(i);
                 doc.insertString(0, 
                         String.format("%s got the boot",
-                        msgBox.getName()), style);
+                        room.getName()), style);
                 sendButton.doClick();
                 doc.insertString(0, message, style);
-                msgBox.alive = false;                  //Döda klienten
+                room.alive = false;                  //Döda klienten
                 for (ChatRoom mBox : chatCreator.chatRooms) {
-                    mBox.items.removeElement(msgBox);
+                    mBox.items.removeElement(room);
                 }
             } catch (BadLocationException ex) {
                 ex.printStackTrace();

@@ -88,13 +88,13 @@ public class Client implements Runnable {
                                 chatRoom.chatCreator.indices.get(index).doClick();
                                 o.println(chatRoom.getQuitMessage());
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
-                                ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-                                for (ChatRoom msgBox : chatRoom.chatCreator.chatRooms) {
-                                    buggyCopy.add(msgBox);
+                                ArrayList<ChatRoom> roomArray = new ArrayList<>();
+                                for (ChatRoom room : chatRoom.chatCreator.chatRooms) {
+                                    roomArray.add(room);
                                 }
-                                for (ChatRoom msgBox : buggyCopy) {
-                                    msgBox.speedyDelete = true;
-                                    msgBox.closeButton.doClick();
+                                for (ChatRoom room : roomArray) {
+                                    room.speedyDelete = true;
+                                    room.closeButton.doClick();
                                 }
                                 System.exit(0);
                             }

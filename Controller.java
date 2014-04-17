@@ -133,11 +133,11 @@ public class Controller {
         }
     }
 
-    private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> msgBoxes) {
+    private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> roomes) {
         synchronized (lock) {
-            for (ChatRoom msgBox : msgBoxes) {
-                if (!chatRoom.items.contains(msgBox)) {
-                    chatRoom.items.addElement(msgBox);
+            for (ChatRoom room : roomes) {
+                if (!chatRoom.items.contains(room)) {
+                    chatRoom.items.addElement(room);
                 }
             }
         }
@@ -145,9 +145,9 @@ public class Controller {
     }
 
     private void addUser2(ChatRoom chatRoom) {
-        for (ChatRoom msgBox : chatCreator.chatRooms) {
-            if (!msgBox.items.contains(chatRoom)) {
-                msgBox.items.addElement(chatRoom);
+        for (ChatRoom room : chatCreator.chatRooms) {
+            if (!room.items.contains(chatRoom)) {
+                room.items.addElement(chatRoom);
             }
         }
     }
@@ -201,8 +201,8 @@ public class Controller {
             // behövs nytt index fortfarande?
             if ((index = chatCreator.indices.indexOf(button)) != -1) {
                 chatCreator.chatRooms.get(index).alive = false;
-                for (ChatRoom msgBox : chatCreator.chatRooms) {
-                    msgBox.items.removeElement(chatCreator.chatRooms.get(index));
+                for (ChatRoom room : chatCreator.chatRooms) {
+                    room.items.removeElement(chatCreator.chatRooms.get(index));
                 }
                 chatCreator.chatRooms.remove(index);
                 chatCreator.indices.remove(index);
@@ -253,12 +253,12 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-            for (ChatRoom msgBox : chatCreator.chatRooms) {
-                buggyCopy.add(msgBox);
+            ArrayList<ChatRoom> roomArray = new ArrayList<>();
+            for (ChatRoom room : chatCreator.chatRooms) {
+                roomArray.add(room);
             }
-            for (ChatRoom msgBox : buggyCopy) {
-                msgBox.closeButton.doClick();
+            for (ChatRoom room : roomArray) {
+                room.closeButton.doClick();
             }
             if (chatCreator.chatRooms.isEmpty()) {
                 int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
@@ -282,13 +282,13 @@ public class Controller {
                     "Are you sure you want to exit ChatBox?",
                     "Confirmation", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-                for (ChatRoom msgBox : chatCreator.chatRooms) {
-                    buggyCopy.add(msgBox);
+                ArrayList<ChatRoom> roomArray = new ArrayList<>();
+                for (ChatRoom room : chatCreator.chatRooms) {
+                    roomArray.add(room);
                 }
-                for (ChatRoom msgBox : buggyCopy) {
-                    msgBox.speedyDelete = true;
-                    msgBox.closeButton.doClick();
+                for (ChatRoom room : roomArray) {
+                    room.speedyDelete = true;
+                    room.closeButton.doClick();
                 }
                 System.exit(0);
             }
