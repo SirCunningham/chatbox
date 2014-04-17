@@ -5,23 +5,17 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.text.*;
-import java.util.Random.*;
 
 public class Controller {
 
     private final ChatCreator chatCreator;
-    static volatile ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
-    private final ArrayList<JButton> indices = new ArrayList<>();
     private int tabCount = 1;
     private final Random rand = new Random();
     private final Object lock = new Object();
-    private Server server;
-    private Client client;
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;
@@ -56,7 +50,7 @@ public class Controller {
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
         closeButton.addActionListener(new TabButtonListener());
-        indices.add(closeButton);
+        chatCreator.indices.add(closeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -90,13 +84,14 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // move server and client to their classes, initialize before run!
-            ChatRoom chatRoom = new ChatRoom(chatCreator);
-            String host = chatCreator.hostPane.getText();
-            int port = Integer.parseInt(chatCreator.portPane.getText());
+            final ChatRoom chatRoom = new ChatRoom(chatCreator);
             try {
-                if (chatCreator.serverButton.isSelected()) {
+                final String host = chatCreator.hostPane.getText();
+                final int port = Integer.parseInt(chatCreator.portPane.getText());
+                final boolean isServer = chatCreator.serverButton.isSelected();
+                if (isServer) {
                     chatCreator.hostPane.setText("127.0.0.1");
+<<<<<<< HEAD
                     // Starta socket för servern
                     ServerSocket serverSocket;
                     try {
@@ -110,37 +105,20 @@ public class Controller {
                         chatRoom.showError(String.format("Could not listen on port %d.",
                                 port));
                     }
+=======
+                        
+                    Server server = new Server(port, chatRoom);
+                    new Thread(server).start();
+>>>>>>> ba573ed4c96d121f6e29ad556aa4b87dfbee2505
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
                 }
                 if (chatRoom.success) {
-                    // Starta socket för klienten
-                    Socket clientSocket;
-                    //BufferedReader i; Not used
-                    PrintWriter o;
-                    try {
-                        clientSocket = new Socket(host, port);
-                        //i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        o = new PrintWriter(clientSocket.getOutputStream(), true);
-                        if (!chatCreator.serverButton.isSelected()) {
-                            o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
-                        }
-                        new Thread(new Client(clientSocket, port,
-                                chatRoom)).start();
-                        //System.out.println(Server.portServer);
-                        //Server.portServer.get(port).addChatRoom(chatRoom);
-                        //Server.portServer.get(port).addUser(chatRoom);
-                        //server.addChatRoom(chatRoom);  //wrong server
-                        messageBoxes.add(chatRoom);
-                        //server.addUser(chatRoom);
-                    } catch (UnknownHostException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError("Don't know about host.");
-                    } catch (IOException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError("Couldn't get I/O for the connection to host.");
-                    }
+                    Client client = new Client(host, port, chatRoom, isServer);
+                    new Thread(client).start();
+                    chatCreator.messageBoxes.add(chatRoom);
+                    addUser(chatRoom, chatCreator.messageBoxes);
                 }
             } catch (NumberFormatException ex) {
                 chatRoom.success = false;
@@ -154,8 +132,8 @@ public class Controller {
                     //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                     addUser2(chatRoom);
                     int index = chatCreator.tabbedPane.getTabCount() - 1;
-                    chatCreator.tabbedPane.insertTab(null, null, chatRoom.mainPanel,
-                            chatCreator.tabPane.getText(), index);
+                    chatCreator.tabbedPane.insertTab(chatCreator.tabPane.getText(),
+                            null, chatRoom.mainPanel, chatCreator.tabPane.getText(), index);
                     try {
                         chatCreator.tabbedPane.setTabComponentAt(index, createTabPanel());
                     } catch (IOException ex) {
@@ -182,11 +160,9 @@ public class Controller {
     }
 
     private void addUser2(ChatRoom chatRoom) {
-        for (ChatRoom msgBox : messageBoxes) {
+        for (ChatRoom msgBox : chatCreator.messageBoxes) {
             if (!msgBox.items.contains(chatRoom)) {
                 msgBox.items.addElement(chatRoom);
-
-
             }
         }
     }
@@ -237,13 +213,14 @@ public class Controller {
             JButton button = (JButton) e.getSource();
             int index = chatCreator.tabbedPane.indexOfTabComponent(button.getParent());
             chatCreator.tabbedPane.remove(index);
-            if ((index = indices.indexOf(button)) != -1) {
-                messageBoxes.get(index).alive = false;
-                for (ChatRoom msgBox : messageBoxes) {
-                    msgBox.items.removeElement(messageBoxes.get(index));
+            // behövs nytt index fortfarande?
+            if ((index = chatCreator.indices.indexOf(button)) != -1) {
+                chatCreator.messageBoxes.get(index).alive = false;
+                for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                    msgBox.items.removeElement(chatCreator.messageBoxes.get(index));
                 }
-                messageBoxes.remove(index);
-                indices.remove(index);
+                chatCreator.messageBoxes.remove(index);
+                chatCreator.indices.remove(index);
             }
         }
     }
@@ -286,20 +263,28 @@ public class Controller {
         }
     }
 
-// Stäng av hela programmet
+    // Stäng av hela programmet
     public class CloseButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(chatCreator.frame, "Are you sure you "
-                    + "want to quit?", "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-
-                System.exit(0);
-            } else {
-                JOptionPane.showMessageDialog(chatCreator.frame, "Good choice. "
-                        + "Everyone's finger can slip!");
+            ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
+            for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                buggyCopy.add(msgBox);
+            }
+            for (ChatRoom msgBox : buggyCopy) {
+                msgBox.closeButton.doClick();
+            }
+            if (chatCreator.messageBoxes.isEmpty()) {
+                int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
+                        "Are you sure you want to exit ChatBox?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+                    JOptionPane.showMessageDialog(chatCreator.frame,
+                            "Good choice. Everyone's finger can slip!");
+                }
             }
         }
     }

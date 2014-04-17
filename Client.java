@@ -3,7 +3,6 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
@@ -12,22 +11,37 @@ import javax.swing.*;
 // Gör detta här eller i IOThread!
 public class Client implements Runnable {
 
-    private final Socket clientSocket;
-    private final BufferedReader i;
-    private final PrintWriter o;
+    private Socket clientSocket;
+    private BufferedReader i;
+    private PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
-    private ArrayList<ChatRoom> connectedChatRooms;
 
-    public Client(Socket clientSocket,
-            int port, final ChatRoom chatRoom) throws IOException {
-        this.clientSocket = clientSocket;
-        this.i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        this.o = new PrintWriter(clientSocket.getOutputStream(), true);
+    public Client(String host, int port, final ChatRoom chatRoom,
+            final boolean isServer) {
         this.port = port;
         this.chatRoom = chatRoom;
+<<<<<<< HEAD
         connectedChatRooms = new ArrayList<>();
         connectedChatRooms.add(chatRoom);
+=======
+        
+        // Starta socket för klienten
+        try {
+            clientSocket = new Socket(host, port);
+            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            o = new PrintWriter(clientSocket.getOutputStream(), true);
+            if (!isServer) {
+                o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
+            }
+        } catch (UnknownHostException ex) {
+            chatRoom.success = false;
+            chatRoom.showError("Don't know about host.");
+        } catch (IOException ex) {
+            chatRoom.success = false;
+            chatRoom.showError("Couldn't get I/O for the connection to host.");
+        }
+>>>>>>> ba573ed4c96d121f6e29ad556aa4b87dfbee2505
     }
 
     // Skapa tråd för att läsa från servern
@@ -49,29 +63,37 @@ public class Client implements Runnable {
 
                     }
                 }
+                // finns redan i ChatRoom, onödig dubblering!
                 class SendFileButtonListener implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(chatRoom.getFileMessage());
                     }
                 }
+                
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
-                    // stäng av alla tabbar, gör detta i varje tabb!
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
-                                "Are you sure you want to quit?", "Confirmation",
-                                JOptionPane.YES_NO_OPTION);
+                        Object[] options = {"Yes", "No", "Exit ChatRoom"};
+                        JButton button = (JButton) e.getSource();
+                        int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
+                        int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
+                                String.format("Are you sure you want to leave %s?",
+                                chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
+                                "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                         if (reply == JOptionPane.YES_OPTION) {
+                            chatRoom.chatCreator.indices.get(index).doClick();
                             o.println(chatRoom.getQuitMessage());
+                        } else if (reply == JOptionPane.CANCEL_OPTION) {
+                            // kill all chatrooms automatically
                             System.exit(0);
-                        } else {
-                            JOptionPane.showMessageDialog(chatRoom.chatCreator.frame,
-                                    "Good choice. Everyone's finger can slip!");
                         }
                     }
                 }
+
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.sendButton.addActionListener(sendButtonListener);
                 chatRoom.sendFileButton.addActionListener(new SendFileButtonListener());
@@ -101,7 +123,7 @@ public class Client implements Runnable {
 
     public void keyRequest(String html) {
         if (html.contains("</keyrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(null,
+            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
@@ -117,7 +139,8 @@ public class Client implements Runnable {
 
     public void fileRequest(String html) {
         if (html.contains("</filrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Receive file?",
+            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
+                    String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {

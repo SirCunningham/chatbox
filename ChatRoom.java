@@ -2,12 +2,12 @@ package chatbox;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -63,8 +63,8 @@ final class ChatRoom {
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton receiveFileButton = new JButton("Receive [test!]");
+    JButton progressBarButton = new JButton("Progress [test!]");
     IconButton closeButton = new IconButton("closeIcon.png");
-    JProgressBar progressBar = new JProgressBar();
     JComboBox fileEncryptions;
     private String filePath;
     private static final int TYPE_NONE = 0;
@@ -129,19 +129,19 @@ final class ChatRoom {
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
         fileButtonPanel.add(receiveFileButton); //Testing only!
+        fileButtonPanel.add(progressBarButton); //Testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
-        rightPanel.add(progressBar); //Temporary only - add to dialog!
 
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
         sendFileButton.addActionListener(new SendFileButtonListener());
         receiveFileButton.addActionListener(new ReceiveFileButtonListener());
+        progressBarButton.addActionListener(new ProgressBarButtonListener());
         fileButton.addActionListener(new FileButtonListener());
-        closeButton.addActionListener(new CloseButtonListener());
 
         this.chatCreator = chatCreator;
         try {
@@ -213,7 +213,7 @@ final class ChatRoom {
     }
     @Override
     public String toString() {
-        return String.format("%s (%s)",namePane.getText(), chatCreator.hostPane.getText());
+        return String.format("%s (%s)", namePane.getText(), chatCreator.hostPane.getText());
     }
     public String getName() {
         return namePane.getText();
@@ -264,6 +264,13 @@ final class ChatRoom {
         keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
+    
+    public void disableChat() {
+        // disable more!!
+        namePane.setEnabled(false);
+        messagePane.setEnabled(false);
+        sendButton.setEnabled(false);
+    }
 
     class BootButtonListener implements ActionListener {
 
@@ -277,10 +284,10 @@ final class ChatRoom {
                 doc.insertString(0, 
                         String.format("%s got the boot",
                         msgBox.getName()), style);
-                sendButton.doClick();                  //Do something else if no connection, or make it work solo!
+                sendButton.doClick();
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
-                for (ChatRoom mBox : Controller.messageBoxes) {
+                for (ChatRoom mBox : chatCreator.messageBoxes) {
                     mBox.items.removeElement(msgBox);
                 }
             } catch (BadLocationException ex) {
@@ -383,24 +390,6 @@ final class ChatRoom {
         }
     }
 
-    // Stäng av hela programmet
-    public class CloseButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "Are you sure you "
-                    + "want to quit?", "Confirmation",
-                    JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                
-                System.exit(0);
-            } else {
-                JOptionPane.showMessageDialog(null, "Good choice. "
-                        + "Everyone's finger can slip!");
-            }
-        }
-    }
-
     // Välj bakgrundsfärg
     class ColorButtonListener implements ActionListener {
 
@@ -418,7 +407,7 @@ final class ChatRoom {
                 try {
                     doc.remove(0, message.length());
                     doc.insertString(0, "I just changed to a new color: " + color, style);
-                    sendButton.doClick(); //do something else if no connection, or make it work solo!
+                    sendButton.doClick();
                     doc.insertString(0, message, style);
                     if (cipherButton.isSelected()) {
                         String text = message.substring(cipherStart, cipherEnd);
@@ -465,7 +454,7 @@ final class ChatRoom {
                 try {
                     doc.remove(0, message.length());
                     doc.insertString(0, "I just switched from my old name: " + name, style);
-                    sendButton.doClick(); //do something else if no connection, or make it work solo!
+                    sendButton.doClick();
                     doc.insertString(0, message, style);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
@@ -530,6 +519,8 @@ final class ChatRoom {
                 case KeyEvent.VK_LEFT:
                     if (index > 0) {
                         chatCreator.tabbedPane.setSelectedIndex(index - 1);
+                    } else {
+                        // refocus tab 0, but how? same problem as focus in general...
                     }
                     break;
                 case KeyEvent.VK_D:
@@ -553,12 +544,12 @@ final class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "<fileData>\nAccept file?",
+            int reply = JOptionPane.showConfirmDialog(chatCreator.frame, "<fileData>\nAccept file?",
                     "File request", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Good for you!");
+                JOptionPane.showMessageDialog(chatCreator.frame, "Good for you!");
             } else {
-                JOptionPane.showMessageDialog(null, "Your loss!");
+                JOptionPane.showMessageDialog(chatCreator.frame, "Your loss!");
             }
             /*
             try {
@@ -569,6 +560,81 @@ final class ChatRoom {
             System.err.println("Ett fel inträffade4: " + ex);
             }
              */
+        }
+    }
+    
+    public class ProgressBarButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    final JProgressBar progressBar = new JProgressBar(0, 100);
+                    progressBar.setValue(0);
+                    progressBar.setStringPainted(true);
+                    
+                    final JTextArea msgLabel = new JTextArea("Downloading...");
+                    msgLabel.setEditable(false);
+                    
+                    final JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    panel.add(msgLabel, BorderLayout.PAGE_START);
+                    panel.add(progressBar, BorderLayout.CENTER);
+                    panel.setBorder(BorderFactory.createEmptyBorder(11, 11, 11, 11));
+                    
+                    // extenda Ja/Nej-dialog istället!
+                    final JDialog dialog = new JDialog();
+                    dialog.getContentPane().add(panel);
+                    dialog.pack();
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.setLocationRelativeTo(chatCreator.frame);
+                    dialog.setSize(500, dialog.getHeight());
+                    dialog.setResizable(false);
+                    dialog.setAlwaysOnTop(false);
+                    dialog.setVisible(true);
+                    msgLabel.setBackground(panel.getBackground());
+                    
+                    dialog.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    
+                    SwingWorker worker = new SwingWorker<Object, Object>() {
+
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            Random random = new Random();
+                            int progress = 0;
+                            setProgress(progress);
+                            while (progress < 100) {
+                                try {
+                                    Thread.sleep(random.nextInt(100));
+                                } catch (InterruptedException e) {
+                                }
+                                progress += random.nextInt(10);
+                                setProgress(Math.min(progress, 100));
+                            }
+                            return null;
+                        }
+                        
+                        @Override
+                        protected void done() {
+                            dialog.setCursor(null);
+                            dialog.dispose();
+                        }
+                    };
+                    worker.addPropertyChangeListener(new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent e) {
+                            String name = e.getPropertyName();
+                            if (name.equals("progress")) {
+                                SwingWorker worker = (SwingWorker) e.getSource();
+                                progressBar.setValue(worker.getProgress());
+                            }
+                        }
+                    });
+                    worker.execute();
+                }
+            });
         }
     }
 
@@ -686,7 +752,7 @@ final class ChatRoom {
             try {
                 doc.remove(0, message.length());
                 doc.insertString(0, "Filerequest: " + fileData, style);
-                sendButton.doClick(); //do something else if no connection, or make it work solo!
+                sendButton.doClick();
                 doc.insertString(0, message, style);
             } catch (BadLocationException ex) {
                 ex.printStackTrace();

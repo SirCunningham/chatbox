@@ -6,22 +6,26 @@ import java.util.*;
 
 public class Server implements Runnable {
 
-    private final ServerSocket serverSocket;
-    private final int port;
-    private final ChatRoom chatRoom;
-    private ArrayList<ChatRoom> connectedChatRooms;
-    private final Object lock = new Object();
-    private final Object lock2 = new Object();
+    private ServerSocket serverSocket;
     private Socket clientSocket;
     private LinkedList<IOThread> threads;
+    private final Object lock = new Object();
+    private final int port;
+    private final ChatRoom chatRoom;
 
-    public Server(ServerSocket serverSocket, int port,
-            final ChatRoom chatRoom) {
-        this.serverSocket = serverSocket;
+    public Server(int port, final ChatRoom chatRoom) {
         this.port = port;
         this.chatRoom = chatRoom;
-        connectedChatRooms = new ArrayList<>();
-        connectedChatRooms.add(chatRoom);
+        
+        // Starta socket för servern
+        try {
+            serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(100);
+        } catch (IOException e) {
+            chatRoom.success = false;
+            chatRoom.showError(String.format("Could not listen on port %d.",
+                    port));
+        }
     }
 
     @Override
@@ -50,22 +54,5 @@ public class Server implements Runnable {
                 chatRoom.showError("Failed to close server.");
             }
         }
-    }
-
-    public void addChatRoom(ChatRoom chatRoom) {
-        connectedChatRooms.add(chatRoom);
-    }
-    public ArrayList<ChatRoom> getChatRooms() {
-        return connectedChatRooms;
-    }
-    public void addUser(ChatRoom chatRoom) {
-        synchronized (lock2) {
-            for (ChatRoom msgBox : connectedChatRooms) {
-                if (!chatRoom.items.contains(msgBox)) {
-                    chatRoom.items.addElement(msgBox);
-                }
-            }
-        }
-
     }
 }
