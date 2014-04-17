@@ -1,3 +1,0 @@
-chatbox
-=======
-Ron Paul

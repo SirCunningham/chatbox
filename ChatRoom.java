@@ -456,11 +456,12 @@ final class ChatRoom {
                     sendButton.doClick();
                     doc.insertString(0, message, style);
                 } catch (BadLocationException ex) {
+                    System.out.println("test");
                     ex.printStackTrace();
                 }
                 source.select(0, 0);
             } else if (source == keyPane) {
-                source.setText(source.getText());
+                source.setText(source.getText()); //redundant?
             }
         }
     }
