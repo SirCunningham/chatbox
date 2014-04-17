@@ -31,6 +31,7 @@ public class ChatCreator {
 
     // Skapa GUI
     public ChatCreator() {
+        Random generator = new Random();
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -49,7 +50,6 @@ public class ChatCreator {
         ((AbstractDocument) hostPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         hostPane.setText("127.0.0.1");
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5));
-        Random generator = new Random();
         portPane.setText(Integer.toString(generator.nextInt(65536 - 1024) + 1024));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));
         namePane.setText("User 1000000000");
