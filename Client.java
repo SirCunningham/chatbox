@@ -118,7 +118,7 @@ public class Client implements Runnable {
 
     public void keyRequest(String html) {
         if (html.contains("</keyrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(null,
+            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
@@ -134,7 +134,8 @@ public class Client implements Runnable {
 
     public void fileRequest(String html) {
         if (html.contains("</filrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(null, String.format("%s sends a filerequest of type %s.\n Receive file?",
+            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
+                    String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {

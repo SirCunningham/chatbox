@@ -37,8 +37,10 @@ public class ChatCreator {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close Application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                if (confirm == 0) {
+                int reply = JOptionPane.showConfirmDialog(frame,
+                        "Are you sure you want to exit ChatBox?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
             }

@@ -544,12 +544,12 @@ final class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int reply = JOptionPane.showConfirmDialog(null, "<fileData>\nAccept file?",
+            int reply = JOptionPane.showConfirmDialog(chatCreator.frame, "<fileData>\nAccept file?",
                     "File request", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Good for you!");
+                JOptionPane.showMessageDialog(chatCreator.frame, "Good for you!");
             } else {
-                JOptionPane.showMessageDialog(null, "Your loss!");
+                JOptionPane.showMessageDialog(chatCreator.frame, "Your loss!");
             }
             /*
             try {
@@ -575,11 +575,11 @@ final class ChatRoom {
                         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                     }
-                    ProgressBar frame = new ProgressBar();
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
-                    frame.iterate();
+                    ProgressBar iFrame = new ProgressBar();
+                    iFrame.pack();
+                    iFrame.setLocationRelativeTo(chatCreator.frame);
+                    iFrame.setVisible(true);
+                    iFrame.iterate();
                 }
             });
         }
