@@ -28,13 +28,12 @@ public class Server implements Runnable {
     public void run() {
         if (serverSocket != null) {
             threads = new LinkedList<>();
-            
             // Lyssna efter klienter
             while (chatRoom.alive) {
                 try {
                     clientSocket = serverSocket.accept();
-                    
                     // Skapa tråd för varje klient
+                    
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();

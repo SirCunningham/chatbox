@@ -28,7 +28,6 @@ public class Client implements Runnable {
         this.chatRoom = chatRoom;
         connectedChatRooms = new ArrayList<>();
         connectedChatRooms.add(chatRoom);
-
     }
 
     // Skapa tråd för att läsa från servern
