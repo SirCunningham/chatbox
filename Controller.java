@@ -91,7 +91,7 @@ public class Controller {
                 final boolean isServer = chatCreator.serverButton.isSelected();
                 if (isServer) {
                     chatCreator.hostPane.setText("127.0.0.1");
-                        
+
                     Server server = new Server(port, chatRoom);
                     new Thread(server).start();
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
@@ -113,7 +113,7 @@ public class Controller {
                             + "<text color=\"#00ff00\">Connection successful</text></message>"));
                     // send this to others!
                     //chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
+                    // - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                     addUser2(chatRoom);
                     int index = chatCreator.tabbedPane.getTabCount() - 1;
                     chatCreator.tabbedPane.insertTab(chatCreator.tabPane.getText(),
