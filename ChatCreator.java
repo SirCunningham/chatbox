@@ -41,6 +41,7 @@ public class ChatCreator {
                         "Are you sure you want to exit ChatBox?",
                         "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
+                    // fixa global avstängning av rum!
                     System.exit(0);
                 }
             }

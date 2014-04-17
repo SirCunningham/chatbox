@@ -2,6 +2,7 @@ package chatbox;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -571,15 +572,64 @@ final class ChatRoom {
 
                 @Override
                 public void run() {
-                    try {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                    }
-                    ProgressBar iFrame = new ProgressBar();
-                    iFrame.pack();
-                    iFrame.setLocationRelativeTo(chatCreator.frame);
-                    iFrame.setVisible(true);
-                    iFrame.iterate();
+                    final JProgressBar progressBar = new JProgressBar(0, 100);
+                    progressBar.setValue(0);
+                    progressBar.setStringPainted(true);
+                    
+                    JTextArea msgLabel = new JTextArea("Downloading...");
+                    msgLabel.setEditable(false);
+                    
+                    JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    panel.add(msgLabel, BorderLayout.PAGE_START);
+                    panel.add(progressBar, BorderLayout.CENTER);
+                    panel.setBorder(BorderFactory.createEmptyBorder(11, 11, 11, 11));
+                    
+                    final JDialog dialog = new JDialog();
+                    dialog.getContentPane().add(panel);
+                    dialog.setResizable(false);
+                    dialog.pack();
+                    dialog.setSize(500, dialog.getHeight());
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.setAlwaysOnTop(false);
+                    dialog.setVisible(true);
+                    msgLabel.setBackground(panel.getBackground());
+                    
+                    SwingWorker worker = new SwingWorker<Object, Object>() {
+
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            int num = 0;
+                            while (num < 2000) {
+                                //progressBar.setValue(num);
+                                try {
+                                    Thread.sleep(25);
+                                } catch (InterruptedException e) {
+                                }
+                                num += 95;
+                                int p = Math.round(((float) Math.min(num, 2000) / 2000f) * 100f);
+                                setProgress(p);
+                            }
+                            return null;
+                        }
+                        
+                        @Override
+                        protected void done() {
+                            dialog.dispose();
+                        }
+                    };
+                    worker.addPropertyChangeListener(new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent e) {
+                            String name = e.getPropertyName();
+                            if (name.equals("progress")) {
+                                SwingWorker worker = (SwingWorker) e.getSource();
+                                progressBar.setValue(worker.getProgress());
+                            }
+                        }
+                    });
+                    worker.execute();
                 }
             });
         }
