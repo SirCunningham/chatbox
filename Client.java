@@ -89,7 +89,7 @@ public class Client implements Runnable {
                                 o.println(chatRoom.getQuitMessage());
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
                                 ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-                                for (ChatRoom msgBox : chatRoom.chatCreator.messageBoxes) {
+                                for (ChatRoom msgBox : chatRoom.chatCreator.chatRooms) {
                                     buggyCopy.add(msgBox);
                                 }
                                 for (ChatRoom msgBox : buggyCopy) {

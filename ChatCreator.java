@@ -26,7 +26,7 @@ public class ChatCreator {
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
     
-    final ArrayList<ChatRoom> messageBoxes = new ArrayList<>();
+    final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
     final ArrayList<JButton> indices = new ArrayList<>();
 
     // Skapa GUI

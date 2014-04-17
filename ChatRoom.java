@@ -286,7 +286,7 @@ final class ChatRoom {
                 sendButton.doClick();
                 doc.insertString(0, message, style);
                 msgBox.alive = false;                  //Döda klienten
-                for (ChatRoom mBox : chatCreator.messageBoxes) {
+                for (ChatRoom mBox : chatCreator.chatRooms) {
                     mBox.items.removeElement(msgBox);
                 }
             } catch (BadLocationException ex) {

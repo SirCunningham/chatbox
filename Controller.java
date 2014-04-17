@@ -102,8 +102,8 @@ public class Controller {
                 if (chatRoom.success) {
                     final Client client = new Client(host, port, chatRoom, isServer);
                     new Thread(client).start();
-                    chatCreator.messageBoxes.add(chatRoom);
-                    addUser(chatRoom, chatCreator.messageBoxes);
+                    chatCreator.chatRooms.add(chatRoom);
+                    addUser(chatRoom, chatCreator.chatRooms);
                 }
             } catch (NumberFormatException ex) {
                 chatRoom.success = false;
@@ -145,7 +145,7 @@ public class Controller {
     }
 
     private void addUser2(ChatRoom chatRoom) {
-        for (ChatRoom msgBox : chatCreator.messageBoxes) {
+        for (ChatRoom msgBox : chatCreator.chatRooms) {
             if (!msgBox.items.contains(chatRoom)) {
                 msgBox.items.addElement(chatRoom);
             }
@@ -200,11 +200,11 @@ public class Controller {
             chatCreator.tabbedPane.remove(index);
             // behövs nytt index fortfarande?
             if ((index = chatCreator.indices.indexOf(button)) != -1) {
-                chatCreator.messageBoxes.get(index).alive = false;
-                for (ChatRoom msgBox : chatCreator.messageBoxes) {
-                    msgBox.items.removeElement(chatCreator.messageBoxes.get(index));
+                chatCreator.chatRooms.get(index).alive = false;
+                for (ChatRoom msgBox : chatCreator.chatRooms) {
+                    msgBox.items.removeElement(chatCreator.chatRooms.get(index));
                 }
-                chatCreator.messageBoxes.remove(index);
+                chatCreator.chatRooms.remove(index);
                 chatCreator.indices.remove(index);
             }
         }
@@ -254,13 +254,13 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-            for (ChatRoom msgBox : chatCreator.messageBoxes) {
+            for (ChatRoom msgBox : chatCreator.chatRooms) {
                 buggyCopy.add(msgBox);
             }
             for (ChatRoom msgBox : buggyCopy) {
                 msgBox.closeButton.doClick();
             }
-            if (chatCreator.messageBoxes.isEmpty()) {
+            if (chatCreator.chatRooms.isEmpty()) {
                 int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
                         "Are you sure you want to exit ChatBox?",
                         "Confirmation", JOptionPane.YES_NO_OPTION);
@@ -283,7 +283,7 @@ public class Controller {
                     "Confirmation", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-                for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                for (ChatRoom msgBox : chatCreator.chatRooms) {
                     buggyCopy.add(msgBox);
                 }
                 for (ChatRoom msgBox : buggyCopy) {
