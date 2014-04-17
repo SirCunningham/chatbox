@@ -21,10 +21,6 @@ public class Client implements Runnable {
             final boolean isServer) {
         this.port = port;
         this.chatRoom = chatRoom;
-<<<<<<< HEAD
-        connectedChatRooms = new ArrayList<>();
-        connectedChatRooms.add(chatRoom);
-=======
         
         // Starta socket för klienten
         try {
@@ -41,7 +37,6 @@ public class Client implements Runnable {
             chatRoom.success = false;
             chatRoom.showError("Couldn't get I/O for the connection to host.");
         }
->>>>>>> ba573ed4c96d121f6e29ad556aa4b87dfbee2505
     }
 
     // Skapa tråd för att läsa från servern

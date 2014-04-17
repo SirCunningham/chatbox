@@ -91,25 +91,9 @@ public class Controller {
                 final boolean isServer = chatCreator.serverButton.isSelected();
                 if (isServer) {
                     chatCreator.hostPane.setText("127.0.0.1");
-<<<<<<< HEAD
-                    // Starta socket för servern
-                    ServerSocket serverSocket;
-                    try {
-                        serverSocket = new ServerSocket(port);
-                        serverSocket.setSoTimeout(100);
-                        server = new Server(serverSocket, port, chatRoom);
-                        
-                        new Thread(server).start();
-                    } catch (IOException ex) {
-                        chatRoom.success = false;
-                        chatRoom.showError(String.format("Could not listen on port %d.",
-                                port));
-                    }
-=======
-                        
+
                     Server server = new Server(port, chatRoom);
                     new Thread(server).start();
->>>>>>> ba573ed4c96d121f6e29ad556aa4b87dfbee2505
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
@@ -129,7 +113,7 @@ public class Controller {
                             + "<text color=\"#00ff00\">Connection successful</text></message>"));
                     // send this to others!
                     //chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                    //        - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
+                    // - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                     addUser2(chatRoom);
                     int index = chatCreator.tabbedPane.getTabCount() - 1;
                     chatCreator.tabbedPane.insertTab(chatCreator.tabPane.getText(),
