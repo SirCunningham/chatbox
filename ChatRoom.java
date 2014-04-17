@@ -627,8 +627,15 @@ final class ChatRoom {
                         public void propertyChange(PropertyChangeEvent e) {
                             String name = e.getPropertyName();
                             if (name.equals("progress")) {
-                                SwingWorker worker = (SwingWorker) e.getSource();
-                                progressBar.setValue(worker.getProgress());
+                                SwingWorker worker1 = (SwingWorker) e.getSource();
+                                int progress = worker1.getProgress();
+                                if (progress == 0) {
+                                    progressBar.setIndeterminate(true);
+                                } else {
+                                    progressBar.setIndeterminate(false);
+                                    progressBar.setValue(progress);
+                                }
+
                             }
                         }
                     });
