@@ -1,9 +1,8 @@
 package chatbox;
 
-//Dialogmeddelande för utsparkning, men ej avslutning av programmet!
+//Utsparkning: Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();" i kod!?
 //Color switch does not work when encrypted, sends wrong message!!!
 //Scroll does not always work - and lags!
-//Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();"!?
 
 //Problems: tab switching does not work without server, no left end, no focus when click on tab
 //Trådbugg: ibland får nya klienter en tom rad vid intro

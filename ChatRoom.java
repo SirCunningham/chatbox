@@ -19,6 +19,7 @@ final class ChatRoom {
 
     volatile boolean success = true;
     volatile boolean alive = true;
+    volatile boolean speedyDelete = false;
     private final String[] cipherString = {"None", "caesar", "AES"};
     public ChatCreator chatCreator;
     public AESCrypto AES;

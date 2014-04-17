@@ -1,7 +1,6 @@
 package chatbox;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -33,20 +32,6 @@ public class ChatCreator {
     // Skapa GUI
     public ChatCreator() {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        WindowListener exitListener = new WindowAdapter() {
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int reply = JOptionPane.showConfirmDialog(frame,
-                        "Are you sure you want to exit ChatBox?",
-                        "Confirmation", JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.YES_OPTION) {
-                    // fixa global avstängning av rum!
-                    System.exit(0);
-                }
-            }
-        };
-        frame.addWindowListener(exitListener);
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setPreferredSize(new Dimension(dim.width * 4 / 5, dim.height / 2));

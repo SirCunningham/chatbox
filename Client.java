@@ -3,6 +3,7 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import javax.swing.*;
 
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
@@ -71,9 +72,14 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Object[] options = {"Yes", "No", "Exit ChatRoom"};
                         JButton button = (JButton) e.getSource();
                         int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
+                        if (chatRoom.speedyDelete) {
+                            chatRoom.chatCreator.indices.get(index).doClick();
+                            o.println(chatRoom.getQuitMessage());
+                            System.out.println("I'm here!");
+                        }
+                        Object[] options = {"Yes", "No", "Exit ChatRoom"};
                         int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
                                 String.format("Are you sure you want to leave %s?",
                                 chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
@@ -83,7 +89,15 @@ public class Client implements Runnable {
                             chatRoom.chatCreator.indices.get(index).doClick();
                             o.println(chatRoom.getQuitMessage());
                         } else if (reply == JOptionPane.CANCEL_OPTION) {
-                            // kill all chatrooms automatically
+                            // buggy!
+                            ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
+                            for (ChatRoom msgBox : chatRoom.chatCreator.messageBoxes) {
+                                buggyCopy.add(msgBox);
+                            }
+                            for (ChatRoom msgBox : buggyCopy) {
+                                msgBox.speedyDelete = true;
+                                msgBox.closeButton.doClick();
+                            }
                             System.exit(0);
                         }
                     }

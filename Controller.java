@@ -1,14 +1,14 @@
 package chatbox;
 
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.*;
 import java.io.*;
+import javax.imageio.ImageIO;
 import java.util.*;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.text.*;
 
 public class Controller {
 
@@ -19,6 +19,7 @@ public class Controller {
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;
+        chatCreator.frame.addWindowListener(new ExitListener());
         chatCreator.hostPane.addFocusListener(new FieldListener());
         chatCreator.hostPane.addKeyListener(new StartListener());
         chatCreator.portPane.addFocusListener(new FieldListener());
@@ -272,4 +273,27 @@ public class Controller {
             }
         }
     }
+    
+    public class ExitListener extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
+                    "Are you sure you want to exit ChatBox?",
+                    "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                // buggy!
+                ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
+                for (ChatRoom msgBox : chatCreator.messageBoxes) {
+                    msgBox.speedyDelete = true;
+                    buggyCopy.add(msgBox);
+                }
+                for (ChatRoom msgBox : buggyCopy) {
+                    //msgBox.speedyDelete = true;
+                    msgBox.closeButton.doClick();
+                }
+                System.exit(0);
+            }
+        }
+    };
 }
