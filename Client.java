@@ -77,28 +77,27 @@ public class Client implements Runnable {
                         if (chatRoom.speedyDelete) {
                             chatRoom.chatCreator.indices.get(index).doClick();
                             o.println(chatRoom.getQuitMessage());
-                            System.out.println("I'm here!");
-                        }
-                        Object[] options = {"Yes", "No", "Exit ChatRoom"};
-                        int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
-                                String.format("Are you sure you want to leave %s?",
-                                chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
-                                "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
-                                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                        if (reply == JOptionPane.YES_OPTION) {
-                            chatRoom.chatCreator.indices.get(index).doClick();
-                            o.println(chatRoom.getQuitMessage());
-                        } else if (reply == JOptionPane.CANCEL_OPTION) {
-                            // buggy!
-                            ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
-                            for (ChatRoom msgBox : chatRoom.chatCreator.messageBoxes) {
-                                buggyCopy.add(msgBox);
+                        } else {
+                            Object[] options = {"Yes", "No", "Exit ChatRoom"};
+                            int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
+                                    String.format("Are you sure you want to leave %s?",
+                                    chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
+                                    "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                            if (reply == JOptionPane.YES_OPTION) {
+                                chatRoom.chatCreator.indices.get(index).doClick();
+                                o.println(chatRoom.getQuitMessage());
+                            } else if (reply == JOptionPane.CANCEL_OPTION) {
+                                ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
+                                for (ChatRoom msgBox : chatRoom.chatCreator.messageBoxes) {
+                                    buggyCopy.add(msgBox);
+                                }
+                                for (ChatRoom msgBox : buggyCopy) {
+                                    msgBox.speedyDelete = true;
+                                    msgBox.closeButton.doClick();
+                                }
+                                System.exit(0);
                             }
-                            for (ChatRoom msgBox : buggyCopy) {
-                                msgBox.speedyDelete = true;
-                                msgBox.closeButton.doClick();
-                            }
-                            System.exit(0);
                         }
                     }
                 }

@@ -282,14 +282,12 @@ public class Controller {
                     "Are you sure you want to exit ChatBox?",
                     "Confirmation", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                // buggy!
                 ArrayList<ChatRoom> buggyCopy = new ArrayList<>();
                 for (ChatRoom msgBox : chatCreator.messageBoxes) {
-                    msgBox.speedyDelete = true;
                     buggyCopy.add(msgBox);
                 }
                 for (ChatRoom msgBox : buggyCopy) {
-                    //msgBox.speedyDelete = true;
+                    msgBox.speedyDelete = true;
                     msgBox.closeButton.doClick();
                 }
                 System.exit(0);
