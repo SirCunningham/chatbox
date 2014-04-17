@@ -48,8 +48,9 @@ public class ChatCreator {
 
         ((AbstractDocument) hostPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         hostPane.setText("127.0.0.1");
-        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(12));
-        portPane.setText("4444");
+        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5));
+        Random generator = new Random();
+        portPane.setText(Integer.toString(generator.nextInt(65536 - 1024) + 1024));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));
         namePane.setText("User 1000000000");
         ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));

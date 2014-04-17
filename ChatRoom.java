@@ -578,15 +578,15 @@ final class ChatRoom {
 
                         @Override
                         protected Object doInBackground() throws Exception {
-                            Random random = new Random();
+                            Random generator = new Random();
                             int progress = 0;
                             setProgress(progress);
                             while (progress < 100) {
                                 try {
-                                    Thread.sleep(random.nextInt(100));
+                                    Thread.sleep(generator.nextInt(100));
                                 } catch (InterruptedException e) {
                                 }
-                                progress += random.nextInt(10);
+                                progress += generator.nextInt(10);
                                 setProgress(Math.min(progress, 100));
                             }
                             return null;

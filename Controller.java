@@ -14,7 +14,6 @@ public class Controller {
 
     private final ChatCreator chatCreator;
     private int tabCount = 1;
-    private final Random rand = new Random();
     private final Object lock = new Object();
 
     public Controller(ChatCreator chatCreator) {
@@ -82,6 +81,8 @@ public class Controller {
 
     // Starta klient eller server
     public class StartButtonListener implements ActionListener {
+        
+        private final Random generator = new Random();
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -126,7 +127,7 @@ public class Controller {
                     }
 
                     chatCreator.tabbedPane.setSelectedIndex(index);
-                    chatCreator.namePane.setText("User " + rand.nextInt(1000000000));
+                    chatCreator.namePane.setText("User " + generator.nextInt(1000000000));
                     chatCreator.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }
@@ -141,7 +142,6 @@ public class Controller {
                 }
             }
         }
-
     }
 
     private void addUser2(ChatRoom chatRoom) {
