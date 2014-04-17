@@ -92,14 +92,14 @@ public class Controller {
                 if (isServer) {
                     chatCreator.hostPane.setText("127.0.0.1");
 
-                    Server server = new Server(port, chatRoom);
+                    final Server server = new Server(port, chatRoom);
                     new Thread(server).start();
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
                 }
                 if (chatRoom.success) {
-                    Client client = new Client(host, port, chatRoom, isServer);
+                    final Client client = new Client(host, port, chatRoom, isServer);
                     new Thread(client).start();
                     chatCreator.messageBoxes.add(chatRoom);
                     addUser(chatRoom, chatCreator.messageBoxes);
