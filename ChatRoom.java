@@ -71,6 +71,7 @@ final class ChatRoom {
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
+    
 
     public ChatRoom(ChatCreator chatCreator) {
         list.setSelectionModel(new DefaultListSelectionModel() {
