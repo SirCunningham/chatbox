@@ -6,7 +6,7 @@ import java.beans.*;
 import java.util.*;
 import javax.swing.*;
 
-    class ProgressBarButtonListener implements ActionListener {
+    public class ProgressBarButtonListener implements ActionListener {
         
         private final ChatRoom chatRoom;
 

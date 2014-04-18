@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 
-final class ChatRoom {
+public class ChatRoom {
 
     volatile boolean success = true;
     volatile boolean alive = true;

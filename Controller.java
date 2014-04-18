@@ -18,18 +18,18 @@ public class Controller {
 
     public Controller(ChatCreator chatCreator) {
         this.chatCreator = chatCreator;
-        chatCreator.frame.addWindowListener(new ExitListener());
-        chatCreator.hostPane.addFocusListener(new FieldListener());
+        chatCreator.frame.addWindowListener(new ExitListener(chatCreator));
+        chatCreator.hostPane.addFocusListener(new TextFieldListener());
         chatCreator.hostPane.addKeyListener(new StartListener());
-        chatCreator.portPane.addFocusListener(new FieldListener());
+        chatCreator.portPane.addFocusListener(new TextFieldListener());
         chatCreator.portPane.addKeyListener(new StartListener());
-        chatCreator.passPane.addFocusListener(new FieldListener());
+        chatCreator.passPane.addFocusListener(new TextFieldListener());
         chatCreator.passPane.addKeyListener(new StartListener());
-        chatCreator.requestPane.addFocusListener(new FieldListener());
+        chatCreator.requestPane.addFocusListener(new TextFieldListener());
         chatCreator.requestPane.addKeyListener(new StartListener());
-        chatCreator.namePane.addFocusListener(new FieldListener());
+        chatCreator.namePane.addFocusListener(new TextFieldListener());
         chatCreator.namePane.addKeyListener(new StartListener());
-        chatCreator.tabPane.addFocusListener(new FieldListener());
+        chatCreator.tabPane.addFocusListener(new TextFieldListener());
         chatCreator.tabPane.addKeyListener(new StartListener());
         chatCreator.startButton.addActionListener(new StartButtonListener());
         chatCreator.startButton.addKeyListener(new StartListener());
@@ -62,21 +62,6 @@ public class Controller {
         gbc.weightx = 0;
         tabPanel.add(closeButton, gbc);
         return tabPanel;
-    }
-
-    public class FieldListener implements FocusListener {
-
-        @Override
-        public void focusGained(FocusEvent e) {
-            JTextComponent source = (JTextComponent) e.getSource();
-            source.selectAll();
-        }
-
-        @Override
-        public void focusLost(FocusEvent e) {
-            JTextComponent source = (JTextComponent) e.getSource();
-            source.select(0, 0);
-        }
     }
 
     // Starta klient eller server
@@ -273,25 +258,4 @@ public class Controller {
             }
         }
     }
-    
-    public class ExitListener extends WindowAdapter {
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            int reply = JOptionPane.showConfirmDialog(chatCreator.frame,
-                    "Are you sure you want to exit ChatBox?",
-                    "Confirmation", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                ArrayList<ChatRoom> roomArray = new ArrayList<>();
-                for (ChatRoom room : chatCreator.chatRooms) {
-                    roomArray.add(room);
-                }
-                for (ChatRoom room : roomArray) {
-                    room.speedyDelete = true;
-                    room.closeButton.doClick();
-                }
-                System.exit(0);
-            }
-        }
-    };
 }
