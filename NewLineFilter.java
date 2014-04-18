@@ -3,7 +3,7 @@ package chatbox;
 import java.awt.*;
 import javax.swing.text.*;
 
-class NewLineFilter extends DocumentFilter {
+public class NewLineFilter extends DocumentFilter {
 
     private int charLimit;
     private boolean notOnlyNumbers;

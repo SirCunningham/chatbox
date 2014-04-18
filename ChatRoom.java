@@ -88,13 +88,13 @@ public class ChatRoom {
         sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
         ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        filePane.addFocusListener(new FieldListener());
+        filePane.addFocusListener(new StatusListener(this));
         filePane.setText("filename.txt");
         ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
         fileSizePane.setEditable(false);
         fileSizePane.setText("0");
         ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
-        descriptionPane.addFocusListener(new FieldListener());
+        descriptionPane.addFocusListener(new StatusListener(this));
         descriptionPane.setText("File description (optional)");
         fileEncryptions = new JComboBox(cipherString);
 
@@ -110,8 +110,8 @@ public class ChatRoom {
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
 
-        filePane.addFocusListener(new FieldListener());
-        descriptionPane.addFocusListener(new FieldListener());
+        filePane.addFocusListener(new StatusListener(this));
+        descriptionPane.addFocusListener(new StatusListener(this));
         sendFileButton.addActionListener(new SendFileButtonListener());
         progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         fileButton.addActionListener(new FileButtonListener());
@@ -137,7 +137,7 @@ public class ChatRoom {
         HTMLDocument doc2 = new HTMLDocument();
         chatBox.setEditorKit(kit);
         chatBox.setDocument(doc2);
-        chatBox.addKeyListener(new TabListener());
+        chatBox.addKeyListener(new TabListener(this));
         appendToPane(String.format("<message sender=\"INFO\">"
                 + "<text color=\"#339966\">This is where it happens.</text></message>"));
         JScrollPane scrollPane = new JScrollPane(chatBox);
@@ -150,10 +150,10 @@ public class ChatRoom {
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         String name = chatCreator.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
-        namePane.addFocusListener(new FieldListener());
+        namePane.addFocusListener(new StatusListener(this));
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
-        messagePane.addFocusListener(new FieldListener());
+        messagePane.addFocusListener(new StatusListener(this));
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
         messagePanel.add(namePane);
@@ -170,7 +170,7 @@ public class ChatRoom {
         cipherBox.addItemListener(new CipherBoxListener());
         keyLabel.setVisible(false);
         keyPane.setVisible(false);
-        keyPane.addFocusListener(new FieldListener());
+        keyPane.addFocusListener(new StatusListener(this));
         keyBox.setVisible(false);
         buttonPanel.add(keyRequestBox);
         buttonPanel.add(cipherButton);
@@ -246,6 +246,7 @@ public class ChatRoom {
         namePane.setEnabled(false);
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
+        showError("You have been booted!"); //not an error
     }
 
     class BootButtonListener implements ActionListener {
@@ -303,27 +304,6 @@ public class ChatRoom {
 
     class CipherButtonListener implements ActionListener {
 
-        private String encrypt(String type, String text, String key) {
-            switch (type) {
-                case "caesar":
-                    try {
-                        return encryptCaesar(text, Integer.valueOf(key));
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    }
-                case "AES":
-                    try {
-                        return AES.encrypt(text);
-                    } catch (NoSuchAlgorithmException | InvalidKeyException |
-                            UnsupportedEncodingException |
-                            IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-            }
-            return null;
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if (cipherButton.isSelected()) {
@@ -364,6 +344,27 @@ public class ChatRoom {
                 }
             }
         }
+        
+        private String encrypt(String type, String text, String key) {
+            switch (type) {
+                case "caesar":
+                    try {
+                        return encryptCaesar(text, Integer.valueOf(key));
+                    } catch (UnsupportedEncodingException ex) {
+                        ex.printStackTrace();
+                    }
+                case "AES":
+                    try {
+                        return AES.encrypt(text);
+                    } catch (NoSuchAlgorithmException | InvalidKeyException |
+                            UnsupportedEncodingException |
+                            IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+            }
+            return null;
+        }
     }
 
     // Välj bakgrundsfärg
@@ -371,7 +372,6 @@ public class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             Color newColor = JColorChooser.showDialog(chatCreator.frame,
                     "Choose text color", chatCreator.frame.getBackground());
             if (newColor != null) {
@@ -395,50 +395,6 @@ public class ChatRoom {
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
-            }
-        }
-    }
-
-    // Markera textrutor
-    class FieldListener implements FocusListener {
-
-        private String name;
-
-        @Override
-        public void focusGained(FocusEvent e) {
-            JTextComponent source = (JTextComponent) e.getSource();
-            if (source == namePane) {
-                name = namePane.getText();
-            }
-            source.selectAll();
-        }
-
-        @Override
-        public void focusLost(FocusEvent e) {
-            JTextComponent source = (JTextComponent) e.getSource();
-            if (source == messagePane && !cipherButton.isSelected()) {
-                cipherStart = source.getSelectionStart();
-                cipherEnd = source.getSelectionEnd();
-            } else if (source == namePane && !name.equals(namePane.getText())) {
-                if (namePane.getText().isEmpty()) {
-                    namePane.setText("Nomen nescio");
-                    if (name.equals("Nomen nescio")) {
-                        return;
-                    }
-                }
-                String message = messagePane.getText();
-                try {
-                    doc.remove(0, message.length());
-                    doc.insertString(0, "I just switched from my old name: " + name, style);
-                    sendButton.doClick();
-                    doc.insertString(0, message, style);
-                } catch (BadLocationException ex) {
-                    System.out.println("test");
-                    ex.printStackTrace();
-                }
-                source.select(0, 0);
-            } else if (source == keyPane) {
-                source.setText(source.getText()); //redundant?
             }
         }
     }
@@ -471,44 +427,6 @@ public class ChatRoom {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 sendButton.doClick();
             }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-        }
-    }
-
-    class TabListener implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            int index = chatCreator.tabbedPane.getSelectedIndex();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_ENTER:
-                    sendButton.doClick();
-                    break;
-                case KeyEvent.VK_A:
-                case KeyEvent.VK_KP_LEFT:
-                case KeyEvent.VK_LEFT:
-                    if (index > 0) {
-                        chatCreator.tabbedPane.setSelectedIndex(index - 1);
-                    } else {
-                        // refocus tab 0, but how? same problem as focus in general...
-                    }
-                    break;
-                case KeyEvent.VK_D:
-                case KeyEvent.VK_KP_RIGHT:
-                case KeyEvent.VK_RIGHT:
-                    chatCreator.tabbedPane.setSelectedIndex(index + 1);
-                    break;
-                default:
-                    break;
-            }
-            messagePane.requestFocusInWindow();
         }
 
         @Override
