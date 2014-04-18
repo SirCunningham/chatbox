@@ -9,6 +9,8 @@ package chatbox;
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
 
+//Write fake host, then a new server cannot be created after that! Is host info meaningful for server??
+
 public class ChatBox {
 
     public static void main(String[] args) {

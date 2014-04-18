@@ -103,7 +103,7 @@ public class ChatRoom {
         filePanel.add(fileSizePane);
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
-        fileButtonPanel.add(progressBarButton); //Testing only!
+        fileButtonPanel.add(progressBarButton); // testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
@@ -435,7 +435,7 @@ public class ChatRoom {
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-    public void appendToPane(String msg) {
+    public final void appendToPane(String msg) {
 
         try {
             xmlHTMLEditorKit kit = (ChatRoom.xmlHTMLEditorKit) chatBox.getEditorKit();
