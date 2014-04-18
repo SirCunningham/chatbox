@@ -607,7 +607,7 @@ final class ChatRoom {
                                     String name = e.getPropertyName();
                                     if (e.getSource() == optionPane
                                             && name.equals(JOptionPane.VALUE_PROPERTY)) {
-                                        Object reply = optionPane.getValue();
+                                        int reply = (int) optionPane.getValue();
                                         if (reply == JOptionPane.YES_OPTION) {
                                             progressBar.setVisible(true);
                                             label.setVisible(true);
