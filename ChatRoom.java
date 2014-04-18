@@ -2,7 +2,6 @@ package chatbox;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -51,7 +50,7 @@ final class ChatRoom {
     int cipherStart;
     int cipherEnd;
     DefaultListModel items = new DefaultListModel();
-    JList list = new JList(items);
+    JList list = new SelectionList(items);
     JScrollPane listPane = new JScrollPane(list);
     JPanel bootPanel = new JPanel();
     JButton bootButton = new JButton("Boot selected");
@@ -73,30 +72,6 @@ final class ChatRoom {
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
 
     public ChatRoom(ChatCreator chatCreator) {
-        list.setSelectionModel(new DefaultListSelectionModel() {
-
-            private static final long serialVersionUID = 1L;
-            boolean gestureStarted = false;
-
-            @Override
-            public void setSelectionInterval(int index0, int index1) {
-                if (!gestureStarted) {
-                    if (isSelectedIndex(index0)) {
-                        super.removeSelectionInterval(index0, index1);
-                    } else {
-                        super.addSelectionInterval(index0, index1);
-                    }
-                }
-                gestureStarted = true;
-            }
-
-            @Override
-            public void setValueIsAdjusting(boolean isAdjusting) {
-                if (isAdjusting == false) {
-                    gestureStarted = false;
-                }
-            }
-        });
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
         JLabel infoLabel1 = new JLabel("Host: " + chatCreator.hostPane.getText());
@@ -138,7 +113,7 @@ final class ChatRoom {
         filePane.addFocusListener(new FieldListener());
         descriptionPane.addFocusListener(new FieldListener());
         sendFileButton.addActionListener(new SendFileButtonListener());
-        progressBarButton.addActionListener(new ProgressBarButtonListener());
+        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         fileButton.addActionListener(new FileButtonListener());
 
         this.chatCreator = chatCreator;
@@ -538,122 +513,6 @@ final class ChatRoom {
 
         @Override
         public void keyReleased(KeyEvent e) {
-        }
-    }
-
-    // Mottag fil med server
-    public class ProgressBarButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            EventQueue.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    final JProgressBar progressBar;
-                    final JPanel invisibleContainer;
-                    final JLabel label;
-                    final JOptionPane optionPane;
-                    final JDialog dialog;
-                    final SwingWorker worker;
-
-                    progressBar = new JProgressBar(0, 100);
-                    progressBar.setValue(0);
-                    progressBar.setStringPainted(true);
-                    progressBar.setVisible(false);
-
-                    invisibleContainer = new JPanel(new GridLayout(2, 1));
-                    label = new JLabel("Downloading...");
-                    label.setBackground(invisibleContainer.getBackground());
-                    label.setVisible(false);
-                    invisibleContainer.add(label, BorderLayout.PAGE_START);
-                    invisibleContainer.add(progressBar, BorderLayout.CENTER);
-
-                    String description = descriptionPane.getText();
-                    if (description.equals("File description (optional)")) {
-                        description = "No description";
-                    }
-                    String fileData = String.format("File name: %s\nFile size: %s\n"
-                            + "File description: %s\nAccept file?", filePane.getText(),
-                            fileSizePane.getText(), description);
-
-                    optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
-                            JOptionPane.YES_NO_OPTION);
-                    dialog = new JDialog(chatCreator.frame, "File request", false);
-                    worker = new SwingWorker<Object, Object>() {
-                        @Override
-                        protected Object doInBackground() throws Exception {
-                            Random generator = new Random();
-                            int progress = 0;
-                            setProgress(progress);
-                            while (progress < 100) {
-                                try {
-                                    Thread.sleep(generator.nextInt(100));
-                                } catch (InterruptedException e) {
-                                }
-                                progress += generator.nextInt(10);
-                                setProgress(Math.min(progress, 100));
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void done() {
-                            dialog.setCursor(null);
-                            dialog.dispose();
-                        }
-                    };
-                    optionPane.addPropertyChangeListener(
-                            new PropertyChangeListener() {
-
-                                @Override
-                                public void propertyChange(PropertyChangeEvent e) {
-                                    String name = e.getPropertyName();
-                                    if (e.getSource() == optionPane
-                                    && name.equals(JOptionPane.VALUE_PROPERTY)) {
-                                        int reply = (int) optionPane.getValue();
-                                        if (reply == JOptionPane.YES_OPTION) {
-                                            progressBar.setVisible(true);
-                                            label.setVisible(true);
-                                            dialog.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                                            worker.execute();
-                                        } else {
-                                            dialog.dispose();
-                                        }
-                                    }
-                                }
-                            });
-
-                    dialog.setContentPane(optionPane);
-                    dialog.getContentPane().add(invisibleContainer);
-                    dialog.pack();
-                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                    dialog.setLocationRelativeTo(chatCreator.frame);
-                    dialog.setResizable(false);
-                    dialog.setAlwaysOnTop(false);
-                    dialog.setVisible(true);
-
-                    worker.addPropertyChangeListener(new PropertyChangeListener() {
-
-                        @Override
-                        public void propertyChange(PropertyChangeEvent e) {
-                            String name = e.getPropertyName();
-                            if (name.equals("progress")) {
-                                SwingWorker worker1 = (SwingWorker) e.getSource();
-                                int progress = worker1.getProgress();
-                                if (progress == 0) {
-                                    progressBar.setIndeterminate(true);
-                                } else {
-                                    progressBar.setIndeterminate(false);
-                                    progressBar.setValue(progress);
-                                }
-
-                            }
-                        }
-                    });
-                }
-            });
         }
     }
 
