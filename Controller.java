@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.text.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.util.*;
@@ -20,22 +19,22 @@ public class Controller {
         this.chatCreator = chatCreator;
         chatCreator.frame.addWindowListener(new ExitListener(chatCreator));
         chatCreator.hostPane.addFocusListener(new TextFieldListener());
-        chatCreator.hostPane.addKeyListener(new StartListener());
+        chatCreator.hostPane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.portPane.addFocusListener(new TextFieldListener());
-        chatCreator.portPane.addKeyListener(new StartListener());
+        chatCreator.portPane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.passPane.addFocusListener(new TextFieldListener());
-        chatCreator.passPane.addKeyListener(new StartListener());
+        chatCreator.passPane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.requestPane.addFocusListener(new TextFieldListener());
-        chatCreator.requestPane.addKeyListener(new StartListener());
+        chatCreator.requestPane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.namePane.addFocusListener(new TextFieldListener());
-        chatCreator.namePane.addKeyListener(new StartListener());
+        chatCreator.namePane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.tabPane.addFocusListener(new TextFieldListener());
-        chatCreator.tabPane.addKeyListener(new StartListener());
+        chatCreator.tabPane.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.startButton.addActionListener(new StartButtonListener());
-        chatCreator.startButton.addKeyListener(new StartListener());
-        chatCreator.clientButton.addKeyListener(new StartListener());
+        chatCreator.startButton.addKeyListener(new CreatorListener(chatCreator));
+        chatCreator.clientButton.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.serverButton.addChangeListener(new ServerButtonListener());
-        chatCreator.serverButton.addKeyListener(new StartListener());
+        chatCreator.serverButton.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.serverOptions.addItemListener(new ServerOptionsListener());
         chatCreator.closeButton.addActionListener(new CloseButtonListener());
     }
@@ -192,44 +191,6 @@ public class Controller {
                 chatCreator.chatRooms.remove(index);
                 chatCreator.indices.remove(index);
             }
-        }
-    }
-
-    class StartListener implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_ENTER:
-                    chatCreator.startButton.doClick();
-                    break;
-                case KeyEvent.VK_A:
-                case KeyEvent.VK_KP_LEFT:
-                case KeyEvent.VK_LEFT:
-                    chatCreator.clientButton.setSelected(true);
-                    chatCreator.startButton.setText("Join server");
-                    chatCreator.hostLabel.setEnabled(true);
-                    chatCreator.hostPane.setEnabled(true);
-                    break;
-                case KeyEvent.VK_D:
-                case KeyEvent.VK_KP_RIGHT:
-                case KeyEvent.VK_RIGHT:
-                    chatCreator.serverButton.setSelected(true);
-                    chatCreator.startButton.setText("Create server");
-                    chatCreator.hostLabel.setEnabled(false);
-                    chatCreator.hostPane.setEnabled(false);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
         }
     }
 

@@ -22,7 +22,7 @@ public class ChatCreator {
     JTextPane namePane = new JTextPane();
     JTextPane tabPane = new JTextPane();
     JButton startButton = new JButton("Join server");
-    IconButton closeButton = new IconButton("closeIcon.png");
+    JButton closeButton = new IconButton("closeIcon.png");
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
     

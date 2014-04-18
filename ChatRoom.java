@@ -25,7 +25,7 @@ public class ChatRoom {
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
     JPanel rightPanel = new JPanel();
-    IconButton colorButton = new IconButton("colorIcon.png");
+    JButton colorButton = new IconButton("colorIcon.png");
     DefaultStyledDocument doc = new DefaultStyledDocument();
     JTextPane namePane = new JTextPane();
     JTextPane messagePane = new JTextPane(doc);
@@ -57,13 +57,13 @@ public class ChatRoom {
     JPanel infoPanel = new JPanel();
     JPanel filePanel = new JPanel();
     JPanel fileButtonPanel = new JPanel();
-    IconButton fileButton = new IconButton("fileIcon.png");
+    JButton fileButton = new IconButton("fileIcon.png");
     JTextPane filePane = new JTextPane();
     JTextPane fileSizePane = new JTextPane();
     JTextPane descriptionPane = new JTextPane();
     JButton sendFileButton = new JButton("Send file to selected");
     JButton progressBarButton = new JButton("NEW Receive [test!]");
-    IconButton closeButton = new IconButton("closeIcon.png");
+    JButton closeButton = new IconButton("closeIcon.png");
     JComboBox fileEncryptions;
     private String filePath;
     private static final int TYPE_NONE = 0;
