@@ -71,7 +71,6 @@ final class ChatRoom {
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
-    
 
     public ChatRoom(ChatCreator chatCreator) {
         list.setSelectionModel(new DefaultListSelectionModel() {
@@ -165,7 +164,7 @@ final class ChatRoom {
         chatBox.setDocument(doc2);
         chatBox.addKeyListener(new TabListener());
         appendToPane(String.format("<message sender=\"INFO\">"
-                            + "<text color=\"#339966\">This is where it happens.</text></message>"));
+                + "<text color=\"#339966\">This is where it happens.</text></message>"));
         JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);
@@ -210,13 +209,16 @@ final class ChatRoom {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
+
     @Override
     public String toString() {
         return String.format("%s (%s)", namePane.getText(), chatCreator.hostPane.getText());
     }
+
     public String getName() {
         return namePane.getText();
     }
+
     public String getIP() {
         return chatCreator.hostPane.getText();
     }
@@ -231,7 +233,7 @@ final class ChatRoom {
                 return null;
         }
     }
-    
+
     public void showError(String text) {
         JOptionPane.showMessageDialog(chatCreator.frame, text, "Error message",
                 JOptionPane.ERROR_MESSAGE);
@@ -263,7 +265,7 @@ final class ChatRoom {
         keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
-    
+
     public void disableChat() {
         // disable more!!
         namePane.setEnabled(false);
@@ -280,9 +282,9 @@ final class ChatRoom {
             try {
                 doc.remove(0, message.length());
                 ChatRoom room = (ChatRoom) items.getElementAt(i);
-                doc.insertString(0, 
+                doc.insertString(0,
                         String.format("%s got the boot",
-                        room.getName()), style);
+                                room.getName()), style);
                 sendButton.doClick();
                 doc.insertString(0, message, style);
                 room.alive = false;                  //Döda klienten
@@ -363,9 +365,9 @@ final class ChatRoom {
                         cipherMessage = String.format("%s<encrypted type="
                                 + "\"%s\"%s>%s</encrypted>%s",
                                 XMLString.convertAngle(getText.substring(0,
-                                cipherStart)), type, keyString,
+                                                cipherStart)), type, keyString,
                                 XMLString.convertAngle(encrypt(type, text, key)), XMLString.convertAngle(
-                                getText.substring(cipherEnd)));
+                                        getText.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
                         doc.insertString(cipherStart, text, style);
@@ -500,7 +502,7 @@ final class ChatRoom {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     class TabListener implements KeyListener {
 
         @Override
@@ -538,29 +540,36 @@ final class ChatRoom {
         public void keyReleased(KeyEvent e) {
         }
     }
-    
+
     // Mottag fil med server
     public class ProgressBarButtonListener implements ActionListener {
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             EventQueue.invokeLater(new Runnable() {
 
                 @Override
                 public void run() {
-                    final JProgressBar progressBar = new JProgressBar(0, 100);
+                    final JProgressBar progressBar;
+                    final JPanel invisibleContainer;
+                    final JLabel label;
+                    final JOptionPane optionPane;
+                    final JDialog dialog;
+                    final SwingWorker worker;
+
+                    progressBar = new JProgressBar(0, 100);
                     progressBar.setValue(0);
                     progressBar.setStringPainted(true);
                     progressBar.setVisible(false);
-                    
-                    final JPanel invisibleContainer = new JPanel(new GridLayout(2, 1));
-                    final JLabel label = new JLabel("Downloading...");
+
+                    invisibleContainer = new JPanel(new GridLayout(2, 1));
+                    label = new JLabel("Downloading...");
                     label.setBackground(invisibleContainer.getBackground());
                     label.setVisible(false);
                     invisibleContainer.add(label, BorderLayout.PAGE_START);
                     invisibleContainer.add(progressBar, BorderLayout.CENTER);
-                    
+
                     String description = descriptionPane.getText();
                     if (description.equals("File description (optional)")) {
                         description = "No description";
@@ -568,15 +577,11 @@ final class ChatRoom {
                     String fileData = String.format("File name: %s\nFile size: %s\n"
                             + "File description: %s\nAccept file?", filePane.getText(),
                             fileSizePane.getText(), description);
-                    
-                    final JOptionPane optionPane = new JOptionPane(fileData,
-                            JOptionPane.QUESTION_MESSAGE,
-                            JOptionPane.YES_NO_OPTION);
-                    
-                    final JDialog dialog = new JDialog(chatCreator.frame,
-                            "File request", false);
-                    final SwingWorker worker = new SwingWorker<Object, Object>() {
 
+                    optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
+                            JOptionPane.YES_NO_OPTION);
+                    dialog = new JDialog(chatCreator.frame, "File request", false);
+                    worker = new SwingWorker<Object, Object>() {
                         @Override
                         protected Object doInBackground() throws Exception {
                             Random generator = new Random();
@@ -599,14 +604,14 @@ final class ChatRoom {
                             dialog.dispose();
                         }
                     };
-                    
                     optionPane.addPropertyChangeListener(
                             new PropertyChangeListener() {
 
+                                @Override
                                 public void propertyChange(PropertyChangeEvent e) {
                                     String name = e.getPropertyName();
                                     if (e.getSource() == optionPane
-                                            && name.equals(JOptionPane.VALUE_PROPERTY)) {
+                                    && name.equals(JOptionPane.VALUE_PROPERTY)) {
                                         int reply = (int) optionPane.getValue();
                                         if (reply == JOptionPane.YES_OPTION) {
                                             progressBar.setVisible(true);
@@ -619,7 +624,7 @@ final class ChatRoom {
                                     }
                                 }
                             });
-                    
+
                     dialog.setContentPane(optionPane);
                     dialog.getContentPane().add(invisibleContainer);
                     dialog.pack();
@@ -628,7 +633,7 @@ final class ChatRoom {
                     dialog.setResizable(false);
                     dialog.setAlwaysOnTop(false);
                     dialog.setVisible(true);
-                    
+
                     worker.addPropertyChangeListener(new PropertyChangeListener() {
 
                         @Override
@@ -680,16 +685,16 @@ final class ChatRoom {
                 fileSizePane.getText(), description);
         String message = messagePane.getText();
         /*
-        appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-        namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
+         appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+         namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
          * 
          */
         return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
                 namePane.getText(), filePane.getText(), fileSizePane.getText(), description);
     }
-    
+
     public String getQuitMessage() {
-        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", namePane.getText(),color);
+        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", namePane.getText(), color);
     }
 
     public String getMessage() {
@@ -715,28 +720,28 @@ final class ChatRoom {
                         + "type=\"%s\">%s"
                         + "</keyrequest></text></message>",
                         name, color,
-                        String.valueOf(cipherBox.getSelectedItem()),message);
+                        String.valueOf(cipherBox.getSelectedItem()), message);
                 /*
-                timer.setType(String.valueOf(chatRoom.cipherBox.getSelectedItem()));
-                timer.start();
+                 timer.setType(String.valueOf(chatRoom.cipherBox.getSelectedItem()));
+                 timer.start();
                  * 
                  */
 
 
                 /*
-                appendToPane(String.format("<message sender=\"%s\">"
-                + "<text color=\"%s\">%s</text></message>",
-                name, chatRoom.color,
-                message));
+                 appendToPane(String.format("<message sender=\"%s\">"
+                 + "<text color=\"%s\">%s</text></message>",
+                 name, chatRoom.color,
+                 message));
                  * 
                  */
             }
             /*
-            if (message.contains("terminate my ass")) {
-            appendToPane("<message sender=\"INFO\">"
-            + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
-            //kill();
-            }
+             if (message.contains("terminate my ass")) {
+             appendToPane("<message sender=\"INFO\">"
+             + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
+             //kill();
+             }
              * 
              */
         } catch (Exception ex) {
@@ -772,14 +777,14 @@ final class ChatRoom {
                 ex.printStackTrace();
             }
             /*
-            try {
-            FileSender thr = new FileSender(chatCreator.hostPane.getText(),
-            Integer.parseInt(chatCreator.portPane.getText()),
-            filePane.getText());
-            thr.start();
-            } catch (Exception ex) {
-            System.err.println("Ett fel inträffade2: " + ex);
-            }
+             try {
+             FileSender thr = new FileSender(chatCreator.hostPane.getText(),
+             Integer.parseInt(chatCreator.portPane.getText()),
+             filePane.getText());
+             thr.start();
+             } catch (Exception ex) {
+             System.err.println("Ett fel inträffade2: " + ex);
+             }
              */
         }
     }
@@ -797,22 +802,22 @@ final class ChatRoom {
                     offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
                     + "</font>", popDepth, pushDepth, insertTag);
             /*else {
-            super.insertHTML((HTMLDocument) chatBox.getDocument(),
-            offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
-            }
-            /*
-            if (thr.timer.isRunning()) {
-            System.out.println(thr.timer.getType());
-            System.out.println(html);
-            System.out.println(XMLString.getEncryptedType(html));
-            if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
-            thr.timer.stop();
-            chatRoom.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
-            }
-            }
+             super.insertHTML((HTMLDocument) chatBox.getDocument(),
+             offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
+             }
+             /*
+             if (thr.timer.isRunning()) {
+             System.out.println(thr.timer.getType());
+             System.out.println(html);
+             System.out.println(XMLString.getEncryptedType(html));
+             if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
+             thr.timer.stop();
+             chatRoom.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
+             }
+             }
              * 
              */
-            
+
         }
     }
 }
