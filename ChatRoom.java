@@ -110,7 +110,7 @@ public class ChatRoom {
         filePanel.add(fileSizePane);
         filePanel.add(descriptionPane);
         filePanel.add(sendFileButton);
-        fileButtonPanel.add(progressBarButton); // testing only!
+        fileButtonPanel.add(progressBarButton); // temporary - testing only!
         fileButtonPanel.add(new JLabel("Encryption:"));
         fileButtonPanel.add(fileEncryptions);
         fileButtonPanel.add(closeButton);
@@ -247,7 +247,7 @@ public class ChatRoom {
         namePane.setEnabled(false);
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
-        ChatCreator.showError("You have been booted!"); //not an error
+        ChatCreator.showError("You have been booted!"); //not an error, but info
     }
 
     class BootButtonListener implements ActionListener {

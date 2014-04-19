@@ -63,7 +63,7 @@ public class Client implements Runnable {
 
                     }
                 }
-                // finns redan i ChatRoom, onödig dubblering!
+                // finns redan i ChatRoom, onödig dubblering, ta bort där?
                 class SendFileButtonListener implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {

@@ -11,7 +11,6 @@ package chatbox;
 //Lösning: adapter??
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
-//Kolla portars tal! Kan inte skriva a eller d!!
 
 import java.awt.*;
 import java.awt.event.*;
@@ -46,6 +45,7 @@ public class ChatBox {
         ChatCreator.serverButton.addKeyListener(new CreatorListener());
         ChatCreator.serverOptions.addItemListener(new ServerOptionsListener());
         ChatCreator.closeButton.addActionListener(new CloseButtonListener());
+        ChatCreator.closeButton.addKeyListener(new CreatorListener());
     }
 
     public final JPanel createTabPanel() throws IOException {
