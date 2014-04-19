@@ -33,7 +33,11 @@ public class NewLineFilter extends DocumentFilter {
     @Override
     public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
         if ((fb.getDocument().getLength() + text.length()) <= charLimit) {
-            super.replace(fb, offset, length, text.replaceAll("\\n", ""), attr);
+            if (notOnlyNumbers) {
+                super.replace(fb, offset, length, text.replaceAll("\\n", ""), attr);
+            } else {
+                super.replace(fb, offset, length, text.replaceAll("\\D", ""), attr);
+            }
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
