@@ -32,12 +32,15 @@ public class Client implements Runnable {
             if (!isServer) {
                 o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
             }
-        } catch (UnknownHostException ex) {
+        } catch (UnknownHostException e) {
             chatRoom.success = false;
             chatRoom.showError("Don't know about host.");
-        } catch (IOException ex) {
+        } catch (IOException e) {
             chatRoom.success = false;
             chatRoom.showError("Couldn't get I/O for the connection to host.");
+        } catch (IllegalArgumentException e) {
+            chatRoom.success = false;
+            chatRoom.showError("Port out of range.");
         }
     }
 

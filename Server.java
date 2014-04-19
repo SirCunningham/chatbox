@@ -25,6 +25,9 @@ public class Server implements Runnable {
             chatRoom.success = false;
             chatRoom.showError(String.format("Could not listen on port %d.",
                     port));
+        } catch (IllegalArgumentException e) {
+            chatRoom.success = false;
+            chatRoom.showError(String.format("Port %d is out of range.", port));
         }
     }
 

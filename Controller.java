@@ -66,6 +66,7 @@ public class Controller {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // throw NumberFormatException
             final ChatRoom chatRoom = new ChatRoom(chatCreator);
             try {
                 if (chatRoom.isServer) {
@@ -83,7 +84,7 @@ public class Controller {
                 }
             } catch (NumberFormatException ex) {
                 chatRoom.success = false;
-                chatRoom.showError("Port is not a small number!");
+                chatRoom.showError("Port is not an integer or not sufficiently small.");
             } finally {
                 if (chatRoom.success) {
                     chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
