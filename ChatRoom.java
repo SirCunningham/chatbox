@@ -70,12 +70,20 @@ public class ChatRoom {
     private static final int TYPE_CAESAR = 1;
     private static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
+    
+    final String host;
+    final int port;
+    final boolean isServer;
 
     public ChatRoom(ChatCreator chatCreator) {
+        host = chatCreator.hostPane.getText();
+        port = Integer.parseInt(chatCreator.portPane.getText());
+        isServer = chatCreator.serverButton.isSelected();
+        
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
-        JLabel infoLabel1 = new JLabel("Host: " + chatCreator.hostPane.getText());
-        JLabel infoLabel2 = new JLabel("Port: " + chatCreator.portPane.getText());
+        JLabel infoLabel1 = new JLabel("Host: " + host);
+        JLabel infoLabel2 = new JLabel("Port: " + port);
         infoPanel.add(infoLabel1);
         infoPanel.add(infoLabel2);
         bootPanel.add(bootButton);
@@ -187,7 +195,7 @@ public class ChatRoom {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", namePane.getText(), chatCreator.hostPane.getText());
+        return String.format("%s (%s)", namePane.getText(), host);
     }
 
     public String getName() {
@@ -195,7 +203,7 @@ public class ChatRoom {
     }
 
     public String getIP() {
-        return chatCreator.hostPane.getText();
+        return host;
     }
 
     public String getKey(String type) {

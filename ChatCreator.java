@@ -26,6 +26,8 @@ public class ChatCreator {
     JComboBox serverOptions;
     JTabbedPane tabbedPane = new JTabbedPane();
     
+    String host = "127.0.0.1";
+    
     final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
     final ArrayList<JButton> indices = new ArrayList<>();
 
@@ -48,7 +50,7 @@ public class ChatCreator {
         closeButton.setFocusPainted(false);
 
         ((AbstractDocument) hostPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
-        hostPane.setText("127.0.0.1");
+        hostPane.setText(host);
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5));
         portPane.setText(Integer.toString(generator.nextInt(65536 - 1024) + 1024));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));

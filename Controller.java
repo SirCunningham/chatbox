@@ -33,7 +33,7 @@ public class Controller {
         chatCreator.startButton.addActionListener(new StartButtonListener());
         chatCreator.startButton.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.clientButton.addKeyListener(new CreatorListener(chatCreator));
-        chatCreator.serverButton.addChangeListener(new ServerButtonListener());
+        chatCreator.serverButton.addItemListener(new ServerButtonListener());
         chatCreator.serverButton.addKeyListener(new CreatorListener(chatCreator));
         chatCreator.serverOptions.addItemListener(new ServerOptionsListener());
         chatCreator.closeButton.addActionListener(new CloseButtonListener());
@@ -72,20 +72,15 @@ public class Controller {
         public void actionPerformed(ActionEvent e) {
             final ChatRoom chatRoom = new ChatRoom(chatCreator);
             try {
-                final String host = chatCreator.hostPane.getText();
-                final int port = Integer.parseInt(chatCreator.portPane.getText());
-                final boolean isServer = chatCreator.serverButton.isSelected();
-                if (isServer) {
-                    chatCreator.hostPane.setText("127.0.0.1");
-
-                    final Server server = new Server(port, chatRoom);
+                if (chatRoom.isServer) {
+                    final Server server = new Server(chatRoom.port, chatRoom);
                     new Thread(server).start();
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
                 }
                 if (chatRoom.success) {
-                    final Client client = new Client(host, port, chatRoom, isServer);
+                    final Client client = new Client(chatRoom.host, chatRoom.port, chatRoom, chatRoom.isServer);
                     new Thread(client).start();
                     chatCreator.chatRooms.add(chatRoom);
                     addUser(chatRoom, chatCreator.chatRooms);
@@ -136,18 +131,21 @@ public class Controller {
         }
     }
 
-    public class ServerButtonListener implements ChangeListener {
+    public class ServerButtonListener implements ItemListener {
 
         @Override
-        public void stateChanged(ChangeEvent e) {
-            if (chatCreator.serverButton.isSelected()) {
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 chatCreator.startButton.setText("Create server");
                 chatCreator.hostLabel.setEnabled(false);
                 chatCreator.hostPane.setEnabled(false);
-            } else {
+                chatCreator.host = chatCreator.hostPane.getText();
+                chatCreator.hostPane.setText("127.0.0.1");
+            } else if (e.getStateChange() == ItemEvent.DESELECTED) {
                 chatCreator.startButton.setText("Join server");
                 chatCreator.hostLabel.setEnabled(true);
                 chatCreator.hostPane.setEnabled(true);
+                chatCreator.hostPane.setText(chatCreator.host);
             }
         }
     }
