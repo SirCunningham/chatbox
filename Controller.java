@@ -102,7 +102,7 @@ public class Controller {
                     }
 
                     chatCreator.tabbedPane.setSelectedIndex(index);
-                    chatCreator.namePane.setText("User " + chatCreator.generator.nextInt(1000000000));
+                    chatCreator.namePane.setText("User " + ChatCreator.generator.nextInt(1000000000));
                     chatCreator.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }

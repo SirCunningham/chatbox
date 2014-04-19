@@ -57,10 +57,10 @@ public class ProgressBarButtonListener implements ActionListener {
                         setProgress(progress);
                         while (progress < 100) {
                             try {
-                                Thread.sleep(chatRoom.chatCreator.generator.nextInt(100));
+                                Thread.sleep(ChatCreator.generator.nextInt(100));
                             } catch (InterruptedException e) {
                             }
-                            progress += chatRoom.chatCreator.generator.nextInt(10);
+                            progress += ChatCreator.generator.nextInt(10);
                             setProgress(Math.min(progress, 100));
                         }
                         return null;
