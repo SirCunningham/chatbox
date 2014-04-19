@@ -3,7 +3,6 @@ package chatbox;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
-import java.util.*;
 import javax.swing.*;
 
 public class ProgressBarButtonListener implements ActionListener {
@@ -54,15 +53,14 @@ public class ProgressBarButtonListener implements ActionListener {
                 worker = new SwingWorker<Object, Object>() {
                     @Override
                     protected Object doInBackground() throws Exception {
-                        Random generator = new Random();
                         int progress = 0;
                         setProgress(progress);
                         while (progress < 100) {
                             try {
-                                Thread.sleep(generator.nextInt(100));
+                                Thread.sleep(chatRoom.chatCreator.generator.nextInt(100));
                             } catch (InterruptedException e) {
                             }
-                            progress += generator.nextInt(10);
+                            progress += chatRoom.chatCreator.generator.nextInt(10);
                             setProgress(Math.min(progress, 100));
                         }
                         return null;

@@ -3,10 +3,8 @@ package chatbox;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.io.*;
 import javax.imageio.ImageIO;
-import java.util.*;
 import java.util.ArrayList;
 
 public class Controller {
@@ -65,22 +63,20 @@ public class Controller {
 
     // Starta klient eller server
     public class StartButtonListener implements ActionListener {
-        
-        private final Random generator = new Random();
 
         @Override
         public void actionPerformed(ActionEvent e) {
             final ChatRoom chatRoom = new ChatRoom(chatCreator);
             try {
                 if (chatRoom.isServer) {
-                    final Server server = new Server(chatRoom.port, chatRoom);
+                    final Server server = new Server(chatRoom);
                     new Thread(server).start();
                     chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                             + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                     chatRoom.bootPanel.setVisible(true);
                 }
                 if (chatRoom.success) {
-                    final Client client = new Client(chatRoom.host, chatRoom.port, chatRoom, chatRoom.isServer);
+                    final Client client = new Client(chatRoom);
                     new Thread(client).start();
                     chatCreator.chatRooms.add(chatRoom);
                     addUser(chatRoom, chatCreator.chatRooms);
@@ -106,7 +102,7 @@ public class Controller {
                     }
 
                     chatCreator.tabbedPane.setSelectedIndex(index);
-                    chatCreator.namePane.setText("User " + generator.nextInt(1000000000));
+                    chatCreator.namePane.setText("User " + chatCreator.generator.nextInt(1000000000));
                     chatCreator.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
             }

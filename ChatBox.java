@@ -8,8 +8,10 @@ package chatbox;
 //Trådbugg: ibland får nya klienter en tom rad vid intro
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
+//Lösning: adapter??
 
-//Write fake host, then a new server cannot be created after that! Is host info meaningful for server??
+//Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
+//Kolla portars tal! Kan inte skriva a eller d!!
 
 public class ChatBox {
 

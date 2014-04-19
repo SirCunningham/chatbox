@@ -30,10 +30,11 @@ public class ChatCreator {
     
     final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
     final ArrayList<JButton> indices = new ArrayList<>();
+    
+    static final Random generator = new Random();
 
     // Skapa GUI
     public ChatCreator() {
-        Random generator = new Random();
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -54,7 +55,7 @@ public class ChatCreator {
         ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5));
         portPane.setText(Integer.toString(generator.nextInt(65536 - 1024) + 1024));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));
-        namePane.setText("User 1000000000");
+        namePane.setText("User " + generator.nextInt(1000000000));
         ((AbstractDocument) tabPane.getDocument()).setDocumentFilter(new NewLineFilter(24));
         tabPane.setText("Chat 1");
 

@@ -18,9 +18,10 @@ public class Client implements Runnable {
     private final int port;
     private final ChatRoom chatRoom;
 
-    public Client(String host, int port, final ChatRoom chatRoom,
-            final boolean isServer) {
-        this.port = port;
+    public Client(final ChatRoom chatRoom) {
+        String host = chatRoom.host;
+        this.port = chatRoom.port;
+        boolean isServer = chatRoom.isServer;
         this.chatRoom = chatRoom;
         
         // Starta socket för klienten
