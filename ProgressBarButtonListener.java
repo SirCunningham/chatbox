@@ -49,7 +49,7 @@ public class ProgressBarButtonListener implements ActionListener {
 
                 optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
                         JOptionPane.YES_NO_OPTION);
-                dialog = new JDialog(chatRoom.chatCreator.frame, "File request", false);
+                dialog = new JDialog(ChatCreator.frame, "File request", false);
                 worker = new SwingWorker<Object, Object>() {
                     @Override
                     protected Object doInBackground() throws Exception {
@@ -97,7 +97,7 @@ public class ProgressBarButtonListener implements ActionListener {
                 dialog.getContentPane().add(invisibleContainer);
                 dialog.pack();
                 dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                dialog.setLocationRelativeTo(chatRoom.chatCreator.frame);
+                dialog.setLocationRelativeTo(ChatCreator.frame);
                 dialog.setResizable(false);
                 dialog.setAlwaysOnTop(false);
                 dialog.setVisible(true);

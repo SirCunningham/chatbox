@@ -23,11 +23,11 @@ public class Server implements Runnable {
             serverSocket.setSoTimeout(100);
         } catch (IOException e) {
             chatRoom.success = false;
-            chatRoom.showError(String.format("Could not listen on port %d.",
+            ChatCreator.showError(String.format("Could not listen on port %d.",
                     port));
         } catch (IllegalArgumentException e) {
             chatRoom.success = false;
-            chatRoom.showError(String.format("Port %d is out of range.", port));
+            ChatCreator.showError(String.format("Port %d is out of range.", port));
         }
     }
 
@@ -47,14 +47,14 @@ public class Server implements Runnable {
                     }
                 } catch (SocketTimeoutException e) {
                 } catch (IOException e) {
-                    chatRoom.showError(String.format("Accept failed on port %d.",
+                    ChatCreator.showError(String.format("Accept failed on port %d.",
                             port));
                 }
             }
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                chatRoom.showError("Failed to close server.");
+                ChatCreator.showError("Failed to close server.");
             }
         }
     }

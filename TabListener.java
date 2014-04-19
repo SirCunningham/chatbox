@@ -16,7 +16,7 @@ public class TabListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int index = chatRoom.chatCreator.tabbedPane.getSelectedIndex();
+        int index = ChatCreator.tabbedPane.getSelectedIndex();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER:
                 chatRoom.sendButton.doClick();
@@ -25,7 +25,7 @@ public class TabListener implements KeyListener {
             case KeyEvent.VK_KP_LEFT:
             case KeyEvent.VK_LEFT:
                 if (index > 0) {
-                    chatRoom.chatCreator.tabbedPane.setSelectedIndex(index - 1);
+                    ChatCreator.tabbedPane.setSelectedIndex(index - 1);
                 } else {
                     // refocus tab 0, but how? same problem as focus in general...
                 }
@@ -33,7 +33,7 @@ public class TabListener implements KeyListener {
             case KeyEvent.VK_D:
             case KeyEvent.VK_KP_RIGHT:
             case KeyEvent.VK_RIGHT:
-                chatRoom.chatCreator.tabbedPane.setSelectedIndex(index + 1);
+                ChatCreator.tabbedPane.setSelectedIndex(index + 1);
                 break;
             default:
                 break;

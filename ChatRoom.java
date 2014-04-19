@@ -20,7 +20,6 @@ public class ChatRoom {
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
     private final String[] cipherString = {"None", "caesar", "AES"};
-    public ChatCreator chatCreator;
     public AESCrypto AES;
     JPanel mainPanel = new JPanel();
     JPanel leftPanel = new JPanel();
@@ -75,10 +74,10 @@ public class ChatRoom {
     final int port;
     final boolean isServer;
 
-    public ChatRoom(ChatCreator chatCreator) {
-        host = chatCreator.hostPane.getText();
-        port = Integer.parseInt(chatCreator.portPane.getText());
-        isServer = chatCreator.serverButton.isSelected();
+    public ChatRoom() {
+        host = ChatCreator.hostPane.getText();
+        port = Integer.parseInt(ChatCreator.portPane.getText());
+        isServer = ChatCreator.serverButton.isSelected();
         
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener());
@@ -124,7 +123,6 @@ public class ChatRoom {
         progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         fileButton.addActionListener(new FileButtonListener());
 
-        this.chatCreator = chatCreator;
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
@@ -156,7 +154,7 @@ public class ChatRoom {
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener());
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        String name = chatCreator.namePane.getText();
+        String name = ChatCreator.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
         namePane.addFocusListener(new StatusListener(this));
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
@@ -217,11 +215,6 @@ public class ChatRoom {
         }
     }
 
-    public void showError(String text) {
-        JOptionPane.showMessageDialog(chatCreator.frame, text, "Error message",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
     public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
@@ -254,7 +247,7 @@ public class ChatRoom {
         namePane.setEnabled(false);
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
-        showError("You have been booted!"); //not an error
+        ChatCreator.showError("You have been booted!"); //not an error
     }
 
     class BootButtonListener implements ActionListener {
@@ -272,7 +265,7 @@ public class ChatRoom {
                 sendButton.doClick();
                 doc.insertString(0, message, style);
                 room.alive = false;                  //Döda klienten
-                for (ChatRoom mBox : chatCreator.chatRooms) {
+                for (ChatRoom mBox : ChatCreator.chatRooms) {
                     mBox.items.removeElement(room);
                 }
             } catch (BadLocationException ex) {
@@ -380,8 +373,8 @@ public class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Color newColor = JColorChooser.showDialog(chatCreator.frame,
-                    "Choose text color", chatCreator.frame.getBackground());
+            Color newColor = JColorChooser.showDialog(ChatCreator.frame,
+                    "Choose text color", ChatCreator.frame.getBackground());
             if (newColor != null) {
                 colorObj = newColor;
                 color = Integer.toHexString(colorObj.getRGB()).substring(2);
@@ -413,7 +406,7 @@ public class ChatRoom {
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
 
-            int returnVal = chooser.showOpenDialog(chatCreator.frame);
+            int returnVal = chooser.showOpenDialog(ChatCreator.frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
                 filePath = file.getAbsolutePath();
@@ -455,7 +448,7 @@ public class ChatRoom {
             }
 
         } catch (BadLocationException e) {
-            showError("String insertion failed.");
+            ChatCreator.showError("String insertion failed.");
         }
 
     }

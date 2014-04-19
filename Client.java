@@ -34,13 +34,13 @@ public class Client implements Runnable {
             }
         } catch (UnknownHostException e) {
             chatRoom.success = false;
-            chatRoom.showError("Don't know about host.");
+            ChatCreator.showError("Don't know about host.");
         } catch (IOException e) {
             chatRoom.success = false;
-            chatRoom.showError("Couldn't get I/O for the connection to host.");
+            ChatCreator.showError("Couldn't get I/O for the connection to host.");
         } catch (IllegalArgumentException e) {
             chatRoom.success = false;
-            chatRoom.showError("Port out of range.");
+            ChatCreator.showError("Port out of range.");
         }
     }
 
@@ -77,23 +77,23 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JButton button = (JButton) e.getSource();
-                        int index = chatRoom.chatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
+                        int index = ChatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                         if (chatRoom.speedyDelete) {
-                            chatRoom.chatCreator.indices.get(index).doClick();
+                            ChatCreator.indices.get(index).doClick();
                             o.println(chatRoom.getQuitMessage());
                         } else {
                             Object[] options = {"Yes", "No", "Exit ChatRoom"};
-                            int reply = JOptionPane.showOptionDialog(chatRoom.chatCreator.frame,
+                            int reply = JOptionPane.showOptionDialog(ChatCreator.frame,
                                     String.format("Are you sure you want to leave %s?",
-                                    chatRoom.chatCreator.tabbedPane.getTitleAt(index)),
+                                    ChatCreator.tabbedPane.getTitleAt(index)),
                                     "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
                                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                             if (reply == JOptionPane.YES_OPTION) {
-                                chatRoom.chatCreator.indices.get(index).doClick();
+                                ChatCreator.indices.get(index).doClick();
                                 o.println(chatRoom.getQuitMessage());
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
                                 ArrayList<ChatRoom> roomArray = new ArrayList<>();
-                                for (ChatRoom room : chatRoom.chatCreator.chatRooms) {
+                                for (ChatRoom room : ChatCreator.chatRooms) {
                                     roomArray.add(room);
                                 }
                                 for (ChatRoom room : roomArray) {
@@ -128,14 +128,14 @@ public class Client implements Runnable {
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
-                chatRoom.showError("Failed to close connection.");
+                ChatCreator.showError("Failed to close connection.");
             }
         }
     }
 
     public void keyRequest(String html) {
         if (html.contains("</keyrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
+            int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
@@ -151,7 +151,7 @@ public class Client implements Runnable {
 
     public void fileRequest(String html) {
         if (html.contains("</filrequest>")) {
-            int reply = JOptionPane.showConfirmDialog(chatRoom.chatCreator.frame,
+            int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);

@@ -5,36 +5,36 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class ChatCreator {
+final public class ChatCreator {
 
-    JFrame frame = new JFrame("ChatBox - instant messaging for pros");
-    JPanel dialogPanel = new JPanel();
-    JRadioButton clientButton = new JRadioButton("Client");
-    JRadioButton serverButton = new JRadioButton("Server");
-    ButtonGroup buttonGroup = new ButtonGroup();
-    JLabel hostLabel = new JLabel("Host:");
-    JLabel passLabel = new JLabel("Password:");
-    JLabel requestLabel = new JLabel("Request:");
-    JTextPane hostPane = new JTextPane();
-    JTextPane portPane = new JTextPane();
-    JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
-    JTextField requestPane = new JTextField("Let me in!", 15);
-    JTextPane namePane = new JTextPane();
-    JTextPane tabPane = new JTextPane();
-    JButton startButton = new JButton("Join server");
-    JButton closeButton = new IconButton("closeIcon.png");
-    JComboBox serverOptions;
-    JTabbedPane tabbedPane = new JTabbedPane();
+    static final JFrame frame = new JFrame("ChatBox - instant messaging for pros");
+    static final JPanel dialogPanel = new JPanel();
+    static final JRadioButton clientButton = new JRadioButton("Client");
+    static final JRadioButton serverButton = new JRadioButton("Server");
+    static final ButtonGroup buttonGroup = new ButtonGroup();
+    static final JLabel hostLabel = new JLabel("Host:");
+    static final JLabel passLabel = new JLabel("Password:");
+    static final JLabel requestLabel = new JLabel("Request:");
+    static final JTextPane hostPane = new JTextPane();
+    static final JTextPane portPane = new JTextPane();
+    static final JPasswordField passPane = new JPasswordField("4hfJ/dc.5t", 10);
+    static final JTextField requestPane = new JTextField("Let me in!", 15);
+    static final JTextPane namePane = new JTextPane();
+    static final JTextPane tabPane = new JTextPane();
+    static final JButton startButton = new JButton("Join server");
+    static final JButton closeButton = new IconButton("closeIcon.png");
+    static final JComboBox serverOptions;
+    static final JTabbedPane tabbedPane = new JTabbedPane();
     
-    String host = "127.0.0.1";
+    static String host = "127.0.0.1";
     
-    final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
-    final ArrayList<JButton> indices = new ArrayList<>();
+    static final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
+    static final ArrayList<JButton> indices = new ArrayList<>();
     
     static final Random generator = new Random();
-
-    // Skapa GUI
-    public ChatCreator() {
+    
+    // Statisk initialisering
+    static {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -113,5 +113,15 @@ public class ChatCreator {
         frame.add(tabbedPane, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
+    }
+    
+    // Förbjud instansiering
+    private ChatCreator() {
+        throw new AssertionError();
+    }
+    
+    public static void showError(String text) {
+        JOptionPane.showMessageDialog(frame, text, "Error message",
+                JOptionPane.ERROR_MESSAGE);
     }
 }
