@@ -52,7 +52,8 @@ final public class ChatCreator {
 
         ((AbstractDocument) hostPane.getDocument()).setDocumentFilter(new NewLineFilter(48));
         hostPane.setText(host);
-        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5));
+        // jämför portPane med keyPane för att få filtret att fungera!
+        ((AbstractDocument) portPane.getDocument()).setDocumentFilter(new NewLineFilter(5, false));
         portPane.setText(Integer.toString(generator.nextInt(65536 - 1024) + 1024));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(24));
         namePane.setText("User " + generator.nextInt(1000000000));

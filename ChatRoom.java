@@ -74,7 +74,7 @@ public class ChatRoom {
     final int port;
     final boolean isServer;
 
-    public ChatRoom() {
+    public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
         port = Integer.parseInt(ChatCreator.portPane.getText());
         isServer = ChatCreator.serverButton.isSelected();
@@ -285,7 +285,7 @@ public class ChatRoom {
             String chosen = String.valueOf(cipherBox.getSelectedItem());
             switch (chosen) {
                 case "caesar":
-                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(8, false));
+                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(3, false));
                     toggleType(TYPE_CAESAR);
                     keyPane.setText(caesarKey);
                     break;

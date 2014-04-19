@@ -81,9 +81,8 @@ public class ChatBox {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // throw NumberFormatException
-            final ChatRoom chatRoom = new ChatRoom();
             try {
+                final ChatRoom chatRoom = new ChatRoom();
                 if (chatRoom.isServer) {
                     final Server server = new Server(chatRoom);
                     new Thread(server).start();
@@ -94,15 +93,10 @@ public class ChatBox {
                 if (chatRoom.success) {
                     final Client client = new Client(chatRoom);
                     new Thread(client).start();
-                    ChatCreator.chatRooms.add(chatRoom);
-                    // don't add before you know it's good!!!
-                    addUser(chatRoom, ChatCreator.chatRooms);
                 }
-            } catch (NumberFormatException ex) {
-                chatRoom.success = false;
-                ChatCreator.showError("Port is not an integer or not sufficiently small.");
-            } finally {
                 if (chatRoom.success) {
+                    ChatCreator.chatRooms.add(chatRoom);
+                    addUser(chatRoom, ChatCreator.chatRooms);
                     chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
                             + "<text color=\"#00ff00\">Connection successful</text></message>"));
                     // send this to others!
@@ -122,6 +116,8 @@ public class ChatBox {
                     ChatCreator.namePane.setText("User " + ChatCreator.generator.nextInt(1000000000));
                     ChatCreator.tabPane.setText("Chat " + String.valueOf(++tabCount));
                 }
+            } catch (NumberFormatException ex) {
+                ChatCreator.showError("Port is not an integer or not sufficiently small.");
             }
         }
     }
