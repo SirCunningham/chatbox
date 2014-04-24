@@ -1,7 +1,11 @@
 package chatbox;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.text.*;
+
+// skicka krypterat: ta bort ny bakgrund!
+// modifiera krypterat: uppdatera text!
 
 // Markera textrutor
 public class StatusListener implements FocusListener {
@@ -37,13 +41,23 @@ public class StatusListener implements FocusListener {
             }
             String message = chatRoom.messagePane.getText();
             try {
+                //hacklösning... ersätt med adapter.o.println(text)!
+                chatRoom.statusUpdate = true;
                 chatRoom.doc.remove(0, message.length());
                 chatRoom.doc.insertString(0, "I just switched from my old name: " + name, chatRoom.style);
                 chatRoom.sendButton.doClick();
                 chatRoom.doc.insertString(0, message, chatRoom.style);
+                if (chatRoom.cipherButton.isSelected()) {
+                    String text = message.substring(chatRoom.cipherStart, chatRoom.cipherEnd);
+                    StyleConstants.setBackground(chatRoom.style, chatRoom.colorObj);
+                    chatRoom.doc.remove(chatRoom.cipherStart, chatRoom.cipherEnd - chatRoom.cipherStart);
+                    chatRoom.doc.insertString(chatRoom.cipherStart, text, chatRoom.style);
+                    StyleConstants.setBackground(chatRoom.style, Color.WHITE);
+                }
             } catch (BadLocationException ex) {
-                System.out.println("test");
                 ex.printStackTrace();
+            } finally {
+                chatRoom.statusUpdate = false;
             }
             source.select(0, 0);
         } else if (source == chatRoom.keyPane) {

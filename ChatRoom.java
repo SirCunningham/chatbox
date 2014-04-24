@@ -73,6 +73,8 @@ public class ChatRoom {
     final String host;
     final int port;
     final boolean isServer;
+    
+    boolean statusUpdate = false;
 
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
@@ -307,9 +309,9 @@ public class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            String getText = messagePane.getText();
             if (cipherButton.isSelected()) {
-                if (cipherStart < cipherEnd) {
-                    String getText = messagePane.getText();
+                if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
                     String text = getText.substring(cipherStart, cipherEnd);
                     String type = String.valueOf(cipherBox.getSelectedItem());
                     String key = keyPane.getText();
@@ -334,9 +336,8 @@ public class ChatRoom {
                 } else {
                     cipherButton.doClick();
                 }
-            } else {
-                String text = messagePane.getText().substring(cipherStart,
-                        cipherEnd);
+            } else if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
+                String text = getText.substring(cipherStart, cipherEnd);
                 try {
                     doc.remove(cipherStart, cipherEnd - cipherStart);
                     doc.insertString(cipherStart, text, style);
@@ -382,6 +383,8 @@ public class ChatRoom {
                 String message = messagePane.getText();
                 StyleConstants.setForeground(style, colorObj);
                 try {
+                    //hacklösning... ersätt med adapter.o.println(text)!
+                    statusUpdate = true;
                     doc.remove(0, message.length());
                     doc.insertString(0, "I just changed to a new color: " + color, style);
                     sendButton.doClick();
@@ -395,6 +398,8 @@ public class ChatRoom {
                     }
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
+                } finally {
+                    statusUpdate = false;
                 }
             }
         }
@@ -478,7 +483,7 @@ public class ChatRoom {
     public String getMessage() {
         try {
             String message;
-            if (cipherButton.isSelected()) {
+            if (cipherButton.isSelected() && !statusUpdate) {
                 message = cipherMessage;
                 cipherButton.doClick();
             } else {

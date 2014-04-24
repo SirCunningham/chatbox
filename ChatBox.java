@@ -8,7 +8,11 @@ package chatbox;
 //Trådbugg: ibland får nya klienter en tom rad vid intro
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
-//Lösning: adapter??
+//Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
+
+//Bara mellanrum i namnet filtreras bort!
+
+//Make panel grab focus and everything else lose it when one clicks on it!
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 
