@@ -1,7 +1,6 @@
 package chatbox;
 
 //Utsparkning: Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();" i kod!?
-//Color switch does not work when encrypted, sends wrong message!!!
 //Scroll does not always work - and lags!
 
 //Problems: tab switching does not work without server, no left end, no focus when click on tab
@@ -11,6 +10,9 @@ package chatbox;
 //Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
 
 //Bara mellanrum i namnet filtreras bort!
+
+//Går inte att modifiera/uppdatera redan krypterad text!!
+//På grund av detta kvarstår backgrunden om ny kryptotext tillkommit (färgbyte löser detta, men ej ovanstående)!!!
 
 //Make panel grab focus and everything else lose it when one clicks on it!
 

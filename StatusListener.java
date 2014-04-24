@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.text.*;
 
-// skicka krypterat: ta bort ny bakgrund!
-// modifiera krypterat: uppdatera text!
-
 // Markera textrutor
 public class StatusListener implements FocusListener {
 
