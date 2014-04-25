@@ -89,9 +89,13 @@ public class ChatRoom {
         rightPanel.add(bootPanel);
         rightPanel.add(infoPanel);
         
+        fileButton.addActionListener(new FileButtonListener(this));
         fileButton.setBorder(BorderFactory.createEmptyBorder());
+        sendFileButton.addActionListener(new SendFileButtonListener(this));
         sendFileButton.setEnabled(false);
+        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         closeButton.setFocusPainted(false);
+        
         ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         filePane.addFocusListener(new StatusListener(this));
         filePane.setText("filename.txt");
@@ -115,12 +119,6 @@ public class ChatRoom {
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
         
-        filePane.addFocusListener(new StatusListener(this));
-        descriptionPane.addFocusListener(new StatusListener(this));
-        sendFileButton.addActionListener(new SendFileButtonListener(this));
-        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
-        fileButton.addActionListener(new FileButtonListener(this));
-        
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
@@ -129,7 +127,6 @@ public class ChatRoom {
         
         mainPanel.setFocusable(true);
         mainPanel.addMouseListener(new MouseAdapter() {
-            // textfields are still selected, why?? namefield works, messagefield doesn't...
             
             @Override
             public void mousePressed(MouseEvent e) {
