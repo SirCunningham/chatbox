@@ -209,10 +209,9 @@ public class ChatRoom {
                 return null;
         }
     }
-    //Används aldrig??
 
     private void disableChat() {
-        // disable more!!
+        // disable more fields!!
         namePane.setEnabled(false);
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
