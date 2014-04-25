@@ -19,19 +19,26 @@ public class CipherBoxListener implements ItemListener {
         switch (chosen) {
             case "caesar":
                 ((AbstractDocument) chatRoom.keyPane.getDocument()).setDocumentFilter(new NewLineFilter(3, false));
-                chatRoom.toggleType(chatRoom.TYPE_CAESAR);
+                toggleType(chatRoom.TYPE_CAESAR);
                 chatRoom.keyPane.setText(chatRoom.caesarKey);
                 break;
             case "AES":
                 ((AbstractDocument) chatRoom.keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
-                chatRoom.toggleType(chatRoom.TYPE_AES);
+                toggleType(chatRoom.TYPE_AES);
                 chatRoom.keyPane.setText(chatRoom.AES.getDecodeKey());
                 break;
             default:
                 if (chatRoom.cipherButton.isSelected()) {
                     chatRoom.cipherButton.doClick();
                 }
-                chatRoom.toggleType(chatRoom.TYPE_NONE);
+                toggleType(chatRoom.TYPE_NONE);
         }
+    }
+    public void toggleType(int type) {
+        chatRoom.cipherButton.setEnabled(type != chatRoom.TYPE_NONE);
+        chatRoom.keyLabel.setVisible(type != chatRoom.TYPE_NONE);
+        chatRoom.keyPane.setVisible(type != chatRoom.TYPE_NONE);
+        chatRoom.keyPane.setEditable(type != chatRoom.TYPE_AES);
+        chatRoom.keyBox.setVisible(type != chatRoom.TYPE_NONE);
     }
 }

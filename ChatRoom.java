@@ -206,16 +206,8 @@ public class ChatRoom {
                 return null;
         }
     }
-    
-    public void toggleType(int type) {
-        cipherButton.setEnabled(type != TYPE_NONE);
-        keyLabel.setVisible(type != TYPE_NONE);
-        keyPane.setVisible(type != TYPE_NONE);
-        keyPane.setEditable(type != TYPE_AES);
-        keyBox.setVisible(type != TYPE_NONE);
-    }
-    
-    public void disableChat() {
+    //Används aldrig??
+    private void disableChat() {
         // disable more!!
         namePane.setEnabled(false);
         messagePane.setEnabled(false);
