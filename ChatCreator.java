@@ -25,18 +25,15 @@ final public class ChatCreator {
     static final JButton closeButton = new IconButton("closeIcon.png");
     static final JComboBox serverOptions;
     static final JTabbedPane tabbedPane = new JTabbedPane();
-    
     static String host = "127.0.0.1";
-    
     static final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
     static final ArrayList<JButton> indices = new ArrayList<>();
-    
     static final Random generator = new Random();
-    
+
     // Statisk initialisering
     static {
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
+
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setPreferredSize(new Dimension(dim.width * 4 / 5, dim.height / 2));
         tabbedPane.setFocusable(false);
@@ -64,7 +61,7 @@ final public class ChatCreator {
 
         passLabel.setVisible(false);
         passPane.setVisible(false);
-        
+
         requestLabel.setVisible(false);
         requestPane.setVisible(false);
 
@@ -79,7 +76,7 @@ final public class ChatCreator {
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer4 = new JPanel(new GridLayout(1, 1));
-        
+
         radioPanel.add(clientButton);
         radioPanel.add(serverButton);
         hostPanel.add(hostLabel);
@@ -114,12 +111,12 @@ final public class ChatCreator {
         frame.pack();
         frame.setVisible(true);
     }
-    
+
     // Förbjud instansiering
     private ChatCreator() {
         throw new AssertionError();
     }
-    
+
     public static void showError(String text) {
         JOptionPane.showMessageDialog(frame, text, "Error message",
                 JOptionPane.ERROR_MESSAGE);

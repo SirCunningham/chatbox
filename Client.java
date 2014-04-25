@@ -23,7 +23,7 @@ public class Client implements Runnable {
         this.port = chatRoom.port;
         boolean isServer = chatRoom.isServer;
         this.chatRoom = chatRoom;
-        
+
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
@@ -56,7 +56,7 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = chatRoom.getMessage();
+                        String msg = Messages.getMessage(chatRoom);
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
@@ -65,12 +65,13 @@ public class Client implements Runnable {
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
                 class SendFileButtonListener implements ActionListener {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(chatRoom.getFileMessage());
+                        o.println(Messages.getFileMessage(chatRoom));
                     }
                 }
-                
+
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
 
@@ -80,7 +81,7 @@ public class Client implements Runnable {
                         int index = ChatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                         if (chatRoom.speedyDelete) {
                             ChatCreator.indices.get(index).doClick();
-                            o.println(chatRoom.getQuitMessage());
+                            o.println(Messages.getQuitMessage(chatRoom));
                         } else {
                             Object[] options = {"Yes", "No", "Exit ChatRoom"};
                             int reply = JOptionPane.showOptionDialog(ChatCreator.frame,
@@ -90,7 +91,7 @@ public class Client implements Runnable {
                                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                             if (reply == JOptionPane.YES_OPTION) {
                                 ChatCreator.indices.get(index).doClick();
-                                o.println(chatRoom.getQuitMessage());
+                                o.println(Messages.getQuitMessage(chatRoom));
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
                                 ArrayList<ChatRoom> roomArray = new ArrayList<>();
                                 for (ChatRoom room : ChatCreator.chatRooms) {
@@ -114,12 +115,12 @@ public class Client implements Runnable {
                     keyRequest(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
-                    if (responseLine.contains("*** Bye")) {                                          
+                    if (responseLine.contains("*** Bye")) {
                         break;
                     }
                 }
                 // send to others instead!?
-                
+
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.namePane.getText()));
                 chatRoom.sendButton.setEnabled(false);
@@ -162,7 +163,7 @@ public class Client implements Runnable {
             } else {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
-                        chatRoom.namePane.getText(), chatRoom.color,chatRoom.messagePane.getText()));
+                        chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
             }
         }
     }
