@@ -331,7 +331,6 @@ public class ChatRoom {
             }
             lockDocument = false;
         }
-        
     }
 
     // Välj bakgrundsfärg
