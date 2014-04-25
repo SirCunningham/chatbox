@@ -3,12 +3,8 @@ package chatbox;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.math.BigInteger;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -406,10 +402,10 @@ public class ChatRoom {
     public final void appendToPane(String msg) {
 
         try {
-            xmlHTMLEditorKit kit = (ChatRoom.xmlHTMLEditorKit) chatBox.getEditorKit();
+            xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc1.getLength(), msg, 0, 0, null);
+                kit.insertHTML(doc1.getLength(), msg, 0, 0, null, doc1);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -531,38 +527,6 @@ public class ChatRoom {
              System.err.println("Ett fel inträffade2: " + ex);
              }
              */
-        }
-    }
-
-    public class xmlHTMLEditorKit extends HTMLEditorKit {
-        //Måste förbättras
-
-        public void insertHTML(int offset, String html,
-                int popDepth, int pushDepth, HTML.Tag insertTag) throws
-                BadLocationException, IOException {
-            String color = XMLString.toHexColor(html);
-            //thr.keyRequest(html);
-
-            super.insertHTML((HTMLDocument) chatBox.getDocument(),
-                    offset, "<font color=\"" + color + "\">" + XMLString.showName(html)
-                    + "</font>", popDepth, pushDepth, insertTag);
-            /*else {
-             super.insertHTML((HTMLDocument) chatBox.getDocument(),
-             offset, "Något blev fel i meddelandet", popDepth, pushDepth, insertTag);
-             }
-             /*
-             if (thr.timer.isRunning()) {
-             System.out.println(thr.timer.getType());
-             System.out.println(html);
-             System.out.println(XMLString.getEncryptedType(html));
-             if (thr.timer.getType().equals(XMLString.getEncryptedType(html))) {
-             thr.timer.stop();
-             chatRoom.nameToKey.put(XMLString.getSender(html), new ArrayList<String>());
-             }
-             }
-             * 
-             */
-
         }
     }
 }
