@@ -150,7 +150,7 @@ public class ChatRoom {
 
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
-        colorButton.addActionListener(new ColorButtonListener());
+        colorButton.addActionListener(new ColorButtonListener(this));
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         String name = ChatCreator.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
@@ -228,42 +228,6 @@ public class ChatRoom {
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
-    }
-
-    // Välj bakgrundsfärg
-    class ColorButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Color newColor = JColorChooser.showDialog(ChatCreator.frame,
-                    "Choose text color", ChatCreator.frame.getBackground());
-            if (newColor != null) {
-                colorObj = newColor;
-                color = Integer.toHexString(colorObj.getRGB()).substring(2);
-                namePane.setForeground(colorObj);
-                String message = messagePane.getText();
-                StyleConstants.setForeground(style, colorObj);
-                try {
-                    //hacklösning... ersätt med adapter.o.println(text)!
-                    statusUpdate = true;
-                    doc.remove(0, message.length());
-                    doc.insertString(0, "I just changed to a new color: " + color, style);
-                    sendButton.doClick();
-                    doc.insertString(0, message, style);
-                    if (cipherButton.isSelected()) {
-                        String text = message.substring(cipherStart, cipherEnd);
-                        StyleConstants.setBackground(style, colorObj);
-                        doc.remove(cipherStart, cipherEnd - cipherStart);
-                        doc.insertString(cipherStart, text, style);
-                        StyleConstants.setBackground(style, Color.WHITE);
-                    }
-                } catch (BadLocationException ex) {
-                    ex.printStackTrace();
-                } finally {
-                    statusUpdate = false;
-                }
-            }
-        }
     }
 
     public class FileButtonListener implements ActionListener {
