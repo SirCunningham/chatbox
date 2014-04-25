@@ -3,7 +3,7 @@ package chatbox;
 import java.awt.event.*;
 
 public class TabListener implements KeyListener {
-    
+
     private final ChatRoom chatRoom;
 
     public TabListener(ChatRoom chatRoom) {

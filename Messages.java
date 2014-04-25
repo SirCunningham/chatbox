@@ -23,10 +23,11 @@ public class Messages {
         return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
                 chatRoom.namePane.getText(), chatRoom.filePane.getText(), chatRoom.fileSizePane.getText(), description);
     }
-    
+
     public static String getQuitMessage(ChatRoom chatRoom) {
         return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", chatRoom.namePane.getText(), chatRoom.color);
     }
+
     public static String getMessage(ChatRoom chatRoom) {
         try {
             String message;
@@ -82,6 +83,4 @@ public class Messages {
         return "";
     }
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
-
-    
 }

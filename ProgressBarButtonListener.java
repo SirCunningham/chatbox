@@ -51,6 +51,7 @@ public class ProgressBarButtonListener implements ActionListener {
                         JOptionPane.YES_NO_OPTION);
                 dialog = new JDialog(ChatCreator.frame, "File request", false);
                 worker = new SwingWorker<Object, Object>() {
+
                     @Override
                     protected Object doInBackground() throws Exception {
                         int progress = 0;
@@ -79,7 +80,7 @@ public class ProgressBarButtonListener implements ActionListener {
                             public void propertyChange(PropertyChangeEvent e) {
                                 String name = e.getPropertyName();
                                 if (e.getSource() == optionPane
-                                && name.equals(JOptionPane.VALUE_PROPERTY)) {
+                                        && name.equals(JOptionPane.VALUE_PROPERTY)) {
                                     int reply = (int) optionPane.getValue();
                                     if (reply == JOptionPane.YES_OPTION) {
                                         progressBar.setVisible(true);

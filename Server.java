@@ -16,7 +16,7 @@ public class Server implements Runnable {
     public Server(final ChatRoom chatRoom) {
         this.port = chatRoom.port;
         this.chatRoom = chatRoom;
-        
+
         // Starta socket för servern
         try {
             serverSocket = new ServerSocket(port);
@@ -40,7 +40,7 @@ public class Server implements Runnable {
                 try {
                     clientSocket = serverSocket.accept();
                     // Skapa tråd för varje klient
-                    
+
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();

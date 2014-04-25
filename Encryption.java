@@ -47,6 +47,6 @@ public class Encryption {
         }
         //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
         String msg = new String(chars);
-        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
+        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();
     }
 }

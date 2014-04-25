@@ -31,15 +31,15 @@ public class XMLString {
             ex.printStackTrace();
         }
     }
-    
+
     public String toText() {
         return xmlStr;
     }
-    
+
     public static boolean isCorrect(String xmlStr) {
         return xmlStr.matches("<message .*>.*</message>");
     }
-    
+
     public static String getEncryptedType(String xmlStr) {
         String[] strings = xmlStr.split("type=\"");
         for (String str : strings) {
@@ -49,13 +49,15 @@ public class XMLString {
         }
         return null;
     }
+
     public static String removeKeyRequest(String xmlStr) {
         return xmlStr.replaceAll("<keyrequest.*>.*</keyrequest>", "");
     }
+
     public static String removeFileRequest(String xmlStr) {
-        return xmlStr.replaceAll("<filerequest.*>.*</filerequest>","");
+        return xmlStr.replaceAll("<filerequest.*>.*</filerequest>", "");
     }
-    
+
     public static String getKeyRequestType(String xmlStr) {
         String[] strings = xmlStr.split("keyrequest type=");
         for (String str : strings) {
@@ -92,7 +94,7 @@ public class XMLString {
         if (hex.matches("<fetstil>.*</fetstil>")) {
             hex = hex.replaceAll("<(|/)fetstil>", "");
         }
-        
+
         hex = hex.replaceAll("<(\\w*.)>.*</\1>", ""); //Tveksamt
         return hex;
     }
