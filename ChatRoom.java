@@ -64,7 +64,7 @@ public class ChatRoom {
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
-    HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
+    HashMap<String, String[]> nameToKey = new HashMap<>();    //String[] is a vector with two components; the first is the Caesar key and the second the AES key
     final String host;
     final int port;
     final boolean isServer;
