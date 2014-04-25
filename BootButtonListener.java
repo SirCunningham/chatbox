@@ -5,11 +5,13 @@ import java.awt.event.ActionListener;
 import javax.swing.text.BadLocationException;
 
 public class BootButtonListener implements ActionListener {
+
     private ChatRoom chatRoom;
-    
+
     public BootButtonListener(ChatRoom chatRoom) {
-        this.chatRoom=chatRoom;
+        this.chatRoom = chatRoom;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String message = chatRoom.messagePane.getText();

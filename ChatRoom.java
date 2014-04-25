@@ -207,6 +207,7 @@ public class ChatRoom {
         }
     }
     //Används aldrig??
+
     private void disableChat() {
         // disable more!!
         namePane.setEnabled(false);

@@ -2,22 +2,16 @@ package chatbox;
 
 //Utsparkning: Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();" i kod!?
 //Scroll does not always work - and lags!
-
 //Problems: tab switching does not work without server, no left end, no focus when click on tab
 //Trådbugg: ibland får nya klienter en tom rad vid intro
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
 //Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
-
 //Bara mellanrum i namnet filtreras bort!
-
 //Går inte att modifiera/uppdatera redan krypterad text!!
 //På grund av detta kvarstår backgrunden om ny kryptotext tillkommit (färgbyte löser detta, men ej ovanstående)!!!
-
 //Make panel grab focus and everything else lose it when one clicks on it!
-
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -77,7 +71,7 @@ public class ChatBox {
         tabPanel.add(closeButton, gbc);
         return tabPanel;
     }
-    
+
     public static void main(String[] args) {
         new ChatBox();
     }

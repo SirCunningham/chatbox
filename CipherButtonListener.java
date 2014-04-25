@@ -7,11 +7,13 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyleConstants;
 
 public class CipherButtonListener implements ActionListener {
+
     private final ChatRoom chatRoom;
-    
+
     public CipherButtonListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
+
     public void actionPerformed(ActionEvent e) {
         String getText = chatRoom.messagePane.getText();
         if (chatRoom.cipherButton.isSelected()) {

@@ -6,12 +6,13 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 public class FileButtonListener implements ActionListener {
-    
+
     public final ChatRoom chatRoom;
+
     public FileButtonListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     public void actionPerformed(ActionEvent e) {
         JFileChooser chooser = new JFileChooser();
 

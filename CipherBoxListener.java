@@ -1,6 +1,5 @@
 package chatbox;
 
-
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.text.AbstractDocument;
@@ -12,7 +11,7 @@ public class CipherBoxListener implements ItemListener {
     public CipherBoxListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     //Välj krypteringssystem
     public void itemStateChanged(ItemEvent e) {
         String chosen = String.valueOf(chatRoom.cipherBox.getSelectedItem());
@@ -34,6 +33,7 @@ public class CipherBoxListener implements ItemListener {
                 toggleType(chatRoom.TYPE_NONE);
         }
     }
+
     public void toggleType(int type) {
         chatRoom.cipherButton.setEnabled(type != chatRoom.TYPE_NONE);
         chatRoom.keyLabel.setVisible(type != chatRoom.TYPE_NONE);

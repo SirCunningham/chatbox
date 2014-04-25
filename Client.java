@@ -23,7 +23,7 @@ public class Client implements Runnable {
         this.port = chatRoom.port;
         boolean isServer = chatRoom.isServer;
         this.chatRoom = chatRoom;
-        
+
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
@@ -65,12 +65,13 @@ public class Client implements Runnable {
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
                 class SendFileButtonListener implements ActionListener {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         o.println(Messages.getFileMessage(chatRoom));
                     }
                 }
-                
+
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
 
@@ -114,12 +115,12 @@ public class Client implements Runnable {
                     keyRequest(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
-                    if (responseLine.contains("*** Bye")) {                                          
+                    if (responseLine.contains("*** Bye")) {
                         break;
                     }
                 }
                 // send to others instead!?
-                
+
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.namePane.getText()));
                 chatRoom.sendButton.setEnabled(false);
@@ -162,7 +163,7 @@ public class Client implements Runnable {
             } else {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
-                        chatRoom.namePane.getText(), chatRoom.color,chatRoom.messagePane.getText()));
+                        chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
             }
         }
     }

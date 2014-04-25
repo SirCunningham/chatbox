@@ -15,6 +15,7 @@ public class ColorButtonListener implements ActionListener {
     public ColorButtonListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
+
     public void actionPerformed(ActionEvent e) {
         Color newColor = JColorChooser.showDialog(ChatCreator.frame,
                 "Choose text color", ChatCreator.frame.getBackground());

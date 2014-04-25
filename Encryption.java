@@ -9,7 +9,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class Encryption {
-    
+
     public static String encrypt(String type, String text, String key, AESCrypto AES) {
         switch (type) {
             case "caesar":
@@ -30,7 +30,7 @@ public class Encryption {
         }
         return null;
     }
-    
+
     private static String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
