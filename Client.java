@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 import javax.swing.*;
 
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
@@ -17,13 +18,14 @@ public class Client implements Runnable {
     private PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
+    private static ScheduledExecutorService worker;   //Timer for keyrequest
 
     public Client(final ChatRoom chatRoom) {
         String host = chatRoom.host;
         this.port = chatRoom.port;
         boolean isServer = chatRoom.isServer;
         this.chatRoom = chatRoom;
-
+        worker = Executors.newSingleThreadScheduledExecutor();
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
