@@ -56,7 +56,7 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = chatRoom.getMessage();
+                        String msg = Messages.getMessage(chatRoom);
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
@@ -67,7 +67,7 @@ public class Client implements Runnable {
                 class SendFileButtonListener implements ActionListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(chatRoom.getFileMessage());
+                        o.println(Messages.getFileMessage(chatRoom));
                     }
                 }
                 
@@ -80,7 +80,7 @@ public class Client implements Runnable {
                         int index = ChatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
                         if (chatRoom.speedyDelete) {
                             ChatCreator.indices.get(index).doClick();
-                            o.println(chatRoom.getQuitMessage());
+                            o.println(Messages.getQuitMessage(chatRoom));
                         } else {
                             Object[] options = {"Yes", "No", "Exit ChatRoom"};
                             int reply = JOptionPane.showOptionDialog(ChatCreator.frame,
@@ -90,7 +90,7 @@ public class Client implements Runnable {
                                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                             if (reply == JOptionPane.YES_OPTION) {
                                 ChatCreator.indices.get(index).doClick();
-                                o.println(chatRoom.getQuitMessage());
+                                o.println(Messages.getQuitMessage(chatRoom));
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
                                 ArrayList<ChatRoom> roomArray = new ArrayList<>();
                                 for (ChatRoom room : ChatCreator.chatRooms) {

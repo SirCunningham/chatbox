@@ -61,9 +61,9 @@ public class ChatRoom {
     JButton closeButton = new IconButton("closeIcon.png");
     JComboBox fileEncryptions;
     private String filePath;
-    private static final int TYPE_NONE = 0;
-    private static final int TYPE_CAESAR = 1;
-    private static final int TYPE_AES = 2;
+    static final int TYPE_NONE = 0;
+    static final int TYPE_CAESAR = 1;
+    static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
     
     final String host;
@@ -78,7 +78,7 @@ public class ChatRoom {
         isServer = ChatCreator.serverButton.isSelected();
         
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        bootButton.addActionListener(new BootButtonListener());
+        bootButton.addActionListener(new BootButtonListener(this));
         JLabel infoLabel1 = new JLabel("Host: " + host);
         JLabel infoLabel2 = new JLabel("Port: " + port);
         infoPanel.add(infoLabel1);
@@ -170,8 +170,8 @@ public class ChatRoom {
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer3 = new JPanel(new GridLayout(1, 1));
         cipherButton.setEnabled(false);
-        cipherButton.addActionListener(new CipherButtonListener());
-        cipherBox.addItemListener(new CipherBoxListener());
+        cipherButton.addActionListener(new CipherButtonListener(this));
+        cipherBox.addItemListener(new CipherBoxListener(this));
         keyLabel.setVisible(false);
         keyPane.setVisible(false);
         keyPane.addFocusListener(new StatusListener(this));
@@ -228,103 +228,6 @@ public class ChatRoom {
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
-    }
-
-    class BootButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String message = messagePane.getText();
-            int i = list.getSelectedIndex();
-            try {
-                doc.remove(0, message.length());
-                ChatRoom room = (ChatRoom) items.getElementAt(i);
-                doc.insertString(0,
-                        String.format("%s got the boot",
-                                room.getName()), style);
-                sendButton.doClick();
-                doc.insertString(0, message, style);
-                room.alive = false;                  //Döda klienten
-                for (ChatRoom mBox : ChatCreator.chatRooms) {
-                    mBox.items.removeElement(room);
-                }
-            } catch (BadLocationException ex) {
-                ex.printStackTrace();
-            }
-            while (i >= 0) {
-                i = list.getSelectedIndex();
-            }
-        }
-    }
-
-    // Välj krypteringssystem
-    class CipherBoxListener implements ItemListener {
-
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            String chosen = String.valueOf(cipherBox.getSelectedItem());
-            switch (chosen) {
-                case "caesar":
-                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(3, false));
-                    toggleType(TYPE_CAESAR);
-                    keyPane.setText(caesarKey);
-                    break;
-                case "AES":
-                    ((AbstractDocument) keyPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
-                    toggleType(TYPE_AES);
-                    keyPane.setText(AES.getDecodeKey());
-                    break;
-                default:
-                    if (cipherButton.isSelected()) {
-                        cipherButton.doClick();
-                    }
-                    toggleType(TYPE_NONE);
-            }
-        }
-    }
-
-    class CipherButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String getText = messagePane.getText();
-            if (cipherButton.isSelected()) {
-                if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
-                    String text = getText.substring(cipherStart, cipherEnd);
-                    String type = String.valueOf(cipherBox.getSelectedItem());
-                    String key = keyPane.getText();
-                    String keyString = "";
-                    if (keyBox.isSelected()) {
-                        keyString = String.format(" key=\"%s\"", key);
-                    }
-                    try {
-                        cipherMessage = String.format("%s<encrypted type="
-                                + "\"%s\"%s>%s</encrypted>%s",
-                                XMLString.convertAngle(getText.substring(0,
-                                                cipherStart)), type, keyString,
-                                XMLString.convertAngle(Encryption.encrypt(type, text, key,AES)), XMLString.convertAngle(
-                                        getText.substring(cipherEnd)));
-                        StyleConstants.setBackground(style, colorObj);
-                        doc.remove(cipherStart, cipherEnd - cipherStart);
-                        doc.insertString(cipherStart, text, style);
-                        StyleConstants.setBackground(style, Color.WHITE);
-                    } catch (BadLocationException ex) {
-                        ex.printStackTrace();
-                    }
-                } else {
-                    cipherButton.doClick();
-                }
-            } else if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
-                String text = getText.substring(cipherStart, cipherEnd);
-                try {
-                    doc.remove(cipherStart, cipherEnd - cipherStart);
-                    doc.insertString(cipherStart, text, style);
-                } catch (BadLocationException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-        
     }
 
     // Välj bakgrundsfärg
@@ -414,83 +317,6 @@ public class ChatRoom {
             ChatCreator.showError("String insertion failed.");
         }
 
-    }
-
-    public String getFileMessage() {
-        String description = descriptionPane.getText();
-        if (description.equals("File description (optional)")) {
-            description = "No description";
-        }
-        String fileData = String.format("File name: %s\nFile size: %s\n"
-                + "File description: %s\nAccept file?", filePane.getText(),
-                fileSizePane.getText(), description);
-        String message = messagePane.getText();
-        /*
-         appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-         namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
-         * 
-         */
-        return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                namePane.getText(), filePane.getText(), fileSizePane.getText(), description);
-    }
-
-    public String getQuitMessage() {
-        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", namePane.getText(), color);
-    }
-
-    public String getMessage() {
-        try {
-            String message;
-            if (cipherButton.isSelected() && !statusUpdate) {
-                message = cipherMessage;
-                cipherButton.doClick();
-            } else {
-                message = XMLString.convertAngle(messagePane.getText());
-            }
-            messagePane.setText("");
-            String name = namePane.getText();
-            if (!message.isEmpty()) {
-                if (!keyRequestBox.isSelected()) {
-                    return String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s</text></message>",
-                            name, color,
-                            message);
-                }
-                return String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><keyrequest "
-                        + "type=\"%s\">%s"
-                        + "</keyrequest></text></message>",
-                        name, color,
-                        String.valueOf(cipherBox.getSelectedItem()), message);
-                /*
-                 timer.setType(String.valueOf(chatRoom.cipherBox.getSelectedItem()));
-                 timer.start();
-                 * 
-                 */
-
-
-                /*
-                 appendToPane(String.format("<message sender=\"%s\">"
-                 + "<text color=\"%s\">%s</text></message>",
-                 name, chatRoom.color,
-                 message));
-                 * 
-                 */
-            }
-            /*
-             if (message.contains("terminate my ass")) {
-             appendToPane("<message sender=\"INFO\">"
-             + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");
-             //kill();
-             }
-             * 
-             */
-        } catch (Exception ex) {
-            appendToPane(String.format("<message sender=\"ERROR\">"
-                    + "<text color=\"#ff0000\">Output stream failed</text></message>"));
-        }
-        System.out.println("Shouldn't be here!");
-        return "";
     }
 
     // Skicka fil med klient
