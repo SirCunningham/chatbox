@@ -127,6 +127,16 @@ public class ChatRoom {
             e.printStackTrace();
         }
         
+        mainPanel.setFocusable(true);
+        mainPanel.addMouseListener(new MouseAdapter() {
+            // textfields are still selected, why?? namefield works, messagefield doesn't...
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JComponent source = (JComponent) e.getSource();
+                source.requestFocusInWindow();
+            }
+        });
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
