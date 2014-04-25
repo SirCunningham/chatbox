@@ -60,7 +60,7 @@ public class ChatRoom {
     JButton progressBarButton = new JButton("NEW Receive [test!]");
     JButton closeButton = new IconButton("closeIcon.png");
     JComboBox fileEncryptions;
-    private String filePath;
+    String filePath;
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
@@ -117,7 +117,7 @@ public class ChatRoom {
         descriptionPane.addFocusListener(new StatusListener(this));
         sendFileButton.addActionListener(new SendFileButtonListener(this));
         progressBarButton.addActionListener(new ProgressBarButtonListener(this));
-        fileButton.addActionListener(new FileButtonListener());
+        fileButton.addActionListener(new FileButtonListener(this));
         
         try {
             AES = new AESCrypto();
@@ -221,23 +221,6 @@ public class ChatRoom {
         messagePane.setEnabled(false);
         sendButton.setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
-    }
-    
-    public class FileButtonListener implements ActionListener {
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JFileChooser chooser = new JFileChooser();
-            
-            int returnVal = chooser.showOpenDialog(ChatCreator.frame);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                filePath = file.getAbsolutePath();
-                filePane.setText(file.getName());
-                fileSizePane.setText(Long.toString(file.length()) + " bytes");
-                sendFileButton.setEnabled(true);
-            }
-        }
     }
     
     class MessageListener implements KeyListener {

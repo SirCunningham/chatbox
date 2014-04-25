@@ -7,7 +7,7 @@ import javax.swing.text.BadLocationException;
 // Skicka fil med klient
 public class SendFileButtonListener implements ActionListener {
 
-    public ChatRoom chatRoom;
+    public final ChatRoom chatRoom;
 
     public SendFileButtonListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
