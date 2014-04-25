@@ -77,6 +77,24 @@ public class XMLString {
         msg += xmlStr;
         return msg;
     }
+    
+    //CONTINUE!!!!!!!!!!!!!!!!!!!!!!
+    public static String[] getKeys(String xmlStr) {
+        String[] keys = new String[2];
+        keys[0]="";
+        keys[1]="";
+        String msg = "";
+        if (xmlStr.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)")) {
+            int i = xmlStr.indexOf("<encrypted");
+            String rest = xmlStr.substring(i);
+            if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
+                String fromType = rest.substring(16);
+                String type=fromType.substring(0,fromType.indexOf((" ")));
+                
+            }
+        } 
+        return keys;
+    }
 
     public String toText() {
         return xmlStr;

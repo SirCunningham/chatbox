@@ -115,6 +115,8 @@ public class Client implements Runnable {
                 chatRoom.closeButton.addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
+                    String sender=XMLString.getSender(responseLine);
+                    
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
                     if (responseLine.contains("*** Bye")) {
