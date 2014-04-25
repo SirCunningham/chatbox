@@ -302,7 +302,7 @@ public class ChatRoom {
                                 + "\"%s\"%s>%s</encrypted>%s",
                                 XMLString.convertAngle(getText.substring(0,
                                                 cipherStart)), type, keyString,
-                                XMLString.convertAngle(Encrypt.encrypt(type, text, key,AES)), XMLString.convertAngle(
+                                XMLString.convertAngle(Encryption.encrypt(type, text, key,AES)), XMLString.convertAngle(
                                         getText.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);

@@ -41,20 +41,20 @@ public class AESCrypto {
         return hexDecodeKey;
     }
 
-    public static String keyToString(SecretKeySpec key) {
+    private static String keyToString(SecretKeySpec key) {
         return Hex.encodeHexString(key.getEncoded());
     }
 
-    public static SecretKeySpec stringToKey(String key) throws DecoderException {
+    private static SecretKeySpec stringToKey(String key) throws DecoderException {
         byte[] decodedKey = Hex.decodeHex(key.toCharArray());
         return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
     }
 
-    public static String byteArrayToHex(byte[] bytes) throws UnsupportedEncodingException {
+    private static String byteArrayToHex(byte[] bytes) throws UnsupportedEncodingException {
         return Hex.encodeHexString(bytes);
     }
 
-    public static byte[] hexToByteArray(String hex) throws DecoderException {
+    private static byte[] hexToByteArray(String hex) throws DecoderException {
         return Hex.decodeHex(hex.toCharArray());
     }
 }
