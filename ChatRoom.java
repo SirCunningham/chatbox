@@ -117,7 +117,7 @@ public class ChatRoom {
 
         filePane.addFocusListener(new StatusListener(this));
         descriptionPane.addFocusListener(new StatusListener(this));
-        sendFileButton.addActionListener(new SendFileButtonListener());
+        sendFileButton.addActionListener(new SendFileButtonListener(this));
         progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         fileButton.addActionListener(new FileButtonListener());
 
@@ -198,9 +198,6 @@ public class ChatRoom {
         return namePane.getText();
     }
 
-    public String getIP() {
-        return host;
-    }
 
     public String getKey(String type) {
         switch (type) {
@@ -283,40 +280,4 @@ public class ChatRoom {
 
     }
 
-    // Skicka fil med klient
-    public class SendFileButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String description = descriptionPane.getText();
-            if ("File description (optional)".equals(description)) {
-                description = "No description";
-            }
-            String fileData = String.format("File name: %s\nFile size: %s\n"
-                    + "File description: %s\nAccept file?", filePane.getText(),
-                    fileSizePane.getText(), description);
-            String message = messagePane.getText();
-
-            appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                    namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
-            try {
-                doc.remove(0, message.length());
-                doc.insertString(0, "Filerequest: " + fileData, style);
-                sendButton.doClick();
-                doc.insertString(0, message, style);
-            } catch (BadLocationException ex) {
-                ex.printStackTrace();
-            }
-            /*
-             try {
-             FileSender thr = new FileSender(chatCreator.hostPane.getText(),
-             Integer.parseInt(chatCreator.portPane.getText()),
-             filePane.getText());
-             thr.start();
-             } catch (Exception ex) {
-             System.err.println("Ett fel inträffade2: " + ex);
-             }
-             */
-        }
-    }
 }
