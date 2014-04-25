@@ -29,34 +29,38 @@ public class StatusListener implements FocusListener {
         if (source == chatRoom.messagePane && !chatRoom.cipherButton.isSelected()) {
             chatRoom.cipherStart = source.getSelectionStart();
             chatRoom.cipherEnd = source.getSelectionEnd();
-        } else if (source == chatRoom.namePane && !name.equals(chatRoom.namePane.getText())) {
-            if (chatRoom.namePane.getText().isEmpty()) {
-                chatRoom.namePane.setText("Nomen nescio");
-                if (name.equals("Nomen nescio")) {
-                    return;
+        } else if (source == chatRoom.namePane) {
+            String nameProposal = chatRoom.namePane.getText().replaceAll("\\s+", " ").trim();
+            chatRoom.namePane.setText(nameProposal);
+            if (!name.equals(nameProposal)) {
+                if (nameProposal.isEmpty()) {
+                    chatRoom.namePane.setText("Nomen nescio");
+                    if (name.equals("Nomen nescio")) {
+                        return;
+                    }
                 }
-            }
-            String message = chatRoom.messagePane.getText();
-            try {
-                //hacklösning... ersätt med adapter.o.println(text)!
-                chatRoom.statusUpdate = true;
-                chatRoom.doc.remove(0, message.length());
-                chatRoom.doc.insertString(0, "I just switched from my old name: " + name, chatRoom.style);
-                chatRoom.sendButton.doClick();
-                chatRoom.doc.insertString(0, message, chatRoom.style);
-                if (chatRoom.cipherButton.isSelected()) {
-                    String text = message.substring(chatRoom.cipherStart, chatRoom.cipherEnd);
-                    StyleConstants.setBackground(chatRoom.style, chatRoom.colorObj);
-                    chatRoom.doc.remove(chatRoom.cipherStart, chatRoom.cipherEnd - chatRoom.cipherStart);
-                    chatRoom.doc.insertString(chatRoom.cipherStart, text, chatRoom.style);
-                    StyleConstants.setBackground(chatRoom.style, Color.WHITE);
+                String message = chatRoom.messagePane.getText();
+                try {
+                    //hacklösning... ersätt med adapter.o.println(text)!
+                    chatRoom.statusUpdate = true;
+                    chatRoom.doc.remove(0, message.length());
+                    chatRoom.doc.insertString(0, "I just switched from my old name: " + name, chatRoom.style);
+                    chatRoom.sendButton.doClick();
+                    chatRoom.doc.insertString(0, message, chatRoom.style);
+                    if (chatRoom.cipherButton.isSelected()) {
+                        String text = message.substring(chatRoom.cipherStart, chatRoom.cipherEnd);
+                        StyleConstants.setBackground(chatRoom.style, chatRoom.colorObj);
+                        chatRoom.doc.remove(chatRoom.cipherStart, chatRoom.cipherEnd - chatRoom.cipherStart);
+                        chatRoom.doc.insertString(chatRoom.cipherStart, text, chatRoom.style);
+                        StyleConstants.setBackground(chatRoom.style, Color.WHITE);
+                    }
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                } finally {
+                    chatRoom.statusUpdate = false;
                 }
-            } catch (BadLocationException ex) {
-                ex.printStackTrace();
-            } finally {
-                chatRoom.statusUpdate = false;
+                source.select(0, 0);
             }
-            source.select(0, 0);
         } else if (source == chatRoom.keyPane) {
             source.setText(source.getText()); //redundant?
         }

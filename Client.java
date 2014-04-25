@@ -66,7 +66,7 @@ public class Client implements Runnable {
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
-                class SendFileButtonListener implements ActionListener {
+                class SendFileButtonListener2 implements ActionListener {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -111,7 +111,7 @@ public class Client implements Runnable {
 
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.sendButton.addActionListener(sendButtonListener);
-                chatRoom.sendFileButton.addActionListener(new SendFileButtonListener());
+                chatRoom.sendFileButton.addActionListener(new SendFileButtonListener2());
                 chatRoom.closeButton.addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);

@@ -7,7 +7,6 @@ package chatbox;
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
 //Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
-//Bara mellanrum i namnet filtreras bort!
 
 //Make panel grab focus and everything else lose it when one clicks on it!
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
@@ -121,9 +120,9 @@ public class ChatBox {
         }
     }
 
-    private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> roomes) {
+    private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> rooms) {
         synchronized (lock) {
-            for (ChatRoom room : roomes) {
+            for (ChatRoom room : rooms) {
                 if (!chatRoom.items.contains(room)) {
                     chatRoom.items.addElement(room);
                 }
