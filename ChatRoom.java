@@ -11,7 +11,7 @@ import javax.swing.text.*;
 import javax.swing.text.html.*;
 
 public class ChatRoom {
-
+    
     volatile boolean success = true;
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
@@ -65,13 +65,11 @@ public class ChatRoom {
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
     HashMap<String, ArrayList<String>> nameToKey = new HashMap<>();
-    
     final String host;
     final int port;
     final boolean isServer;
-    
     boolean statusUpdate = false;
-
+    
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
         port = Integer.parseInt(ChatCreator.portPane.getText());
@@ -88,7 +86,7 @@ public class ChatRoom {
         rightPanel.add(listPane);
         rightPanel.add(bootPanel);
         rightPanel.add(infoPanel);
-
+        
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         sendFileButton.setEnabled(false);
         closeButton.setFocusPainted(false);
@@ -102,7 +100,7 @@ public class ChatRoom {
         descriptionPane.addFocusListener(new StatusListener(this));
         descriptionPane.setText("File description (optional)");
         fileEncryptions = new JComboBox(cipherString);
-
+        
         filePanel.add(fileButton);
         filePanel.add(filePane);
         filePanel.add(fileSizePane);
@@ -114,25 +112,25 @@ public class ChatRoom {
         fileButtonPanel.add(closeButton);
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
-
+        
         filePane.addFocusListener(new StatusListener(this));
         descriptionPane.addFocusListener(new StatusListener(this));
         sendFileButton.addActionListener(new SendFileButtonListener(this));
         progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         fileButton.addActionListener(new FileButtonListener());
-
+        
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
-
+        
         DefaultCaret caret = (DefaultCaret) chatBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         chatBox.setEditable(false);
@@ -147,7 +145,7 @@ public class ChatRoom {
         JScrollPane scrollPane = new JScrollPane(chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         leftPanel.add(scrollPane);
-
+        
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener(this));
@@ -164,7 +162,7 @@ public class ChatRoom {
         messagePanel.add(messagePane);
         messagePanel.add(sendButton);
         leftPanel.add(messagePanel);
-
+        
         JPanel buttonPanel = new JPanel();
         JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
@@ -188,17 +186,16 @@ public class ChatRoom {
         buttonPanel.add(invisibleContainer3);
         leftPanel.add(buttonPanel);
     }
-
+    
     @Override
     public String toString() {
         return String.format("%s (%s)", namePane.getText(), host);
     }
-
+    
     public String getName() {
         return namePane.getText();
     }
-
-
+    
     public String getKey(String type) {
         switch (type) {
             case "caesar":
@@ -209,8 +206,7 @@ public class ChatRoom {
                 return null;
         }
     }
-
-
+    
     public void toggleType(int type) {
         cipherButton.setEnabled(type != TYPE_NONE);
         keyLabel.setVisible(type != TYPE_NONE);
@@ -218,7 +214,7 @@ public class ChatRoom {
         keyPane.setEditable(type != TYPE_AES);
         keyBox.setVisible(type != TYPE_NONE);
     }
-
+    
     public void disableChat() {
         // disable more!!
         namePane.setEnabled(false);
@@ -226,13 +222,13 @@ public class ChatRoom {
         sendButton.setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
     }
-
+    
     public class FileButtonListener implements ActionListener {
-
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser chooser = new JFileChooser();
-
+            
             int returnVal = chooser.showOpenDialog(ChatCreator.frame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
@@ -243,20 +239,20 @@ public class ChatRoom {
             }
         }
     }
-
+    
     class MessageListener implements KeyListener {
-
+        
         @Override
         public void keyTyped(KeyEvent e) {
         }
-
+        
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 sendButton.doClick();
             }
         }
-
+        
         @Override
         public void keyReleased(KeyEvent e) {
         }
@@ -264,7 +260,7 @@ public class ChatRoom {
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     public final void appendToPane(String msg) {
-
+        
         try {
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
@@ -273,11 +269,10 @@ public class ChatRoom {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
+            
         } catch (BadLocationException e) {
             ChatCreator.showError("String insertion failed.");
         }
-
+        
     }
-
 }
