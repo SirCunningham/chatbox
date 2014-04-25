@@ -11,9 +11,6 @@ package chatbox;
 
 //Bara mellanrum i namnet filtreras bort!
 
-//Går inte att modifiera/uppdatera redan krypterad text!!
-//På grund av detta kvarstår backgrunden om ny kryptotext tillkommit (färgbyte löser detta, men ej ovanstående)!!!
-
 //Make panel grab focus and everything else lose it when one clicks on it!
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!

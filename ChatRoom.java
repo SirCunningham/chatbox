@@ -70,7 +70,8 @@ public class ChatRoom {
     final int port;
     final boolean isServer;
     
-    boolean statusUpdate = false;
+    volatile boolean statusUpdate = false;
+    volatile boolean lockDocument = false;
 
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
@@ -157,6 +158,7 @@ public class ChatRoom {
         namePane.addFocusListener(new StatusListener(this));
         ((AbstractDocument) messagePane.getDocument()).setDocumentFilter(new NewLineFilter(256));
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
+        messagePane.getDocument().addDocumentListener(new MessageDocListener(this));
         messagePane.addFocusListener(new StatusListener(this));
         messagePane.addKeyListener(new MessageListener());
         messagePanel.add(colorButton);
@@ -287,10 +289,12 @@ public class ChatRoom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String getText = messagePane.getText();
+            lockDocument = true;
+            String text = messagePane.getText();
+            int length = text.length();
             if (cipherButton.isSelected()) {
-                if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
-                    String text = getText.substring(cipherStart, cipherEnd);
+                if (cipherStart < cipherEnd && cipherEnd <= length) {
+                    String cipherText = text.substring(cipherStart, cipherEnd);
                     String type = String.valueOf(cipherBox.getSelectedItem());
                     String key = keyPane.getText();
                     String keyString = "";
@@ -300,13 +304,14 @@ public class ChatRoom {
                     try {
                         cipherMessage = String.format("%s<encrypted type="
                                 + "\"%s\"%s>%s</encrypted>%s",
-                                XMLString.convertAngle(getText.substring(0,
+                                XMLString.convertAngle(text.substring(0,
                                                 cipherStart)), type, keyString,
-                                XMLString.convertAngle(Encryption.encrypt(type, text, key,AES)), XMLString.convertAngle(
-                                        getText.substring(cipherEnd)));
+                                XMLString.convertAngle(Encryption.encrypt(type,
+                                cipherText, key, AES)), XMLString.convertAngle(
+                                        text.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
-                        doc.insertString(cipherStart, text, style);
+                        doc.insertString(cipherStart, cipherText, style);
                         StyleConstants.setBackground(style, Color.WHITE);
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
@@ -314,15 +319,17 @@ public class ChatRoom {
                 } else {
                     cipherButton.doClick();
                 }
-            } else if (cipherStart < cipherEnd && cipherEnd <= getText.length()) {
-                String text = getText.substring(cipherStart, cipherEnd);
+            } else {
                 try {
-                    doc.remove(cipherStart, cipherEnd - cipherStart);
-                    doc.insertString(cipherStart, text, style);
+                    int pos = messagePane.getCaretPosition();
+                    doc.remove(0, length);
+                    doc.insertString(0, text, style);
+                    messagePane.setCaretPosition(pos);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
             }
+            lockDocument = false;
         }
         
     }
