@@ -1,9 +1,5 @@
 package chatbox;
 
-import java.io.IOException;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
-
 public class Messages {
 
     public static String getFileMessage(ChatRoom chatRoom) {
