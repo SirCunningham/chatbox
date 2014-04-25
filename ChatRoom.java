@@ -217,24 +217,6 @@ public class ChatRoom {
         }
     }
 
-    public String encryptCaesar(String text, int shift) throws UnsupportedEncodingException {
-        char[] chars = text.toCharArray();
-        for (int i = 0; i < text.length(); i++) {
-            char c = chars[i];
-            //Tag inte med control characters
-            if (c >= 32 && c <= 127) {
-                int x = c - 32;
-                x = (x + shift) % 96;
-                if (x < 0) {
-                    x += 96;
-                }
-                chars[i] = (char) (x + 32);
-            }
-        }
-        //stackoverflow.com/questions/923863/converting-a-string-to-hexadecimal-in-java
-        String msg = new String(chars);
-        return String.format("%x", new BigInteger(1, msg.getBytes("UTF-8"))).toUpperCase();  //UTF-8 krav, men då fungerar inte åäö
-    }
 
     public void toggleType(int type) {
         cipherButton.setEnabled(type != TYPE_NONE);
@@ -324,7 +306,7 @@ public class ChatRoom {
                                 + "\"%s\"%s>%s</encrypted>%s",
                                 XMLString.convertAngle(getText.substring(0,
                                                 cipherStart)), type, keyString,
-                                XMLString.convertAngle(encrypt(type, text, key)), XMLString.convertAngle(
+                                XMLString.convertAngle(Encrypt.encrypt(type, text, key,AES)), XMLString.convertAngle(
                                         getText.substring(cipherEnd)));
                         StyleConstants.setBackground(style, colorObj);
                         doc.remove(cipherStart, cipherEnd - cipherStart);
@@ -347,26 +329,6 @@ public class ChatRoom {
             }
         }
         
-        private String encrypt(String type, String text, String key) {
-            switch (type) {
-                case "caesar":
-                    try {
-                        return encryptCaesar(text, Integer.valueOf(key));
-                    } catch (UnsupportedEncodingException ex) {
-                        ex.printStackTrace();
-                    }
-                case "AES":
-                    try {
-                        return AES.encrypt(text);
-                    } catch (NoSuchAlgorithmException | InvalidKeyException |
-                            UnsupportedEncodingException |
-                            IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-            }
-            return null;
-        }
     }
 
     // Välj bakgrundsfärg
