@@ -11,8 +11,8 @@ package chatbox;
 //Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
+
 import java.awt.event.*;
-import javax.swing.*;
 
 public class ChatBox {
 
@@ -85,4 +85,4 @@ public class ChatBox {
             }
         }
     }
-}   
+}

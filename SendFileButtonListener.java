@@ -1,8 +1,7 @@
 package chatbox;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.text.BadLocationException;
+import java.awt.event.*;
+import javax.swing.text.*;
 
 // Skicka fil med klient
 public class SendFileButtonListener implements ActionListener {
@@ -13,6 +12,7 @@ public class SendFileButtonListener implements ActionListener {
         this.chatRoom = chatRoom;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String description = chatRoom.descriptionPane.getText();
         if ("File description (optional)".equals(description)) {
