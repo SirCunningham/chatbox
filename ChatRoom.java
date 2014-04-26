@@ -68,6 +68,7 @@ public class ChatRoom {
     final String host;
     final int port;
     final boolean isServer;
+    PrintWriter o;
     
     volatile boolean statusUpdate = false;
     volatile boolean lockDocument = false;

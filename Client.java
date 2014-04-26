@@ -14,8 +14,8 @@ import javax.swing.*;
 public class Client implements Runnable {
 
     private Socket clientSocket;
-    private BufferedReader i;
-    private PrintWriter o;
+    protected BufferedReader i;
+    protected PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
     private static ScheduledExecutorService worker;   //Timer for keyrequest
