@@ -13,8 +13,8 @@ public class Server implements Runnable {
     private final int port;
     private final ChatRoom chatRoom;
 
-    public Server(final ChatRoom chatRoom) {
-        this.port = chatRoom.port;
+    public Server(int port, final ChatRoom chatRoom) {
+        this.port = port;
         this.chatRoom = chatRoom;
 
         // Starta socket för servern

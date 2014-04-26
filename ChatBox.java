@@ -1,6 +1,7 @@
 package chatbox;
 
-//StartButtonListener: item-listan uppdateras bara ibland??
+//StartButtonListener: item-listan uppdateras bara ibland, vem skrev detta??
+//Privata ELLER statiska variabler överallt - inga publika fält, tack!!
 
 //Utsparkning: Skicka <disconnect> med servern till en klient som blir kickad, skriv "chatRoom.disableChat();" i kod!?
 //Scroll does not always work - and lags! http://tips4java.wordpress.com/2008/10/22/text-area-scrolling/
@@ -8,7 +9,7 @@ package chatbox;
 //Trådbugg: ibland får nya klienter en tom rad vid intro
 //Återskapad bugg: server dör för sent, påverkar nyskapade tabbar
 //Bugg: sendknappen låser sig ibland, antagligen samma fel som ovan, utloggningsmeddelanden missas också ibland
-//Lösning: adapter för server (enkel) och klient (med fälten i och o)!?
+//Lösning: adapter för server (enkel) och klient (med fälten i och o, som läggs till i ChatRoom)!?
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 

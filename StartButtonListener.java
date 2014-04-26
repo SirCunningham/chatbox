@@ -23,14 +23,14 @@ public class StartButtonListener implements ActionListener {
         try {
             final ChatRoom chatRoom = new ChatRoom();
             if (chatRoom.isServer) {
-                final Server server = new Server(chatRoom);
+                final Server server = new ServerAdapter(chatRoom);
                 new Thread(server).start();
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
                 chatRoom.bootPanel.setVisible(true);
             }
             if (chatRoom.success) {
-                final Client client = new Client(chatRoom);
+                final Client client = new ClientAdapter(chatRoom);
                 new Thread(client).start();
             }
             if (chatRoom.success) {
