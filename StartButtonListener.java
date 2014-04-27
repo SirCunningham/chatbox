@@ -36,9 +36,18 @@ public class StartButtonListener implements ActionListener {
             if (chatRoom.success) {
                 ChatCreator.chatRooms.add(chatRoom);
                 addUser(chatRoom, ChatCreator.chatRooms);
-                chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
-                        + "<text color=\"#00ff00\">Connection successful</text></message>"));
-                    // send this to others!
+                if (!chatRoom.isServer) {
+                    chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>I beg to be connected!!</request></text></message>", chatRoom.getName()));
+                    try {
+                        //Vänta på bekräftelse, fixa riktigt villkor
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        ChatCreator.showError("You failed to be connected.");
+                    }
+                    chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
+                            + "<text color=\"#00ff00\">Connection successful</text></message>"));
+                }
+                // send this to others!
                 //chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
                 // - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
                 addUser2(chatRoom);

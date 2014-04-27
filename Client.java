@@ -29,9 +29,6 @@ public class Client implements Runnable {
             clientSocket = new Socket(host, port);
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream(), true);
-            if (!chatRoom.isServer) {
-                o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
-            }
         } catch (UnknownHostException e) {
             chatRoom.success = false;
             ChatCreator.showError("Don't know about host.");
