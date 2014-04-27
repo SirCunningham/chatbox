@@ -34,10 +34,13 @@ public class XMLString {
     public static void main(String[] args) {
         String test = "hej";
         String enc = Encryption.encrypt("caesar", test, "10", AES);
-        String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"caesar\" key=\"10\">"+enc+"</encrypted></text></message>";
+        String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"caesar\" key=\"10\">"+enc+"</encrypted><encrypted type=\"AES\" key=\"sdadsadasds\"> gsergserg </encrypted></text></message>";
         int i =msg.indexOf("<encrypted");
-        System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
-        System.out.println(handleString(msg));
+        //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
+        //System.out.println(handleString(msg));
+        String keys[] = getKeys(msg);
+        System.out.println(keys[0]);
+        System.out.println(keys[1]);
     }
     
     public static String handleString(String xmlStr) {
@@ -78,18 +81,39 @@ public class XMLString {
         return msg;
     }
     
-    //CONTINUE!!!!!!!!!!!!!!!!!!!!!!
     public static String[] getKeys(String xmlStr) {
         String[] keys = new String[2];
         keys[0]="";
         keys[1]="";
-        String msg = "";
         if (xmlStr.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)")) {
             int i = xmlStr.indexOf("<encrypted");
             String rest = xmlStr.substring(i);
+            //System.out.println(rest);
             if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
                 String fromType = rest.substring(16);
-                String type=fromType.substring(0,fromType.indexOf((" ")));
+                //.out.println(fromType);
+                String type=fromType.substring(1,fromType.indexOf((" "))-1);
+                //System.out.println(type);
+                String fromKey = fromType.substring(fromType.indexOf(" ")+6);
+
+                String key = fromKey.substring(0, fromKey.indexOf(">")-1);
+                switch (type) {
+                    case "caesar":
+                        keys[0]=key;
+                        break;
+                    case "AES":
+                        keys[1]=key;
+                        break;
+                }
+                rest = fromKey.substring(fromKey.indexOf(">")+1);
+                System.out.println(rest);
+                String[] otherKey = getKeys(rest);
+                if (keys[0].equals("")) {
+                    keys[0]=otherKey[0];
+                }
+                if (keys[1].equals("")) {
+                    keys[1]=otherKey[1];
+                }
             }
         } 
         return keys;

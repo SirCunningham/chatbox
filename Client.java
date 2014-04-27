@@ -113,8 +113,7 @@ public class Client implements Runnable {
                 chatRoom.closeButton.addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
-                    String sender=XMLString.getSender(responseLine);
-                    
+                    setKeys(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
                     if (responseLine.contains("*** Bye")) {
@@ -136,7 +135,7 @@ public class Client implements Runnable {
         }
     }
 
-    public void keyRequest(String html) {
+    private void keyRequest(String html) {
         if (html.contains("</keyrequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
@@ -151,8 +150,8 @@ public class Client implements Runnable {
             }
         }
     }
-
-    public void fileRequest(String html) {
+    
+    private void fileRequest(String html) {
         if (html.contains("</filrequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s.\n Receive file?",
@@ -167,6 +166,23 @@ public class Client implements Runnable {
                         + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
                         chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
             }
+        }
+    }
+    //Obtain and save the keys from the sender
+    private void setKeys(String responseLine) {
+        String sender = XMLString.getSender(responseLine);
+        String[] keys = XMLString.getKeys(responseLine);
+        String[] oldKeys = chatRoom.nameToKey.get(sender);
+        if (oldKeys != null) {
+            if (keys[0].equals("")) {
+                keys[0] = oldKeys[0];
+            }
+            if (keys[1].equals("")) {
+                keys[1] = oldKeys[1];
+            }
+            chatRoom.nameToKey.put(sender, keys);
+        } else {
+            chatRoom.nameToKey.put(sender, keys);
         }
     }
 }
