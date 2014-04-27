@@ -14,6 +14,8 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
         String color = XMLString.toHexColor(html);
         //thr.keyRequest(html);
         String sender = XMLString.getSender(html);
+        //System.out.println(chatRoom.nameToKey.get(sender));
+        System.out.println(html);
         super.insertHTML((HTMLDocument) chatRoom.chatBox.getDocument(),
                 offset, "<font color=\"" + color + "\">" + XMLString.showName(XMLString.decryptString(html,chatRoom.nameToKey.get(sender)))
                 + "</font>", popDepth, pushDepth, insertTag);
