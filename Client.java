@@ -168,7 +168,7 @@ public class Client implements Runnable {
             }
         }
     }
-    //Obtain and save the keys from the sender
+    //Obtain and save the keys from the sender. Might need to change this - problem if two people have the same name
     private void setKeys(String responseLine) {
         String sender = XMLString.getSender(responseLine);
         String[] keys = XMLString.getKeys(responseLine);

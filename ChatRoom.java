@@ -233,7 +233,7 @@ public class ChatRoom {
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc1.getLength(), msg, 0, 0, null, doc1);
+                kit.insertHTML(doc1.getLength(), msg, 0, 0, null, this);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

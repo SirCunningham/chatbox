@@ -9,13 +9,13 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
     //Måste förbättras
 
     public void insertHTML(int offset, String html,
-            int popDepth, int pushDepth, HTML.Tag insertTag, HTMLDocument doc) throws
+            int popDepth, int pushDepth, HTML.Tag insertTag, ChatRoom chatRoom) throws
             BadLocationException, IOException {
         String color = XMLString.toHexColor(html);
         //thr.keyRequest(html);
-
-        super.insertHTML((HTMLDocument) doc,
-                offset, "<font color=\"" + color + "\">" + XMLString.showName(XMLString.handleString(html))
+        String sender = XMLString.getSender(html);
+        super.insertHTML((HTMLDocument) chatRoom.chatBox.getDocument(),
+                offset, "<font color=\"" + color + "\">" + XMLString.showName(XMLString.decryptString(html,chatRoom.nameToKey.get(sender)))
                 + "</font>", popDepth, pushDepth, insertTag);
         /*else {
         super.insertHTML((HTMLDocument) chatBox.getDocument(),

@@ -31,18 +31,21 @@ public class XMLString {
             ex.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
         String test = "hej";
         String enc = Encryption.encrypt("caesar", test, "10", AES);
-        String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"caesar\" key=\"10\">"+enc+"</encrypted><encrypted type=\"AES\" key=\"sdadsadasds\"> gsergserg </encrypted></text></message>";
-        int i =msg.indexOf("<encrypted");
+        String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"caesar\">" + enc + "</encrypted></text></message>";
+        int i = msg.indexOf("<encrypted");
         //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
         //System.out.println(handleString(msg));
-        String keys[] = getKeys(msg);
-        System.out.println(keys[0]);
+        String keys[] = new String[2];
+        keys[0]="10";
+        keys[1]="";
+        System.out.println(decryptString(msg, keys));
         System.out.println(keys[1]);
     }
-    
+
     public static String handleString(String xmlStr) {
         String msg = "";
         if (xmlStr.contains("<encrypted")) {
@@ -80,47 +83,79 @@ public class XMLString {
         msg += xmlStr;
         return msg;
     }
-    
+
+    public static String decryptString(String xmlStr, String[] keys) {
+        //If keys included in message, encrypt that part
+        xmlStr = handleString(xmlStr);
+        if (xmlStr.matches("(.*)<encrypted type=(.*)>(.*)")) {
+            String msg = "";
+            int i = xmlStr.indexOf("<encrypted");
+            msg += xmlStr.substring(0, i);
+            String rest = xmlStr.substring(i);
+            if (rest.matches("<encrypted type=\"(.*)\">(.*)")) {
+                int k = rest.indexOf("</encrypted>");
+                String type = rest.substring(rest.indexOf("\"")+1, rest.indexOf("\">"));
+                String enc = rest.substring(rest.indexOf(">")+1, k);
+                switch (type) {
+                    case "caesar":
+                        if (!keys[0].equals("")) {
+                            msg += decryptCaesar(enc, Integer.valueOf(keys[0]));
+                        } else {
+                            msg+=enc;
+                        }
+                        break;
+                    case "AES":
+                        try {
+                            if (!keys[1].equals("")) {
+                                msg += AES.decrypt(enc, keys[1]);
+                            } else {
+                                msg+=enc;
+                            }
+                        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
+                        }
+                        break;
+                }
+                rest = rest.substring(k + 12);
+                msg += decryptString(rest, keys);
+                xmlStr = msg;
+            }
+        }
+        return xmlStr;
+
+    }
+
     public static String[] getKeys(String xmlStr) {
         String[] keys = new String[2];
-        keys[0]="";
-        keys[1]="";
+        keys[0] = "";
+        keys[1] = "";
         if (xmlStr.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)")) {
             int i = xmlStr.indexOf("<encrypted");
             String rest = xmlStr.substring(i);
-            //System.out.println(rest);
             if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
                 String fromType = rest.substring(16);
-                //.out.println(fromType);
-                String type=fromType.substring(1,fromType.indexOf((" "))-1);
-                //System.out.println(type);
-                String fromKey = fromType.substring(fromType.indexOf(" ")+6);
+                String type = fromType.substring(1, fromType.indexOf((" ")) - 1);
+                String fromKey = fromType.substring(fromType.indexOf(" ") + 6);
 
-                String key = fromKey.substring(0, fromKey.indexOf(">")-1);
+                String key = fromKey.substring(0, fromKey.indexOf(">") - 1);
                 switch (type) {
                     case "caesar":
-                        keys[0]=key;
+                        keys[0] = key;
                         break;
                     case "AES":
-                        keys[1]=key;
+                        keys[1] = key;
                         break;
                 }
-                rest = fromKey.substring(fromKey.indexOf(">")+1);
-                System.out.println(rest);
+                rest = fromKey.substring(fromKey.indexOf(">") + 1);
                 String[] otherKey = getKeys(rest);
                 if (keys[0].equals("")) {
-                    keys[0]=otherKey[0];
+                    keys[0] = otherKey[0];
                 }
                 if (keys[1].equals("")) {
-                    keys[1]=otherKey[1];
+                    keys[1] = otherKey[1];
                 }
             }
-        } 
+        }
         return keys;
-    }
-
-    public String toText() {
-        return xmlStr;
     }
 
     public static boolean isCorrect(String xmlStr) {
@@ -186,11 +221,12 @@ public class XMLString {
         return hex;
     }
 
-
-
     public static String getSender(String xmlMsg) {
         int index = xmlMsg.indexOf("sender");
-        return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
+        if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
+            return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
+        }
+        return "Anonymous";
     }
 
     public static String showName(String xmlMsg) {
@@ -204,7 +240,7 @@ public class XMLString {
         return null;
     }
 
-    public static String decryptCaesar(String text, int shift) {
+    private static String decryptCaesar(String text, int shift) {
         text = hexToString(text);
         char[] chars = text.toCharArray();
         for (int i = 0; i < text.length(); i++) {
