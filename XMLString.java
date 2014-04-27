@@ -90,7 +90,6 @@ public class XMLString {
             if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
                 String fromType = rest.substring(16);
                 String type=fromType.substring(0,fromType.indexOf((" ")));
-                
             }
         } 
         return keys;
