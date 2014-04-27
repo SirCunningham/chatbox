@@ -68,6 +68,7 @@ public class ChatRoom {
     final String host;
     final int port;
     final boolean isServer;
+    PrintWriter o;
     
     volatile boolean statusUpdate = false;
     volatile boolean lockDocument = false;
@@ -89,9 +90,13 @@ public class ChatRoom {
         rightPanel.add(bootPanel);
         rightPanel.add(infoPanel);
         
+        fileButton.addActionListener(new FileButtonListener(this));
         fileButton.setBorder(BorderFactory.createEmptyBorder());
+        sendFileButton.addActionListener(new SendFileButtonListener(this));
         sendFileButton.setEnabled(false);
+        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
         closeButton.setFocusPainted(false);
+        
         ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         filePane.addFocusListener(new StatusListener(this));
         filePane.setText("filename.txt");
@@ -115,12 +120,6 @@ public class ChatRoom {
         rightPanel.add(filePanel);
         rightPanel.add(fileButtonPanel);
         
-        filePane.addFocusListener(new StatusListener(this));
-        descriptionPane.addFocusListener(new StatusListener(this));
-        sendFileButton.addActionListener(new SendFileButtonListener(this));
-        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
-        fileButton.addActionListener(new FileButtonListener(this));
-        
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
@@ -129,7 +128,6 @@ public class ChatRoom {
         
         mainPanel.setFocusable(true);
         mainPanel.addMouseListener(new MouseAdapter() {
-            // textfields are still selected, why?? namefield works, messagefield doesn't...
             
             @Override
             public void mousePressed(MouseEvent e) {
@@ -169,7 +167,7 @@ public class ChatRoom {
         messagePane.setText("In medio cursu vitae nostrae, eram in silva obscura...");
         messagePane.getDocument().addDocumentListener(new MessageDocListener(this));
         messagePane.addFocusListener(new StatusListener(this));
-        messagePane.addKeyListener(new MessageListener());
+        messagePane.addKeyListener(new MessageListener(this));
         messagePanel.add(colorButton);
         messagePanel.add(namePane);
         messagePanel.add(messagePane);
@@ -228,24 +226,6 @@ public class ChatRoom {
         ChatCreator.showError("You have been booted!"); //not an error, but info
     }
 
-    class MessageListener implements KeyListener {
-        
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-        
-        @Override
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                sendButton.doClick();
-            }
-        }
-        
-        @Override
-        public void keyReleased(KeyEvent e) {
-        }
-    }
-
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     public final void appendToPane(String msg) {
         
@@ -261,6 +241,5 @@ public class ChatRoom {
         } catch (BadLocationException e) {
             ChatCreator.showError("String insertion failed.");
         }
-        
     }
 }

@@ -29,6 +29,7 @@ public class StatusListener implements FocusListener {
         if (source == chatRoom.messagePane && !chatRoom.cipherButton.isSelected()) {
             chatRoom.cipherStart = source.getSelectionStart();
             chatRoom.cipherEnd = source.getSelectionEnd();
+            source.setText(source.getText());
         } else if (source == chatRoom.namePane) {
             String nameProposal = chatRoom.namePane.getText().replaceAll("\\s+", " ").trim();
             chatRoom.namePane.setText(nameProposal);
@@ -61,8 +62,8 @@ public class StatusListener implements FocusListener {
                 }
                 source.select(0, 0);
             }
-        } else if (source == chatRoom.keyPane) {
-            source.setText(source.getText()); //redundant?
+        } else {
+            source.setText(source.getText());
         }
     }
 }

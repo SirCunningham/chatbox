@@ -1,12 +1,11 @@
 package chatbox;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.text.BadLocationException;
+import java.awt.event.*;
+import javax.swing.text.*;
 
 public class BootButtonListener implements ActionListener {
 
-    private ChatRoom chatRoom;
+    private final ChatRoom chatRoom;
 
     public BootButtonListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;

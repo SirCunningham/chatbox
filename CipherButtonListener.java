@@ -1,10 +1,8 @@
 package chatbox;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyleConstants;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.text.*;
 
 public class CipherButtonListener implements ActionListener {
 
@@ -14,6 +12,7 @@ public class CipherButtonListener implements ActionListener {
         this.chatRoom = chatRoom;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         chatRoom.lockDocument = true;
         String text = chatRoom.messagePane.getText();

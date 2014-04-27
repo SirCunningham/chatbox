@@ -1,11 +1,9 @@
 package chatbox;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JColorChooser;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyleConstants;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.text.*;
 
 //Välj bakrundsfärg
 public class ColorButtonListener implements ActionListener {
@@ -16,6 +14,7 @@ public class ColorButtonListener implements ActionListener {
         this.chatRoom = chatRoom;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         Color newColor = JColorChooser.showDialog(ChatCreator.frame,
                 "Choose text color", ChatCreator.frame.getBackground());

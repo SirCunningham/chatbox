@@ -14,16 +14,14 @@ import javax.swing.*;
 public class Client implements Runnable {
 
     private Socket clientSocket;
-    private BufferedReader i;
-    private PrintWriter o;
+    protected BufferedReader i;
+    protected PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
     private static ScheduledExecutorService worker;   //Timer for keyrequest
 
-    public Client(final ChatRoom chatRoom) {
-        String host = chatRoom.host;
-        this.port = chatRoom.port;
-        boolean isServer = chatRoom.isServer;
+    public Client(String host, int port, final ChatRoom chatRoom) {
+        this.port = port;
         this.chatRoom = chatRoom;
         worker = Executors.newSingleThreadScheduledExecutor();
         // Starta socket för klienten
@@ -31,7 +29,7 @@ public class Client implements Runnable {
             clientSocket = new Socket(host, port);
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream(), true);
-            if (!isServer) {
+            if (!chatRoom.isServer) {
                 o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>Jag vill ansluta mig!!!</request></text></message>", chatRoom.getName()));
             }
         } catch (UnknownHostException e) {

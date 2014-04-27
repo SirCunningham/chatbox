@@ -10,8 +10,7 @@ public class IconButton extends JButton {
         try {
             setIcon(new ImageIcon(ImageIO.read(new File(pathToIcon))));
         } catch (IOException e) {
-            System.err.println("Följande fil kunde inte hittas: " + pathToIcon);
-            e.printStackTrace();
+            ChatCreator.showError("Följande fil kunde inte hittas: " + pathToIcon);
         }
     }
 }
