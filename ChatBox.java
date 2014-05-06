@@ -13,6 +13,8 @@ package chatbox;
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 
+//Split leftPanel and rightPanel from ChatRoom, will be 3 small classes!
+
 import java.awt.event.*;
 
 public class ChatBox {
