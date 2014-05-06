@@ -18,7 +18,7 @@ public class ExitListener extends WindowAdapter {
             }
             for (ChatRoom room : roomArray) {
                 room.speedyDelete = true;
-                room.closeButton.doClick();
+                room.getCloseButton().doClick();
             }
             System.exit(0);
         }

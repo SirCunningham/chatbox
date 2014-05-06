@@ -17,7 +17,7 @@ class MessageListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            chatRoom.sendButton.doClick();
+            chatRoom.getSendButton().doClick();
         }
     }
 

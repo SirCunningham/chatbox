@@ -14,21 +14,21 @@ public class SendFileButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String description = chatRoom.descriptionPane.getText();
+        String description = chatRoom.getDescriptionPane().getText();
         if ("File description (optional)".equals(description)) {
             description = "No description";
         }
         String fileData = String.format("File name: %s\nFile size: %s\n"
-                + "File description: %s\nAccept file?", chatRoom.filePane.getText(),
-                chatRoom.fileSizePane.getText(), description);
-        String message = chatRoom.messagePane.getText();
+                + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
+                chatRoom.getFileSizePane().getText(), description);
+        String message = chatRoom.getMessagePane().getText();
 
         chatRoom.appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                chatRoom.namePane.getText(), chatRoom.filePane.getText(), chatRoom.fileSizePane.getText(), description));
+                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description));
         try {
             chatRoom.doc.remove(0, message.length());
             chatRoom.doc.insertString(0, "Filerequest: " + fileData, chatRoom.style);
-            chatRoom.sendButton.doClick();
+            chatRoom.getSendButton().doClick();
             chatRoom.doc.insertString(0, message, chatRoom.style);
         } catch (BadLocationException ex) {
             ex.printStackTrace();

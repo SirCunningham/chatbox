@@ -19,7 +19,7 @@ public class CloseButtonListener implements ActionListener {
             roomArray.add(room);
         }
         for (ChatRoom room : roomArray) {
-            room.closeButton.doClick();
+            room.getCloseButton().doClick();
         }
         if (ChatCreator.chatRooms.isEmpty()) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,

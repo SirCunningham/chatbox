@@ -27,7 +27,7 @@ public class StartButtonListener implements ActionListener {
                 new Thread(server).start();
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
-                chatRoom.bootPanel.setVisible(true);
+                chatRoom.getBootPanel().setVisible(true);
             }
             if (chatRoom.success) {
                 final Client client = new ClientAdapter(chatRoom);
@@ -53,7 +53,7 @@ public class StartButtonListener implements ActionListener {
                 addUser2(chatRoom);
                 int index = ChatCreator.tabbedPane.getTabCount() - 1;
                 ChatCreator.tabbedPane.insertTab(ChatCreator.tabPane.getText(),
-                        null, chatRoom.mainPanel, ChatCreator.tabPane.getText(), index);
+                        null, chatRoom.getMainPanel(), ChatCreator.tabPane.getText(), index);
                 try {
                     ChatCreator.tabbedPane.setTabComponentAt(index, createTabPanel());
                 } catch (IOException ex) {

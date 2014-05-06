@@ -3,40 +3,40 @@ package chatbox;
 public class Messages {
 
     public static String getFileMessage(ChatRoom chatRoom) {
-        String description = chatRoom.descriptionPane.getText();
+        String description = chatRoom.getDescriptionPane().getText();
         if (description.equals("File description (optional)")) {
             description = "No description";
         }
         String fileData = String.format("File name: %s\nFile size: %s\n"
-                + "File description: %s\nAccept file?", chatRoom.filePane.getText(),
-                chatRoom.fileSizePane.getText(), description);
-        String message = chatRoom.messagePane.getText();
+                + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
+                chatRoom.getFileSizePane().getText(), description);
+        String message = chatRoom.getMessagePane().getText();
         /*
         appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
         namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
          * 
          */
         return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
-                chatRoom.namePane.getText(), chatRoom.filePane.getText(), chatRoom.fileSizePane.getText(), description);
+                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description);
     }
 
     public static String getQuitMessage(ChatRoom chatRoom) {
-        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", chatRoom.namePane.getText(), chatRoom.color);
+        return String.format("<message sender=\"%s\"><text color=\"%s\">I just left.</text><disconnect /></message>", chatRoom.getNamePane().getText(), chatRoom.color);
     }
 
     public static String getMessage(ChatRoom chatRoom) {
         try {
             String message;
-            if (chatRoom.cipherButton.isSelected() && !chatRoom.statusUpdate) {
+            if (chatRoom.getCipherButton().isSelected() && !chatRoom.statusUpdate) {
                 message = chatRoom.cipherMessage;
-                chatRoom.cipherButton.doClick();
+                chatRoom.getCipherButton().doClick();
             } else {
-                message = XMLString.convertAngle(chatRoom.messagePane.getText());
+                message = XMLString.convertAngle(chatRoom.getMessagePane().getText());
             }
-            chatRoom.messagePane.setText("");
-            String name = chatRoom.namePane.getText();
+            chatRoom.getMessagePane().setText("");
+            String name = chatRoom.getNamePane().getText();
             if (!message.isEmpty()) {
-                if (!chatRoom.keyRequestBox.isSelected()) {
+                if (!chatRoom.getKeyRequestBox().isSelected()) {
                     return String.format("<message sender=\"%s\">"
                             + "<text color=\"%s\">%s</text></message>",
                             name, chatRoom.color,
@@ -47,9 +47,9 @@ public class Messages {
                         + "type=\"%s\">%s"
                         + "</keyrequest></text></message>",
                         name, chatRoom.color,
-                        String.valueOf(chatRoom.cipherBox.getSelectedItem()), message);
+                        String.valueOf(chatRoom.getCipherBox().getSelectedItem()), message);
                 /*
-                timer.setType(String.valueOf(chatRoom.cipherBox.getSelectedItem()));
+                timer.setType(String.valueOf(chatRoom.getCipherBox().getSelectedItem()));
                 timer.start();
                  * 
                  */

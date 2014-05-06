@@ -26,12 +26,12 @@ public class MessageDocListener implements DocumentListener {
     }
     
     private void uncipher(){
-        if (!chatRoom.lockDocument && chatRoom.cipherButton.isSelected()) {
+        if (!chatRoom.lockDocument && chatRoom.getCipherButton().isSelected()) {
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
                 public void run() {
-                    chatRoom.cipherButton.doClick();
+                    chatRoom.getCipherButton().doClick();
                 }
             });
         }

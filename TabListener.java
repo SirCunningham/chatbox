@@ -19,7 +19,7 @@ public class TabListener implements KeyListener {
         int index = ChatCreator.tabbedPane.getSelectedIndex();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                chatRoom.sendButton.doClick();
+                chatRoom.getSendButton().doClick();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_KP_LEFT:
@@ -38,7 +38,7 @@ public class TabListener implements KeyListener {
             default:
                 break;
         }
-        chatRoom.messagePane.requestFocusInWindow();
+        chatRoom.getMessagePane().requestFocusInWindow();
     }
 
     @Override

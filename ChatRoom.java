@@ -17,24 +17,24 @@ public class ChatRoom {
     volatile boolean speedyDelete = false;
     private final String[] cipherString = {"None", "caesar", "AES"};
     public AESCrypto AES;
-    JPanel mainPanel = new JPanel();
-    JPanel leftPanel = new JPanel();
-    JPanel rightPanel = new JPanel();
-    JButton colorButton = new IconButton("colorIcon.png");
+    private JPanel mainPanel = new JPanel();
+    private JPanel leftPanel = new JPanel();
+    private JPanel rightPanel = new JPanel();
+    private JButton colorButton = new IconButton("colorIcon.png");
     DefaultStyledDocument doc = new DefaultStyledDocument();
-    JTextPane namePane = new JTextPane();
-    JTextPane messagePane = new JTextPane(doc);
-    JTextPane chatBox = new JTextPane();
+    private JTextPane namePane = new JTextPane();
+    private JTextPane messagePane = new JTextPane(doc);
+    private JTextPane chatBox = new JTextPane();
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
-    JButton sendButton = new JButton("Send message");
-    JToggleButton cipherButton = new JToggleButton("Encrypt selected");
-    JLabel cipherLabel = new JLabel("Encryption:");
-    JComboBox cipherBox = new JComboBox(cipherString);
-    JLabel keyLabel = new JLabel("Key:");
-    JTextPane keyPane = new JTextPane();
-    JCheckBox keyBox = new JCheckBox("Send key", true);
-    JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
+    private JButton sendButton = new JButton("Send message");
+    private JToggleButton cipherButton = new JToggleButton("Encrypt selected");
+    private JLabel cipherLabel = new JLabel("Encryption:");
+    private JComboBox cipherBox = new JComboBox(cipherString);
+    private JLabel keyLabel = new JLabel("Key:");
+    private JTextPane keyPane = new JTextPane();
+    private JCheckBox keyBox = new JCheckBox("Send key", true);
+    private JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
     int startEnc;
     int endEnc;
     String backup;
@@ -45,21 +45,21 @@ public class ChatRoom {
     int cipherStart;
     int cipherEnd;
     DefaultListModel items = new DefaultListModel();
-    JList list = new SelectionList(items);
-    JScrollPane listPane = new JScrollPane(list);
-    JPanel bootPanel = new JPanel();
-    JButton bootButton = new JButton("Boot selected");
-    JPanel infoPanel = new JPanel();
-    JPanel filePanel = new JPanel();
-    JPanel fileButtonPanel = new JPanel();
-    JButton fileButton = new IconButton("fileIcon.png");
-    JTextPane filePane = new JTextPane();
-    JTextPane fileSizePane = new JTextPane();
-    JTextPane descriptionPane = new JTextPane();
-    JButton sendFileButton = new JButton("Send file to selected");
-    JButton progressBarButton = new JButton("NEW Receive [test!]");
-    JButton closeButton = new IconButton("closeIcon.png");
-    JComboBox fileEncryptions;
+    private JList list = new SelectionList(items);
+    private JScrollPane listPane = new JScrollPane(list);
+    private JPanel bootPanel = new JPanel();
+    private JButton bootButton = new JButton("Boot selected");
+    private JPanel infoPanel = new JPanel();
+    private JPanel filePanel = new JPanel();
+    private JPanel fileButtonPanel = new JPanel();
+    private JButton fileButton = new IconButton("fileIcon.png");
+    private JTextPane filePane = new JTextPane();
+    private JTextPane fileSizePane = new JTextPane();
+    private JTextPane descriptionPane = new JTextPane();
+    private JButton sendFileButton = new JButton("Send file to selected");
+    private JButton progressBarButton = new JButton("NEW Receive [test!]");
+    private JButton closeButton = new IconButton("closeIcon.png");
+    private JComboBox fileEncryptions;
     String filePath;
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
@@ -216,6 +216,78 @@ public class ChatRoom {
             default:
                 return null;
         }
+    }
+    
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+    
+    public JTextPane getMessagePane() {
+        return messagePane;
+    }
+    
+    public JButton getSendButton() {
+        return sendButton;
+    }
+    
+    public JList getList() {
+        return list;
+    }
+    
+    public JToggleButton getCipherButton() {
+        return cipherButton;
+    }
+    
+    public JTextPane getKeyPane() {
+        return keyPane;
+    }
+    
+    public JLabel getKeyLabel() {
+        return keyLabel;
+    }
+    
+    public JCheckBox getKeyBox() {
+        return keyBox;
+    }
+    
+    public JCheckBox getKeyRequestBox() {
+        return keyRequestBox;
+    }
+    
+    public JComboBox getCipherBox() {
+        return cipherBox;
+    }
+    
+    public JButton getCloseButton() {
+        return closeButton;
+    }
+    
+    public JButton getSendFileButton() {
+        return sendFileButton;
+    }
+    
+    public JTextPane getNamePane() {
+        return namePane;
+    }
+    
+    public JTextPane getDescriptionPane() {
+        return descriptionPane;
+    }
+    
+    public JTextPane getFilePane() {
+        return filePane;
+    }
+    
+    public JTextPane getFileSizePane() {
+        return fileSizePane;
+    }
+    
+    public JPanel getBootPanel() {
+        return bootPanel;
+    }
+    
+    public JTextPane getChatBox() {
+        return chatBox;
     }
 
     private void disableChat() {

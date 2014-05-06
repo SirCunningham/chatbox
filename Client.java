@@ -96,7 +96,7 @@ public class Client implements Runnable {
                                 }
                                 for (ChatRoom room : roomArray) {
                                     room.speedyDelete = true;
-                                    room.closeButton.doClick();
+                                    room.getCloseButton().doClick();
                                 }
                                 System.exit(0);
                             }
@@ -105,9 +105,9 @@ public class Client implements Runnable {
                 }
 
                 SendButtonListener sendButtonListener = new SendButtonListener();
-                chatRoom.sendButton.addActionListener(sendButtonListener);
-                chatRoom.sendFileButton.addActionListener(new SendFileButtonListener2());
-                chatRoom.closeButton.addActionListener(new CloseButtonListener());
+                chatRoom.getSendButton().addActionListener(sendButtonListener);
+                chatRoom.getSendFileButton().addActionListener(new SendFileButtonListener2());
+                chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
                     setKeys(responseLine);
@@ -120,9 +120,9 @@ public class Client implements Runnable {
                 // send to others instead!?
 
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
-                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.namePane.getText()));
-                chatRoom.sendButton.setEnabled(false);
-                chatRoom.sendButton.removeActionListener(sendButtonListener);
+                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.getNamePane().getText()));
+                chatRoom.getSendButton().setEnabled(false);
+                chatRoom.getSendButton().removeActionListener(sendButtonListener);
                 i.close();
                 o.close();
                 clientSocket.close();
@@ -141,7 +141,7 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\">Här kommer nyckeln!<encrypted key=\"%s\" type=\"%s\"></encrypted></text></message>",
-                        chatRoom.namePane.getText(), chatRoom.color,
+                        chatRoom.getNamePane().getText(), chatRoom.color,
                         chatRoom.getKey(XMLString.getKeyRequestType(html)),
                         XMLString.getKeyRequestType(html)));
             }
@@ -157,11 +157,11 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"yes\" port=\"" + (port + 13) + "\">%s</filerespnse></text></message>",
-                        chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
+                        chatRoom.getNamePane().getText(), chatRoom.color, chatRoom.getMessagePane().getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
-                        chatRoom.namePane.getText(), chatRoom.color, chatRoom.messagePane.getText()));
+                        chatRoom.getNamePane().getText(), chatRoom.color, chatRoom.getMessagePane().getText()));
             }
         }
     }

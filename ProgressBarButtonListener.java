@@ -39,13 +39,13 @@ public class ProgressBarButtonListener implements ActionListener {
                 invisibleContainer.add(label, BorderLayout.PAGE_START);
                 invisibleContainer.add(progressBar, BorderLayout.CENTER);
 
-                String description = chatRoom.descriptionPane.getText();
+                String description = chatRoom.getDescriptionPane().getText();
                 if (description.equals("File description (optional)")) {
                     description = "No description";
                 }
                 String fileData = String.format("File name: %s\nFile size: %s\n"
-                        + "File description: %s\nAccept file?", chatRoom.filePane.getText(),
-                        chatRoom.fileSizePane.getText(), description);
+                        + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
+                        chatRoom.getFileSizePane().getText(), description);
 
                 optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
                         JOptionPane.YES_NO_OPTION);

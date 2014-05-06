@@ -15,15 +15,15 @@ public class CipherButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         chatRoom.lockDocument = true;
-        String text = chatRoom.messagePane.getText();
+        String text = chatRoom.getMessagePane().getText();
         int length = text.length();
-        if (chatRoom.cipherButton.isSelected()) {
+        if (chatRoom.getCipherButton().isSelected()) {
             if (chatRoom.cipherStart < chatRoom.cipherEnd && chatRoom.cipherEnd <= length) {
                 String cipherText = text.substring(chatRoom.cipherStart, chatRoom.cipherEnd);
-                String type = String.valueOf(chatRoom.cipherBox.getSelectedItem());
-                String key = chatRoom.keyPane.getText();
+                String type = String.valueOf(chatRoom.getCipherBox().getSelectedItem());
+                String key = chatRoom.getKeyPane().getText();
                 String keyString = "";
-                if (chatRoom.keyBox.isSelected()) {
+                if (chatRoom.getKeyBox().isSelected()) {
                     keyString = String.format(" key=\"%s\"", key);
                 }
                 try {
@@ -42,14 +42,14 @@ public class CipherButtonListener implements ActionListener {
                     ex.printStackTrace();
                 }
             } else {
-                chatRoom.cipherButton.doClick();
+                chatRoom.getCipherButton().doClick();
             }
         } else {
             try {
-                int pos = chatRoom.messagePane.getCaretPosition();
+                int pos = chatRoom.getMessagePane().getCaretPosition();
                 chatRoom.doc.remove(0, length);
                 chatRoom.doc.insertString(0, text, chatRoom.style);
-                chatRoom.messagePane.setCaretPosition(pos);
+                chatRoom.getMessagePane().setCaretPosition(pos);
             } catch (BadLocationException ex) {
                 ex.printStackTrace();
             }

@@ -21,17 +21,17 @@ public class ColorButtonListener implements ActionListener {
         if (newColor != null) {
             chatRoom.colorObj = newColor;
             chatRoom.color = Integer.toHexString(chatRoom.colorObj.getRGB()).substring(2);
-            chatRoom.namePane.setForeground(chatRoom.colorObj);
-            String message = chatRoom.messagePane.getText();
+            chatRoom.getNamePane().setForeground(chatRoom.colorObj);
+            String message = chatRoom.getMessagePane().getText();
             StyleConstants.setForeground(chatRoom.style, chatRoom.colorObj);
             try {
                 //hacklösning... ersätt med adapter.o.println(text)!
                 chatRoom.statusUpdate = true;
                 chatRoom.doc.remove(0, message.length());
                 chatRoom.doc.insertString(0, "I just changed to a new color: " + chatRoom.color, chatRoom.style);
-                chatRoom.sendButton.doClick();
+                chatRoom.getSendButton().doClick();
                 chatRoom.doc.insertString(0, message, chatRoom.style);
-                if (chatRoom.cipherButton.isSelected()) {
+                if (chatRoom.getCipherButton().isSelected()) {
                     String text = message.substring(chatRoom.cipherStart, chatRoom.cipherEnd);
                     StyleConstants.setBackground(chatRoom.style, chatRoom.colorObj);
                     chatRoom.doc.remove(chatRoom.cipherStart, chatRoom.cipherEnd - chatRoom.cipherStart);

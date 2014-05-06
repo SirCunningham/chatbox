@@ -21,9 +21,9 @@ public class FileButtonListener implements ActionListener {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             chatRoom.filePath = file.getAbsolutePath();
-            chatRoom.filePane.setText(file.getName());
-            chatRoom.fileSizePane.setText(Long.toString(file.length()) + " bytes");
-            chatRoom.sendFileButton.setEnabled(true);
+            chatRoom.getFilePane().setText(file.getName());
+            chatRoom.getFileSizePane().setText(Long.toString(file.length()) + " bytes");
+            chatRoom.getSendFileButton().setEnabled(true);
         }
     }
 }

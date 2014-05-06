@@ -13,15 +13,15 @@ public class BootButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String message = chatRoom.messagePane.getText();
-        int i = chatRoom.list.getSelectedIndex();
+        String message = chatRoom.getMessagePane().getText();
+        int i = chatRoom.getList().getSelectedIndex();
         try {
             chatRoom.doc.remove(0, message.length());
             ChatRoom room = (ChatRoom) chatRoom.items.getElementAt(i);
             chatRoom.doc.insertString(0,
                     String.format("%s got the boot",
                     room.getName()), chatRoom.style);
-            chatRoom.sendButton.doClick();
+            chatRoom.getSendButton().doClick();
             chatRoom.doc.insertString(0, message, chatRoom.style);
             room.alive = false;                  //Döda klienten
             for (ChatRoom mBox : ChatCreator.chatRooms) {
@@ -30,8 +30,9 @@ public class BootButtonListener implements ActionListener {
         } catch (BadLocationException ex) {
             ex.printStackTrace();
         }
+        //Det här gör ingenting, var syftet att lägga loopen utanför?
         while (i >= 0) {
-            i = chatRoom.list.getSelectedIndex();
+            i = chatRoom.getList().getSelectedIndex();
         }
     }
 }
