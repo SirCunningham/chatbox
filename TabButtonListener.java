@@ -14,7 +14,7 @@ public class TabButtonListener implements ActionListener {
         if ((index = ChatCreator.indices.indexOf(button)) != -1) {
             ChatCreator.chatRooms.get(index).alive = false;
             for (ChatRoom room : ChatCreator.chatRooms) {
-                room.items.removeElement(ChatCreator.chatRooms.get(index));
+                room.getItems().removeElement(ChatCreator.chatRooms.get(index));
             }
             ChatCreator.chatRooms.remove(index);
             ChatCreator.indices.remove(index);

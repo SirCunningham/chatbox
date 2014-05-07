@@ -12,10 +12,14 @@ import javax.swing.text.html.*;
 
 public class ChatRoom {
     
+    static final String[] cipherString = {"None", "caesar", "AES"};
+    
+    private DefaultListModel items = new DefaultListModel();
+    private JList list = new SelectionList(items);
+    
     volatile boolean success = true;
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
-    private final String[] cipherString = {"None", "caesar", "AES"};
     public AESCrypto AES;
     private JPanel mainPanel = new JPanel();
     private JPanel leftPanel = new JPanel();
@@ -44,22 +48,6 @@ public class ChatRoom {
     String caesarKey = Integer.toString((int) (Math.random() * 72 + 1));
     int cipherStart;
     int cipherEnd;
-    DefaultListModel items = new DefaultListModel();
-    private JList list = new SelectionList(items);
-    private JScrollPane listPane = new JScrollPane(list);
-    private JPanel bootPanel = new JPanel();
-    private JButton bootButton = new JButton("Boot selected");
-    private JPanel infoPanel = new JPanel();
-    private JPanel filePanel = new JPanel();
-    private JPanel fileButtonPanel = new JPanel();
-    private JButton fileButton = new IconButton("fileIcon.png");
-    private JTextPane filePane = new JTextPane();
-    private JTextPane fileSizePane = new JTextPane();
-    private JTextPane descriptionPane = new JTextPane();
-    private JButton sendFileButton = new JButton("Send file to selected");
-    private JButton progressBarButton = new JButton("NEW Receive [test!]");
-    private JButton closeButton = new IconButton("closeIcon.png");
-    private JComboBox fileEncryptions;
     String filePath;
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
@@ -78,48 +66,6 @@ public class ChatRoom {
         port = Integer.parseInt(ChatCreator.portPane.getText());
         isServer = ChatCreator.serverButton.isSelected();
         
-        listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        bootButton.addActionListener(new BootButtonListener(this));
-        JLabel infoLabel1 = new JLabel("Host: " + host);
-        JLabel infoLabel2 = new JLabel("Port: " + port);
-        infoPanel.add(infoLabel1);
-        infoPanel.add(infoLabel2);
-        bootPanel.add(bootButton);
-        bootPanel.setVisible(false);
-        rightPanel.add(listPane);
-        rightPanel.add(bootPanel);
-        rightPanel.add(infoPanel);
-        
-        fileButton.addActionListener(new FileButtonListener(this));
-        fileButton.setBorder(BorderFactory.createEmptyBorder());
-        sendFileButton.addActionListener(new SendFileButtonListener(this));
-        sendFileButton.setEnabled(false);
-        progressBarButton.addActionListener(new ProgressBarButtonListener(this));
-        closeButton.setFocusPainted(false);
-        
-        ((AbstractDocument) filePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
-        filePane.addFocusListener(new StatusListener(this));
-        filePane.setText("filename.txt");
-        ((AbstractDocument) fileSizePane.getDocument()).setDocumentFilter(new NewLineFilter(16));
-        fileSizePane.setEditable(false);
-        fileSizePane.setText("0");
-        ((AbstractDocument) descriptionPane.getDocument()).setDocumentFilter(new NewLineFilter(128));
-        descriptionPane.addFocusListener(new StatusListener(this));
-        descriptionPane.setText("File description (optional)");
-        fileEncryptions = new JComboBox(cipherString);
-        
-        filePanel.add(fileButton);
-        filePanel.add(filePane);
-        filePanel.add(fileSizePane);
-        filePanel.add(descriptionPane);
-        filePanel.add(sendFileButton);
-        fileButtonPanel.add(progressBarButton); // temporary - testing only!
-        fileButtonPanel.add(new JLabel("Encryption:"));
-        fileButtonPanel.add(fileEncryptions);
-        fileButtonPanel.add(closeButton);
-        rightPanel.add(filePanel);
-        rightPanel.add(fileButtonPanel);
-        
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
@@ -137,7 +83,6 @@ public class ChatRoom {
         });
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         
@@ -232,6 +177,10 @@ public class ChatRoom {
     
     public JList getList() {
         return list;
+    }
+    
+    public DefaultListModel getItems() {
+        return items;
     }
     
     public JToggleButton getCipherButton() {

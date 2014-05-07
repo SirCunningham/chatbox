@@ -72,8 +72,8 @@ public class StartButtonListener implements ActionListener {
     private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> rooms) {
         synchronized (lock) {
             for (ChatRoom room : rooms) {
-                if (!chatRoom.items.contains(room)) {
-                    chatRoom.items.addElement(room);
+                if (!chatRoom.getItems().contains(room)) {
+                    chatRoom.getItems().addElement(room);
                 }
             }
         }
@@ -81,8 +81,8 @@ public class StartButtonListener implements ActionListener {
 
     private void addUser2(ChatRoom chatRoom) {
         for (ChatRoom room : ChatCreator.chatRooms) {
-            if (!room.items.contains(chatRoom)) {
-                room.items.addElement(chatRoom);
+            if (!room.getItems().contains(chatRoom)) {
+                room.getItems().addElement(chatRoom);
             }
         }
     }

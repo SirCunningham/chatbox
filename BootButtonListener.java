@@ -17,7 +17,7 @@ public class BootButtonListener implements ActionListener {
         int i = chatRoom.getList().getSelectedIndex();
         try {
             chatRoom.doc.remove(0, message.length());
-            ChatRoom room = (ChatRoom) chatRoom.items.getElementAt(i);
+            ChatRoom room = (ChatRoom) chatRoom.getItems().getElementAt(i);
             chatRoom.doc.insertString(0,
                     String.format("%s got the boot",
                     room.getName()), chatRoom.style);
@@ -25,7 +25,7 @@ public class BootButtonListener implements ActionListener {
             chatRoom.doc.insertString(0, message, chatRoom.style);
             room.alive = false;                  //Döda klienten
             for (ChatRoom mBox : ChatCreator.chatRooms) {
-                mBox.items.removeElement(room);
+                mBox.getItems().removeElement(room);
             }
         } catch (BadLocationException ex) {
             ex.printStackTrace();
