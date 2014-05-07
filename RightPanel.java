@@ -65,4 +65,28 @@ public class RightPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
     
+    public JButton getCloseButton() {
+        return closeButton;
+    }
+
+    public JButton getSendFileButton() {
+        return sendFileButton;
+    }
+
+    public JTextPane getDescriptionPane() {
+        return descriptionPane;
+    }
+
+    public JTextPane getFilePane() {
+        return filePane;
+    }
+
+    public JTextPane getFileSizePane() {
+        return fileSizePane;
+    }
+
+    public JPanel getBootPanel() {
+        return bootPanel;
+    }
+    
 }

@@ -23,7 +23,7 @@ public class ChatRoom {
     public AESCrypto AES;
     private JPanel mainPanel = new JPanel();
     private JPanel leftPanel = new JPanel();
-    private JPanel rightPanel = new JPanel();
+    private RightPanel rightPanel = new RightPanel(this);
     private JButton colorButton = new IconButton("colorIcon.png");
     DefaultStyledDocument doc = new DefaultStyledDocument();
     private JTextPane namePane = new JTextPane();
@@ -208,11 +208,11 @@ public class ChatRoom {
     }
     
     public JButton getCloseButton() {
-        return closeButton;
+        return rightPanel.getCloseButton();
     }
     
     public JButton getSendFileButton() {
-        return sendFileButton;
+        return rightPanel.getSendFileButton();
     }
     
     public JTextPane getNamePane() {
@@ -220,19 +220,19 @@ public class ChatRoom {
     }
     
     public JTextPane getDescriptionPane() {
-        return descriptionPane;
+        return rightPanel.getDescriptionPane();
     }
     
     public JTextPane getFilePane() {
-        return filePane;
+        return rightPanel.getFilePane();
     }
     
     public JTextPane getFileSizePane() {
-        return fileSizePane;
+        return rightPanel.getFileSizePane();
     }
     
     public JPanel getBootPanel() {
-        return bootPanel;
+        return rightPanel.getBootPanel();
     }
     
     public JTextPane getChatBox() {
