@@ -110,6 +110,7 @@ public class Client implements Runnable {
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
+                    fileRequest(responseLine);
                     setKeys(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
@@ -149,7 +150,7 @@ public class Client implements Runnable {
     }
     
     private void fileRequest(String html) {
-        if (html.contains("</filrequest>")) {
+        if (html.contains("</filerequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s.\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
