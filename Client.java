@@ -65,7 +65,9 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(Messages.getFileMessage(chatRoom));
+                        o.println(Messages.getFileMessage(chatRoom));            //Send filerequest to every person in the chat??
+                        startTimer();
+
                     }
                 }
 
@@ -83,7 +85,7 @@ public class Client implements Runnable {
                             Object[] options = {"Yes", "No", "Exit ChatRoom"};
                             int reply = JOptionPane.showOptionDialog(ChatCreator.frame,
                                     String.format("Are you sure you want to leave %s?",
-                                    ChatCreator.tabbedPane.getTitleAt(index)),
+                                            ChatCreator.tabbedPane.getTitleAt(index)),
                                     "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
                                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                             if (reply == JOptionPane.YES_OPTION) {
@@ -111,6 +113,7 @@ public class Client implements Runnable {
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     keyRequest(responseLine);
                     fileRequest(responseLine);
+                    fileResponse(responseLine);
                     setKeys(responseLine);
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
@@ -133,11 +136,60 @@ public class Client implements Runnable {
         }
     }
 
+    // Start timer when we send file
+    private void startTimer() {
+        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+        String chatName = chat.getName();
+        System.out.println(chatName);
+        boolean containsName = chatRoom.ipFileResponse.containsKey(chatName);
+
+        chatRoom.ipFileResponse.put(chatName, Executors.newSingleThreadScheduledExecutor());
+
+        // Lambdas ;)  (Equivalent to anonymous Runnable class)
+        Runnable task = () -> {
+            //Check if recived fileresponse - if not, inform the user, else do nothing
+
+            //No response
+            if (!chatRoom.recivedFileResponse.containsKey((chatName))) {
+                o.println(String.format("<message sender=\"%s\"><text color"
+                        + "=\"%s\">I got no fileresponse after one minute. It's not a virus, I promise! Or is it?"
+                        + "</text></message>", chatRoom.getName(), chatRoom.color));
+            } else if (!chatRoom.recivedFileResponse.get(chatName)) {
+                //No fileresponse
+                o.println(String.format("<message sender=\"%s\"><text color"
+                        + "=\"%s\">I got no fileresponse after one minute. It's not a virus, I promise! Or is it?"
+                        + "</text></message>", chatRoom.getName(), chatRoom.color));
+            } else {
+                System.out.println(chatRoom.recivedFileResponse.get(chatName));
+            }
+            chatRoom.recivedFileResponse.put(chatName, false);  // Start over
+            chatRoom.ipFileResponse.get(chatName).shutdown();
+        };
+        //Run after 1 minute
+        chatRoom.ipFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
+
+    }
+
+    // Checks if we have recived a fileresponse
+    private void fileResponse(String html) {
+        if (html.contains("</fileresponse>")) {
+            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+            if (chat != null) {
+                String name = chat.getName();
+                if (!chatRoom.ipFileResponse.get(name).isShutdown()) {
+                    chatRoom.recivedFileResponse.put(name, true);
+                } 
+            }
+
+        }
+    }
+
+    // Checks if we have recived a keyrequest
     private void keyRequest(String html) {
         if (html.contains("</keyrequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                            XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
@@ -148,12 +200,13 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
+    // Checks if we have recived a filerequest
     private void fileRequest(String html) {
         if (html.contains("</filerequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s.\n Receive file?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                            XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
@@ -166,6 +219,7 @@ public class Client implements Runnable {
             }
         }
     }
+
     //Obtain and save the keys from the sender. Might need to change this - problem if two people have the same name
     private void setKeys(String responseLine) {
         String sender = XMLString.getSender(responseLine);

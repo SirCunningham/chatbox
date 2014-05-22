@@ -4,20 +4,20 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class RightPanel extends JPanel {
-    private JScrollPane listPane;
-    private JPanel bootPanel = new JPanel();
-    private JButton bootButton = new JButton("Boot selected");
-    private JPanel infoPanel = new JPanel();
-    private JPanel filePanel = new JPanel();
-    private JPanel fileButtonPanel = new JPanel();
-    private JButton fileButton = new IconButton("fileIcon.png");
-    private JTextPane filePane = new JTextPane();
-    private JTextPane fileSizePane = new JTextPane();
-    private JTextPane descriptionPane = new JTextPane();
-    private JButton sendFileButton = new JButton("Send file to selected");
-    private JButton progressBarButton = new JButton("NEW Receive [test!]");
-    private JButton closeButton = new IconButton("closeIcon.png");
-    private JComboBox fileEncryptions;
+    private final JScrollPane listPane;
+    private final JPanel bootPanel = new JPanel();
+    private final JButton bootButton = new JButton("Boot selected");
+    private final JPanel infoPanel = new JPanel();
+    private final JPanel filePanel = new JPanel();
+    private final JPanel fileButtonPanel = new JPanel();
+    private final JButton fileButton = new IconButton("fileIcon.png");
+    private final JTextPane filePane = new JTextPane();
+    private final JTextPane fileSizePane = new JTextPane();
+    private final JTextPane descriptionPane = new JTextPane();
+    private final JButton sendFileButton = new JButton("Send file to selected");
+    private final JButton progressBarButton = new JButton("NEW Receive [test!]");
+    private final JButton closeButton = new IconButton("closeIcon.png");
+    private final JComboBox fileEncryptions;
     
     public RightPanel(ChatRoom chatRoom) {
         listPane = new JScrollPane(chatRoom.getList());

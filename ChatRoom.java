@@ -9,6 +9,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class ChatRoom {
     
@@ -52,7 +54,9 @@ public class ChatRoom {
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
-    HashMap<String, String[]> nameToKey = new HashMap<>();    //String[] is a vector with two components; the first is the Caesar key and the second the AES key
+    HashMap<String, String[]> nameToKey = new HashMap<>();      //String[] is a vector with two components; the first is the Caesar key and the second the AES key
+    HashMap<String, ScheduledExecutorService> ipFileResponse = new HashMap<>(); 
+    HashMap<String, Boolean> recivedFileResponse = new HashMap<>(); 
     final String host;
     final int port;
     final boolean isServer;
