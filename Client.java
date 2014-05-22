@@ -67,7 +67,6 @@ public class Client implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         o.println(Messages.getFileMessage(chatRoom));            //Send filerequest to every person in the chat??
                         startTimer();
-
                     }
                 }
 
