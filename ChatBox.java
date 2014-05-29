@@ -13,6 +13,8 @@ package chatbox;
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 
+//Mellanrum skapas efter krypterad text
+
 //Småfixar återstår för LeftPanel/RightPanel/ChatRoom...
 
 import java.awt.event.*;
