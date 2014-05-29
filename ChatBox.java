@@ -16,9 +16,6 @@ package chatbox;
 //Mellanrum skapas efter krypterad text
 //Ingen tom rad efter nekad keyrequest!
 
-//Kolla om man verkligen byter färg
-//Unikt namn!
-
 //Småfixar återstår för LeftPanel/RightPanel/ChatRoom...
 
 import java.awt.event.*;

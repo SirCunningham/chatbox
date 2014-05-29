@@ -18,7 +18,7 @@ public class ColorButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Color newColor = JColorChooser.showDialog(ChatCreator.frame,
                 "Choose text color", ChatCreator.frame.getBackground());
-        if (newColor != null) {
+        if (newColor != null && !newColor.equals(chatRoom.colorObj)) {
             chatRoom.colorObj = newColor;
             chatRoom.color = Integer.toHexString(chatRoom.colorObj.getRGB()).substring(2);
             chatRoom.getNamePane().setForeground(chatRoom.colorObj);

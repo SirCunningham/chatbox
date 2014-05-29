@@ -32,6 +32,9 @@ public class StatusListener implements FocusListener {
             source.setText(source.getText());
         } else if (source == chatRoom.getNamePane()) {
             String nameProposal = chatRoom.getNamePane().getText().replaceAll("\\s+", " ").trim();
+            if (chatRoom.getItems().contains(nameProposal)) {
+                // Varning och omstart om namnet redan finns, men items innehåller bara chatBoxes!!
+            }
             chatRoom.getNamePane().setText(nameProposal);
             if (!name.equals(nameProposal)) {
                 if (nameProposal.isEmpty()) {
