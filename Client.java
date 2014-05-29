@@ -18,16 +18,15 @@ public class Client implements Runnable {
     protected PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
-    private static ScheduledExecutorService worker;   //Timer for keyrequest
 
     public Client(String host, int port, final ChatRoom chatRoom) {
         this.port = port;
         this.chatRoom = chatRoom;
-        worker = Executors.newSingleThreadScheduledExecutor();
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
-            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            i = new BufferedReader(new InputStreamReader(
+                    clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (UnknownHostException e) {
             chatRoom.success = false;
@@ -57,7 +56,6 @@ public class Client implements Runnable {
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
-
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
@@ -65,7 +63,8 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        o.println(Messages.getFileMessage(chatRoom));            //Send filerequest to every person in the chat??
+                        //Send filerequest to every person in the chat??
+                        o.println(Messages.getFileMessage(chatRoom)); 
                         startTimer();
                     }
                 }
@@ -76,17 +75,21 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         JButton button = (JButton) e.getSource();
-                        int index = ChatCreator.tabbedPane.indexOfComponent(button.getParent().getParent().getParent());
+                        int index = ChatCreator.tabbedPane.indexOfComponent(
+                                button.getParent().getParent().getParent());
                         if (chatRoom.speedyDelete) {
                             ChatCreator.indices.get(index).doClick();
                             o.println(Messages.getQuitMessage(chatRoom));
                         } else {
                             Object[] options = {"Yes", "No", "Exit ChatRoom"};
-                            int reply = JOptionPane.showOptionDialog(ChatCreator.frame,
-                                    String.format("Are you sure you want to leave %s?",
+                            int reply = JOptionPane.showOptionDialog(
+                                    ChatCreator.frame,
+                                    String.format(
+                                    "Are you sure you want to leave %s?",
                                     ChatCreator.tabbedPane.getTitleAt(index)),
                                     "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                                    JOptionPane.QUESTION_MESSAGE, null,
+                                    options, options[0]);
                             if (reply == JOptionPane.YES_OPTION) {
                                 ChatCreator.indices.get(index).doClick();
                                 o.println(Messages.getQuitMessage(chatRoom));
@@ -107,16 +110,21 @@ public class Client implements Runnable {
 
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.getSendButton().addActionListener(sendButtonListener);
-                chatRoom.getSendFileButton().addActionListener(new SendFileButtonListener2());
-                chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
+                chatRoom.getSendFileButton().addActionListener(
+                        new SendFileButtonListener2());
+                chatRoom.getCloseButton().addActionListener(
+                        new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
                     setKeys(responseLine);
                     keyRequest(responseLine);
+                    keyResponse(responseLine);
                     fileRequest(responseLine);
                     fileResponse(responseLine);
+                    //Skicka inte key- eller filerequest till sig själv!
                     chatRoom.appendToPane(
-                            XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
+                            XMLString.removeKeyRequest(
+                            XMLString.removeFileRequest(responseLine))); 
                     if (responseLine.contains("*** Bye")) {
                         break;
                     }
@@ -124,7 +132,8 @@ public class Client implements Runnable {
 
                 // send to others instead!?
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
-                        + "<text color=\"0000ff\">The server has been abandoned!</text><disconnect /></message>"));
+                        + "<text color=\"0000ff\">The server has been "
+                        + "abandoned!</text><disconnect /></message>"));
                 chatRoom.getSendButton().setEnabled(false);
                 chatRoom.getSendButton().removeActionListener(sendButtonListener);
                 i.close();
@@ -135,14 +144,49 @@ public class Client implements Runnable {
             }
         }
     }
-
+    
+    // Start timer when we send a keyRequest
+    private void startKeyTimer() {
+        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+        final String chatName = chat.getName();
+        
+        chatRoom.nameKeyResponse.put(chatName, 
+                Executors.newSingleThreadScheduledExecutor());
+        
+        Runnable task = new Runnable() {
+            public void run() {
+                //Check if recived keyresponse - if not, inform the user, else 
+                //do nothing
+                
+                //No response
+                if (!chatRoom.recivedKeyResponse.containsKey(chatName)) {
+                    o.println(String.format("<message sender=\"%s\"><text color"
+                            + "=\"%s\">I got no key after one minute from %s."
+                            + "</text></message>", chatRoom.getName(), 
+                            chatRoom.color,chatName));
+                } else if (!chatRoom.recivedKeyResponse.get(chatName)) {
+                    //No keyresponse
+                    o.println(String.format("<message sender=\"%s\"><text color"
+                            + "=\"%s\">I got no key after one minute from %s."
+                            + "</text></message>", chatRoom.getName(), 
+                            chatRoom.color, chatName));
+                }
+                chatRoom.recivedKeyResponse.put(chatName, false); // Start over
+                chatRoom.nameKeyResponse.get(chatName).shutdown();
+            }
+        };
+        chatRoom.nameKeyResponse.get(chatName).schedule(task, 60, 
+                TimeUnit.SECONDS);
+    }
+    
     // Start timer when we send file
     private void startTimer() {
         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
         final String chatName = chat.getName();
         System.out.println(chatName);
 
-        chatRoom.ipFileResponse.put(chatName, Executors.newSingleThreadScheduledExecutor());
+        chatRoom.nameFileResponse.put(chatName, 
+                Executors.newSingleThreadScheduledExecutor());
 
         Runnable task = new Runnable() {
 
@@ -151,25 +195,28 @@ public class Client implements Runnable {
                 //Check if recived fileresponse - if not, inform the user, else do nothing
 
                 //No response
-                if (!chatRoom.recivedFileResponse.containsKey((chatName))) {
+                if (!chatRoom.recivedFileResponse.containsKey(chatName)) {
                     o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no fileresponse after one minute. It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(), chatRoom.color));
+                            + "=\"%s\">I got no fileresponse after one minute. "
+                            + "It's not a virus, I promise!"
+                            + "</text></message>", chatRoom.getName(), 
+                            chatRoom.color));
                 } else if (!chatRoom.recivedFileResponse.get(chatName)) {
                     //No fileresponse
                     o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no fileresponse after one minute. It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(), chatRoom.color));
+                            + "=\"%s\">I got no fileresponse after one minute. "
+                            + "It's not a virus, I promise!"
+                            + "</text></message>", chatRoom.getName(), 
+                            chatRoom.color));
                 } else {
                     System.out.println(chatRoom.recivedFileResponse.get(chatName));
                 }
                 chatRoom.recivedFileResponse.put(chatName, false);  // Start over
-                chatRoom.ipFileResponse.get(chatName).shutdown();
+                chatRoom.nameFileResponse.get(chatName).shutdown();
             }
         };
         //Run after 1 minute
-        chatRoom.ipFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
-
+        chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
     }
 
     // Checks if we have recived a fileresponse
@@ -178,11 +225,24 @@ public class Client implements Runnable {
             ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
             if (chat != null) {
                 String name = chat.getName();
-                if (!chatRoom.ipFileResponse.get(name).isShutdown()) {
+                if (!chatRoom.nameFileResponse.get(name).isShutdown()) {
                     chatRoom.recivedFileResponse.put(name, true);
                 }
             }
-
+        }
+    }
+    
+    // Checks if we have recived a keyresponse
+    private void keyResponse(String html) {
+        if (html.matches("<message>(.*)<encrypted type=(.*) "
+                + "key=(.*)>(.*)</encrypted>(.*)</message>")) {
+            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+            if (chat != null) {
+                String name = chat.getName();
+                if (!chatRoom.nameKeyResponse.get(name).isShutdown()) {
+                    chatRoom.recivedKeyResponse.put(name, true);
+                }
+            }
         }
     }
 
@@ -208,7 +268,8 @@ public class Client implements Runnable {
     private void fileRequest(String html) {
         if (html.contains("</filerequest>")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
-                    String.format("%s sends a filerequest of type %s.\n Receive file?",
+                    String.format("%s sends a filerequest of type %s."
+                    + "\n Receive file?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
