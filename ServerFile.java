@@ -10,7 +10,7 @@ public class ServerFile {
         ServerSocket serverSocket = new ServerSocket(15123);
         try (Socket socket = serverSocket.accept()) {
             System.out.println("Accepted connection : " + socket);
-            File transferFile = new File("/afs/nada.kth.se/home/m/u1m0slem/Desktop/form.html");
+            File transferFile = new File("~/Desktop/form.html");
             byte[] bytearray = new byte[(int) transferFile.length()];
             FileInputStream fin = new FileInputStream(transferFile);
             BufferedInputStream bin = new BufferedInputStream(fin);
