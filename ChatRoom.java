@@ -1,4 +1,4 @@
-package chatbox;
+    package chatbox;
 
 import java.awt.*;
 import java.awt.event.*;
