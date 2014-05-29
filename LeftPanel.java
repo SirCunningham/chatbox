@@ -10,7 +10,6 @@ public class LeftPanel extends JPanel {
     private JButton colorButton = new IconButton("colorIcon.png");
     private JTextPane namePane = new JTextPane();
     private JTextPane messagePane;
-    private JTextPane chatBox = new JTextPane();
     private JButton sendButton = new JButton("Send message");
     private JToggleButton cipherButton = new JToggleButton("Encrypt selected");
     private JLabel cipherLabel = new JLabel("Encryption:");
@@ -23,18 +22,18 @@ public class LeftPanel extends JPanel {
     public LeftPanel(ChatRoom chatRoom) {
         messagePane = new JTextPane(chatRoom.doc);
         
-        DefaultCaret caret = (DefaultCaret) chatBox.getCaret();
+        DefaultCaret caret = (DefaultCaret) chatRoom.chatBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        chatBox.setEditable(false);
-        chatBox.setContentType("text/html");
+        chatRoom.chatBox.setEditable(false);
+        chatRoom.chatBox.setContentType("text/html");
         xmlHTMLEditorKit kit = new xmlHTMLEditorKit();
         HTMLDocument doc2 = new HTMLDocument();
-        chatBox.setEditorKit(kit);
-        chatBox.setDocument(doc2);
-        chatBox.addKeyListener(new TabListener(chatRoom));
+        chatRoom.chatBox.setEditorKit(kit);
+        chatRoom.chatBox.setDocument(doc2);
+        chatRoom.chatBox.addKeyListener(new TabListener(chatRoom));
         chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                 + "<text color=\"#339966\">This is where it happens.</text></message>"));
-        JScrollPane scrollPane = new JScrollPane(chatBox);
+        JScrollPane scrollPane = new JScrollPane(chatRoom.chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane);
         
@@ -116,9 +115,5 @@ public class LeftPanel extends JPanel {
     
     public JTextPane getNamePane() {
         return namePane;
-    }
-    
-    public JTextPane getChatBox() {
-        return chatBox;
     }
 }
