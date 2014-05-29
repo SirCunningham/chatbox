@@ -124,7 +124,7 @@ public class Client implements Runnable {
 
                 // send to others instead!?
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
-                        + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.getNamePane().getText()));
+                        + "<text color=\"0000ff\">The server has been abandoned!</text><disconnect /></message>"));
                 chatRoom.getSendButton().setEnabled(false);
                 chatRoom.getSendButton().removeActionListener(sendButtonListener);
                 i.close();
