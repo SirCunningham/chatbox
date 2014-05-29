@@ -142,6 +142,7 @@ public class XMLString {
             int i = xmlStr.indexOf("<encrypted");
             String rest = xmlStr.substring(i);
             if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
+                
                 String fromType = rest.substring(16);
                 String type = fromType.substring(1, fromType.indexOf((" ")) - 1);
                 String fromKey = fromType.substring(fromType.indexOf(" ") + 6);
