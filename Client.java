@@ -196,10 +196,10 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\">Här kommer nyckeln!<encrypted "
-                        + "key=\"%s\" type=\"%s\"></encrypted></text></message>",
+                        + "type=\"%s\" key=\"%s\"></encrypted></text></message>",
                         chatRoom.getNamePane().getText(), chatRoom.color,
-                        chatRoom.getKey(XMLString.getKeyRequestType(html)),
-                        XMLString.getKeyRequestType(html)));
+                        XMLString.getKeyRequestType(html),
+                        chatRoom.getKey(XMLString.getKeyRequestType(html))));
             }
         }
     }
@@ -244,6 +244,5 @@ public class Client implements Runnable {
             }
         }
         chatRoom.nameToKey.put(sender, keys);
-
     }
 }
