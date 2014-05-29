@@ -110,18 +110,19 @@ public class Client implements Runnable {
                 chatRoom.getSendFileButton().addActionListener(new SendFileButtonListener2());
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
+                    System.out.println(responseLine);
+                    setKeys(responseLine);
                     keyRequest(responseLine);
                     fileRequest(responseLine);
                     fileResponse(responseLine);
-                    setKeys(responseLine);
-                    chatRoom.appendToPane(
-                            XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
+                    //chatRoom.appendToPane(
+                  //          XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
                     if (responseLine.contains("*** Bye")) {
                         break;
                     }
                 }
+                
                 // send to others instead!?
-
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.getNamePane().getText()));
                 chatRoom.getSendButton().setEnabled(false);
@@ -193,7 +194,8 @@ public class Client implements Runnable {
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\">Här kommer nyckeln!<encrypted key=\"%s\" type=\"%s\"></encrypted></text></message>",
+                        + "<text color=\"%s\">Här kommer nyckeln!<encrypted "
+                        + "key=\"%s\" type=\"%s\"></encrypted></text></message>",
                         chatRoom.getNamePane().getText(), chatRoom.color,
                         chatRoom.getKey(XMLString.getKeyRequestType(html)),
                         XMLString.getKeyRequestType(html)));
@@ -210,17 +212,24 @@ public class Client implements Runnable {
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"yes\" port=\"" + (port + 13) + "\">%s</filerespnse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color, chatRoom.getMessagePane().getText()));
+                        + "<text color=\"%s\"><fileresponse reply=\"yes\" "
+                        + "port=\"" + (port + 13) + 
+                        "\">%s</filerespnse></text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color, 
+                        chatRoom.getMessagePane().getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"no\" port=\"" + (port + 13) + "\">%s</fileresponse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color, chatRoom.getMessagePane().getText()));
+                        + "<text color=\"%s\"><fileresponse reply=\"no\" "
+                        + "port=\"" + (port + 13) + 
+                        "\">%s</fileresponse></text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color, 
+                        chatRoom.getMessagePane().getText()));
             }
         }
     }
 
-    //Obtain and save the keys from the sender. Might need to change this - problem if two people have the same name
+    // Obtain and save the keys from the sender. Might need to change this - 
+    // problem if two people have the same name
     private void setKeys(String responseLine) {
         String sender = XMLString.getSender(responseLine);
         String[] keys = XMLString.getKeys(responseLine);
