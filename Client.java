@@ -67,7 +67,7 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Send filerequest to every person in the chat??
-                        o.println(Messages.getFileMessage(chatRoom)); 
+                        o.println(Messages.getFileMessage(chatRoom));
                         startTimer();
                     }
                 }
@@ -127,7 +127,7 @@ public class Client implements Runnable {
                     //Skicka inte key- eller filerequest till sig själv!
                     chatRoom.appendToPane(
                             XMLString.removeKeyRequest(
-                            XMLString.removeFileRequest(responseLine))); 
+                            XMLString.removeFileRequest(responseLine)));
                     if (responseLine.contains("*** Bye")) {
                         break;
                     }
@@ -147,48 +147,49 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
     // Start timer when we send a keyRequest
     private void startKeyTimer() {
         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
         final String chatName = chat.getName();
-        
-        chatRoom.nameKeyResponse.put(chatName, 
+
+        chatRoom.nameKeyResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
-        
+
         Runnable task = new Runnable() {
+
             public void run() {
                 // Check if recived keyresponse - if not, inform the user, else 
                 // do nothing
-                
+
                 // No response
                 if (!chatRoom.recivedKeyResponse.containsKey(chatName)) {
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no key from %s after one minute."
                             + "</text></message>", chatRoom.getName(),
-                            chatRoom.color,chatName));
+                            chatRoom.color, chatName));
                 } else if (!chatRoom.recivedKeyResponse.get(chatName)) {
                     //No keyresponse
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no key from %s after one minute."
-                            + "</text></message>", chatRoom.getName(), 
+                            + "</text></message>", chatRoom.getName(),
                             chatRoom.color, chatName));
                 }
                 chatRoom.recivedKeyResponse.put(chatName, false); // Start over
                 chatRoom.nameKeyResponse.get(chatName).shutdown();
             }
         };
-        chatRoom.nameKeyResponse.get(chatName).schedule(task, 10, 
+        chatRoom.nameKeyResponse.get(chatName).schedule(task, 10,
                 TimeUnit.SECONDS);
     }
-    
+
     // Start timer when we send file
     private void startTimer() {
         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
         final String chatName = chat.getName();
         System.out.println(chatName);
 
-        chatRoom.nameFileResponse.put(chatName, 
+        chatRoom.nameFileResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
 
         Runnable task = new Runnable() {
@@ -202,14 +203,14 @@ public class Client implements Runnable {
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no fileresponse after one minute. "
                             + "It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(), 
+                            + "</text></message>", chatRoom.getName(),
                             chatRoom.color));
                 } else if (!chatRoom.recivedFileResponse.get(chatName)) {
                     //No fileresponse
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no fileresponse after one minute. "
                             + "It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(), 
+                            + "</text></message>", chatRoom.getName(),
                             chatRoom.color));
                 } else {
                     System.out.println(chatRoom.recivedFileResponse.get(chatName));
@@ -221,8 +222,37 @@ public class Client implements Runnable {
         //Run after 1 minute
         chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
     }
-
+    
+    // Determine if user allowed to connect
+    private void handleUserConnect(String html) {
+        if (chatRoom.isServer) {
+            if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*></message>")) {
+                int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
+                        String.format("%s wants to connect. Allow?",
+                        XMLString.getSender(html)),
+                        "Kill", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.NO_OPTION) {
+                    o.println(String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
+                            chatRoom.getNamePane().getText(), chatRoom.color, XMLString.getSender(html)));
+                }
+            } else {
+                int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
+                        String.format("It seems a simple client wants to connect. Allow?",
+                        XMLString.getSender(html)),
+                        "Kill", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.NO_OPTION) {
+                    o.println(String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\"><request reply=\"no\">A simple "
+                            + "client was not allowed to connect!</request></text></message>",
+                            chatRoom.getNamePane().getText(), chatRoom.color));
+                }
+            }
+        }
+    }
+    
     // Checks if we have recived a fileresponse
+
     private void fileResponse(String html) {
         if (html.contains("</fileresponse>")) {
             ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
@@ -234,12 +264,12 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
     // Checks if we have recived a keyresponse
     private void keyResponse(String html) {
-        if (html.matches("<message>(.*)<encrypted type=(.*) "
+        if (html.matches("<message sender=(.*)>(.*)<encrypted type=(.*) "
                 + "key=(.*)>(.*)</encrypted>(.*)</message>")) {
-            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();  //Problem if change selected value
             if (chat != null) {
                 String name = chat.getName();
                 if (!chatRoom.nameKeyResponse.get(name).isShutdown()) {
