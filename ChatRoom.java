@@ -26,8 +26,8 @@ public class ChatRoom {
     volatile boolean speedyDelete = false;
     public AESCrypto AES;
     private JPanel mainPanel = new JPanel();
-    private LeftPanel leftPanel = new LeftPanel(this);
-    private RightPanel rightPanel = new RightPanel(this);
+    private LeftPanel leftPanel;
+    private RightPanel rightPanel;
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
     int startEnc;
@@ -58,6 +58,9 @@ public class ChatRoom {
         host = ChatCreator.hostPane.getText();
         port = Integer.parseInt(ChatCreator.portPane.getText());
         isServer = ChatCreator.serverButton.isSelected();
+        
+        leftPanel = new LeftPanel(this);
+        rightPanel = new RightPanel(this);
         
         try {
             AES = new AESCrypto();
