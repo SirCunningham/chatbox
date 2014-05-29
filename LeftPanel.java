@@ -12,12 +12,10 @@ public class LeftPanel extends JPanel {
     private JTextPane messagePane;
     private JButton sendButton = new JButton("Send message");
     private JToggleButton cipherButton = new JToggleButton("Encrypt selected");
-    private JLabel cipherLabel = new JLabel("Encryption:");
     private JComboBox cipherBox = new JComboBox(ChatRoom.cipherString);
     private JLabel keyLabel = new JLabel("Key:");
     private JTextPane keyPane = new JTextPane();
     private JCheckBox keyBox = new JCheckBox("Send key", true);
-    private JCheckBox keyRequestBox = new JCheckBox("Send keyrequest", false);
     
     public LeftPanel(ChatRoom chatRoom) {
         messagePane = new JTextPane(chatRoom.doc);
@@ -66,9 +64,8 @@ public class LeftPanel extends JPanel {
         keyPane.setVisible(false);
         keyPane.addFocusListener(new StatusListener(chatRoom));
         keyBox.setVisible(false);
-        buttonPanel.add(keyRequestBox);
         buttonPanel.add(cipherButton);
-        buttonPanel.add(cipherLabel);
+        buttonPanel.add(new JLabel("Encryption:"));
         buttonPanel.add(cipherBox);
         invisibleContainer1.add(keyLabel);
         invisibleContainer2.add(keyPane);
@@ -95,10 +92,6 @@ public class LeftPanel extends JPanel {
 
     public JCheckBox getKeyBox() {
         return keyBox;
-    }
-
-    public JCheckBox getKeyRequestBox() {
-        return keyRequestBox;
     }
 
     public JComboBox getCipherBox() {

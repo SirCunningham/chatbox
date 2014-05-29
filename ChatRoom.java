@@ -165,10 +165,6 @@ public class ChatRoom {
         return leftPanel.getKeyBox();
     }
     
-    public JCheckBox getKeyRequestBox() {
-        return leftPanel.getKeyRequestBox();
-    }
-    
     public JComboBox getCipherBox() {
         return leftPanel.getCipherBox();
     }
@@ -197,8 +193,8 @@ public class ChatRoom {
         return rightPanel.getFileSizePane();
     }
     
-    public JPanel getBootPanel() {
-        return rightPanel.getBootPanel();
+    public JButton getBootButton() {
+        return rightPanel.getBootButton();
     }
 
 }

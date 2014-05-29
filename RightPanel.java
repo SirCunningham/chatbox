@@ -1,5 +1,6 @@
 package chatbox;
 
+import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
@@ -7,6 +8,7 @@ public class RightPanel extends JPanel {
     private final JScrollPane listPane;
     private final JPanel bootPanel = new JPanel();
     private final JButton bootButton = new JButton("Boot selected");
+    private final JButton keyRequestButton = new JButton("Send keyrequest");
     private final JPanel infoPanel = new JPanel();
     private final JPanel filePanel = new JPanel();
     private final JPanel fileButtonPanel = new JPanel();
@@ -18,17 +20,23 @@ public class RightPanel extends JPanel {
     private final JButton progressBarButton = new JButton("NEW Receive [test!]");
     private final JButton closeButton = new IconButton("closeIcon.png");
     private final JComboBox fileEncryptions;
+    private final JComboBox keyRequestEncryptions;
     
     public RightPanel(ChatRoom chatRoom) {
         listPane = new JScrollPane(chatRoom.getList());
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener(chatRoom));
+        bootButton.setVisible(false);
+        keyRequestButton.addActionListener(new BootButtonListener(chatRoom));
+        keyRequestEncryptions = new JComboBox(Arrays.copyOfRange(ChatRoom.cipherString, 1, 3));
         JLabel infoLabel1 = new JLabel("Host: " + chatRoom.host);
         JLabel infoLabel2 = new JLabel("Port: " + chatRoom.port);
         infoPanel.add(infoLabel1);
         infoPanel.add(infoLabel2);
         bootPanel.add(bootButton);
-        bootPanel.setVisible(false);
+        bootPanel.add(keyRequestButton); //skicka till markerade, avmarkera sedan, blockera om inget markerat?
+        bootPanel.add(new JLabel("Encryption:"));
+        bootPanel.add(keyRequestEncryptions);
         add(listPane);
         add(bootPanel);
         add(infoPanel);
@@ -85,8 +93,8 @@ public class RightPanel extends JPanel {
         return fileSizePane;
     }
 
-    public JPanel getBootPanel() {
-        return bootPanel;
+    public JButton getBootButton() {
+        return bootButton;
     }
     
 }

@@ -27,7 +27,7 @@ public class StartButtonListener implements ActionListener {
                 new Thread(server).start();
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"#339966\">Wait for others to connect...</text></message>"));
-                chatRoom.getBootPanel().setVisible(true);
+                chatRoom.getBootButton().setVisible(true);
             }
             if (chatRoom.success) {
                 final Client client = new ClientAdapter(chatRoom);
