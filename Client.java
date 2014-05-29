@@ -65,13 +65,18 @@ public class Client implements Runnable {
                 // Listener for keyrequest
                 class KeyRequestListener implements ActionListener {
                     public void actionPerformed(ActionEvent e) {
-                        startKeyTimer();
-                        o.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><keyrequest "
-                                + "type=\"%s\">%s"
-                                + "</keyrequest></text></message>",
-                                chatRoom.getName(), chatRoom.color,
-                                String.valueOf(chatRoom.getCipherBox().getSelectedItem()), Messages.getMessage(chatRoom)));
+                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+                        if (chat != null) {
+                            final String chatName = chat.getName();
+                            o.println(String.format("<message sender=\"%s\">"
+                                    + "<text color=\"%s\"><keyrequest "
+                                    + "type=\"%s\">%s"
+                                    + "</keyrequest></text></message>",
+                                    chatRoom.getName(), chatRoom.color,
+                                    String.valueOf(chatRoom.getCipherBox().getSelectedItem()), Messages.getMessage(chatRoom)));
+                            startKeyTimer(chatName);
+                        }
+
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
@@ -80,8 +85,13 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Send filerequest to every person in the chat??
-                        o.println(Messages.getFileMessage(chatRoom));
-                        startTimer();
+                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+                        if (chat != null) {
+                            final String chatName = chat.getName();
+                            o.println(Messages.getFileMessage(chatRoom));
+                            startTimer(chatName);
+                        }
+
                     }
                 }
 
@@ -163,9 +173,9 @@ public class Client implements Runnable {
     }
 
     // Start timer when we send a keyRequest
-    private void startKeyTimer() {
-        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-        final String chatName = chat.getName();
+    private void startKeyTimer(final String chatName) {
+        //ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+        //final String chatName = chat.getName();
 
         chatRoom.nameKeyResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
@@ -198,10 +208,8 @@ public class Client implements Runnable {
     }
 
     // Start timer when we send file
-    private void startTimer() {
-        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-        final String chatName = chat.getName();
-        System.out.println(chatName);
+    private void startTimer(final String chatName) {
+
 
         chatRoom.nameFileResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
