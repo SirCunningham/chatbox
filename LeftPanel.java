@@ -31,8 +31,8 @@ public class LeftPanel extends JPanel {
         chatRoom.chatBox.setEditorKit(kit);
         chatRoom.chatBox.setDocument(doc2);
         chatRoom.chatBox.addKeyListener(new TabListener(chatRoom));
-        chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
-                + "<text color=\"#339966\">This is where it happens.</text></message>"));
+        chatRoom.appendToPane("<message sender=\"INFO\">"
+                + "<text color=\"#339966\">This is where it happens.</text></message>");
         JScrollPane scrollPane = new JScrollPane(chatRoom.chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane);
