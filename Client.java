@@ -115,13 +115,13 @@ public class Client implements Runnable {
                     keyRequest(responseLine);
                     fileRequest(responseLine);
                     fileResponse(responseLine);
-                    //chatRoom.appendToPane(
-                  //          XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
+                    chatRoom.appendToPane(
+                            XMLString.removeKeyRequest(XMLString.removeFileRequest(responseLine)));  //Skicka inte key- eller filerequest till sig själv!
                     if (responseLine.contains("*** Bye")) {
                         break;
                     }
                 }
-                
+
                 // send to others instead!?
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">%s har loggat ut!<disconnect /></text></message>", chatRoom.getNamePane().getText()));
@@ -145,6 +145,7 @@ public class Client implements Runnable {
         chatRoom.ipFileResponse.put(chatName, Executors.newSingleThreadScheduledExecutor());
 
         Runnable task = new Runnable() {
+
             @Override
             public void run() {
                 //Check if recived fileresponse - if not, inform the user, else do nothing
@@ -213,16 +214,16 @@ public class Client implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"yes\" "
-                        + "port=\"" + (port + 13) + 
-                        "\">%s</filerespnse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color, 
+                        + "port=\"" + (port + 13)
+                        + "\">%s</filerespnse></text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color,
                         chatRoom.getMessagePane().getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\"><fileresponse reply=\"no\" "
-                        + "port=\"" + (port + 13) + 
-                        "\">%s</fileresponse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color, 
+                        + "port=\"" + (port + 13)
+                        + "\">%s</fileresponse></text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color,
                         chatRoom.getMessagePane().getText()));
             }
         }
@@ -241,9 +242,8 @@ public class Client implements Runnable {
             if (keys[1].equals("")) {
                 keys[1] = oldKeys[1];
             }
-            chatRoom.nameToKey.put(sender, keys);
-        } else {
-            chatRoom.nameToKey.put(sender, keys);
         }
+        chatRoom.nameToKey.put(sender, keys);
+
     }
 }
