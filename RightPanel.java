@@ -27,7 +27,6 @@ public class RightPanel extends JPanel {
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         bootButton.addActionListener(new BootButtonListener(chatRoom));
         bootButton.setVisible(false);
-        keyRequestButton.addActionListener(new BootButtonListener(chatRoom));
         keyRequestEncryptions = new JComboBox(Arrays.copyOfRange(ChatRoom.cipherString, 1, 3));
         JLabel infoLabel1 = new JLabel("Host: " + chatRoom.host);
         JLabel infoLabel2 = new JLabel("Port: " + chatRoom.port);
