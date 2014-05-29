@@ -1,4 +1,4 @@
-    package chatbox;
+package chatbox;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,6 +18,7 @@ public class ChatRoom {
     private DefaultListModel items = new DefaultListModel();
     private JList list = new SelectionList(items);
     
+    JTextPane chatBox = new JTextPane();
     DefaultStyledDocument doc = new DefaultStyledDocument();
     
     volatile boolean success = true;
@@ -196,7 +197,7 @@ public class ChatRoom {
     }
     
     public JTextPane getChatBox() {
-        return leftPanel.getChatBox();
+        return chatBox;
     }
 
 }
