@@ -18,7 +18,6 @@ public class Client implements Runnable {
     protected PrintWriter o;
     private final int port;
     private final ChatRoom chatRoom;
-    private static ScheduledExecutorService worker;   //Timer for keyrequest
 
     public Client(String host, int port, final ChatRoom chatRoom) {
         this.port = port;
@@ -57,7 +56,6 @@ public class Client implements Runnable {
                         if (!msg.equals("")) {
                             o.println(msg);
                         }
-
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
