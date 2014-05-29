@@ -12,7 +12,7 @@ public class ClientFile {
         try (Socket socket = new Socket("130.237.227.41", 15123)) {
             byte[] bytearray = new byte[filesize];
             InputStream is = socket.getInputStream();
-            FileOutputStream fos = new FileOutputStream("~/Desktop/highscore.html");
+            FileOutputStream fos = new FileOutputStream("/home/6/u1uk0zn6/Desktop/highscore.html");
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             bytesRead = is.read(bytearray, 0, bytearray.length);
             currentTot = bytesRead;
