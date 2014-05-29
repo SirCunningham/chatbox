@@ -55,6 +55,9 @@ public class Client implements Runnable {
                         String msg = Messages.getMessage(chatRoom);
                         if (!msg.equals("")) {
                             o.println(msg);
+                            if (chatRoom.getKeyRequestBox().isSelected()) {
+                                startKeyTimer();
+                            }
                         }
                     }
                 }
@@ -155,19 +158,19 @@ public class Client implements Runnable {
         
         Runnable task = new Runnable() {
             public void run() {
-                //Check if recived keyresponse - if not, inform the user, else 
-                //do nothing
+                // Check if recived keyresponse - if not, inform the user, else 
+                // do nothing
                 
-                //No response
+                // No response
                 if (!chatRoom.recivedKeyResponse.containsKey(chatName)) {
                     o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no key after one minute from %s."
-                            + "</text></message>", chatRoom.getName(), 
+                            + "=\"%s\">I got no key from %s after one minute."
+                            + "</text></message>", chatRoom.getName(),
                             chatRoom.color,chatName));
                 } else if (!chatRoom.recivedKeyResponse.get(chatName)) {
                     //No keyresponse
                     o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no key after one minute from %s."
+                            + "=\"%s\">I got no key from %s after one minute."
                             + "</text></message>", chatRoom.getName(), 
                             chatRoom.color, chatName));
                 }
@@ -175,7 +178,7 @@ public class Client implements Runnable {
                 chatRoom.nameKeyResponse.get(chatName).shutdown();
             }
         };
-        chatRoom.nameKeyResponse.get(chatName).schedule(task, 60, 
+        chatRoom.nameKeyResponse.get(chatName).schedule(task, 10, 
                 TimeUnit.SECONDS);
     }
     
