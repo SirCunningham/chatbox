@@ -34,7 +34,9 @@ public class Messages {
                 message = XMLString.convertAngle(chatRoom.getMessagePane().getText());
             }
             chatRoom.getMessagePane().setText("");
-            String name = chatRoom.getNamePane().getText();
+            //String name = chatRoom.getNamePane().getText();
+            return message;
+            /*
             if (!message.isEmpty()) {
                 if (!chatRoom.getKeyRequestBox().isSelected()) {
                     return String.format("<message sender=\"%s\">"
@@ -48,7 +50,7 @@ public class Messages {
                         + "</keyrequest></text></message>",
                         name, chatRoom.color,
                         String.valueOf(chatRoom.getCipherBox().getSelectedItem()), message);
-                /*
+                
                 timer.setType(String.valueOf(chatRoom.getCipherBox().getSelectedItem()));
                 timer.start();
                  * 
@@ -61,9 +63,9 @@ public class Messages {
                 name, chatRoom.color,
                 message));
                  * 
-                 */
+                 
             }
-            /*
+            
             if (message.contains("terminate my ass")) {
             appendToPane("<message sender=\"INFO\">"
             + "<text color=\"0000FF\">Med huvudet före!!!<disconnect /></text></message>");

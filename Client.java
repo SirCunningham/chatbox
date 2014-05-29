@@ -52,13 +52,26 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = Messages.getMessage(chatRoom);
+                        String msg = String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\">%s</text></message>",
+                                chatRoom.getName(), chatRoom.color,
+                                Messages.getMessage(chatRoom));
                         if (!msg.equals("")) {
                             o.println(msg);
-                            if (chatRoom.getKeyRequestBox().isSelected()) {
-                                startKeyTimer();
-                            }
                         }
+                    }
+                }
+                
+                // Listener for keyrequest
+                class KeyRequestListener implements ActionListener {
+                    public void actionPerformed(ActionEvent e) {
+                        startKeyTimer();
+                        o.println(String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\"><keyrequest "
+                                + "type=\"%s\">%s"
+                                + "</keyrequest></text></message>",
+                                chatRoom.getName(), chatRoom.color,
+                                String.valueOf(chatRoom.getCipherBox().getSelectedItem()), Messages.getMessage(chatRoom)));
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
@@ -117,6 +130,7 @@ public class Client implements Runnable {
                         new SendFileButtonListener2());
                 chatRoom.getCloseButton().addActionListener(
                         new CloseButtonListener());
+                chatRoom.getKeyRequestButton().addActionListener(new KeyRequestListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
                     setKeys(responseLine);
