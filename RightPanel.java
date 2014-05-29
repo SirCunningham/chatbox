@@ -95,5 +95,8 @@ public class RightPanel extends JPanel {
     public JButton getBootButton() {
         return bootButton;
     }
+    public JButton getKeyRequestButton() {
+        return keyRequestButton;
+    }
     
 }

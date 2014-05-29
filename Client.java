@@ -52,13 +52,31 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = Messages.getMessage(chatRoom);
+                        String msg = String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\">%s</text></message>",
+                                chatRoom.getName(), chatRoom.color,
+                                Messages.getMessage(chatRoom));
                         if (!msg.equals("")) {
                             o.println(msg);
-                            if (chatRoom.getKeyRequestBox().isSelected()) {
-                                startKeyTimer();
-                            }
                         }
+                    }
+                }
+                
+                // Listener for keyrequest
+                class KeyRequestListener implements ActionListener {
+                    public void actionPerformed(ActionEvent e) {
+                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+                        if (chat != null) {
+                            final String chatName = chat.getName();
+                            o.println(String.format("<message sender=\"%s\">"
+                                    + "<text color=\"%s\"><keyrequest "
+                                    + "type=\"%s\">%s"
+                                    + "</keyrequest></text></message>",
+                                    chatRoom.getName(), chatRoom.color,
+                                    String.valueOf(chatRoom.getCipherBox().getSelectedItem()), Messages.getMessage(chatRoom)));
+                            startKeyTimer(chatName);
+                        }
+
                     }
                 }
                 // finns redan i ChatRoom, onödig dubblering, ta bort där?
@@ -67,8 +85,13 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Send filerequest to every person in the chat??
-                        o.println(Messages.getFileMessage(chatRoom));
-                        startTimer();
+                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+                        if (chat != null) {
+                            final String chatName = chat.getName();
+                            o.println(Messages.getFileMessage(chatRoom));
+                            startTimer(chatName);
+                        }
+
                     }
                 }
 
@@ -117,6 +140,7 @@ public class Client implements Runnable {
                         new SendFileButtonListener2());
                 chatRoom.getCloseButton().addActionListener(
                         new CloseButtonListener());
+                chatRoom.getKeyRequestButton().addActionListener(new KeyRequestListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
                     setKeys(responseLine);
@@ -149,9 +173,9 @@ public class Client implements Runnable {
     }
 
     // Start timer when we send a keyRequest
-    private void startKeyTimer() {
-        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-        final String chatName = chat.getName();
+    private void startKeyTimer(final String chatName) {
+        //ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
+        //final String chatName = chat.getName();
 
         chatRoom.nameKeyResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
@@ -184,10 +208,8 @@ public class Client implements Runnable {
     }
 
     // Start timer when we send file
-    private void startTimer() {
-        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-        final String chatName = chat.getName();
-        System.out.println(chatName);
+    private void startTimer(final String chatName) {
+
 
         chatRoom.nameFileResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());

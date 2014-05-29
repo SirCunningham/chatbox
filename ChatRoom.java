@@ -196,5 +196,9 @@ public class ChatRoom {
     public JButton getBootButton() {
         return rightPanel.getBootButton();
     }
+    
+    public JButton getKeyRequestButton() {
+        return rightPanel.getKeyRequestButton();
+    }
 
 }
