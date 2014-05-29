@@ -44,8 +44,10 @@ public class ChatRoom {
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
     HashMap<String, String[]> nameToKey = new HashMap<>();      //String[] is a vector with two components; the first is the Caesar key and the second the AES key
-    HashMap<String, ScheduledExecutorService> ipFileResponse = new HashMap<>(); 
-    HashMap<String, Boolean> recivedFileResponse = new HashMap<>(); 
+    HashMap<String, ScheduledExecutorService> nameFileResponse = new HashMap<>();
+    HashMap<String, ScheduledExecutorService> nameKeyResponse = new HashMap<>();
+    HashMap<String, Boolean> recivedFileResponse = new HashMap<>();
+    HashMap<String, Boolean> recivedKeyResponse = new HashMap<>();
     final String host;
     final int port;
     final boolean isServer;
