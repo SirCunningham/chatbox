@@ -29,41 +29,39 @@ class IOThread extends Thread {
 
             String name;
             /*
-            while (true) {
-            name = i.readLine();
-            // Integrera med GUI, behövs nog inte här!!!
-            if (!name.isEmpty()) {
-            break;
-            } else {
+             while (true) {
+             name = i.readLine();
+             // Integrera med GUI, behövs nog inte här!!!
+             if (!name.isEmpty()) {
+             break;
+             } else {
             
-            }
-            }
+             }
+             }
              * 
              */
 
             // Ge välkomstmeddelande
             /*
-            o.println("<message sender=system> Welcome " + name
-            + " to our chat room.\nTo leave enter /quit in a new line.</message>");
+             o.println("<message sender=system> Welcome " + name
+             + " to our chat room.\nTo leave enter /quit in a new line.</message>");
              * 
              */
 
             /*
-            synchronized (lock) {
-            for (IOThread thread : threads) {
-            if (thread == this) {
-            clientName = "@" + name;
-            break;
-            } else {
-            thread.o.println("<message sender=system>*** A new user "
-            + " entered the chat room !!! ***</message>");
-            }
-            }
-            }
+             synchronized (lock) {
+             for (IOThread thread : threads) {
+             if (thread == this) {
+             clientName = "@" + name;
+             break;
+             } else {
+             thread.o.println("<message sender=system>*** A new user "
+             + " entered the chat room !!! ***</message>");
+             }
+             }
+             }
              * 
              */
-
-
             while (true) {
                 String line = i.readLine();
                 System.out.println(line);
@@ -74,37 +72,30 @@ class IOThread extends Thread {
                 // Skicka privata meddelanden
                 if (line.startsWith("@")) {
                     /*
-                    String[] words = line.split("\\s", 2);
-                    if (words.length > 1 && words[1] != null) {
-                    words[1] = words[1].trim();
-                    if (!words[1].isEmpty()) {
-                    synchronized (lock) {
-                    for (IOThread thread : threads) {
-                    if (thread != this && thread.clientName.equals(words[0])) {
-                    thread.o.println("<" + name + "> " + words[1]);
+                     String[] words = line.split("\\s", 2);
+                     if (words.length > 1 && words[1] != null) {
+                     words[1] = words[1].trim();
+                     if (!words[1].isEmpty()) {
+                     synchronized (lock) {
+                     for (IOThread thread : threads) {
+                     if (thread != this && thread.clientName.equals(words[0])) {
+                     thread.o.println("<" + name + "> " + words[1]);
                     
-                    // Visa att meddelandet har skickats
-                    this.o.println("<" + name + "> " + words[1]);
-                    break;
-                    }
-                    }
-                    }
-                    }
-                    }
+                     // Visa att meddelandet har skickats
+                     this.o.println("<" + name + "> " + words[1]);
+                     break;
+                     }
+                     }
+                     }
+                     }
+                     }
                      * 
                      */
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOThread thread : threads) {
-                            if (thread != this) {
-                                thread.o.println(line);
-                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
-                                    //Skapa timer
-                                }
-                            } else {
-                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
-                            }
+                            thread.o.println(line);
                         }
                     }
                 }

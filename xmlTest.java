@@ -3,8 +3,9 @@ package chatbox;
 public class xmlTest {
 
     public static void main(String[] args) {
-        String test = "<message><keyrequest></keyrequest></message>";
-        System.out.println(removeKeyRequest(test));
+        String html = "<message sender=asd><encrypted type=\"asd key=asd></encrypted></message>";
+        System.out.println(html.matches("<message sender=(.*)>(.*)<encrypted type=(.*) "
+                + "key=(.*)>(.*)</encrypted>(.*)</message>"));
     }
 
     public static String removeKeyRequest(String xmlStr) {

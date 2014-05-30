@@ -71,6 +71,7 @@ public class Client implements Runnable {
                 
                 // Listener for keyrequest
                 class KeyRequestListener implements ActionListener {
+                    
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
@@ -142,8 +143,8 @@ public class Client implements Runnable {
                     }
                 }
 
-                // Varför lyssna på closeButton här? Obs! Anonyma lyssnare stängs ej av på slutet!
-                // Obs! Två olika klasser med samma namn - vilken avses??
+                // Varför lyssna på closeButton här? Obs! Anonyma lyssnare stängs ej av på slutet! Vilken lyssnare?
+                // Obs! Två olika klasser med samma namn - vilken avses??  Båda används - måste fixas (Om du syftar på SendFileButtonListener
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.getSendButton().addActionListener(sendButtonListener);
                 SendFileButtonListener2 sendFileButtonListener = new SendFileButtonListener2();
@@ -158,10 +159,7 @@ public class Client implements Runnable {
                     keyResponse(responseLine);
                     fileRequest(responseLine);
                     fileResponse(responseLine);
-                    //Skicka inte key- eller filerequest till sig själv!
-                    chatRoom.appendToPane(
-                            XMLString.removeKeyRequest(
-                            XMLString.removeFileRequest(responseLine)));
+                    chatRoom.appendToPane(responseLine);
                     if (responseLine.contains("*** Bye")) {
                         break;
                     }
@@ -267,7 +265,7 @@ public class Client implements Runnable {
                         "Kill", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.NO_OPTION) {
                     o.println(String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
+                                + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
                             chatRoom.getNamePane().getText(), chatRoom.color, XMLString.getSender(html)));
                 }
             } else {
@@ -286,7 +284,6 @@ public class Client implements Runnable {
     }
     
     // Checks if we have recived a fileresponse
-
     private void fileResponse(String html) {
         if (html.contains("</fileresponse>")) {
             ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
@@ -315,7 +312,8 @@ public class Client implements Runnable {
 
     // Checks if we have recived a keyrequest
     private void keyRequest(String html) {
-        if (html.contains("</keyrequest>")) {
+        String name = XMLString.getSender(html);
+        if (html.contains("</keyrequest>") && !name.equals(chatRoom.getName()) ) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
@@ -333,7 +331,8 @@ public class Client implements Runnable {
 
     // Checks if we have recived a filerequest
     private void fileRequest(String html) {
-        if (html.contains("</filerequest>")) {
+        String name = XMLString.getSender(html);
+        if (html.contains("</filerequest>") && !name.equals(chatRoom.getName())) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s."
                     + "\n Receive file?",
