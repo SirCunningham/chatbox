@@ -101,8 +101,11 @@ public class FileClient implements Runnable {
                 i.close();
                 o.close();
                 clientSocket.close();
+            } catch (FileNotFoundException e) {
+                //this should not really be here, as the listener should not be fired at start!!
+                ChatCreator.showError("Failed to find file.");
             } catch (IOException e) {
-                ChatCreator.showError("Failed to close connection.");
+                ChatCreator.showError("Failed to close file connection.");
             }
         }
     }
