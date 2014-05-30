@@ -105,4 +105,8 @@ public class RightPanel extends JPanel {
         return fileButton;
     }
     
+    public String getKeyRequestEncryption() {
+        return (String) keyRequestEncryptions.getSelectedItem();
+    }
+    
 }

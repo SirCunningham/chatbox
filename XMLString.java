@@ -237,7 +237,7 @@ public class XMLString {
         if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
             return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
         }
-        return "Anonymous";
+        return "";
     }
 
     public static String showName(String xmlMsg) {

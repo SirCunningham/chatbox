@@ -205,5 +205,9 @@ public class ChatRoom {
     public JButton getFileButton() {
         return rightPanel.getFileButton();
     }
+    
+    public String getKeyRequestEncryption() {
+        return rightPanel.getKeyRequestEncryption();
+    }
 
 }

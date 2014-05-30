@@ -32,26 +32,39 @@ class IOStream extends Thread {
 
             String name;
             /*
-            while (true) {
-            name = i.readLine();
-            // Integrera med GUI, behövs nog inte här!!!
-            if (!name.isEmpty()) {
-            break;
-            } else {
+             while (true) {
+             name = i.readLine();
+             // Integrera med GUI, behövs nog inte här!!!
+             if (!name.isEmpty()) {
+             break;
+             } else {
             
-            }
-            }
+             }
+             }
              * 
              */
 
             // Ge välkomstmeddelande
             /*
-            o.println("<message sender=system> Welcome " + name
-            + " to our chat room.\nTo leave enter /quit in a new line.</message>");
+             o.println("<message sender=system> Welcome " + name
+             + " to our chat room.\nTo leave enter /quit in a new line.</message>");
              * 
              */
 
             /*
+<<<<<<< HEAD:IOThread.java
+             synchronized (lock) {
+             for (IOThread thread : threads) {
+             if (thread == this) {
+             clientName = "@" + name;
+             break;
+             } else {
+             thread.o.println("<message sender=system>*** A new user "
+             + " entered the chat room !!! ***</message>");
+             }
+             }
+             }
+=======
             synchronized (lock) {
             for (IOStream stream : streams) {
             if (stream == this) {
@@ -63,10 +76,9 @@ class IOStream extends Thread {
             }
             }
             }
+>>>>>>> 689d18b4e791bf6a73fb3ec2f5d247e66f785711:IOStream.java
              * 
              */
-
-
             while (true) {
                 String line = i.readLine();
                 System.out.println(line);
@@ -77,37 +89,49 @@ class IOStream extends Thread {
                 // Skicka privata meddelanden
                 if (line.startsWith("@")) {
                     /*
+<<<<<<< HEAD:IOThread.java
+                     String[] words = line.split("\\s", 2);
+                     if (words.length > 1 && words[1] != null) {
+                     words[1] = words[1].trim();
+                     if (!words[1].isEmpty()) {
+                     synchronized (lock) {
+                     for (IOThread thread : threads) {
+                     if (thread != this && thread.clientName.equals(words[0])) {
+                     thread.o.println("<" + name + "> " + words[1]);
+=======
                     String[] words = line.split("\\s", 2);
                     if (words.length > 1 && words[1] != null) {
                     words[1] = words[1].trim();
                     if (!words[1].isEmpty()) {
                     synchronized (lock) {
+<<<<<<< HEAD
                     for (IOStream stream : streams) {
                     if (stream != this && stream.clientName.equals(words[0])) {
                     stream.o.println("<" + name + "> " + words[1]);
+=======
+                    for (IOStream thread : threads) {
+                    if (thread != this && thread.clientName.equals(words[0])) {
+                    thread.o.println("<" + name + "> " + words[1]);
+>>>>>>> 689d18b4e791bf6a73fb3ec2f5d247e66f785711:IOStream.java
+>>>>>>> 37ca926ff75612ce7eaa5423d795e65e0b3079e2
                     
-                    // Visa att meddelandet har skickats
-                    this.o.println("<" + name + "> " + words[1]);
-                    break;
-                    }
-                    }
-                    }
-                    }
-                    }
+                     // Visa att meddelandet har skickats
+                     this.o.println("<" + name + "> " + words[1]);
+                     break;
+                     }
+                     }
+                     }
+                     }
+                     }
                      * 
                      */
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOStream stream : streams) {
-                            if (stream != this) {
-                                stream.o.println(line);
-                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
-                                    //Skapa timer
-                                }
-                            } else {
-                                stream.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
-                            }
+                            //if (stream != this) {
+                            stream.o.println(line);
+                            //}
                         }
                     }
                 }
