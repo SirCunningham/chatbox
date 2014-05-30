@@ -11,12 +11,10 @@ public class FileClient implements Runnable {
     protected OutputStream o;
     private final int port;
     private final ChatRoom chatRoom;
-    private final String file;
 
     public FileClient(String host, int port, final ChatRoom chatRoom) {
         this.port = port;
         this.chatRoom = chatRoom;
-        this.file = "/home/m/u1m0slem/Desktop/form.html";
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
@@ -45,6 +43,8 @@ public class FileClient implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        //fetch fileName variable instead!!
+                        String file = "/home/m/u1m0slem/Desktop/form.html";
                         FileInputStream fin = null;
                         try {
                             File transferFile = new File(file);
@@ -74,20 +74,20 @@ public class FileClient implements Runnable {
                     byte[] bytearray = new byte[filesize];
                     //choose file location with GUI?! at least get the name right!!!
                     FileOutputStream fos = new FileOutputStream("/home/6/u1uk0zn6/Desktop/highscore.html");
-                    BufferedOutputStream bos = new BufferedOutputStream(fos);
-                    int bytesRead = i.read(bytearray, 0, bytearray.length);
-                    int currentTot = bytesRead;
-
-                    do {
-                        bytesRead = i.read(bytearray, currentTot, (bytearray.length - currentTot));
-                        if (bytesRead >= 0) {
-                            currentTot += bytesRead;
-                        }
-                    } while (bytesRead > -1);
-
-                    bos.write(bytearray, 0, currentTot);
-                    bos.flush();
-                    bos.close();
+                    try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+                        int bytesRead = i.read(bytearray, 0, bytearray.length);
+                        int currentTot = bytesRead;
+                        
+                        do {
+                            bytesRead = i.read(bytearray, currentTot, (bytearray.length - currentTot));
+                            if (bytesRead >= 0) {
+                                currentTot += bytesRead;
+                            }
+                        } while (bytesRead > -1);
+                        
+                        bos.write(bytearray, 0, currentTot);
+                        bos.flush();
+                    }
                 }
 
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
