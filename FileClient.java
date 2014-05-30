@@ -46,8 +46,6 @@ public class FileClient implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println("I'm here now!!");
-                        
                         //fetch fileName variable instead!!
                         String file = "/home/alexander/Skrivbord/highscore.html";
                         File transferFile = new File(file);
@@ -79,9 +77,11 @@ public class FileClient implements Runnable {
                     byte[] bytearray = new byte[filesize];
                     String file = "/home/alexander/Skrivbord/highscore2.html";
                     //choose file location with GUI?! at least get the name right!!!
+                    //and don't write until someone has sent a file!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
                         int bytesRead = i.read(bytearray, 0, bytearray.length);
+                        //it's stuck here, need to fix this
                         int currentTot = bytesRead;
                         
                         do {

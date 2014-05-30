@@ -11,6 +11,13 @@ import javax.swing.*;
 // *new user is connected (certain msg comes)
 // *user changes name
 // Gör detta här eller i IOThread!
+
+//OBS OBS OBS
+//All data går igenom IOThread, alltid
+//Gör krypteringen i IOThread så sker det både för meddelanden och filer automatiskt
+//Filer använder en annan klient för gränssnittet är annorlunda där
+//OBS OBS OBS
+
 public class Client implements Runnable {
 
     private Socket clientSocket;
