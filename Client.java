@@ -258,7 +258,7 @@ public class Client implements Runnable {
     // Determine if user allowed to connect
     private void handleUserConnect(String html) {
         if (chatRoom.isServer) {
-            if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*></message>")) {
+            if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
                 int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                         String.format("%s wants to connect. Allow?",
                         XMLString.getSender(html)),

@@ -14,9 +14,9 @@ import org.apache.commons.codec.DecoderException;
 
 public class XMLString {
 
-    private String xmlStr;
+    private final String xmlStr;
     private static AESCrypto AES;
-    private ArrayList<String> allowedTags;
+    private final ArrayList<String> allowedTags;
 
     public XMLString(String xmlStr) {
         this.xmlStr = xmlStr;
