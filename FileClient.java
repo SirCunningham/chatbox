@@ -73,8 +73,8 @@ public class FileClient implements Runnable {
                     }
                     
                     byte[] bytearray = new byte[filesize];
-                    String file = "/home/alexander/Skrivbord/X" + chatRoom.getFilePane().getText();
-                    //choose file location with GUI?! the name here is just temporary!
+                    String file = "/home/XX" + chatRoom.getFilePane().getText();
+                    //choose file location with GUI?! the name here is temporarily local!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
                         int bytesRead = i.read(bytearray, 0, bytearray.length);
