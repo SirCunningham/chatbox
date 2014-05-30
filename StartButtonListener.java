@@ -37,7 +37,7 @@ public class StartButtonListener implements ActionListener {
                 ChatCreator.chatRooms.add(chatRoom);
                 addUser(chatRoom, ChatCreator.chatRooms);
                 if (!chatRoom.isServer) {
-                    //funkar ej längre!!
+                    //funkar ej längre med detta!!
                     //chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>I beg to be connected!!</request></text></message>", chatRoom.getName()));
                     try {
                         //Vänta på bekräftelse, fixa riktigt villkor

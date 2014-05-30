@@ -5,6 +5,7 @@ import java.io.*;
 
 public class ClientFile {
 
+    // Flytta till ny IOThread?
     public static void main(String[] args) throws IOException {
         int filesize = 1022386;
         int bytesRead;
