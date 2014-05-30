@@ -23,7 +23,7 @@ public class SendFileButtonListener implements ActionListener {
                 chatRoom.getFileSizePane().getText(), description);
         String message = chatRoom.getMessagePane().getText();
 
-        chatRoom.appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+        chatRoom.appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
                 chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description));
         try {
             chatRoom.doc.remove(0, message.length());

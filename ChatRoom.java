@@ -200,5 +200,9 @@ public class ChatRoom {
     public JButton getKeyRequestButton() {
         return rightPanel.getKeyRequestButton();
     }
+    
+    public JButton getFileButton() {
+        return rightPanel.getFileButton();
+    }
 
 }

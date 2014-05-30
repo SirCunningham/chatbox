@@ -41,7 +41,6 @@ public class Server implements Runnable {
                     clientSocket = serverSocket.accept();
                     
                     // Skapa tråd för varje klient
-
                     synchronized (lock) {
                         threads.addLast(new IOThread(clientSocket, threads, lock));
                         threads.getLast().start();

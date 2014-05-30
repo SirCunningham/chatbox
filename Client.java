@@ -134,12 +134,12 @@ public class Client implements Runnable {
                     }
                 }
 
+                // Varför lyssna på closeButton här? Obs! Anonyma lyssnare stängs ej av på slutet!
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.getSendButton().addActionListener(sendButtonListener);
-                chatRoom.getSendFileButton().addActionListener(
-                        new SendFileButtonListener2());
-                chatRoom.getCloseButton().addActionListener(
-                        new CloseButtonListener());
+                SendFileButtonListener2 sendFileButtonListener = new SendFileButtonListener2();
+                chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
+                chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestListener());
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
@@ -163,6 +163,7 @@ public class Client implements Runnable {
                         + "abandoned!</text><disconnect /></message>"));
                 chatRoom.getSendButton().setEnabled(false);
                 chatRoom.getSendButton().removeActionListener(sendButtonListener);
+                chatRoom.getSendFileButton().removeActionListener(sendFileButtonListener);
                 i.close();
                 o.close();
                 clientSocket.close();

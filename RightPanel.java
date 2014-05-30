@@ -42,6 +42,7 @@ public class RightPanel extends JPanel {
 
         fileButton.addActionListener(new FileButtonListener(chatRoom));
         fileButton.setBorder(BorderFactory.createEmptyBorder());
+        fileButton.setToolTipText("Open file explorer");
         sendFileButton.addActionListener(new SendFileButtonListener(chatRoom));
         sendFileButton.setEnabled(false);
         progressBarButton.addActionListener(new ProgressBarButtonListener(chatRoom));
@@ -95,8 +96,13 @@ public class RightPanel extends JPanel {
     public JButton getBootButton() {
         return bootButton;
     }
+    
     public JButton getKeyRequestButton() {
         return keyRequestButton;
+    }
+    
+    public JButton getFileButton() {
+        return fileButton;
     }
     
 }

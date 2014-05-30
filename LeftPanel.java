@@ -7,15 +7,15 @@ import javax.swing.text.html.*;
 
 public class LeftPanel extends JPanel {
     
-    private JButton colorButton = new IconButton("colorIcon.png");
-    private JTextPane namePane = new JTextPane();
-    private JTextPane messagePane;
-    private JButton sendButton = new JButton("Send message");
-    private JToggleButton cipherButton = new JToggleButton("Encrypt selected");
-    private JComboBox cipherBox = new JComboBox(ChatRoom.cipherString);
-    private JLabel keyLabel = new JLabel("Key:");
-    private JTextPane keyPane = new JTextPane();
-    private JCheckBox keyBox = new JCheckBox("Send key", true);
+    private final JButton colorButton = new IconButton("colorIcon.png");
+    private final JTextPane namePane = new JTextPane();
+    private final JTextPane messagePane;
+    private final JButton sendButton = new JButton("Send message");
+    private final JToggleButton cipherButton = new JToggleButton("Encrypt selected");
+    private final JComboBox cipherBox = new JComboBox(ChatRoom.cipherString);
+    private final JLabel keyLabel = new JLabel("Key:");
+    private final JTextPane keyPane = new JTextPane();
+    private final JCheckBox keyBox = new JCheckBox("Send key", true);
     
     public LeftPanel(ChatRoom chatRoom) {
         messagePane = new JTextPane(chatRoom.doc);
@@ -38,6 +38,7 @@ public class LeftPanel extends JPanel {
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener(chatRoom));
+        colorButton.setToolTipText("Change color");
         ((AbstractDocument) namePane.getDocument()).setDocumentFilter(new NewLineFilter(32));
         String name = ChatCreator.namePane.getText();
         namePane.setText(name.isEmpty() ? "Nomen nescio" : name);
