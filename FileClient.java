@@ -67,6 +67,29 @@ public class FileClient implements Runnable {
                         }
                     }
                 }
+                
+                while (chatRoom.alive) {
+                    int filesize = 1022386;
+                    int bytesRead;
+                    int currentTot = 0;
+
+                    byte[] bytearray = new byte[filesize];
+                    FileOutputStream fos = new FileOutputStream("/home/6/u1uk0zn6/Desktop/highscore.html");
+                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                    bytesRead = i.read(bytearray, 0, bytearray.length);
+                    currentTot = bytesRead;
+
+                    do {
+                        bytesRead = i.read(bytearray, currentTot, (bytearray.length - currentTot));
+                        if (bytesRead >= 0) {
+                            currentTot += bytesRead;
+                        }
+                    } while (bytesRead > -1);
+
+                    bos.write(bytearray, 0, currentTot);
+                    bos.flush();
+                    bos.close();
+                }
 
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
