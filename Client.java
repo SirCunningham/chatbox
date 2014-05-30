@@ -136,6 +136,7 @@ public class Client implements Runnable {
                 }
 
                 // Varför lyssna på closeButton här? Obs! Anonyma lyssnare stängs ej av på slutet!
+                // Obs! Två olika klasser med samma namn - vilken avses??
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.getSendButton().addActionListener(sendButtonListener);
                 SendFileButtonListener2 sendFileButtonListener = new SendFileButtonListener2();
@@ -184,6 +185,7 @@ public class Client implements Runnable {
 
         Runnable task = new Runnable() {
 
+            @Override
             public void run() {
                 // Check if recived keyresponse - if not, inform the user, else 
                 // do nothing
