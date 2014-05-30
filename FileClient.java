@@ -3,6 +3,8 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileClient implements Runnable {
 
@@ -45,11 +47,9 @@ public class FileClient implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         //fetch fileName variable instead!!
                         String file = "/home/m/u1m0slem/Desktop/form.html";
-                        FileInputStream fin = null;
-                        try {
-                            File transferFile = new File(file);
-                            byte[] bytearray = new byte[(int) transferFile.length()];
-                            fin = new FileInputStream(transferFile);
+                        File transferFile = new File(file);
+                        byte[] bytearray = new byte[(int) transferFile.length()];
+                        try (FileInputStream fin = new FileInputStream(transferFile)) {
                             BufferedInputStream bin = new BufferedInputStream(fin);
                             bin.read(bytearray, 0, bytearray.length);
                             o.write(bytearray, 0, bytearray.length);
@@ -57,13 +57,7 @@ public class FileClient implements Runnable {
                         } catch (FileNotFoundException ex) {
                             ChatCreator.showError("Failed to find file.");
                         } catch (IOException ex) {
-                                ChatCreator.showError("Failed with I/O.");
-                        } finally {
-                            try {
-                                fin.close();
-                            } catch (IOException ex) {
-                                ChatCreator.showError("Failed to close file stream.");
-                            }
+                            ChatCreator.showError("Failed with I/O.");
                         }
                     }
                 }
