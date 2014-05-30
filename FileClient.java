@@ -74,7 +74,8 @@ public class FileClient implements Runnable {
                     }
                     
                     byte[] bytearray = new byte[chatRoom.fileSize];
-                    String file = "/home/alexander/Skrivbord/highscore2.html";
+                    //String file = "/home/alexander/Skrivbord/highscore2.html";
+                    String file = "/home/karl/Desktop/catpicture4231.jpg";
                     //choose file location with GUI?! the name here is temporarily local!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
