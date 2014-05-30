@@ -3,8 +3,9 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+// För kryptering av filer, se:
+// https://stackoverflow.com/questions/16911632/java-file-encryption
 
 public class FileClient implements Runnable {
 
@@ -45,8 +46,10 @@ public class FileClient implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        System.out.println("I'm here now!!");
+                        
                         //fetch fileName variable instead!!
-                        String file = "/home/m/u1m0slem/Desktop/form.html";
+                        String file = "/home/alexander/Skrivbord/highscore.html";
                         File transferFile = new File(file);
                         byte[] bytearray = new byte[(int) transferFile.length()];
                         try (FileInputStream fin = new FileInputStream(transferFile)) {
@@ -62,6 +65,9 @@ public class FileClient implements Runnable {
                     }
                 }
                 
+                SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
+                chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
+                
                 int filesize = 1048576;
                 while (chatRoom.alive) {
                     //sinka så att den får vila lite, egentligen behövs bättre upplägg, se Client!
@@ -71,7 +77,7 @@ public class FileClient implements Runnable {
                     }
                     
                     byte[] bytearray = new byte[filesize];
-                    String file = "/home/6/u1uk0zn6/Desktop/highscore.html";
+                    String file = "/home/alexander/Skrivbord/highscore2.html";
                     //choose file location with GUI?! at least get the name right!!!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
@@ -89,9 +95,6 @@ public class FileClient implements Runnable {
                         bos.flush();
                     }
                 }
-
-                SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
-                chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
 
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
                         + "<text color=\"0000ff\">It is no longer possible "

@@ -143,6 +143,7 @@ public class Client implements Runnable {
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestListener());
+
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
                     setKeys(responseLine);
