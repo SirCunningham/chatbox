@@ -40,6 +40,7 @@ public class ChatRoom {
     int cipherStart;
     int cipherEnd;
     String filePath;
+    int fileSize;
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;

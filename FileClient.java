@@ -64,20 +64,23 @@ public class FileClient implements Runnable {
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
                 
-                int filesize = 1048576;
-                while (chatRoom.alive) {
+                int bytesRead;
+                while ((bytesRead = i.read()) >= 0 && chatRoom.alive) {
+                    
                     //sinka så att den får vila lite, egentligen behövs bättre upplägg, se Client!
                     try {
                         Thread.sleep(ChatCreator.generator.nextInt(1000));
                     } catch (InterruptedException e) {
                     }
                     
-                    byte[] bytearray = new byte[filesize];
-                    String file = "/home/XX" + chatRoom.getFilePane().getText();
+                    byte[] bytearray = new byte[chatRoom.fileSize];
+                    String file = "/home/alexander/Skrivbord/highscore2.html";
                     //choose file location with GUI?! the name here is temporarily local!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-                        int bytesRead = i.read(bytearray, 0, bytearray.length);
+                        System.out.println("I'm here!");
+                        bytesRead = i.read(bytearray, 0, bytearray.length);
+                        System.out.println("I'm here!");
                         //it's stuck here, need to fix this; don't read until someone has sent a file!
                         int currentTot = bytesRead;
                         
@@ -104,6 +107,7 @@ public class FileClient implements Runnable {
             } catch (FileNotFoundException e) {
                 //this should not really be here, as the listener should not be fired at start!!
                 ChatCreator.showError("Failed to find file.");
+                e.printStackTrace();
             } catch (IOException e) {
                 ChatCreator.showError("Failed to close file connection.");
             }

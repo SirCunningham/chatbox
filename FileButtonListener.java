@@ -22,7 +22,9 @@ public class FileButtonListener implements ActionListener {
             File file = chooser.getSelectedFile();
             chatRoom.filePath = file.getAbsolutePath();
             chatRoom.getFilePane().setText(file.getName());
-            chatRoom.getFileSizePane().setText(Long.toString(file.length()) + " bytes");
+            //kan finnas bättre sätt att konvertera long till int!!
+            chatRoom.fileSize = (int) file.length();
+            chatRoom.getFileSizePane().setText(Integer.toString(chatRoom.fileSize) + " bytes");
             chatRoom.getSendFileButton().setEnabled(true);
         }
     }
