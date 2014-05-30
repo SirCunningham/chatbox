@@ -10,7 +10,7 @@ public class ServerCreator implements Runnable {
     
     @Override
     public void run() {
-        final Server server = new Server(chatRoom.port, false, chatRoom);
+        final Server server = new Server(chatRoom.port, chatRoom);
         new Thread(server).start();
         
         final int port;
@@ -19,7 +19,7 @@ public class ServerCreator implements Runnable {
         } else {
             port = chatRoom.port - 23;
         }
-        final Server fileServer = new Server(port, true, chatRoom);
+        final Server fileServer = new Server(port, chatRoom);
         new Thread(fileServer).start();
     }
 }

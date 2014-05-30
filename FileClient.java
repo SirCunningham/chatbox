@@ -10,7 +10,7 @@ import java.net.*;
 public class FileClient implements Runnable {
 
     private Socket clientSocket;
-    protected InputStream i;
+    protected BufferedReader i;
     protected OutputStream o;
     private final int port;
     private final ChatRoom chatRoom;
@@ -21,7 +21,7 @@ public class FileClient implements Runnable {
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
-            i = clientSocket.getInputStream();
+            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = clientSocket.getOutputStream();
         } catch (UnknownHostException e) {
             chatRoom.success = false;
@@ -39,6 +39,7 @@ public class FileClient implements Runnable {
     @Override
     public void run() {
         // Håll uppkopplingen tills servern vill avbryta den
+        String responseLine;
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa lyssnare för att skicka till servern
@@ -53,6 +54,8 @@ public class FileClient implements Runnable {
                             bin.read(bytearray, 0, bytearray.length);
                             o.write(bytearray, 0, bytearray.length);
                             o.flush();
+                            PrintWriter pw = new PrintWriter(o, true);
+                            pw.println("THIS IS A REALLY BAD HACK BUT IT WORKS");
                         } catch (FileNotFoundException ex) {
                             ChatCreator.showError("Failed to find file.");
                         } catch (IOException ex) {
@@ -63,36 +66,31 @@ public class FileClient implements Runnable {
                 
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
+
+                //välj filadress med GUI, eller spara i samma katalog; filnamnet kommer från avsändaren!!
+                String file;
+                if (chatRoom.isServer) {
+                    file = "/home/alexander/Skrivbord/highscore2.html";
+                } else {
+                    file = "/home/alexander/Skrivbord/highscore3.html";
+                }
+                FileWriter fw = new FileWriter(file);
+                BufferedWriter bw = new BufferedWriter(fw);
                 
-                int bytesRead;
-                while ((bytesRead = i.read()) >= 0 && chatRoom.alive) {
-                    
-                    //sinka så att den får vila lite, egentligen behövs bättre upplägg, se Client!
+                while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     try {
-                        Thread.sleep(ChatCreator.generator.nextInt(1000));
-                    } catch (InterruptedException e) {
-                    }
-                    
-                    byte[] bytearray = new byte[chatRoom.fileSize];
-                    String file = "/home/alexander/Skrivbord/highscore2.html";
-                    //choose file location with GUI?! the name here is temporarily local!
-                    FileOutputStream fos = new FileOutputStream(file);
-                    try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-                        System.out.println("I'm here!");
-                        bytesRead = i.read(bytearray, 0, bytearray.length);
-                        System.out.println("I'm here!");
-                        //it's stuck here, need to fix this; don't read until someone has sent a file!
-                        int currentTot = bytesRead;
-                        
-                        do {
-                            bytesRead = i.read(bytearray, currentTot, (bytearray.length - currentTot));
-                            if (bytesRead >= 0) {
-                                currentTot += bytesRead;
-                            }
-                        } while (bytesRead > -1);
-                        
-                        bos.write(bytearray, 0, currentTot);
-                        bos.flush();
+                        if (responseLine.equals("THIS IS A REALLY BAD HACK BUT IT WORKS")) {
+                            bw.close();
+                            //uppdatera file (namnet) när ny fil accepteras
+                            file = "/home/alexander/Skrivbord/highscore4.html";
+                            fw = new FileWriter(file);
+                            bw = new BufferedWriter(fw);
+                        } else {
+                            bw.write(responseLine);
+                            bw.newLine();
+                        }
+                    } catch (IOException ex) {
+                        ChatCreator.showError("Failed to save file.");
                     }
                 }
 

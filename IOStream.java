@@ -10,16 +10,16 @@ class IOStream extends Thread {
     private BufferedReader i;
     private PrintWriter o;
     protected final Socket clientSocket;
-    protected final LinkedList<IOStream> threads;
+    protected final LinkedList<IOStream> streams;
     protected final Object lock;
     
     protected InputStream bi;
     protected OutputStream bo;
 
-    public IOStream(Socket clientSocket, LinkedList<IOStream> threads,
+    public IOStream(Socket clientSocket, LinkedList<IOStream> streams,
             Object lock) {
         this.clientSocket = clientSocket;
-        this.threads = threads;
+        this.streams = streams;
         this.lock = lock;
     }
 
@@ -53,12 +53,12 @@ class IOStream extends Thread {
 
             /*
             synchronized (lock) {
-            for (IOStream thread : threads) {
-            if (thread == this) {
+            for (IOStream stream : streams) {
+            if (stream == this) {
             clientName = "@" + name;
             break;
             } else {
-            thread.o.println("<message sender=system>*** A new user "
+            stream.o.println("<message sender=system>*** A new user "
             + " entered the chat room !!! ***</message>");
             }
             }
@@ -82,9 +82,9 @@ class IOStream extends Thread {
                     words[1] = words[1].trim();
                     if (!words[1].isEmpty()) {
                     synchronized (lock) {
-                    for (IOStream thread : threads) {
-                    if (thread != this && thread.clientName.equals(words[0])) {
-                    thread.o.println("<" + name + "> " + words[1]);
+                    for (IOStream stream : streams) {
+                    if (stream != this && stream.clientName.equals(words[0])) {
+                    stream.o.println("<" + name + "> " + words[1]);
                     
                     // Visa att meddelandet har skickats
                     this.o.println("<" + name + "> " + words[1]);
@@ -99,23 +99,23 @@ class IOStream extends Thread {
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
-                        for (IOStream thread : threads) {
-                            if (thread != this) {
-                                thread.o.println(line);
+                        for (IOStream stream : streams) {
+                            if (stream != this) {
+                                stream.o.println(line);
                                 if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
                                     //Skapa timer
                                 }
                             } else {
-                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
+                                stream.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
                             }
                         }
                     }
                 }
             }
             synchronized (lock) {
-                for (IOStream thread : threads) {
-                    if (thread != this) {
-                        //thread.o.println("<message sender=system>*** The user " + name
+                for (IOStream stream : streams) {
+                    if (stream != this) {
+                        //stream.o.println("<message sender=system>*** The user " + name
                         //+ " is leaving the chat room !!! ***</message>");
                     }
                 }
@@ -124,7 +124,7 @@ class IOStream extends Thread {
 
             // Lämna plats för nya klienter
             synchronized (lock) {
-                threads.remove(this);
+                streams.remove(this);
             }
 
             i.close();

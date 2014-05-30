@@ -8,15 +8,13 @@ public class Server implements Runnable {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private LinkedList<IOStream> threads;
+    private LinkedList<IOStream> streams;
     private final Object lock = new Object();
     private final int port;
     private final ChatRoom chatRoom;
-    private final boolean byteStream;
 
-    public Server(int port, boolean byteStream, final ChatRoom chatRoom) {
+    public Server(int port, final ChatRoom chatRoom) {
         this.port = port;
-        this.byteStream = byteStream;
         this.chatRoom = chatRoom;
 
         // Starta socket för servern
@@ -36,7 +34,7 @@ public class Server implements Runnable {
     @Override
     public void run() {
         if (serverSocket != null) {
-            threads = new LinkedList<>();
+            streams = new LinkedList<>();
             // Lyssna efter klienter
             while (chatRoom.alive) {
                 try {
@@ -44,12 +42,8 @@ public class Server implements Runnable {
                     
                     // Skapa tråd för varje klient
                     synchronized (lock) {
-                        if (byteStream) {
-                            threads.addLast(new IOByteStream(clientSocket, threads, lock));
-                        } else {
-                            threads.addLast(new IOStream(clientSocket, threads, lock));
-                        }
-                        threads.getLast().start();
+                        streams.addLast(new IOStream(clientSocket, streams, lock));
+                        streams.getLast().start();
                     }
                 } catch (SocketTimeoutException e) {
                 } catch (IOException e) {
