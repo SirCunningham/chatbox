@@ -62,9 +62,8 @@ public class FileClient implements Runnable {
                     }
                 }
                 
+                int filesize = 1048576;
                 while (chatRoom.alive) {
-                    int filesize = 1022386;
-
                     byte[] bytearray = new byte[filesize];
                     String file = "/home/6/u1uk0zn6/Desktop/highscore.html";
                     //choose file location with GUI?! at least get the name right!!!
