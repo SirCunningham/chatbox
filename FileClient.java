@@ -3,18 +3,11 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
-// add chatRoom.items.addElement(clientSocket.getInetAddress()); when
-// *new user is connected (certain msg comes)
-// *user changes name
-// Gör detta här eller i IOThread!
+
 public class FileClient implements Runnable {
 
     private Socket clientSocket;
+    protected InputStream i;
     protected OutputStream o;
     private final int port;
     private final ChatRoom chatRoom;
@@ -27,6 +20,7 @@ public class FileClient implements Runnable {
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
+            i = clientSocket.getInputStream();
             o = clientSocket.getOutputStream();
         } catch (UnknownHostException e) {
             chatRoom.success = false;
@@ -44,7 +38,7 @@ public class FileClient implements Runnable {
     @Override
     public void run() {
         // Håll uppkopplingen tills servern vill avbryta den
-        if (clientSocket != null && o != null) {
+        if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa lyssnare för att skicka till servern
                 class SendFileButtonListener3 implements ActionListener {
@@ -82,6 +76,7 @@ public class FileClient implements Runnable {
                         + "to send or receive files!</text><disconnect /></message>"));
                 chatRoom.getFileButton().setEnabled(false);
                 chatRoom.getSendFileButton().removeActionListener(sendFileButtonListener);
+                i.close();
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {

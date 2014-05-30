@@ -64,6 +64,7 @@ public class Client implements Runnable {
                 
                 // Listener for keyrequest
                 class KeyRequestListener implements ActionListener {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
                         if (chat != null) {
