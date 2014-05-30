@@ -66,8 +66,9 @@ public class FileClient implements Runnable {
                     int filesize = 1022386;
 
                     byte[] bytearray = new byte[filesize];
+                    String file = "/home/6/u1uk0zn6/Desktop/highscore.html";
                     //choose file location with GUI?! at least get the name right!!!
-                    FileOutputStream fos = new FileOutputStream("/home/6/u1uk0zn6/Desktop/highscore.html");
+                    FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
                         int bytesRead = i.read(bytearray, 0, bytearray.length);
                         int currentTot = bytesRead;
