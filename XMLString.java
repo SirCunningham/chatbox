@@ -79,7 +79,7 @@ public class XMLString {
                                 }
                                 break;
                         }
-                        xmlStr = " " + xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
+                        xmlStr = xmlStr.substring(xmlStr.indexOf("</encrypted>") + 12);
                         i = 0;
                     }
 
