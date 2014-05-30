@@ -252,7 +252,7 @@ public class Client implements Runnable {
             }
         };
         //Run after 1 minute
-        chatRoom.nameFileResponse.get(chatName).schedule(task, 10, TimeUnit.SECONDS);
+        chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
     }
     
     // Determine if user allowed to connect
