@@ -73,13 +73,12 @@ public class FileClient implements Runnable {
                     }
                     
                     byte[] bytearray = new byte[filesize];
-                    String file = "/home/alexander/Skrivbord/highscore2.html";
-                    //choose file location with GUI?! at least get the name right!!!
-                    //and don't write until someone has sent a file!
+                    String file = "/home/alexander/Skrivbord/X" + chatRoom.getFilePane().getText();
+                    //choose file location with GUI?! the name here is just temporary!
                     FileOutputStream fos = new FileOutputStream(file);
                     try (BufferedOutputStream bos = new BufferedOutputStream(fos)) {
                         int bytesRead = i.read(bytearray, 0, bytearray.length);
-                        //it's stuck here, need to fix this
+                        //it's stuck here, need to fix this; don't read until someone has sent a file!
                         int currentTot = bytesRead;
                         
                         do {
