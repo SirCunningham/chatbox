@@ -4,16 +4,16 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-class IOThread extends Thread {
+class IOStream extends Thread {
 
     private final String clientName = "@NN";
     private BufferedReader i;
     private PrintWriter o;
     private final Socket clientSocket;
-    private final LinkedList<IOThread> threads;
+    private final LinkedList<IOStream> threads;
     private final Object lock;
 
-    public IOThread(Socket clientSocket, LinkedList<IOThread> threads,
+    public IOStream(Socket clientSocket, LinkedList<IOStream> threads,
             Object lock) {
         this.clientSocket = clientSocket;
         this.threads = threads;
@@ -50,7 +50,7 @@ class IOThread extends Thread {
 
             /*
             synchronized (lock) {
-            for (IOThread thread : threads) {
+            for (IOStream thread : threads) {
             if (thread == this) {
             clientName = "@" + name;
             break;
@@ -79,7 +79,7 @@ class IOThread extends Thread {
                     words[1] = words[1].trim();
                     if (!words[1].isEmpty()) {
                     synchronized (lock) {
-                    for (IOThread thread : threads) {
+                    for (IOStream thread : threads) {
                     if (thread != this && thread.clientName.equals(words[0])) {
                     thread.o.println("<" + name + "> " + words[1]);
                     
@@ -96,7 +96,7 @@ class IOThread extends Thread {
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
-                        for (IOThread thread : threads) {
+                        for (IOStream thread : threads) {
                             if (thread != this) {
                                 thread.o.println(line);
                                 if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
@@ -110,7 +110,7 @@ class IOThread extends Thread {
                 }
             }
             synchronized (lock) {
-                for (IOThread thread : threads) {
+                for (IOStream thread : threads) {
                     if (thread != this) {
                         //thread.o.println("<message sender=system>*** The user " + name
                         //+ " is leaving the chat room !!! ***</message>");

@@ -10,11 +10,11 @@ import javax.swing.*;
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
 // *new user is connected (certain msg comes)
 // *user changes name
-// Gör detta här eller i IOThread!
+// Gör detta här eller i IOStream!
 
 //OBS OBS OBS
-//All data går igenom IOThread, alltid
-//Gör krypteringen i IOThread så sker det både för meddelanden och filer automatiskt
+//All data går igenom IOStream, alltid
+//Gör krypteringen i IOStream så sker det både för meddelanden och filer automatiskt
 //Filer använder en annan klient för gränssnittet är annorlunda där
 //OBS OBS OBS
 

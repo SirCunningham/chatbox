@@ -8,7 +8,7 @@ public class Server implements Runnable {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
-    private LinkedList<IOThread> threads;
+    private LinkedList<IOStream> threads;
     private final Object lock = new Object();
     private final int port;
     private final ChatRoom chatRoom;
@@ -42,7 +42,7 @@ public class Server implements Runnable {
                     
                     // Skapa tråd för varje klient
                     synchronized (lock) {
-                        threads.addLast(new IOThread(clientSocket, threads, lock));
+                        threads.addLast(new IOStream(clientSocket, threads, lock));
                         threads.getLast().start();
                     }
                 } catch (SocketTimeoutException e) {
