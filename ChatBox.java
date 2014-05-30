@@ -13,6 +13,7 @@ package chatbox;
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 
 //Ingen tom rad efter nekad keyrequest! Tom rad är tomt keyrequestmeddelande. Se kommentaren nedan.
+//Varför skickar man keyrequestmeddelande när man kommenterar? Oväntat beteende - knappen finns där av en anledning.
 
 //Funkar numera att skicka tomma meddelanden, tidigare förbjöds detta medelst trimning!
 

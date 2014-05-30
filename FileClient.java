@@ -54,7 +54,7 @@ public class FileClient implements Runnable {
                             o.write(bytearray, 0, bytearray.length);
                             o.flush();
                             PrintWriter pw = new PrintWriter(o, true);
-                            pw.println("THIS IS A REALLY BAD HACK BUT IT WORKS");
+                            pw.println("THIS IS A REALLY UGLY HACK BUT IT WORKS");
                         } catch (FileNotFoundException ex) {
                             ChatCreator.showError("Failed to find file.");
                         } catch (IOException ex) {
@@ -78,9 +78,10 @@ public class FileClient implements Runnable {
 
                 //ett alternativ för att undvika detta hack är att skapa nya servrar/clienter varje gång en fil skickas
                 //då kan man använda bytearrays hela vägen
+                //dessutom måste man begränsa till en fil i taget p.g.a. hacklösningen
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     try {
-                        if (responseLine.equals("THIS IS A REALLY BAD HACK BUT IT WORKS")) {
+                        if (responseLine.equals("THIS IS A REALLY UGLY HACK BUT IT WORKS")) {
                             bw.close();
                             //uppdatera file (namnet) när ny fil accepteras
                             file = "/home/alexander/Skrivbord/highscore4.html";
