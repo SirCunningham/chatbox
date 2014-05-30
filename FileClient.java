@@ -6,7 +6,6 @@ import java.net.*;
 
 // För kryptering av filer, se:
 // https://stackoverflow.com/questions/16911632/java-file-encryption
-
 public class FileClient implements Runnable {
 
     private Socket clientSocket;
@@ -63,7 +62,7 @@ public class FileClient implements Runnable {
                         }
                     }
                 }
-                
+
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
 
@@ -76,7 +75,7 @@ public class FileClient implements Runnable {
                 }
                 FileWriter fw = new FileWriter(file);
                 BufferedWriter bw = new BufferedWriter(fw);
-                
+
                 //ett alternativ för att undvika detta hack är att skapa nya servrar/clienter varje gång en fil skickas
                 //då kan man använda bytearrays hela vägen
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
