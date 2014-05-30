@@ -77,6 +77,8 @@ public class FileClient implements Runnable {
                 FileWriter fw = new FileWriter(file);
                 BufferedWriter bw = new BufferedWriter(fw);
                 
+                //ett alternativ för att undvika detta hack är att skapa nya servrar/clienter varje gång en fil skickas
+                //då kan man använda bytearrays hela vägen
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     try {
                         if (responseLine.equals("THIS IS A REALLY BAD HACK BUT IT WORKS")) {

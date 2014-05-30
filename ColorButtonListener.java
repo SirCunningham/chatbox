@@ -25,8 +25,9 @@ public class ColorButtonListener implements ActionListener {
             String message = chatRoom.getMessagePane().getText();
             StyleConstants.setForeground(chatRoom.style, chatRoom.colorObj);
             try {
-                //hacklösning... ersätt med adapter.o.println(text)!
                 chatRoom.statusUpdate = true;
+                //bättre lösning än hacklösningen, men kräver att keyRequest inte håller på
+                //chatRoom.o.println("I just changed to a new color: " + chatRoom.color);
                 chatRoom.doc.remove(0, message.length());
                 chatRoom.doc.insertString(0, "I just changed to a new color: " + chatRoom.color, chatRoom.style);
                 chatRoom.getSendButton().doClick();
