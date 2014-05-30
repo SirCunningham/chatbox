@@ -82,7 +82,7 @@ public class Client implements Runnable {
                                     + "type=\"%s\">%s"
                                     + "</keyrequest></text></message>",
                                     chatRoom.getName(), chatRoom.color,
-                                    String.valueOf(chatRoom.getCipherBox().getSelectedItem()), Messages.getMessage(chatRoom)));
+                                    String.valueOf(chatRoom.getKeyRequestEncryption()), Messages.getMessage(chatRoom)));
                             startKeyTimer(chatName);
                         }
 
