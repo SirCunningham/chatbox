@@ -15,8 +15,11 @@ public class ChatRoom {
     
     static final String[] cipherString = {"None", "caesar", "AES"};
     
-    private DefaultListModel items = new DefaultListModel();
-    private JList list = new SelectionList(items);
+    private final JPanel mainPanel = new JPanel();
+    private final LeftPanel leftPanel;
+    private final RightPanel rightPanel;
+    private final DefaultListModel items = new DefaultListModel();
+    private final JList list = new SelectionList(items);
     
     JTextPane chatBox = new JTextPane();
     DefaultStyledDocument doc = new DefaultStyledDocument();
@@ -25,9 +28,6 @@ public class ChatRoom {
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
     public AESCrypto AES;
-    private JPanel mainPanel = new JPanel();
-    private LeftPanel leftPanel;
-    private RightPanel rightPanel;
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
     int startEnc;
@@ -40,6 +40,7 @@ public class ChatRoom {
     int cipherStart;
     int cipherEnd;
     String filePath;
+    int fileSize;
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;

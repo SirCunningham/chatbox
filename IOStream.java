@@ -4,16 +4,19 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-class IOThread extends Thread {
+class IOStream extends Thread {
 
-    private final String clientName = "@NN";
+    protected final String clientName = "@NN";
     private BufferedReader i;
     private PrintWriter o;
-    private final Socket clientSocket;
-    private final LinkedList<IOThread> threads;
-    private final Object lock;
+    protected final Socket clientSocket;
+    protected final LinkedList<IOStream> threads;
+    protected final Object lock;
+    
+    protected InputStream bi;
+    protected OutputStream bo;
 
-    public IOThread(Socket clientSocket, LinkedList<IOThread> threads,
+    public IOStream(Socket clientSocket, LinkedList<IOStream> threads,
             Object lock) {
         this.clientSocket = clientSocket;
         this.threads = threads;
@@ -49,6 +52,7 @@ class IOThread extends Thread {
              */
 
             /*
+<<<<<<< HEAD:IOThread.java
              synchronized (lock) {
              for (IOThread thread : threads) {
              if (thread == this) {
@@ -60,6 +64,19 @@ class IOThread extends Thread {
              }
              }
              }
+=======
+            synchronized (lock) {
+            for (IOStream thread : threads) {
+            if (thread == this) {
+            clientName = "@" + name;
+            break;
+            } else {
+            thread.o.println("<message sender=system>*** A new user "
+            + " entered the chat room !!! ***</message>");
+            }
+            }
+            }
+>>>>>>> 689d18b4e791bf6a73fb3ec2f5d247e66f785711:IOStream.java
              * 
              */
             while (true) {
@@ -72,6 +89,7 @@ class IOThread extends Thread {
                 // Skicka privata meddelanden
                 if (line.startsWith("@")) {
                     /*
+<<<<<<< HEAD:IOThread.java
                      String[] words = line.split("\\s", 2);
                      if (words.length > 1 && words[1] != null) {
                      words[1] = words[1].trim();
@@ -80,6 +98,16 @@ class IOThread extends Thread {
                      for (IOThread thread : threads) {
                      if (thread != this && thread.clientName.equals(words[0])) {
                      thread.o.println("<" + name + "> " + words[1]);
+=======
+                    String[] words = line.split("\\s", 2);
+                    if (words.length > 1 && words[1] != null) {
+                    words[1] = words[1].trim();
+                    if (!words[1].isEmpty()) {
+                    synchronized (lock) {
+                    for (IOStream thread : threads) {
+                    if (thread != this && thread.clientName.equals(words[0])) {
+                    thread.o.println("<" + name + "> " + words[1]);
+>>>>>>> 689d18b4e791bf6a73fb3ec2f5d247e66f785711:IOStream.java
                     
                      // Visa att meddelandet har skickats
                      this.o.println("<" + name + "> " + words[1]);
@@ -94,14 +122,16 @@ class IOThread extends Thread {
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
-                        for (IOThread thread : threads) {
+
+                        for (IOStream thread : threads) {
                             thread.o.println(line);
+
                         }
                     }
                 }
             }
             synchronized (lock) {
-                for (IOThread thread : threads) {
+                for (IOStream thread : threads) {
                     if (thread != this) {
                         //thread.o.println("<message sender=system>*** The user " + name
                         //+ " is leaving the chat room !!! ***</message>");

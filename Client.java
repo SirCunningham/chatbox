@@ -10,11 +10,11 @@ import javax.swing.*;
 // add chatRoom.items.addElement(clientSocket.getInetAddress()); when
 // *new user is connected (certain msg comes)
 // *user changes name
-// Gör detta här eller i IOThread!
+// Gör detta här eller i IOStream!
 
 //OBS OBS OBS
-//All data går igenom IOThread, alltid
-//Gör krypteringen i IOThread så sker det både för meddelanden och filer automatiskt
+//All data går igenom IOStream, alltid
+//Gör krypteringen i IOStream så sker det både för meddelanden och filer automatiskt
 //Filer använder en annan klient för gränssnittet är annorlunda där
 //OBS OBS OBS
 
@@ -312,8 +312,10 @@ public class Client implements Runnable {
 
     // Checks if we have recived a keyrequest
     private void keyRequest(String html) {
-        String name = XMLString.getSender(html);
-        if (html.contains("</keyrequest>") && !name.equals(chatRoom.getName()) ) {
+        String chatName = chatRoom.getName();
+        // getSender add : to the end of name
+        String name = XMLString.getSender(html).substring(0, chatName.length());
+        if (html.contains("</keyrequest>") && !name.equals(chatName)) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
                     XMLString.getSender(html), XMLString.getKeyRequestType(html)),
@@ -322,7 +324,7 @@ public class Client implements Runnable {
                 o.println(String.format("<message sender=\"%s\">"
                         + "<text color=\"%s\">Här kommer nyckeln!<encrypted "
                         + "type=\"%s\" key=\"%s\"></encrypted></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color,
+                        chatName, chatRoom.color,
                         XMLString.getKeyRequestType(html),
                         chatRoom.getKey(XMLString.getKeyRequestType(html))));
             }
@@ -331,8 +333,9 @@ public class Client implements Runnable {
 
     // Checks if we have recived a filerequest
     private void fileRequest(String html) {
-        String name = XMLString.getSender(html);
-        if (html.contains("</filerequest>") && !name.equals(chatRoom.getName())) {
+        String chatName = chatRoom.getName();
+        String name = XMLString.getSender(html).substring(0, chatName.length());
+        if (html.contains("</filerequest>") && !name.equals(chatName)) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a filerequest of type %s."
                     + "\n Receive file?",
@@ -343,7 +346,7 @@ public class Client implements Runnable {
                         + "<text color=\"%s\"><fileresponse reply=\"yes\" "
                         + "port=\"" + (port + 13)
                         + "\">%s</filerespnse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color,
+                        chatName, chatRoom.color,
                         chatRoom.getMessagePane().getText()));
             } else {
                 o.println(String.format("<message sender=\"%s\">"
