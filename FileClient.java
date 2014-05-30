@@ -15,7 +15,6 @@ import javax.swing.*;
 public class FileClient implements Runnable {
 
     private Socket clientSocket;
-    protected BufferedReader i;
     protected OutputStream o;
     private final int port;
     private final ChatRoom chatRoom;
@@ -28,8 +27,6 @@ public class FileClient implements Runnable {
         // Starta socket för klienten
         try {
             clientSocket = new Socket(host, port);
-            i = new BufferedReader(new InputStreamReader(
-                    clientSocket.getInputStream()));
             o = clientSocket.getOutputStream();
         } catch (UnknownHostException e) {
             chatRoom.success = false;
@@ -47,7 +44,7 @@ public class FileClient implements Runnable {
     @Override
     public void run() {
         // Håll uppkopplingen tills servern vill avbryta den
-        if (clientSocket != null && i != null && o != null) {
+        if (clientSocket != null && o != null) {
             try {
                 // Skapa lyssnare för att skicka till servern
                 class SendFileButtonListener3 implements ActionListener {
@@ -81,11 +78,10 @@ public class FileClient implements Runnable {
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
 
                 chatRoom.appendToPane(String.format("<message sender=\"INFO\">"
-                        + "<text color=\"0000ff\">It is no longer possible"
+                        + "<text color=\"0000ff\">It is no longer possible "
                         + "to send or receive files!</text><disconnect /></message>"));
                 chatRoom.getFileButton().setEnabled(false);
                 chatRoom.getSendFileButton().removeActionListener(sendFileButtonListener);
-                i.close();
                 o.close();
                 clientSocket.close();
             } catch (IOException e) {
