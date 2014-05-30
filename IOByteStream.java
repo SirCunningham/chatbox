@@ -4,34 +4,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
-class IOStream extends Thread {
+class IOByteStream extends IOStream {
 
-    protected final String clientName = "@NN";
-    private BufferedReader i;
-    private PrintWriter o;
-    protected final Socket clientSocket;
-    protected final LinkedList<IOStream> threads;
-    protected final Object lock;
-    
-    protected InputStream bi;
-    protected OutputStream bo;
-
-    public IOStream(Socket clientSocket, LinkedList<IOStream> threads,
+    public IOByteStream(Socket clientSocket, LinkedList<IOStream> threads,
             Object lock) {
-        this.clientSocket = clientSocket;
-        this.threads = threads;
-        this.lock = lock;
+        super(clientSocket, threads, lock);
     }
 
     @Override
     public void run() {
         try {
             // Skapa input- och outputströmmar
-            i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            o = new PrintWriter(clientSocket.getOutputStream(), true);
+            bi = clientSocket.getInputStream();
+            bo = clientSocket.getOutputStream();
 
-            String name;
             /*
+            String name;
             while (true) {
             name = i.readLine();
             // Integrera med GUI, behövs nog inte här!!!
@@ -53,7 +41,7 @@ class IOStream extends Thread {
 
             /*
             synchronized (lock) {
-            for (IOStream thread : threads) {
+            for (IOByteStream thread : threads) {
             if (thread == this) {
             clientName = "@" + name;
             break;
@@ -68,21 +56,20 @@ class IOStream extends Thread {
 
 
             while (true) {
-                String line = i.readLine();
-                System.out.println(line);
-                if (line == null) {
+                int bytesRead = bi.read();
+                if (bytesRead < 0) {
                     break;
                 }
 
                 // Skicka privata meddelanden
-                if (line.startsWith("@")) {
+                //if (line.startsWith("@")) {
                     /*
                     String[] words = line.split("\\s", 2);
                     if (words.length > 1 && words[1] != null) {
                     words[1] = words[1].trim();
                     if (!words[1].isEmpty()) {
                     synchronized (lock) {
-                    for (IOStream thread : threads) {
+                    for (IOByteStream thread : threads) {
                     if (thread != this && thread.clientName.equals(words[0])) {
                     thread.o.println("<" + name + "> " + words[1]);
                     
@@ -96,21 +83,16 @@ class IOStream extends Thread {
                     }
                      * 
                      */
-                } else {
+                //} else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
                         for (IOStream thread : threads) {
                             if (thread != this) {
-                                thread.o.println(line);
-                                if (!line.equals(XMLString.removeKeyRequest(line))) {  //om line innehåller en keyrequest - Utanför for-loop?
-                                    //Skapa timer
-                                }
-                            } else {
-                                thread.o.println(XMLString.removeKeyRequest(XMLString.removeFileRequest(line))); //Skicka inte key- eller filerequest till sig själv
+                                thread.bo.write(bytesRead);
                             }
                         }
                     }
-                }
+                //}
             }
             synchronized (lock) {
                 for (IOStream thread : threads) {
@@ -127,8 +109,8 @@ class IOStream extends Thread {
                 threads.remove(this);
             }
 
-            i.close();
-            o.close();
+            bi.close();
+            bo.close();
             clientSocket.close();
         } catch (IOException e) {
         }

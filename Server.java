@@ -12,9 +12,11 @@ public class Server implements Runnable {
     private final Object lock = new Object();
     private final int port;
     private final ChatRoom chatRoom;
+    private final boolean byteStream;
 
-    public Server(int port, final ChatRoom chatRoom) {
+    public Server(int port, boolean byteStream, final ChatRoom chatRoom) {
         this.port = port;
+        this.byteStream = byteStream;
         this.chatRoom = chatRoom;
 
         // Starta socket för servern
@@ -42,7 +44,11 @@ public class Server implements Runnable {
                     
                     // Skapa tråd för varje klient
                     synchronized (lock) {
-                        threads.addLast(new IOStream(clientSocket, threads, lock));
+                        if (byteStream) {
+                            threads.addLast(new IOByteStream(clientSocket, threads, lock));
+                        } else {
+                            threads.addLast(new IOStream(clientSocket, threads, lock));
+                        }
                         threads.getLast().start();
                     }
                 } catch (SocketTimeoutException e) {
