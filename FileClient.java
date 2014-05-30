@@ -46,9 +46,7 @@ public class FileClient implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //fetch fileName variable instead!!
-                        String file = "/home/alexander/Skrivbord/highscore.html";
-                        File transferFile = new File(file);
+                        File transferFile = new File(chatRoom.filePath);
                         byte[] bytearray = new byte[(int) transferFile.length()];
                         try (FileInputStream fin = new FileInputStream(transferFile)) {
                             BufferedInputStream bin = new BufferedInputStream(fin);
