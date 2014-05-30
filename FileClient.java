@@ -70,14 +70,13 @@ public class FileClient implements Runnable {
                 
                 while (chatRoom.alive) {
                     int filesize = 1022386;
-                    int bytesRead;
-                    int currentTot = 0;
 
                     byte[] bytearray = new byte[filesize];
+                    //choose file location with GUI?! at least get the name right!!!
                     FileOutputStream fos = new FileOutputStream("/home/6/u1uk0zn6/Desktop/highscore.html");
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
-                    bytesRead = i.read(bytearray, 0, bytearray.length);
-                    currentTot = bytesRead;
+                    int bytesRead = i.read(bytearray, 0, bytearray.length);
+                    int currentTot = bytesRead;
 
                     do {
                         bytesRead = i.read(bytearray, currentTot, (bytearray.length - currentTot));
