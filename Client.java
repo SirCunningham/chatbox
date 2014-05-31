@@ -74,7 +74,7 @@ public class Client implements Runnable {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Object result = JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
+                        String message = (String) JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
                                 "Send keyrequest", JOptionPane.PLAIN_MESSAGE, null, null,
                                 "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + "!");
                         
