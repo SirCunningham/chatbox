@@ -67,6 +67,7 @@ public class FileClient implements Runnable {
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
                 
+                chatRoom.getProgressBarButton().doClick();
                 JFileChooser chooser = new JFileChooser();
                 //det riktiga namnet kommer från avsändaren!!
                 chooser.setSelectedFile(new File("fileToSave.txt"));

@@ -13,6 +13,9 @@ import javax.swing.text.html.HTMLDocument;
 
 public class ChatRoom {
     
+    static final int TYPE_NONE = 0;
+    static final int TYPE_CAESAR = 1;
+    static final int TYPE_AES = 2;
     static final String[] cipherString = {"None", "caesar", "AES"};
     
     private final JPanel mainPanel = new JPanel();
@@ -21,12 +24,15 @@ public class ChatRoom {
     private final DefaultListModel items = new DefaultListModel();
     private final JList list = new SelectionList(items);
     
-    JTextPane chatBox = new JTextPane();
-    DefaultStyledDocument doc = new DefaultStyledDocument();
-    
     volatile boolean success = true;
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
+    volatile boolean statusUpdate = false;
+    volatile boolean lockDocument = false;
+    
+    JTextPane chatBox = new JTextPane();
+    DefaultStyledDocument doc = new DefaultStyledDocument();
+
     public AESCrypto AES;
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
@@ -41,9 +47,6 @@ public class ChatRoom {
     int cipherEnd;
     String filePath;
     int fileSize;
-    static final int TYPE_NONE = 0;
-    static final int TYPE_CAESAR = 1;
-    static final int TYPE_AES = 2;
     HashMap<String, String[]> nameToKey = new HashMap<>();      //String[] is a vector with two components; the first is the Caesar key and the second the AES key
     HashMap<String, ScheduledExecutorService> nameFileResponse = new HashMap<>();
     HashMap<String, ScheduledExecutorService> nameKeyResponse = new HashMap<>();
@@ -53,9 +56,6 @@ public class ChatRoom {
     final int port;
     final boolean isServer;
     PrintWriter o;
-    
-    volatile boolean statusUpdate = false;
-    volatile boolean lockDocument = false;
 
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
@@ -210,4 +210,7 @@ public class ChatRoom {
         return rightPanel.getKeyRequestEncryption();
     }
 
+    public JButton getProgressBarButton() {
+        return rightPanel.getProgressBarButton();
+    }
 }

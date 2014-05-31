@@ -109,4 +109,7 @@ public class RightPanel extends JPanel {
         return (String) keyRequestEncryptions.getSelectedItem();
     }
     
+    public JButton getProgressBarButton() {
+        return progressBarButton;
+    }
 }
