@@ -3,6 +3,7 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.JFileChooser;
 
 // För kryptering av filer, se:
 // https://stackoverflow.com/questions/16911632/java-file-encryption
@@ -65,14 +66,20 @@ public class FileClient implements Runnable {
 
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
+                
+                JFileChooser chooser = new JFileChooser();
+                //det riktiga namnet kommer från avsändaren!!
+                chooser.setSelectedFile(new File("fileToSave.txt"));
+                File file;
 
-                //välj filadress med GUI, eller spara i samma katalog; filnamnet kommer från avsändaren!!
-                String file;
-                if (chatRoom.isServer) {
-                    file = "/home/alexander/Skrivbord/highscore2.html";
+                //gör detta efter bekräftelse
+                int returnVal = chooser.showSaveDialog(ChatCreator.frame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    file = chooser.getSelectedFile();
                 } else {
-                    file = "/home/alexander/Skrivbord/highscore3.html";
+                    file = new File("/home/alexander/Skrivbord/highscore2.html");
                 }
+
                 FileWriter fw = new FileWriter(file);
                 BufferedWriter bw = new BufferedWriter(fw);
 
@@ -84,7 +91,13 @@ public class FileClient implements Runnable {
                         if (responseLine.equals("THIS IS A REALLY UGLY HACK BUT IT WORKS")) {
                             bw.close();
                             //uppdatera file (namnet) när ny fil accepteras
-                            file = "/home/alexander/Skrivbord/highscore4.html";
+                            chooser.setSelectedFile(new File("fileToSave2.txt"));
+                            returnVal = chooser.showSaveDialog(ChatCreator.frame);
+                            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                                file = chooser.getSelectedFile();
+                            } else {
+                                file = new File("/home/alexander/Skrivbord/highscore3.html");
+                            }
                             fw = new FileWriter(file);
                             bw = new BufferedWriter(fw);
                         } else {
