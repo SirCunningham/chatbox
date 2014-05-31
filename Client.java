@@ -77,9 +77,9 @@ public class Client implements Runnable {
                         String message = (String) JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
                                 "Send keyrequest", JOptionPane.PLAIN_MESSAGE, null, null,
                                 "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + "!");
-                        
+                        //detta skickar bara till en person? loop behövs annars...
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-                        if (chat != null) {
+                        if (chat != null && message != null) {
                             final String chatName = chat.getName();
                             o.println(String.format("<message sender=\"%s\">"
                                     + "<text color=\"%s\"><keyrequest "
