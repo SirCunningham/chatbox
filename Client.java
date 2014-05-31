@@ -70,10 +70,14 @@ public class Client implements Runnable {
                 }
                 
                 // Listener for keyrequest
-                class KeyRequestListener implements ActionListener {
+                class KeyRequestButtonListener implements ActionListener {
                     
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        Object result = JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
+                                "Send keyrequest", JOptionPane.PLAIN_MESSAGE, null, null,
+                                "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + "!");
+                        
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
                         if (chat != null) {
                             final String chatName = chat.getName();
@@ -150,7 +154,7 @@ public class Client implements Runnable {
                 SendFileButtonListener2 sendFileButtonListener = new SendFileButtonListener2();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
-                chatRoom.getKeyRequestButton().addActionListener(new KeyRequestListener());
+                chatRoom.getKeyRequestButton().addActionListener(new KeyRequestButtonListener());
 
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
