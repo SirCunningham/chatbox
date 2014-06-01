@@ -79,7 +79,7 @@ public class Client implements Runnable {
                         if (chat != null) {
                             String message = (String) JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
                                     "Send keyrequest", JOptionPane.INFORMATION_MESSAGE, null, null,
-                                    "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + "!");
+                                    "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + " from " + chat.getName() + "!");
                             if (message != null) {
                                 final String chatName = chat.getName();
                                 o.println(String.format("<message sender=\"%s\">"
