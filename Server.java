@@ -58,4 +58,13 @@ public class Server implements Runnable {
             }
         }
     }
+    
+    public IOStream getStream(String chatName) {
+        for (IOStream stream : streams) {
+            if (stream.getChatName().equals(chatName)) {
+                return stream;
+            }
+        }
+        return null;
+    }
 }

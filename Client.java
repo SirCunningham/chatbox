@@ -268,10 +268,8 @@ public class Client implements Runnable {
     private void handleUserConnect(String html) {
         if (chatRoom.isServer) {
             String sender = XMLString.getSenderWithoutColon(html);
-            System.out.println(chatRoom);
             // Alla får skriva minst en mening i chatten
             if (!chatRoom.isAllowedToConnect.containsKey(sender) && !sender.equals(chatRoom.getName())) {
-                System.out.println(sender);
                 if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
                     dialogMessage(sender, false);
                 } else {

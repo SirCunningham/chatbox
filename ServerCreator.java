@@ -3,6 +3,7 @@ package chatbox;
 public class ServerCreator implements Runnable {
 
     private final ChatRoom chatRoom;
+    private Server server;
 
     public ServerCreator(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
@@ -10,7 +11,7 @@ public class ServerCreator implements Runnable {
 
     @Override
     public void run() {
-        final Server server = new Server(chatRoom.port, chatRoom);
+        server = new Server(chatRoom.port, chatRoom);
         new Thread(server).start();
 
         final int port;
@@ -21,5 +22,9 @@ public class ServerCreator implements Runnable {
         }
         final Server fileServer = new Server(port, chatRoom);
         new Thread(fileServer).start();
+    }
+    
+    public IOStream getStream(String chatName) {
+        return server.getStream(chatName);
     }
 }
