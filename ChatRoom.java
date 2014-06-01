@@ -49,6 +49,7 @@ public class ChatRoom {
     HashMap<String, Boolean> recivedFileResponse = new HashMap<>();
     HashMap<String, Boolean> recivedKeyResponse = new HashMap<>();
     HashMap<String, Boolean> isAllowedToConnect = new HashMap<>();
+    HashMap<String, ChatRoom> nameToChatRoom = new HashMap<>();
     final String host;
     final int port;
     final boolean isServer;

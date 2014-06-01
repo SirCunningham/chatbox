@@ -265,7 +265,7 @@ public class Client implements Runnable {
     }
 
     // Determine if user allowed to connect
-    public void handleUserConnect(String html) {
+    private void handleUserConnect(String html) {
         if (chatRoom.isServer) {
             String sender = XMLString.getSenderWithoutColon(html);
             System.out.println(chatRoom);
