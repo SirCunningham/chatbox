@@ -38,32 +38,32 @@ public class Messages {
             return message;
             /*
             if (!message.isEmpty()) {
-                if (!chatRoom.getKeyRequestBox().isSelected()) {
-                    return String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\">%s</text></message>",
-                            name, chatRoom.color,
-                            message);
-                }
-                return String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><keyrequest "
-                        + "type=\"%s\">%s"
-                        + "</keyrequest></text></message>",
-                        name, chatRoom.color,
-                        String.valueOf(chatRoom.getCipherBox().getSelectedItem()), message);
-                
-                timer.setType(String.valueOf(chatRoom.getCipherBox().getSelectedItem()));
-                timer.start();
-                 * 
-                 */
+            if (!chatRoom.getKeyRequestBox().isSelected()) {
+            return String.format("<message sender=\"%s\">"
+            + "<text color=\"%s\">%s</text></message>",
+            name, chatRoom.color,
+            message);
+            }
+            return String.format("<message sender=\"%s\">"
+            + "<text color=\"%s\"><keyrequest "
+            + "type=\"%s\">%s"
+            + "</keyrequest></text></message>",
+            name, chatRoom.color,
+            String.valueOf(chatRoom.getCipherBox().getSelectedItem()), message);
+            
+            timer.setType(String.valueOf(chatRoom.getCipherBox().getSelectedItem()));
+            timer.start();
+             * 
+             */
 
 
-                /*
-                appendToPane(String.format("<message sender=\"%s\">"
-                + "<text color=\"%s\">%s</text></message>",
-                name, chatRoom.color,
-                message));
-                 * 
-                 
+            /*
+            appendToPane(String.format("<message sender=\"%s\">"
+            + "<text color=\"%s\">%s</text></message>",
+            name, chatRoom.color,
+            message));
+             * 
+            
             }
             
             if (message.contains("terminate my ass")) {

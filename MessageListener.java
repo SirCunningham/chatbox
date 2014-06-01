@@ -9,7 +9,7 @@ class MessageListener implements KeyListener {
     public MessageListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {
     }

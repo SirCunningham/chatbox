@@ -10,7 +10,7 @@ public class MessageDocListener implements DocumentListener {
     public MessageDocListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     @Override
     public void insertUpdate(DocumentEvent e) {
         uncipher();
@@ -24,8 +24,8 @@ public class MessageDocListener implements DocumentListener {
     @Override
     public void changedUpdate(DocumentEvent e) {
     }
-    
-    private void uncipher(){
+
+    private void uncipher() {
         if (!chatRoom.lockDocument && chatRoom.getCipherButton().isSelected()) {
             SwingUtilities.invokeLater(new Runnable() {
 

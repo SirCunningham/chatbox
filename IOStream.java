@@ -12,7 +12,6 @@ class IOStream extends Thread {
     protected final Socket clientSocket;
     protected final LinkedList<IOStream> streams;
     protected final Object lock;
-    
     protected InputStream bi;
     protected OutputStream bo;
 
@@ -32,19 +31,19 @@ class IOStream extends Thread {
 
             String name;
             /*
-             while (true) {
-             name = i.readLine();
-             // Integrera med GUI, behövs nog inte här!!!
-             if (!name.isEmpty()) {
-             break;
-             } else {
-             }}
+            while (true) {
+            name = i.readLine();
+            // Integrera med GUI, behövs nog inte här!!!
+            if (!name.isEmpty()) {
+            break;
+            } else {
+            }}
              **/
 
             // Ge välkomstmeddelande
             /*
-             o.println("<message sender=system> Welcome " + name
-             + " to our chat room.\nTo leave enter /quit in a new line.</message>");
+            o.println("<message sender=system> Welcome " + name
+            + " to our chat room.\nTo leave enter /quit in a new line.</message>");
              **/
 
             /*
@@ -57,7 +56,7 @@ class IOStream extends Thread {
             stream.o.println("<message sender=system>*** A new user "
             + " entered the chat room !!! ***</message>");
             }}}
-            **/
+             **/
 
             while (true) {
                 String line = i.readLine();
@@ -74,15 +73,15 @@ class IOStream extends Thread {
                     words[1] = words[1].trim();
                     if (!words[1].isEmpty()) {
                     synchronized (lock) {
-
+                    
                     for (IOStream stream : streams) {
                     if (stream != this && stream.clientName.equals(words[0])) {
                     stream.o.println("<" + name + "> " + words[1]);
                     
-                     // Visa att meddelandet har skickats
-                     this.o.println("<" + name + "> " + words[1]);
-                     break;}}}}}
-                    **/
+                    // Visa att meddelandet har skickats
+                    this.o.println("<" + name + "> " + words[1]);
+                    break;}}}}}
+                     **/
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {

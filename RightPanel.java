@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class RightPanel extends JPanel {
+
     private final JScrollPane listPane;
     private final JPanel bootPanel = new JPanel();
     private final JButton bootButton = new JButton("Boot selected");
@@ -21,7 +22,7 @@ public class RightPanel extends JPanel {
     private final JButton closeButton = new IconButton("closeIcon.png");
     private final JComboBox fileEncryptions;
     private final JComboBox keyRequestEncryptions;
-    
+
     public RightPanel(ChatRoom chatRoom) {
         listPane = new JScrollPane(chatRoom.getList());
         listPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -72,7 +73,7 @@ public class RightPanel extends JPanel {
         add(fileButtonPanel);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
-    
+
     public JButton getCloseButton() {
         return closeButton;
     }
@@ -96,19 +97,19 @@ public class RightPanel extends JPanel {
     public JButton getBootButton() {
         return bootButton;
     }
-    
+
     public JButton getKeyRequestButton() {
         return keyRequestButton;
     }
-    
+
     public JButton getFileButton() {
         return fileButton;
     }
-    
+
     public String getKeyRequestEncryption() {
         return (String) keyRequestEncryptions.getSelectedItem();
     }
-    
+
     public JButton getProgressBarButton() {
         return progressBarButton;
     }

@@ -7,7 +7,7 @@ import javax.swing.text.*;
 import javax.swing.text.html.*;
 
 public class LeftPanel extends JPanel {
-    
+
     private final JButton colorButton = new IconButton("colorIcon.png");
     private final JTextPane namePane = new JTextPane();
     private final JTextPane messagePane;
@@ -17,10 +17,10 @@ public class LeftPanel extends JPanel {
     private final JLabel keyLabel = new JLabel("Key:");
     private final JTextPane keyPane = new JTextPane();
     private final JCheckBox keyBox = new JCheckBox("Send key", true);
-    
+
     public LeftPanel(ChatRoom chatRoom) {
         messagePane = new JTextPane(chatRoom.doc);
-        
+
         DefaultCaret caret = (DefaultCaret) chatRoom.chatBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         chatRoom.chatBox.setEditable(false);
@@ -35,7 +35,7 @@ public class LeftPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(chatRoom.chatBox);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane);
-        
+
         JPanel messagePanel = new JPanel();
         colorButton.setBorder(BorderFactory.createEmptyBorder());
         colorButton.addActionListener(new ColorButtonListener(chatRoom));
@@ -54,7 +54,7 @@ public class LeftPanel extends JPanel {
         messagePanel.add(messagePane);
         messagePanel.add(sendButton);
         add(messagePanel);
-        
+
         JPanel buttonPanel = new JPanel();
         JPanel invisibleContainer1 = new JPanel(new GridLayout(1, 1));
         JPanel invisibleContainer2 = new JPanel(new GridLayout(1, 1));
@@ -77,10 +77,10 @@ public class LeftPanel extends JPanel {
         buttonPanel.add(invisibleContainer2);
         buttonPanel.add(invisibleContainer3);
         add(buttonPanel);
-        
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
-    
+
     public JToggleButton getCipherButton() {
         return cipherButton;
     }
@@ -100,7 +100,7 @@ public class LeftPanel extends JPanel {
     public JComboBox getCipherBox() {
         return cipherBox;
     }
-    
+
     public JTextPane getMessagePane() {
         return messagePane;
     }
@@ -108,7 +108,7 @@ public class LeftPanel extends JPanel {
     public JButton getSendButton() {
         return sendButton;
     }
-    
+
     public JTextPane getNamePane() {
         return namePane;
     }

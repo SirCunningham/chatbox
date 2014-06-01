@@ -7,12 +7,12 @@ public class ServerCreator implements Runnable {
     public ServerCreator(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     @Override
     public void run() {
         final Server server = new Server(chatRoom.port, chatRoom);
         new Thread(server).start();
-        
+
         final int port;
         if (chatRoom.port < 65523) {
             port = chatRoom.port + 13;

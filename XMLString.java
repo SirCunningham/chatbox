@@ -27,24 +27,25 @@ public class XMLString {
         allowedTags.add("fetstil");
         /*
         try {
-            AES = new AESCrypto();
+        AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+        ex.printStackTrace();
         }
          * 
          */
     }
+
     public static void main(String[] args) {
         String test = "hej";
         String enc = Encryption.encrypt("caesar", test, "10", AES);
-        String msg="<message sender=\"User 377932797\"><text color=\"000000\">In medio cursu vitae nostrae, <encrypted type=\"AES\">a518674b573e2c1d6f2111d6b3ba5c9e</encrypted> in silva obscura...</text></message>";
+        String msg = "<message sender=\"User 377932797\"><text color=\"000000\">In medio cursu vitae nostrae, <encrypted type=\"AES\">a518674b573e2c1d6f2111d6b3ba5c9e</encrypted> in silva obscura...</text></message>";
         //String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"AES\">" + enc1 + "</encrypted></text></message>";
         int i = msg.indexOf("<encrypted");
         //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
         //System.out.println(handleString(msg));
         String keys[] = new String[2];
-        keys[0]="10";
-        keys[1]="737d7c20c6a0251ad48cdf53f8544af5ef5431c9f945c2296bcebce747e43acb";
+        keys[0] = "10";
+        keys[1] = "737d7c20c6a0251ad48cdf53f8544af5ef5431c9f945c2296bcebce747e43acb";
         System.out.println(decryptString(msg, keys));
         System.out.println(keys[1]);
     }
@@ -70,7 +71,7 @@ public class XMLString {
                                 break;
                             case "AES":
                                 try {
-                                    if (AES==null) {
+                                    if (AES == null) {
                                         AES = new AESCrypto();
                                     }
                                     msg += AES.decrypt(encryptedMsg, key);
@@ -101,25 +102,25 @@ public class XMLString {
             System.out.println(rest);
             if (rest.matches("<encrypted type=\"(.*)\">(.*)")) {
                 int k = rest.indexOf("</encrypted>");
-                String type = rest.substring(rest.indexOf("\"")+1, rest.indexOf("\">"));
-                String enc = rest.substring(rest.indexOf(">")+1, k);
+                String type = rest.substring(rest.indexOf("\"") + 1, rest.indexOf("\">"));
+                String enc = rest.substring(rest.indexOf(">") + 1, k);
                 switch (type) {
                     case "caesar":
                         if (!keys[0].equals("")) {
                             msg += decryptCaesar(enc, Integer.valueOf(keys[0]));
                         } else {
-                            msg+=enc;
+                            msg += enc;
                         }
                         break;
                     case "AES":
                         try {
                             if (!keys[1].equals("")) {
-                                if (AES==null) {
+                                if (AES == null) {
                                     AES = new AESCrypto();
                                 }
                                 msg += AES.decrypt(enc, keys[1]);
                             } else {
-                                msg+=enc;
+                                msg += enc;
                             }
                         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | DecoderException ex) {
                         }
@@ -142,7 +143,7 @@ public class XMLString {
             int i = xmlStr.indexOf("<encrypted");
             String rest = xmlStr.substring(i);
             if (rest.matches("<encrypted type=(.*) key=(.*)>(.*)")) {
-                
+
                 String fromType = rest.substring(16);
                 String type = fromType.substring(1, fromType.indexOf((" ")) - 1);
                 String fromKey = fromType.substring(fromType.indexOf(" ") + 6);
@@ -239,12 +240,13 @@ public class XMLString {
         }
         return "";
     }
+
     public static String getSenderWithoutColon(String xmlMsg) {
         String withColon = getSender(xmlMsg);
         if (withColon.equals("")) {
             return withColon;
         }
-        return withColon.substring(0, withColon.length()-2);
+        return withColon.substring(0, withColon.length() - 2);
     }
 
     public static String showName(String xmlMsg) {

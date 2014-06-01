@@ -2,18 +2,18 @@ package chatbox;
 
 import javax.swing.event.*;
 
-public class KeyPaneListener implements DocumentListener{
+public class KeyPaneListener implements DocumentListener {
+
     private final ChatRoom chatRoom;
-    
+
     KeyPaneListener(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-    
+
     @Override
     public void changedUpdate(DocumentEvent e) {
     }
-    
-    
+
     @Override
     public void removeUpdate(DocumentEvent e) {
         updateKeys();
@@ -23,7 +23,7 @@ public class KeyPaneListener implements DocumentListener{
     public void insertUpdate(DocumentEvent arg0) {
         updateKeys();
     }
-    
+
     private void updateKeys() {
         String keyType = (String) chatRoom.getCipherBox().getSelectedItem();
         String name = chatRoom.getName();
@@ -40,5 +40,4 @@ public class KeyPaneListener implements DocumentListener{
         }
         chatRoom.nameToKey.put(name, oldKeys);
     }
-    
 }

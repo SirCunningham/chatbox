@@ -39,7 +39,7 @@ public class Server implements Runnable {
             while (chatRoom.alive) {
                 try {
                     clientSocket = serverSocket.accept();
-                    
+
                     // Skapa tråd för varje klient
                     synchronized (lock) {
                         streams.addLast(new IOStream(clientSocket, streams, lock));

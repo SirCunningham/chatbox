@@ -12,27 +12,23 @@ import java.util.concurrent.*;
 import javax.swing.text.html.HTMLDocument;
 
 public class ChatRoom {
-    
+
     static final int TYPE_NONE = 0;
     static final int TYPE_CAESAR = 1;
     static final int TYPE_AES = 2;
     static final String[] cipherString = {"None", "caesar", "AES"};
-    
     private final JPanel mainPanel = new JPanel();
     private final LeftPanel leftPanel;
     private final RightPanel rightPanel;
     private final DefaultListModel items = new DefaultListModel();
     private final JList list = new SelectionList(items);
-    
     volatile boolean success = true;
     volatile boolean alive = true;
     volatile boolean speedyDelete = false;
     volatile boolean statusUpdate = false;
     volatile boolean lockDocument = false;
-    
     JTextPane chatBox = new JTextPane();
     DefaultStyledDocument doc = new DefaultStyledDocument();
-
     public static AESCrypto AES;
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
@@ -61,19 +57,19 @@ public class ChatRoom {
         host = ChatCreator.hostPane.getText();
         port = Integer.parseInt(ChatCreator.portPane.getText());
         isServer = ChatCreator.serverButton.isSelected();
-        
+
         leftPanel = new LeftPanel(this);
         rightPanel = new RightPanel(this);
-        
+
         try {
             AES = new AESCrypto();
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        
+
         mainPanel.setFocusable(true);
         mainPanel.addMouseListener(new MouseAdapter() {
-            
+
             @Override
             public void mousePressed(MouseEvent e) {
                 JComponent source = (JComponent) e.getSource();
@@ -85,7 +81,7 @@ public class ChatRoom {
         mainPanel.add(rightPanel);
         nameToKey.put(getName(), getKeys());
     }
-    
+
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
     public final void appendToPane(String msg) {
 
@@ -104,7 +100,7 @@ public class ChatRoom {
             ChatCreator.showError("String insertion failed.");
         }
     }
-    
+
     private void disableChat() {
         // disable more fields!!
         getNamePane().setEnabled(false);
@@ -112,16 +108,16 @@ public class ChatRoom {
         getSendButton().setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
     }
-    
+
     @Override
     public String toString() {
         return String.format("%s (%s)", getNamePane().getText(), host);
     }
-    
+
     public String getName() {
         return getNamePane().getText();
     }
-    
+
     public String getKey(String type) {
         switch (type) {
             case "caesar":
@@ -132,92 +128,92 @@ public class ChatRoom {
                 return null;
         }
     }
-    
+
     public String[] getKeys() {
         if (AES != null) {
             String keys[] = {caesarKey, AES.getDecodeKey()};
             return keys;
         }
-        String keys[] = {caesarKey,""};
+        String keys[] = {caesarKey, ""};
         return keys;
     }
-    
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
-    
+
     public JTextPane getMessagePane() {
         return leftPanel.getMessagePane();
     }
-    
+
     public JButton getSendButton() {
         return leftPanel.getSendButton();
     }
-    
+
     public JList getList() {
         return list;
     }
-    
+
     public DefaultListModel getItems() {
         return items;
     }
-    
+
     public JToggleButton getCipherButton() {
         return leftPanel.getCipherButton();
     }
-    
+
     public JTextPane getKeyPane() {
         return leftPanel.getKeyPane();
     }
-    
+
     public JLabel getKeyLabel() {
         return leftPanel.getKeyLabel();
     }
-    
+
     public JCheckBox getKeyBox() {
         return leftPanel.getKeyBox();
     }
-    
+
     public JComboBox getCipherBox() {
         return leftPanel.getCipherBox();
     }
-    
+
     public JButton getCloseButton() {
         return rightPanel.getCloseButton();
     }
-    
+
     public JButton getSendFileButton() {
         return rightPanel.getSendFileButton();
     }
-    
+
     public JTextPane getNamePane() {
         return leftPanel.getNamePane();
     }
-    
+
     public JTextPane getDescriptionPane() {
         return rightPanel.getDescriptionPane();
     }
-    
+
     public JTextPane getFilePane() {
         return rightPanel.getFilePane();
     }
-    
+
     public JTextPane getFileSizePane() {
         return rightPanel.getFileSizePane();
     }
-    
+
     public JButton getBootButton() {
         return rightPanel.getBootButton();
     }
-    
+
     public JButton getKeyRequestButton() {
         return rightPanel.getKeyRequestButton();
     }
-    
+
     public JButton getFileButton() {
         return rightPanel.getFileButton();
     }
-    
+
     public String getKeyRequestEncryption() {
         return rightPanel.getKeyRequestEncryption();
     }
