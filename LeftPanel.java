@@ -65,6 +65,7 @@ public class LeftPanel extends JPanel {
         keyLabel.setVisible(false);
         keyPane.setVisible(false);
         keyPane.addFocusListener(new StatusListener(chatRoom));
+        keyPane.getDocument().addDocumentListener(new KeyPaneListener(chatRoom));
         keyBox.setVisible(false);
         buttonPanel.add(cipherButton);
         buttonPanel.add(new JLabel("Encryption:"));
