@@ -48,6 +48,7 @@ public class ChatRoom {
     HashMap<String, ScheduledExecutorService> nameKeyResponse = new HashMap<>();
     HashMap<String, Boolean> recivedFileResponse = new HashMap<>();
     HashMap<String, Boolean> recivedKeyResponse = new HashMap<>();
+    HashMap<String, Boolean> isAllowedToConnect = new HashMap<>();
     final String host;
     final int port;
     final boolean isServer;

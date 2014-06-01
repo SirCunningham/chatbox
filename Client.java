@@ -11,13 +11,11 @@ import javax.swing.*;
 // *new user is connected (certain msg comes)
 // *user changes name
 // Gör detta här eller i IOStream!
-
 //OBS OBS OBS
 //All data går igenom IOStream, alltid
 //Gör krypteringen i IOStream så sker det både för meddelanden och filer automatiskt
 //Filer använder en annan klient för gränssnittet är annorlunda där
 //OBS OBS OBS
-
 public class Client implements Runnable {
 
     private Socket clientSocket;
@@ -68,7 +66,7 @@ public class Client implements Runnable {
                         }
                     }
                 }
-                
+
                 // Listener for keyrequest
                 class KeyRequestButtonListener implements ActionListener {
 
@@ -164,6 +162,7 @@ public class Client implements Runnable {
 
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
+                    handleUserConnect(responseLine);
                     setKeys(responseLine);
                     keyRequest(responseLine);
                     keyResponse(responseLine);
@@ -264,35 +263,48 @@ public class Client implements Runnable {
         //Run after 1 minute
         chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
     }
-    
+
     // Determine if user allowed to connect
-    private void handleUserConnect(String html) {
+    public void handleUserConnect(String html) {
         if (chatRoom.isServer) {
-            if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
-                int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
-                        String.format("%s wants to connect. Allow?",
-                        XMLString.getSenderWithoutColon(html)),
-                        "Kill", JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.NO_OPTION) {
-                    o.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
-                            chatRoom.getNamePane().getText(), chatRoom.color, XMLString.getSenderWithoutColon(html)));
-                }
-            } else {
-                int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
-                        String.format("It seems a simple client wants to connect. Allow?",
-                        XMLString.getSenderWithoutColon(html)),
-                        "Kill", JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.NO_OPTION) {
-                    o.println(String.format("<message sender=\"%s\">"
-                            + "<text color=\"%s\"><request reply=\"no\">A simple "
-                            + "client was not allowed to connect!</request></text></message>",
-                            chatRoom.getNamePane().getText(), chatRoom.color));
+            String sender = XMLString.getSenderWithoutColon(html);
+            System.out.println(chatRoom);
+            // Alla får skriva minst en mening i chatten
+            if (!chatRoom.isAllowedToConnect.containsKey(sender) && !sender.equals(chatRoom.getName())) {
+                System.out.println(sender);
+                if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
+                    dialogMessage(sender, false);
+                } else {
+                    // Simpel klient
+                    dialogMessage(sender, true);
                 }
             }
         }
     }
-    
+
+    private void dialogMessage(String sender, boolean isSimple) {
+        int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
+                String.format("%s wants to connect. Allow?",
+                sender),
+                "Kill", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.NO_OPTION) {
+            if (!isSimple) {
+                o.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color, sender));
+            } else {
+                o.println(String.format("<message sender=\"%s\">"
+                        + "<text color=\"%s\">%s was not allowed to connect!</text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color, sender));
+            }
+            chatRoom.isAllowedToConnect.put(sender, false);
+        } else {
+            chatRoom.isAllowedToConnect.put(sender, true);
+        }
+
+
+    }
+
     // Checks if we have recived a fileresponse
     private void fileResponse(String html) {
         if (html.contains("</fileresponse>")) {
