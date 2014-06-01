@@ -75,13 +75,16 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //detta skickar bara till en person? loop behövs annars...
+                        //vet inte vad du menar. o.println skickar till alla?
+                        //man bryr sig endast om nycklen från den man markerat
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
                         if (chat != null) {
+                            final String chatName = chat.getName();
                             String message = (String) JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
                                     "Send keyrequest", JOptionPane.INFORMATION_MESSAGE, null, null,
-                                    "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + " from " + chat.getName() + "!");
+                                    "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + " from " + chatName + "!");
                             if (message != null) {
-                                final String chatName = chat.getName();
+
                                 o.println(String.format("<message sender=\"%s\">"
                                         + "<text color=\"%s\"><keyrequest "
                                         + "type=\"%s\">%s"
