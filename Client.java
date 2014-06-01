@@ -76,7 +76,8 @@ public class Client implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         //detta skickar bara till en person? loop behövs annars...
                         //vet inte vad du menar. o.println skickar till alla?
-                        //man bryr sig endast om nycklen från den man markerat
+                        //man bryr sig endast om nycklen från den man markerat,
+                        //men skickar keyrequest till alla
                         ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
                         if (chat != null) {
                             final String chatName = chat.getName();
@@ -270,17 +271,17 @@ public class Client implements Runnable {
             if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
                 int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                         String.format("%s wants to connect. Allow?",
-                        XMLString.getSender(html)),
+                        XMLString.getSenderWithoutColon(html)),
                         "Kill", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.NO_OPTION) {
                     o.println(String.format("<message sender=\"%s\">"
                                 + "<text color=\"%s\"><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
-                            chatRoom.getNamePane().getText(), chatRoom.color, XMLString.getSender(html)));
+                            chatRoom.getNamePane().getText(), chatRoom.color, XMLString.getSenderWithoutColon(html)));
                 }
             } else {
                 int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                         String.format("It seems a simple client wants to connect. Allow?",
-                        XMLString.getSender(html)),
+                        XMLString.getSenderWithoutColon(html)),
                         "Kill", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.NO_OPTION) {
                     o.println(String.format("<message sender=\"%s\">"
@@ -322,12 +323,11 @@ public class Client implements Runnable {
     // Checks if we have recived a keyrequest
     private void keyRequest(String html) {
         String chatName = chatRoom.getName();
-        // getSender add : to the end of name
-        String name = XMLString.getSender(html).substring(0, chatName.length());
+        String name = XMLString.getSenderWithoutColon(html);
         if (html.contains("</keyrequest>") && !name.equals(chatName)) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                    XMLString.getSenderWithoutColon(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
@@ -371,7 +371,7 @@ public class Client implements Runnable {
     // Obtain and save the keys from the sender. Might need to change this - 
     // problem if two people have the same name
     private void setKeys(String responseLine) {
-        String sender = XMLString.getSender(responseLine);
+        String sender = XMLString.getSenderWithoutColon(responseLine);
         String[] keys = XMLString.getKeys(responseLine);
         String[] oldKeys = chatRoom.nameToKey.get(sender);
         if (oldKeys != null) {

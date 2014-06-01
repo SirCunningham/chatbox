@@ -13,7 +13,7 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
             BadLocationException, IOException {
         String color = XMLString.toHexColor(html);
         //thr.keyRequest(html);
-        String sender = XMLString.getSender(html);
+        String sender = XMLString.getSenderWithoutColon(html);
         //System.out.println(chatRoom.nameToKey.get(sender));
         System.out.println(html);
         super.insertHTML((HTMLDocument) chatRoom.chatBox.getDocument(),

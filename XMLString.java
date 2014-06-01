@@ -239,6 +239,13 @@ public class XMLString {
         }
         return "";
     }
+    public static String getSenderWithoutColon(String xmlMsg) {
+        String withColon = getSender(xmlMsg);
+        if (withColon.equals("")) {
+            return withColon;
+        }
+        return withColon.substring(0, withColon.length()-2);
+    }
 
     public static String showName(String xmlMsg) {
         int i = xmlMsg.indexOf(">");

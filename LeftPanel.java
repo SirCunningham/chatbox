@@ -2,6 +2,7 @@ package chatbox;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 

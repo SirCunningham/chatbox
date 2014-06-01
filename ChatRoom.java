@@ -33,7 +33,7 @@ public class ChatRoom {
     JTextPane chatBox = new JTextPane();
     DefaultStyledDocument doc = new DefaultStyledDocument();
 
-    public AESCrypto AES;
+    public static AESCrypto AES;
     StyleContext context = new StyleContext();
     Style style = context.addStyle("Default Style", null);
     int startEnc;
@@ -83,6 +83,7 @@ public class ChatRoom {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
+        nameToKey.put(getName(), getKeys());
     }
     
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
@@ -92,7 +93,9 @@ public class ChatRoom {
             xmlHTMLEditorKit kit = (xmlHTMLEditorKit) chatBox.getEditorKit();
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
-                kit.insertHTML(doc1.getLength(), msg, 0, 0, null, this);
+                if (getKeys() != null) {
+                    kit.insertHTML(doc1.getLength(), msg, 0, 0, null, this);
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -128,6 +131,15 @@ public class ChatRoom {
             default:
                 return null;
         }
+    }
+    
+    public String[] getKeys() {
+        if (AES != null) {
+            String keys[] = {caesarKey, AES.getDecodeKey()};
+            return keys;
+        }
+        String keys[] = {caesarKey,""};
+        return keys;
     }
     
     public JPanel getMainPanel() {
