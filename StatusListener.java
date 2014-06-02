@@ -52,6 +52,8 @@ public class StatusListener implements FocusListener {
                     chatRoom.doc.insertString(0, "I just switched from my old name: " + name, chatRoom.style);
                     chatRoom.getItems().removeElement(name);
                     chatRoom.getItems().addElement(chatRoom.getName());
+                    chatRoom.isAllowedToConnect.remove(name);
+                    chatRoom.isAllowedToConnect.put(chatRoom.getName(), true);
                     chatRoom.getSendButton().doClick();
                     chatRoom.doc.insertString(0, message, chatRoom.style);
                     if (chatRoom.getCipherButton().isSelected()) {

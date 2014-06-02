@@ -119,6 +119,18 @@ public class XMLString {
         return xmlStr;
 
     }
+    
+    public static String getOldName(String xmlStr) {
+        if (xmlStr.matches(String.format("<message sender=(.*)I just switched from my old name: (.*)</message>"))) {
+            int i = xmlStr.indexOf("I just switched from my old name: ");
+            String rest = xmlStr.substring(i);
+            i = rest.indexOf(":");
+            rest = rest.substring(i+2);
+            String oldName = rest.substring(0,rest.indexOf("</"));
+            return oldName;
+        }
+        return "";
+    }
 
     public static String[] getKeys(String xmlStr) {
         String[] keys = new String[2];
