@@ -59,12 +59,46 @@ public class Server implements Runnable {
         }
     }
     
-    public IOStream getStream(String chatName) {
+    public void kill(String chatName) {
         for (IOStream stream : streams) {
             if (stream.getChatName().equals(chatName)) {
-                return stream;
+                stream.kill();
+            }
+        }
+    }
+    // lock needed?
+
+    public Socket getClientSocket(String chatName) {
+
+        for (IOStream stream : streams) {
+            if (stream.getChatName().equals(chatName)) {
+                return stream.getClientSocket();
+            }
+        }
+        return null;
+
+    }
+    // lock needed?
+
+    public BufferedReader getInputStream(String chatName) {
+        for (IOStream stream : streams) {
+            if (stream.getChatName().equals(chatName)) {
+                return stream.getInputStream();
+            }
+        }
+        return null;
+
+    }
+    // lock needed?
+
+    public PrintWriter getOutputStream(String chatName) {
+
+        for (IOStream stream : streams) {
+            if (stream.getChatName().equals(chatName)) {
+                return stream.getOutputStream();
             }
         }
         return null;
     }
+
 }

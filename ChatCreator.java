@@ -26,7 +26,7 @@ final public class ChatCreator {
     static final JComboBox serverOptions;
     static final JTabbedPane tabbedPane = new JTabbedPane();
     static String host = "127.0.0.1";
-    static final ArrayList<ChatRoom> chatRooms = new ArrayList<>();
+    static final ArrayList<String> chatNames = new ArrayList<>();
     static final ArrayList<JButton> indices = new ArrayList<>();
     static final Random generator = new Random();
 

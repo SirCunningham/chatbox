@@ -17,11 +17,12 @@ public class StartButtonListener implements ActionListener {
     
     private static final Object lock = new Object();
     private static int tabCount = 1;
+    private ChatRoom chatRoom;
 
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            final ChatRoom chatRoom = new ChatRoom();
+            chatRoom = new ChatRoom();
             if (chatRoom.isServer) {
                 final ServerCreator server = new ServerCreator(chatRoom);
                 new Thread(server).start();
@@ -34,8 +35,8 @@ public class StartButtonListener implements ActionListener {
                 new Thread(client).start();
             }
             if (chatRoom.success) {
-                ChatCreator.chatRooms.add(chatRoom);
-                addUser(chatRoom, ChatCreator.chatRooms);
+                ChatCreator.chatNames.add(chatRoom.getName());
+                //addUser(chatRoom, ChatCreator.chatRooms);
                 if (!chatRoom.isServer) {
                     //funkar ej längre med detta!!
                     chatRoom.o = new Client(chatRoom.host, chatRoom.port, chatRoom).o;
@@ -52,7 +53,7 @@ public class StartButtonListener implements ActionListener {
                 // send this to others!
                 //chatRoom.appendToPane(String.format("<message sender=\"SUCCESS\">"
                 // - +"<text color=\"#00ff00\"> Connection established with %s </text></message>", clientSocket.getInetAddress()));
-                addUser2(chatRoom);
+                //addUser2(chatRoom);
                 int index = ChatCreator.tabbedPane.getTabCount() - 1;
                 ChatCreator.tabbedPane.insertTab(ChatCreator.tabPane.getText(),
                         null, chatRoom.getMainPanel(), ChatCreator.tabPane.getText(), index);
@@ -70,7 +71,25 @@ public class StartButtonListener implements ActionListener {
             ChatCreator.showError("Port is not an integer or not sufficiently small.");
         }
     }
-    
+    /*
+    private void addUser(String chatName, ArrayList<String> chatNames) {
+        synchronized (lock) {
+            for (ChatRoom name : chatNames) {
+                if (!chatName.getItems().contains(room)) {
+                    chatRoom.getItems().addElement(room);
+                }
+            }
+        }
+    }
+
+    private void addUser2(ChatRoom chatRoom) {
+        for (ChatRoom room : ChatCreator.chatRooms) {
+            if (!room.getItems().contains(chatRoom)) {
+                room.getItems().addElement(chatRoom);
+            }
+        }
+    }
+    /*
     private void addUser(ChatRoom chatRoom, ArrayList<ChatRoom> rooms) {
         synchronized (lock) {
             for (ChatRoom room : rooms) {
@@ -88,6 +107,9 @@ public class StartButtonListener implements ActionListener {
             }
         }
     }
+    */
+    
+    
     
     private JPanel createTabPanel() throws IOException {
         ImageIcon icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
@@ -98,7 +120,7 @@ public class StartButtonListener implements ActionListener {
         closeButton.setContentAreaFilled(false);
         closeButton.setOpaque(false);
         closeButton.setPreferredSize(new Dimension(12, 12));
-        closeButton.addActionListener(new TabButtonListener());
+        closeButton.addActionListener(new TabButtonListener(chatRoom));
         ChatCreator.indices.add(closeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();

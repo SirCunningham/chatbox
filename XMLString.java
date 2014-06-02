@@ -26,11 +26,11 @@ public class XMLString {
         allowedTags.add("kursiv");
         allowedTags.add("fetstil");
         /*
-        try {
-        AES = new AESCrypto();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
-        ex.printStackTrace();
-        }
+         try {
+         AES = new AESCrypto();
+         } catch (NoSuchAlgorithmException | NoSuchPaddingException | UnsupportedEncodingException ex) {
+         ex.printStackTrace();
+         }
          * 
          */
     }
@@ -38,7 +38,7 @@ public class XMLString {
     public static void main(String[] args) {
         String test = "hej";
         String enc = Encryption.encrypt("caesar", test, "10", AES);
-        String msg = "<message sender=\"User 377932797\"><text color=\"000000\">In medio cursu vitae nostrae, <encrypted type=\"AES\">a518674b573e2c1d6f2111d6b3ba5c9e</encrypted> in silva obscura...</text></message>";
+        String msg = "<message sender=\"User 377932797\"><text color=\"000000\"><connected users=[asdaasd,asdasaf,asdfasdf]></connected> in silva obscura...</text></message>";
         //String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"AES\">" + enc1 + "</encrypted></text></message>";
         int i = msg.indexOf("<encrypted");
         //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
@@ -46,8 +46,7 @@ public class XMLString {
         String keys[] = new String[2];
         keys[0] = "10";
         keys[1] = "737d7c20c6a0251ad48cdf53f8544af5ef5431c9f945c2296bcebce747e43acb";
-        System.out.println(decryptString(msg, keys));
-        System.out.println(keys[1]);
+
     }
 
     public static String handleString(String xmlStr) {
@@ -170,6 +169,19 @@ public class XMLString {
         return keys;
     }
 
+    public static String[] getUsers(String xmlStr) {
+        boolean matches = xmlStr.matches("(.*)<connected users=(.*)>(.*)</connected>(.*)");
+        System.out.println(matches);
+        if (matches) {
+            int i = xmlStr.indexOf("<connected users=");
+            String rest = xmlStr.substring(i);
+            rest = rest.substring(rest.indexOf("[") + 1);
+            String users = rest.substring(0, rest.indexOf("]"));
+            return users.split(", ");
+        }
+        return null;
+    }
+
     public static boolean isCorrect(String xmlStr) {
         return xmlStr.matches("<message .*>.*</message>");
     }
@@ -234,8 +246,8 @@ public class XMLString {
     }
 
     public static String getSender(String xmlMsg) {
-        int index = xmlMsg.indexOf("sender");
         if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
+            int index = xmlMsg.indexOf("sender");
             return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
         }
         return "";

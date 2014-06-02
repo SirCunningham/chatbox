@@ -76,9 +76,8 @@ public class Client implements Runnable {
                         //vet inte vad du menar. o.println skickar till alla?
                         //man bryr sig endast om nycklen från den man markerat,
                         //men skickar keyrequest till alla
-                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-                        if (chat != null) {
-                            final String chatName = chat.getName();
+                        String chatName = (String) chatRoom.getList().getSelectedValue();
+                        if (chatName != null) {
                             String message = (String) JOptionPane.showInputDialog(ChatCreator.frame, "Enter message:",
                                     "Send keyrequest", JOptionPane.INFORMATION_MESSAGE, null, null,
                                     "I request a key for " + String.valueOf(chatRoom.getKeyRequestEncryption()) + " from " + chatName + "!");
@@ -137,14 +136,16 @@ public class Client implements Runnable {
                                 ChatCreator.indices.get(index).doClick();
                                 o.println(Messages.getQuitMessage(chatRoom));
                             } else if (reply == JOptionPane.CANCEL_OPTION) {
-                                ArrayList<ChatRoom> roomArray = new ArrayList<>();
-                                for (ChatRoom room : ChatCreator.chatRooms) {
-                                    roomArray.add(room);
+                                ArrayList<String> roomArray = new ArrayList<>();
+                                for (String cName : ChatCreator.chatNames) {
+                                    roomArray.add(cName);
                                 }
-                                for (ChatRoom room : roomArray) {
+                                /*
+                                for (String cName : roomArray) {
                                     room.speedyDelete = true;
                                     room.getCloseButton().doClick();
                                 }
+                                        */
                                 System.exit(0);
                             }
                         }
@@ -168,6 +169,8 @@ public class Client implements Runnable {
                     keyResponse(responseLine);
                     fileRequest(responseLine);
                     fileResponse(responseLine);
+                    registerChatName(responseLine);
+                    addUsers(responseLine);
                     chatRoom.appendToPane(responseLine);
                     if (responseLine.contains("*** Bye")) {
                         break;
@@ -187,6 +190,24 @@ public class Client implements Runnable {
             } catch (IOException e) {
                 ChatCreator.showError("Failed to close connection.");
             }
+        }
+    }
+    
+    private void addUsers(String responseLine) {
+        String[] users = XMLString.getUsers(responseLine);
+        if (users != null) {
+            for (String usr : users) {
+                if (!chatRoom.getItems().contains(usr)) {
+                    chatRoom.getItems().addElement(usr);
+                }
+            }
+        }
+    }
+    
+    private void registerChatName(String responseLine) {
+        String sender = XMLString.getSenderWithoutColon(responseLine);
+        if (!chatRoom.getItems().contains(sender)) {
+            chatRoom.getItems().addElement(sender);
         }
     }
 
@@ -297,6 +318,10 @@ public class Client implements Runnable {
             }
             chatRoom.isAllowedToConnect.put(sender, false);
         } else {
+            String users = chatRoom.getItems().toString();
+            o.println(String.format("<message sender=\"%s\">"
+                        + "<connected users=\""+users+"\"></connected><text color=\"%s\">Welcome %s!</text></message>",
+                        chatRoom.getNamePane().getText(), chatRoom.color, sender));
             chatRoom.isAllowedToConnect.put(sender, true);
         }
 
@@ -320,11 +345,10 @@ public class Client implements Runnable {
     private void keyResponse(String html) {
         if (html.matches("<message sender=(.*)>(.*)<encrypted type=(.*) "
                 + "key=(.*)>(.*)</encrypted>(.*)</message>")) {
-            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();  //Problem if change selected value
-            if (chat != null) {
-                String name = chat.getName();
-                if (!chatRoom.nameKeyResponse.get(name).isShutdown()) {
-                    chatRoom.recivedKeyResponse.put(name, true);
+            String chatName = (String) chatRoom.getList().getSelectedValue();  //Problem if change selected value
+            if (chatName != null) {
+                if (!chatRoom.nameKeyResponse.get(chatName).isShutdown()) {
+                    chatRoom.recivedKeyResponse.put(chatName, true);
                 }
             }
         }

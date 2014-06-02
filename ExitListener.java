@@ -12,14 +12,16 @@ public class ExitListener extends WindowAdapter {
                 "Are you sure you want to exit ChatBox?",
                 "Confirmation", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-            ArrayList<ChatRoom> roomArray = new ArrayList<>();
-            for (ChatRoom room : ChatCreator.chatRooms) {
+            ArrayList<String> roomArray = new ArrayList<>();
+            for (String room : ChatCreator.chatNames) {
                 roomArray.add(room);
             }
+            /*
             for (ChatRoom room : roomArray) {
                 room.speedyDelete = true;
                 room.getCloseButton().doClick();
             }
+            */       
             System.exit(0);
         }
     }

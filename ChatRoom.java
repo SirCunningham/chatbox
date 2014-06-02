@@ -3,12 +3,13 @@ package chatbox;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.*;
+import java.util.concurrent.*;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
-import java.util.*;
-import java.util.concurrent.*;
 import javax.swing.text.html.HTMLDocument;
 
 public class ChatRoom {
@@ -49,11 +50,12 @@ public class ChatRoom {
     HashMap<String, Boolean> recivedFileResponse = new HashMap<>();
     HashMap<String, Boolean> recivedKeyResponse = new HashMap<>();
     HashMap<String, Boolean> isAllowedToConnect = new HashMap<>();
-    HashMap<String, ChatRoom> nameToChatRoom = new HashMap<>();
     final String host;
     final int port;
     final boolean isServer;
     PrintWriter o;
+    Server server;
+    Object lock = new Object();
 
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
@@ -82,6 +84,7 @@ public class ChatRoom {
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         nameToKey.put(getName(), getKeys());
+        items.addElement(getName());
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
@@ -109,6 +112,30 @@ public class ChatRoom {
         getMessagePane().setEnabled(false);
         getSendButton().setEnabled(false);
         ChatCreator.showError("You have been booted!"); //not an error, but info
+    }
+
+    public void setServer(Server server) {
+        if (isServer) {
+            this.server = server;
+        }
+    }
+
+    public Socket getClientSocket(String chatName) {
+        if (isServer) {
+            return server.getClientSocket(chatName);
+        }
+        return null;
+    }
+
+    public void kickUser(String chatName) throws IOException {
+        if (isServer) {
+            server.getOutputStream(chatName).close();
+            server.getClientSocket(chatName).getInputStream().close();
+            server.getClientSocket(chatName).getOutputStream().close();
+            server.getClientSocket(chatName).close();
+            server.getInputStream(chatName).close();
+            alive = false;
+        }
     }
 
     @Override

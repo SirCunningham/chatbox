@@ -7,7 +7,7 @@ import java.util.*;
 class IOStream extends Thread {
 
     protected final String clientName = "@NN";
-    private String chatName;
+    private String chatName = "";
     private BufferedReader i;
     private PrintWriter o;
     protected final Socket clientSocket;
@@ -15,6 +15,7 @@ class IOStream extends Thread {
     protected final Object lock;
     protected InputStream bi;
     protected OutputStream bo;
+    boolean alive = true;
 
     public IOStream(Socket clientSocket, LinkedList<IOStream> streams,
             Object lock) {
@@ -56,10 +57,10 @@ class IOStream extends Thread {
              + " entered the chat room !!! ***</message>");
              }}}
              **/
-            while (true) {
+            while (!clientSocket.isClosed()) {
                 String line = i.readLine();
                 chatName = XMLString.getSenderWithoutColon(line);
-                System.out.println(line);
+                System.out.println(chatName+"!");
                 if (line == null) {
                     break;
                 }
@@ -113,8 +114,24 @@ class IOStream extends Thread {
         } catch (IOException e) {
         }
     }
-
+    
+    public void kill() {
+        alive = false;
+    }
     public String getChatName() {
         return chatName;
     }
+    
+    
+    public Socket getClientSocket() {
+        System.out.println(chatName);
+        return clientSocket;
+    }
+    public BufferedReader getInputStream() {
+        return i;
+    }
+    public PrintWriter getOutputStream() {
+        return o;
+    }
+    
 }

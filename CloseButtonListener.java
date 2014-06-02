@@ -14,14 +14,16 @@ public class CloseButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ArrayList<ChatRoom> roomArray = new ArrayList<>();
-        for (ChatRoom room : ChatCreator.chatRooms) {
-            roomArray.add(room);
+        ArrayList<String> roomArray = new ArrayList<>();
+        for (String chatName : ChatCreator.chatNames) {
+            roomArray.add(chatName);
         }
+        /*
         for (ChatRoom room : roomArray) {
             room.getCloseButton().doClick();
         }
-        if (ChatCreator.chatRooms.isEmpty()) {
+        */
+        if (ChatCreator.chatNames.isEmpty()) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     "Are you sure you want to exit ChatBox?",
                     "Confirmation", JOptionPane.YES_NO_OPTION);
