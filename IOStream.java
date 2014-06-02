@@ -123,6 +123,7 @@ class IOStream extends Thread {
     
     
     public Socket getClientSocket() {
+        System.out.println(chatName);
         return clientSocket;
     }
     public BufferedReader getInputStream() {

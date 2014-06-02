@@ -160,8 +160,7 @@ public class Client implements Runnable {
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestButtonListener());
 
-                while ((responseLine = i.readLine()) != null && 
-                        !responseLine.matches(String.format("<message sender=(.*)%s got the boot(.*)</message>", chatRoom.getName()))) {
+                while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     System.out.println(responseLine);
                     handleUserConnect(responseLine);
                     setKeys(responseLine);
