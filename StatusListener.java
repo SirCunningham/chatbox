@@ -47,9 +47,13 @@ public class StatusListener implements FocusListener {
                 try {
                     chatRoom.statusUpdate = true;
                     //bättre lösning än hacklösningen, men kräver att keyRequest inte håller på
-                    //chatRoom.o.println("I just switched from my old name: " + name);
+                    chatRoom.o.println("I just switched from my old name: " + name);
                     chatRoom.doc.remove(0, message.length());
                     chatRoom.doc.insertString(0, "I just switched from my old name: " + name, chatRoom.style);
+                    chatRoom.getItems().removeElement(name);
+                    chatRoom.getItems().addElement(chatRoom.getName());
+                    chatRoom.isAllowedToConnect.remove(name);
+                    chatRoom.isAllowedToConnect.put(chatRoom.getName(), true);
                     chatRoom.getSendButton().doClick();
                     chatRoom.doc.insertString(0, message, chatRoom.style);
                     if (chatRoom.getCipherButton().isSelected()) {
