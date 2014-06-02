@@ -10,6 +10,7 @@ import java.util.concurrent.*;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 
 public class ChatRoom {
@@ -95,7 +96,8 @@ public class ChatRoom {
             HTMLDocument doc1 = (HTMLDocument) chatBox.getDocument();
             try {
                 if (getKeys() != null) {
-                    kit.insertHTML(doc1.getLength(), msg, 0, 0, null, this);
+                    kit.insertHTML(this, doc1.getLength(), msg, 0, 0, null);
+                    chatBox.setCaretPosition(chatBox.getDocument().getLength());
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -106,8 +108,9 @@ public class ChatRoom {
         }
     }
 
+    //skicka <disconnect> med servern till en klient som blir kickad och anropa detta!!
     private void disableChat() {
-        // disable more fields!!
+        //disable more fields!!
         getNamePane().setEnabled(false);
         getMessagePane().setEnabled(false);
         getSendButton().setEnabled(false);

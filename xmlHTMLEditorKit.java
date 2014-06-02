@@ -8,9 +8,10 @@ import javax.swing.text.html.*;
 public class xmlHTMLEditorKit extends HTMLEditorKit {
     //Måste förbättras
 
-    public void insertHTML(int offset, String html,
-            int popDepth, int pushDepth, HTML.Tag insertTag, ChatRoom chatRoom) throws
+    public void insertHTML(ChatRoom chatRoom, int offset, String html,
+            int popDepth, int pushDepth, HTML.Tag insertTag) throws
             BadLocationException, IOException {
+                
         String color = XMLString.toHexColor(html);
         //thr.keyRequest(html);
         String sender = XMLString.getSenderWithoutColon(html);
@@ -35,6 +36,5 @@ public class xmlHTMLEditorKit extends HTMLEditorKit {
         }
          * 
          */
-
     }
 }
