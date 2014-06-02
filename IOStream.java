@@ -60,7 +60,6 @@ class IOStream extends Thread {
             while (!clientSocket.isClosed()) {
                 String line = i.readLine();
                 chatName = XMLString.getSenderWithoutColon(line);
-                System.out.println(chatName+"!");
                 if (line == null) {
                     break;
                 }
