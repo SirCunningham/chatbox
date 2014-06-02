@@ -43,6 +43,7 @@ public class ChatRoom {
     int cipherStart;
     int cipherEnd;
     String filePath;
+    int fileSize;
     File savePath;
     BufferedWriter bw;
 

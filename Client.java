@@ -406,6 +406,7 @@ public class Client implements Runnable {
 
     // Checks if we have recived a filerequest
     private void fileRequest(final String html) {
+        System.out.println("XXX" + html);
         final String chatName = chatRoom.getName();
         final String name = XMLString.getSender(html).substring(0, chatName.length());
         if (html.contains("</filerequest>") && !name.equals(chatName)) {
@@ -434,7 +435,7 @@ public class Client implements Runnable {
             }
             String fileData = String.format("%s sends a filerequest.\n\n"
                     + "File name: %s\nFile size: %s\nFile description: %s\nAccept file?",
-                    XMLString.getSender(html), XMLString.getFileName(html),
+                    XMLString.getSenderWithoutColon(html), XMLString.getFileName(html),
                     XMLString.getFileSize(html), XMLString.getFileDescription(html));
             
             optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
