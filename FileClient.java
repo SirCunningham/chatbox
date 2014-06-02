@@ -67,43 +67,17 @@ public class FileClient implements Runnable {
                 SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
 
-                chatRoom.getProgressBarButton().doClick();
-                JFileChooser chooser = new JFileChooser();
-                //det riktiga namnet kommer från avsändaren!!
-                chooser.setSelectedFile(new File("fileToSave.txt"));
-                File file;
-
-                //gör detta efter bekräftelse
-                int returnVal = chooser.showSaveDialog(ChatCreator.frame);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    file = chooser.getSelectedFile();
-                } else {
-                    file = new File("/home/alexander/Skrivbord/highscore2.html");
-                }
-
-                FileWriter fw = new FileWriter(file);
-                BufferedWriter bw = new BufferedWriter(fw);
-
-                //ett alternativ för att undvika detta hack är att skapa nya servrar/clienter varje gång en fil skickas
-                //då kan man använda bytearrays hela vägen
-                //dessutom måste man begränsa till en fil i taget p.g.a. hacklösningen
+                //hacklösning
                 while ((responseLine = i.readLine()) != null && chatRoom.alive) {
                     try {
-                        if (responseLine.equals("THIS IS A REALLY UGLY HACK BUT IT WORKS")) {
-                            bw.close();
-                            //uppdatera file (namnet) när ny fil accepteras
-                            chooser.setSelectedFile(new File("fileToSave2.txt"));
-                            returnVal = chooser.showSaveDialog(ChatCreator.frame);
-                            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                                file = chooser.getSelectedFile();
+                        if (chatRoom.bw != null) {
+                            if (responseLine.equals("THIS IS A REALLY UGLY HACK BUT IT WORKS")) {
+                                chatRoom.bw.close();
+                                chatRoom.bw = null;
                             } else {
-                                file = new File("/home/alexander/Skrivbord/highscore3.html");
+                                chatRoom.bw.write(responseLine);
+                                chatRoom.bw.newLine();
                             }
-                            fw = new FileWriter(file);
-                            bw = new BufferedWriter(fw);
-                        } else {
-                            bw.write(responseLine);
-                            bw.newLine();
                         }
                     } catch (IOException ex) {
                         ChatCreator.showError("Failed to save file.");

@@ -233,13 +233,46 @@ public class XMLString {
 
     public static String getSender(String xmlMsg) {
         if (xmlMsg != null) {
-            if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
+            if (xmlMsg.matches("<message sender=(.*)>(.*)</message>")) {
                 int index = xmlMsg.indexOf("sender");
                 return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
             }
         }
-        return "";
-
+        return null;
+    }
+    
+    public static String getFileName(String xmlMsg) {
+        if (xmlMsg != null) {
+            if (xmlMsg.matches("<filerequest(.*)name=(.*)>(.*)</filerequest>")) {
+                int index = xmlMsg.indexOf("name");
+                return xmlMsg.substring(index + 6, xmlMsg.indexOf(">") - 1) + ": ";
+            }
+        }
+        return null;
+    }
+    
+    public static String getFileSize(String xmlMsg) {
+        if (xmlMsg != null) {
+            if (xmlMsg.matches("<filerequest(.*)size=(.*)>(.*)</filerequest>")) {
+                int index = xmlMsg.indexOf("size");
+                return xmlMsg.substring(index + 6, xmlMsg.indexOf(">") - 1) + ": ";
+            }
+        }
+        return null;
+    }
+    
+    public static String getFileDescription(String xmlMsg) {
+        if (xmlMsg != null) {
+            if (xmlMsg.matches("<filerequest(.*)>(.*)</filerequest>")) {
+                String[] strings = xmlMsg.split("<filerequest(.*)>");
+                for (String str : strings) {
+                    if (str.contains("</keyrequest>")) {
+                        return str.substring(0, str.indexOf("</keyrequest>"));
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public static String getSenderWithoutColon(String xmlMsg) {

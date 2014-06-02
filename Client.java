@@ -1,6 +1,9 @@
 package chatbox;
 
+import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -384,30 +387,139 @@ public class Client implements Runnable {
     }
 
     // Checks if we have recived a filerequest
-    private void fileRequest(String html) {
-        String chatName = chatRoom.getName();
-        String name = XMLString.getSender(html).substring(0, chatName.length());
+    private void fileRequest(final String html) {
+        final String chatName = chatRoom.getName();
+        final String name = XMLString.getSender(html).substring(0, chatName.length());
         if (html.contains("</filerequest>") && !name.equals(chatName)) {
-            int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
-                    String.format("%s sends a filerequest of type %s."
-                    + "\n Receive file?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"yes\" "
-                        + "port=\"" + (port + 13)
-                        + "\">%s</filerespnse></text></message>",
-                        chatName, chatRoom.color,
-                        chatRoom.getMessagePane().getText()));
-            } else {
-                o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"no\" "
-                        + "port=\"" + (port + 13)
-                        + "\">%s</fileresponse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color,
-                        chatRoom.getMessagePane().getText()));
+            final JProgressBar progressBar;
+            final JPanel invisibleContainer;
+            final JLabel label;
+            final JOptionPane optionPane;
+            final JDialog dialog;
+            final SwingWorker worker;
+
+            progressBar = new JProgressBar(0, 100);
+            progressBar.setValue(0);
+            progressBar.setStringPainted(true);
+            progressBar.setVisible(false);
+
+            invisibleContainer = new JPanel(new GridLayout(2, 1));
+            label = new JLabel("Downloading...");
+            label.setBackground(invisibleContainer.getBackground());
+            label.setVisible(false);
+            invisibleContainer.add(label, BorderLayout.PAGE_START);
+            invisibleContainer.add(progressBar, BorderLayout.CENTER);
+
+            String description = chatRoom.getDescriptionPane().getText();
+            if (description.equals("File description (optional)")) {
+                description = "No description";
             }
+            String fileData = String.format("%s sends a filerequest.\n\n"
+                    + "File name: %s\nFile size: %s\nFile description: %s\nAccept file?",
+                    XMLString.getSender(html), XMLString.getFileName(html),
+                    XMLString.getFileSize(html), XMLString.getFileDescription(html));
+            
+            optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.YES_NO_OPTION);
+            dialog = new JDialog(ChatCreator.frame, "File request", false);
+            worker = new SwingWorker<Object, Object>() {
+
+                @Override
+                protected Object doInBackground() throws Exception {
+                    int progress = 0;
+                    setProgress(progress);
+                    while (progress < 100) {
+                        try {
+                            Thread.sleep(ChatCreator.generator.nextInt(100));
+                        } catch (InterruptedException e) {
+                        }
+                        progress += ChatCreator.generator.nextInt(10);
+                        setProgress(Math.min(progress, 100));
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    dialog.setCursor(null);
+                    dialog.dispose();
+                }
+            };
+            optionPane.addPropertyChangeListener(
+                    new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent e) {
+                            String name = e.getPropertyName();
+                            if (e.getSource() == optionPane
+                                    && name.equals(JOptionPane.VALUE_PROPERTY)) {
+                                int reply = (int) optionPane.getValue();
+                                if (reply == JOptionPane.YES_OPTION) {
+                                    progressBar.setVisible(true);
+                                    label.setVisible(true);
+                                    dialog.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                                    worker.execute();
+                                    
+                                    if (reply == JOptionPane.YES_OPTION) {
+                                        JFileChooser chooser = new JFileChooser();
+                                        chooser.setSelectedFile(new File(XMLString.getFileName(html)));
+                                        int returnVal = chooser.showSaveDialog(ChatCreator.frame);
+                                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+                                            chatRoom.savePath = chooser.getSelectedFile();
+                                            try {
+                                                FileWriter fw = new FileWriter(chatRoom.savePath);
+                                                chatRoom.bw = new BufferedWriter(fw);
+                                            } catch (IOException ex) {
+                                                ChatCreator.showError("Failed to save file.");
+                                            }
+                                            o.println(String.format("<message sender=\"%s\">"
+                                                    + "<text color=\"%s\"><fileresponse reply=\"yes\" "
+                                                    + "port=\"" + (port + 13)
+                                                    + "\">%s</filerespnse></text></message>",
+                                                    chatName, chatRoom.color,
+                                                    chatRoom.getMessagePane().getText()));
+                                            return;
+                                        }
+                                        o.println(String.format("<message sender=\"%s\">"
+                                                + "<text color=\"%s\"><fileresponse reply=\"no\" "
+                                                + "port=\"" + (port + 13)
+                                                + "\">%s</fileresponse></text></message>",
+                                                chatRoom.getNamePane().getText(), chatRoom.color,
+                                                chatRoom.getMessagePane().getText()));
+                                    }
+                                } else {
+                                    dialog.dispose();
+                                }
+                            }
+                        }
+                    });
+
+            dialog.setContentPane(optionPane);
+            dialog.getContentPane().add(invisibleContainer);
+            dialog.pack();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setLocationRelativeTo(ChatCreator.frame);
+            dialog.setResizable(false);
+            dialog.setAlwaysOnTop(false);
+            dialog.setVisible(true);
+
+            worker.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent e) {
+                    String name = e.getPropertyName();
+                    if (name.equals("progress")) {
+                        SwingWorker worker1 = (SwingWorker) e.getSource();
+                        int progress = worker1.getProgress();
+                        if (progress == 0) {
+                            progressBar.setIndeterminate(true);
+                        } else {
+                            progressBar.setIndeterminate(false);
+                            progressBar.setValue(progress);
+                        }
+                    }
+                }
+            });
         }
     }
 

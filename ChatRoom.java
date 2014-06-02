@@ -43,7 +43,9 @@ public class ChatRoom {
     int cipherStart;
     int cipherEnd;
     String filePath;
-    int fileSize;
+    File savePath;
+    BufferedWriter bw;
+
     HashMap<String, String[]> nameToKey = new HashMap<>();      //String[] is a vector with two components; the first is the Caesar key and the second the AES key
     HashMap<String, ScheduledExecutorService> nameFileResponse = new HashMap<>();
     HashMap<String, ScheduledExecutorService> nameKeyResponse = new HashMap<>();
