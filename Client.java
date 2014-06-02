@@ -57,12 +57,11 @@ public class Client implements Runnable {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String msg = String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s</text></message>",
-                                chatRoom.getName(), chatRoom.color,
-                                Messages.getMessage(chatRoom));
+                        String msg = Messages.getMessage(chatRoom);
                         if (!msg.equals("")) {
-                            o.println(msg);
+                            o.println(String.format("<message sender=\"%s\">"
+                                + "<text color=\"%s\">%s</text></message>",
+                                chatRoom.getName(), chatRoom.color, msg));
                         }
                     }
                 }
@@ -89,7 +88,6 @@ public class Client implements Runnable {
                                         + "</keyrequest></text></message>",
                                         chatRoom.getName(), chatRoom.color,
                                         String.valueOf(chatRoom.getKeyRequestEncryption()), message));
-                                //ersatte Messages.getMessage(chatRoom) med message
                                 startKeyTimer(chatName);
                             }
                         }

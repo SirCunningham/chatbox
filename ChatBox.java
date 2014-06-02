@@ -3,11 +3,9 @@ package chatbox;
 //Problem: servern dör aldrig om man tar bort tabben!!!
 //Funkar tab switching utan server?
 //Skriv ett meddelande för trasiga taggpar, fixa isCorrect och disableChat!!
+//Avstängningsknappen i ChatCreator efter skapande av en ChatBox...
+//Använd @ för privata meddelanden
 
-//Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
-//Ingen tom rad efter nekad keyrequest! Tom rad är tomt keyrequestmeddelande. Se kommentaren nedan.
-//Varför skickar man keyrequestmeddelande när man kommenterar? Oväntat beteende - knappen finns där av en anledning.
-//Funkar numera att skicka tomma meddelanden, tidigare förbjöds detta medelst trimning!
 import java.awt.event.*;
 
 public class ChatBox {
