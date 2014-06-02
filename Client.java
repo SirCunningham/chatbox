@@ -101,9 +101,8 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Send filerequest to every person in the chat??
-                        ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-                        if (chat != null) {
-                            final String chatName = chat.getName();
+                        String chatName = (String) chatRoom.getList().getSelectedValue();
+                        if (chatName != null) {
                             o.println(Messages.getFileMessage(chatRoom));
                             startTimer(chatName);
                         }
