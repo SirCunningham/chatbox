@@ -29,7 +29,7 @@ public class BootButtonListener implements ActionListener {
                 chatRoom.doc.insertString(0, message, chatRoom.style);
                 try {
                     chatRoom.kickUser(chatName);               //Döda klienten
-                    chatRoom.getList();
+                    chatRoom.getItems().removeElement(chatName);
                 } catch (IOException ex) {
                     Logger.getLogger(BootButtonListener.class.getName()).log(Level.SEVERE, null, ex);
                 }
