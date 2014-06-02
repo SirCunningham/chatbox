@@ -211,7 +211,7 @@ public class Client implements Runnable {
         if (users != null) {
             chatRoom.getList().removeAll();
             for (String usr : users) {
-                if (!chatRoom.getItems().contains(usr)) {
+                if (!chatRoom.getItems().contains(usr) && !chatRoom.getName().equals(usr)) {
                     chatRoom.getItems().addElement(usr);
                 }
             }
@@ -220,7 +220,7 @@ public class Client implements Runnable {
     
     private void registerChatName(String responseLine) {
         String sender = XMLString.getSenderWithoutColon(responseLine);
-        if (!chatRoom.getItems().contains(sender)) {
+        if (!chatRoom.getItems().contains(sender) && !sender.equals(chatRoom.getName())) {
             chatRoom.getItems().addElement(sender);
         }
     }

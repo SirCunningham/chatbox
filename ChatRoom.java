@@ -87,7 +87,6 @@ public class ChatRoom {
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         nameToKey.put(getName(), getKeys());
-        items.addElement(getName());
     }
 
     // Inspirerat av http://stackoverflow.com/questions/9650992/how-to-change-text-color-in-the-jtextarea?lq=1
