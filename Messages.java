@@ -12,11 +12,11 @@ public class Messages {
                 chatRoom.getFileSizePane().getText(), description);
         String message = chatRoom.getMessagePane().getText();
         /*
-        appendToPane(String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+        appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
         namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
          * 
          */
-        return String.format("<message sender=\"%s\"><filerequest namn=\"%s\" size=\"%s\">%s</filerequest></message>",
+        return String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
                 chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description);
     }
 

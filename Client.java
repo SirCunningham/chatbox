@@ -406,10 +406,10 @@ public class Client implements Runnable {
 
     // Checks if we have recived a filerequest
     private void fileRequest(final String html) {
-        System.out.println("XXX" + html);
         final String chatName = chatRoom.getName();
         final String name = XMLString.getSender(html).substring(0, chatName.length());
         if (html.contains("</filerequest>") && !name.equals(chatName)) {
+            System.out.println("XXX" + html);
             final JProgressBar progressBar;
             final JPanel invisibleContainer;
             final JLabel label;
@@ -481,6 +481,7 @@ public class Client implements Runnable {
                                     
                                     if (reply == JOptionPane.YES_OPTION) {
                                         JFileChooser chooser = new JFileChooser();
+                                        //getFileName returnerar null!!
                                         chooser.setSelectedFile(new File(XMLString.getFileName(html)));
                                         int returnVal = chooser.showSaveDialog(ChatCreator.frame);
                                         if (returnVal == JFileChooser.APPROVE_OPTION) {
