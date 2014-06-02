@@ -388,28 +388,32 @@ public class Client implements Runnable {
     // Checks if we have recived a filerequest
     private void fileRequest(String html) {
         String chatName = chatRoom.getName();
-        String name = XMLString.getSender(html).substring(0, chatName.length());
-        if (html.contains("</filerequest>") && !name.equals(chatName)) {
-            int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
-                    String.format("%s sends a filerequest of type %s."
-                    + "\n Receive file?",
-                    XMLString.getSender(html), XMLString.getKeyRequestType(html)),
-                    "Kill", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"yes\" "
-                        + "port=\"" + (port + 13)
-                        + "\">%s</filerespnse></text></message>",
-                        chatName, chatRoom.color,
-                        chatRoom.getMessagePane().getText()));
-            } else {
-                o.println(String.format("<message sender=\"%s\">"
-                        + "<text color=\"%s\"><fileresponse reply=\"no\" "
-                        + "port=\"" + (port + 13)
-                        + "\">%s</fileresponse></text></message>",
-                        chatRoom.getNamePane().getText(), chatRoom.color,
-                        chatRoom.getMessagePane().getText()));
+
+        if (html.contains("</filerequest>")) {
+            String name = XMLString.getSender(html).substring(0, chatName.length());
+            if (!name.equals(chatName)) {
+                int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
+                        String.format("%s sends a filerequest of type %s."
+                        + "\n Receive file?",
+                        XMLString.getSender(html), XMLString.getKeyRequestType(html)),
+                        "Kill", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    o.println(String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\"><fileresponse reply=\"yes\" "
+                            + "port=\"" + (port + 13)
+                            + "\">%s</filerespnse></text></message>",
+                            chatName, chatRoom.color,
+                            chatRoom.getMessagePane().getText()));
+                } else {
+                    o.println(String.format("<message sender=\"%s\">"
+                            + "<text color=\"%s\"><fileresponse reply=\"no\" "
+                            + "port=\"" + (port + 13)
+                            + "\">%s</fileresponse></text></message>",
+                            chatRoom.getNamePane().getText(), chatRoom.color,
+                            chatRoom.getMessagePane().getText()));
+                } 
             }
+
         }
     }
 
