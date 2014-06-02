@@ -255,7 +255,7 @@ public class XMLString {
     
     public static String getFileName(String xmlMsg) {
         if (xmlMsg != null) {
-            if (xmlMsg.matches("(.*)<filerequest(.*)name=(.*)>(.*)</filerequest>(.*)")) {
+            if (xmlMsg.matches("<filerequest(.*)name=(.*)>(.*)</filerequest>")) {
                 int index = xmlMsg.indexOf("name");
                 return xmlMsg.substring(index + 6, xmlMsg.indexOf(">") - 1) + ": ";
             }
