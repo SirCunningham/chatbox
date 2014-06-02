@@ -232,11 +232,14 @@ public class XMLString {
     }
 
     public static String getSender(String xmlMsg) {
-        if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
-            int index = xmlMsg.indexOf("sender");
-            return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
+        if (xmlMsg != null) {
+            if (xmlMsg.matches("<message sender=(.*)>(.*)")) {
+                int index = xmlMsg.indexOf("sender");
+                return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
+            }
         }
         return "";
+
     }
 
     public static String getSenderWithoutColon(String xmlMsg) {
