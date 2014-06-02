@@ -300,8 +300,12 @@ public class Client implements Runnable {
         if (responseLine.matches(String.format("<message sender=(.*)I just switched from my old name:(.*)</message>"))) {
             String newName = XMLString.getSenderWithoutColon(responseLine);
             String oldName = XMLString.getOldName(responseLine);
-            chatRoom.isAllowedToConnect.remove(oldName);
-            chatRoom.isAllowedToConnect.put(newName, true);
+            chatRoom.getItems().removeElement(oldName);
+            chatRoom.getItems().addElement(newName);
+            if (chatRoom.isServer) {
+                chatRoom.isAllowedToConnect.remove(oldName);
+                chatRoom.isAllowedToConnect.put(newName, true);
+            }
             
         }
     }
