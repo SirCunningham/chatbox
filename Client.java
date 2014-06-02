@@ -160,7 +160,7 @@ public class Client implements Runnable {
 
                 while ((responseLine = i.readLine()) != null
                         && !responseLine.matches(String.format("<message sender=(.*)%s got the boot(.*)</message>",
-                        chatRoom.getName()))) {
+                        chatRoom.getName())) && !NotAllowedToConnect(responseLine)) {
                     System.out.println(responseLine);
                     handleUserConnect(responseLine);
                     setKeys(responseLine);
@@ -192,6 +192,16 @@ public class Client implements Runnable {
         }
     }
     
+    private boolean NotAllowedToConnect(String responseLine) {
+        boolean simpleMatch = responseLine.matches(String.format("<message sender=(.*)>"
+                + "<text color=(.*)><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
+                 chatRoom.getName()));
+        boolean match = responseLine.matches(String.format("<message sender=(.*)>"
+                + "<text color=(.*)>%s was not allowed to connect!</text></message>",
+                 chatRoom.getName()));
+        return (simpleMatch || match);
+        
+    }
     private void addUsers(String responseLine) {
         String[] users = XMLString.getUsers(responseLine);
         if (users != null) {
