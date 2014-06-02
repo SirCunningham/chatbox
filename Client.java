@@ -160,9 +160,12 @@ public class Client implements Runnable {
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestButtonListener());
 
-                while ((responseLine = i.readLine()) != null && chatRoom.alive) {
+                while ((responseLine = i.readLine()) != null) {
                     System.out.println(responseLine);
-                    handleUserConnect(responseLine);
+                    boolean yesResponse= handleUserConnect(responseLine);
+                    if (!yesResponse) {
+                        break;
+                    }
                     setKeys(responseLine);
                     keyRequest(responseLine);
                     keyResponse(responseLine);
@@ -285,22 +288,23 @@ public class Client implements Runnable {
     }
 
     // Determine if user allowed to connect
-    private void handleUserConnect(String html) {
+    private boolean handleUserConnect(String html) {
         if (chatRoom.isServer) {
             String sender = XMLString.getSenderWithoutColon(html);
             // Alla får skriva minst en mening i chatten
             if (!chatRoom.isAllowedToConnect.containsKey(sender) && !sender.equals(chatRoom.getName())) {
                 if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
-                    dialogMessage(sender, false);
+                    return dialogMessage(sender, false);
                 } else {
                     // Simpel klient
-                    dialogMessage(sender, true);
+                    return dialogMessage(sender, true);
                 }
             }
         }
+        return true;
     }
 
-    private void dialogMessage(String sender, boolean isSimple) {
+    private boolean dialogMessage(String sender, boolean isSimple) {
         int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                 String.format("%s wants to connect. Allow?",
                 sender),
@@ -316,12 +320,14 @@ public class Client implements Runnable {
                         chatRoom.getNamePane().getText(), chatRoom.color, sender));
             }
             chatRoom.isAllowedToConnect.put(sender, false);
+            return false;
         } else {
             String users = chatRoom.getItems().toString();
             o.println(String.format("<message sender=\"%s\">"
                         + "<connected users=\""+users+"\"></connected><text color=\"%s\">Welcome %s!</text></message>",
                         chatRoom.getNamePane().getText(), chatRoom.color, sender));
             chatRoom.isAllowedToConnect.put(sender, true);
+            return true;
         }
 
 
