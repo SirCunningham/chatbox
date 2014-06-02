@@ -2,7 +2,7 @@ package chatbox;
 
 //Problem: servern dör aldrig om man tar bort tabben!!!
 //Funkar tab switching utan server?
-//Skriv ett meddelande för trasiga taggpar!!
+//Skriv ett meddelande för trasiga taggpar, fixa isCorrect och disableChat!!
 
 //Skriv IPv6-adress, då ser man att programmet ej är multitrådat - gammal implementation bättre!
 //Ingen tom rad efter nekad keyrequest! Tom rad är tomt keyrequestmeddelande. Se kommentaren nedan.

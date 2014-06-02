@@ -160,12 +160,11 @@ public class Client implements Runnable {
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestButtonListener());
 
-                while ((responseLine = i.readLine()) != null) {
+                while ((responseLine = i.readLine()) != null
+                        && !responseLine.matches(String.format("<message sender=(.*)%s got the boot(.*)</message>",
+                        chatRoom.getName())) && !NotAllowedToConnect(responseLine)) {
                     System.out.println(responseLine);
-                    boolean yesResponse= handleUserConnect(responseLine);
-                    if (!yesResponse) {
-                        break;
-                    }
+                    handleUserConnect(responseLine);
                     setKeys(responseLine);
                     keyRequest(responseLine);
                     keyResponse(responseLine);
@@ -195,6 +194,16 @@ public class Client implements Runnable {
         }
     }
     
+    private boolean NotAllowedToConnect(String responseLine) {
+        boolean simpleMatch = responseLine.matches(String.format("<message sender=(.*)>"
+                + "<text color=(.*)><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
+                 chatRoom.getName()));
+        boolean match = responseLine.matches(String.format("<message sender=(.*)>"
+                + "<text color=(.*)>%s was not allowed to connect!</text></message>",
+                 chatRoom.getName()));
+        return (simpleMatch || match);
+        
+    }
     private void addUsers(String responseLine) {
         String[] users = XMLString.getUsers(responseLine);
         if (users != null) {
@@ -288,23 +297,22 @@ public class Client implements Runnable {
     }
 
     // Determine if user allowed to connect
-    private boolean handleUserConnect(String html) {
+    private void handleUserConnect(String html) {
         if (chatRoom.isServer) {
             String sender = XMLString.getSenderWithoutColon(html);
             // Alla får skriva minst en mening i chatten
             if (!chatRoom.isAllowedToConnect.containsKey(sender) && !sender.equals(chatRoom.getName())) {
                 if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
-                    return dialogMessage(sender, false);
+                    dialogMessage(sender, false);
                 } else {
                     // Simpel klient
-                    return dialogMessage(sender, true);
+                    dialogMessage(sender, true);
                 }
             }
         }
-        return true;
     }
 
-    private boolean dialogMessage(String sender, boolean isSimple) {
+    private void dialogMessage(String sender, boolean isSimple) {
         int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                 String.format("%s wants to connect. Allow?",
                 sender),
@@ -320,14 +328,12 @@ public class Client implements Runnable {
                         chatRoom.getNamePane().getText(), chatRoom.color, sender));
             }
             chatRoom.isAllowedToConnect.put(sender, false);
-            return false;
         } else {
             String users = chatRoom.getItems().toString();
             o.println(String.format("<message sender=\"%s\">"
                         + "<connected users=\""+users+"\"></connected><text color=\"%s\">Welcome %s!</text></message>",
                         chatRoom.getNamePane().getText(), chatRoom.color, sender));
             chatRoom.isAllowedToConnect.put(sender, true);
-            return true;
         }
 
 

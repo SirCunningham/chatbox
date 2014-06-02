@@ -131,12 +131,12 @@ public class ChatRoom {
 
     public void kickUser(String chatName) throws IOException {
         if (isServer) {
-            server.getOutputStream(chatName).close();
-            server.getClientSocket(chatName).getInputStream().close();
-            server.getClientSocket(chatName).getOutputStream().close();
-            server.getClientSocket(chatName).close();
-            server.getInputStream(chatName).close();
-            alive = false;
+            //server.getOutputStream(chatName).close();
+            //server.getClientSocket(chatName).getInputStream().close();
+            //server.getClientSocket(chatName).getOutputStream().close();
+            //server.getClientSocket(chatName).close();
+            //server.getInputStream(chatName).close();
+            //alive = false;
         }
     }
 
