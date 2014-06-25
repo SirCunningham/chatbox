@@ -34,6 +34,34 @@ public class XMLString {
          * 
          */
     }
+    public static void main(String[] args) {
+        String test = "hej";
+        String enc = Encryption.encrypt("caesar", test, "10", AES);
+        String msg = "<message sender=\"User 377932797\"><text color=\"000000\"><connected users=\"[asdasd, ]\"></connected> in silva obscura...</text></message>";
+        String msg2 = "<message sender=\"Sven\"><text color=\"sad\">asds asd got the boot</text></message>";
+        //String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"AES\">" + enc1 + "</encrypted></text></message>";
+        System.out.println(getUsers(msg)[0]+"1");
+        System.out.println(getBootedUser(msg2, "Sven"));
+        int i = msg.indexOf("<encrypted");
+        //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
+        //System.out.println(handleString(msg));
+        String keys[] = new String[2];
+        keys[0] = "10";
+        keys[1] = "737d7c20c6a0251ad48cdf53f8544af5ef5431c9f945c2296bcebce747e43acb";
+
+    }
+    public static String[] getUsers(String xmlStr) {
+        boolean matches = xmlStr.matches("(.*)<connected users=(.*)>(.*)</connected>(.*)");
+        if (matches) {
+            int i = xmlStr.indexOf("<connected users=\"");
+            String rest = xmlStr.substring(i);
+            rest = rest.substring(rest.indexOf("[") + 1);
+            String users = rest.substring(0, rest.indexOf("]"));
+            System.out.println(users);
+            return users.split(", ");
+        }
+        return null;
+    }
 
     public static String handleString(String xmlStr) {
         String msg = "";
@@ -166,16 +194,15 @@ public class XMLString {
         }
         return keys;
     }
-
-    public static String[] getUsers(String xmlStr) {
-        boolean matches = xmlStr.matches("(.*)<connected users=(.*)>(.*)</connected>(.*)");
-        System.out.println(matches);
-        if (matches) {
-            int i = xmlStr.indexOf("<connected users=");
+    
+    public static String getBootedUser(String xmlStr, String serverName) {
+        if (xmlStr.matches(String.format("<message sender=\"%s\"><text color=(.*)>(.*) got the boot(.*)</text></message>", serverName))) {
+            int i = xmlStr.indexOf("color=");
             String rest = xmlStr.substring(i);
-            rest = rest.substring(rest.indexOf("[") + 1);
-            String users = rest.substring(0, rest.indexOf("]"));
-            return users.split(", ");
+            i = rest.indexOf(">");
+            rest = rest.substring(i+1);
+            i = rest.indexOf(" got the boot");
+            return rest.substring(0, i);
         }
         return null;
     }

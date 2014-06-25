@@ -63,8 +63,8 @@ public class Client implements Runnable {
                         String msg = Messages.getMessage(chatRoom);
                         if (!msg.equals("")) {
                             o.println(String.format("<message sender=\"%s\">"
-                                + "<text color=\"%s\">%s</text></message>",
-                                chatRoom.getName(), chatRoom.color, msg));
+                                    + "<text color=\"%s\">%s</text></message>",
+                                    chatRoom.getName(), chatRoom.color, msg));
                         }
                     }
                 }
@@ -127,8 +127,8 @@ public class Client implements Runnable {
                             int reply = JOptionPane.showOptionDialog(
                                     ChatCreator.frame,
                                     String.format(
-                                    "Are you sure you want to leave %s?",
-                                    ChatCreator.tabbedPane.getTitleAt(index)),
+                                            "Are you sure you want to leave %s?",
+                                            ChatCreator.tabbedPane.getTitleAt(index)),
                                     "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION,
                                     JOptionPane.QUESTION_MESSAGE, null,
                                     options, options[0]);
@@ -141,11 +141,11 @@ public class Client implements Runnable {
                                     roomArray.add(cName);
                                 }
                                 /*
-                                for (String cName : roomArray) {
-                                    room.speedyDelete = true;
-                                    room.getCloseButton().doClick();
-                                }
-                                        */
+                                 for (String cName : roomArray) {
+                                 room.speedyDelete = true;
+                                 room.getCloseButton().doClick();
+                                 }
+                                 */
                                 System.exit(0);
                             }
                         }
@@ -163,8 +163,10 @@ public class Client implements Runnable {
 
                 while ((responseLine = i.readLine()) != null
                         && !responseLine.matches(String.format("<message sender=(.*)%s got the boot(.*)</message>",
-                        chatRoom.getName())) && !NotAllowedToConnect(responseLine)) {
+                                        chatRoom.getName())) && !NotAllowedToConnect(responseLine)) {
                     System.out.println(responseLine);
+                    getServerName(responseLine);
+                    handleBootedUser(responseLine);
                     handleChangedName(responseLine);
                     handleUserConnect(responseLine);
                     setKeys(responseLine);
@@ -195,20 +197,42 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
+    //REMEMBER HANDLE SERVER CHANGE NAME
+    private void getServerName(String responeLine) {
+        if (chatRoom.serverName == null && responeLine.matches(String.format("<message sender=\"(.*)\">(.*)Welcome %s!(.*)</message>",
+                chatRoom.getNamePane().getText()))) {
+            chatRoom.serverName = XMLString.getSenderWithoutColon(responeLine);
+        }
+    }
+
+    private void handleBootedUser(String responseLine) {
+        String bootedUser = null;
+        System.out.println("(server, name) = ("+chatRoom.serverName+","+chatRoom.getName()+")");
+        if (chatRoom.serverName != null) {
+            bootedUser = XMLString.getBootedUser(responseLine, chatRoom.serverName);
+            System.out.println("Booted User:" + bootedUser);
+        }
+        if (bootedUser != null) {
+            chatRoom.getItems().removeElement(bootedUser);
+        }
+        
+    }
+
     private boolean NotAllowedToConnect(String responseLine) {
         boolean simpleMatch = responseLine.matches(String.format("<message sender=(.*)>"
                 + "<text color=(.*)><request reply=\"no\">%s was not allowed to connect!</request></text></message>",
-                 chatRoom.getName()));
+                chatRoom.getName()));
         boolean match = responseLine.matches(String.format("<message sender=(.*)>"
                 + "<text color=(.*)>%s was not allowed to connect!</text></message>",
-                 chatRoom.getName()));
+                chatRoom.getName()));
         return (simpleMatch || match);
-        
+
     }
+
     private void addUsers(String responseLine) {
         String[] users = XMLString.getUsers(responseLine);
-        if (users != null) {
+        if (users != null && !users[0].equals("")) {
             chatRoom.getList().removeAll();
             for (String usr : users) {
                 if (!chatRoom.getItems().contains(usr) && !chatRoom.getName().equals(usr)) {
@@ -217,7 +241,7 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
     private void registerChatName(String responseLine) {
         String sender = XMLString.getSenderWithoutColon(responseLine);
         if (!chatRoom.getItems().contains(sender) && !sender.equals(chatRoom.getName())) {
@@ -264,7 +288,6 @@ public class Client implements Runnable {
     // Start timer when we send file
     private void startTimer(final String chatName) {
 
-
         chatRoom.nameFileResponse.put(chatName,
                 Executors.newSingleThreadScheduledExecutor());
 
@@ -298,7 +321,7 @@ public class Client implements Runnable {
         //Run after 1 minute
         chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
     }
-    
+
     private void handleChangedName(String responseLine) {
         if (responseLine.matches(String.format("<message sender=(.*)I just switched from my old name:(.*)</message>"))) {
             String newName = XMLString.getSenderWithoutColon(responseLine);
@@ -309,7 +332,7 @@ public class Client implements Runnable {
                 chatRoom.isAllowedToConnect.remove(oldName);
                 chatRoom.isAllowedToConnect.put(newName, true);
             }
-            
+
         }
     }
     // Determine if user allowed to connect
@@ -317,8 +340,8 @@ public class Client implements Runnable {
         if (chatRoom.isServer) {
             String sender = XMLString.getSenderWithoutColon(html);
             // Alla får skriva minst en mening i chatten
-            System.out.println(XMLString.getSenderWithoutColon(html));
-            System.out.println(chatRoom.isAllowedToConnect.containsKey(XMLString.getSenderWithoutColon(html)));
+            //System.out.println(XMLString.getSenderWithoutColon(html));
+            //System.out.println(chatRoom.isAllowedToConnect.containsKey(XMLString.getSenderWithoutColon(html)));
             if (!chatRoom.isAllowedToConnect.containsKey(sender) && !sender.equals(chatRoom.getName())) {
                 if (html.matches("<message sender=(.*)>(.*)<request>(.*)</request>(.*)</message>")) {
                     dialogMessage(sender, false);
@@ -334,7 +357,7 @@ public class Client implements Runnable {
         if (!sender.equals("")) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s wants to connect. Allow?",
-                    sender),
+                            sender),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.NO_OPTION) {
                 if (!isSimple) {
@@ -349,6 +372,7 @@ public class Client implements Runnable {
                 chatRoom.isAllowedToConnect.put(sender, false);
             } else {
                 String users = chatRoom.getItems().toString();
+                System.out.println("Test: " + users);
                 o.println(String.format("<message sender=\"%s\">"
                         + "<connected users=\"" + users + "\"></connected><text color=\"%s\">Welcome %s!</text></message>",
                         chatRoom.getNamePane().getText(), chatRoom.color, sender));
@@ -391,7 +415,7 @@ public class Client implements Runnable {
         if (html.contains("</keyrequest>") && !name.equals(chatName)) {
             int reply = JOptionPane.showConfirmDialog(ChatCreator.frame,
                     String.format("%s sends a keyrequest of type %s.\n Send key?",
-                    XMLString.getSenderWithoutColon(html), XMLString.getKeyRequestType(html)),
+                            XMLString.getSenderWithoutColon(html), XMLString.getKeyRequestType(html)),
                     "Kill", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 o.println(String.format("<message sender=\"%s\">"
@@ -437,7 +461,7 @@ public class Client implements Runnable {
                     + "File name: %s\nFile size: %s\nFile description: %s\nAccept file?",
                     XMLString.getSenderWithoutColon(html), XMLString.getFileName(html),
                     XMLString.getFileSize(html), XMLString.getFileDescription(html));
-            
+
             optionPane = new JOptionPane(fileData, JOptionPane.QUESTION_MESSAGE,
                     JOptionPane.YES_NO_OPTION);
             dialog = new JDialog(ChatCreator.frame, "File request", false);
@@ -471,14 +495,14 @@ public class Client implements Runnable {
                         public void propertyChange(PropertyChangeEvent e) {
                             String name = e.getPropertyName();
                             if (e.getSource() == optionPane
-                                    && name.equals(JOptionPane.VALUE_PROPERTY)) {
+                            && name.equals(JOptionPane.VALUE_PROPERTY)) {
                                 int reply = (int) optionPane.getValue();
                                 if (reply == JOptionPane.YES_OPTION) {
                                     progressBar.setVisible(true);
                                     label.setVisible(true);
                                     dialog.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                                     worker.execute();
-                                    
+
                                     if (reply == JOptionPane.YES_OPTION) {
                                         JFileChooser chooser = new JFileChooser();
                                         //getFileName returnerar null!!
@@ -493,19 +517,19 @@ public class Client implements Runnable {
                                                 ChatCreator.showError("Failed to save file.");
                                             }
                                             o.println(String.format("<message sender=\"%s\">"
-                                                    + "<text color=\"%s\"><fileresponse reply=\"yes\" "
-                                                    + "port=\"" + (port + 13)
-                                                    + "\">%s</filerespnse></text></message>",
-                                                    chatName, chatRoom.color,
-                                                    chatRoom.getMessagePane().getText()));
+                                                            + "<text color=\"%s\"><fileresponse reply=\"yes\" "
+                                                            + "port=\"" + (port + 13)
+                                                            + "\">%s</filerespnse></text></message>",
+                                                            chatName, chatRoom.color,
+                                                            chatRoom.getMessagePane().getText()));
                                             return;
                                         }
                                         o.println(String.format("<message sender=\"%s\">"
-                                                + "<text color=\"%s\"><fileresponse reply=\"no\" "
-                                                + "port=\"" + (port + 13)
-                                                + "\">%s</fileresponse></text></message>",
-                                                chatRoom.getNamePane().getText(), chatRoom.color,
-                                                chatRoom.getMessagePane().getText()));
+                                                        + "<text color=\"%s\"><fileresponse reply=\"no\" "
+                                                        + "port=\"" + (port + 13)
+                                                        + "\">%s</fileresponse></text></message>",
+                                                        chatRoom.getNamePane().getText(), chatRoom.color,
+                                                        chatRoom.getMessagePane().getText()));
                                     }
                                 } else {
                                     dialog.dispose();

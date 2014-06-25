@@ -59,7 +59,9 @@ public class ChatRoom {
     PrintWriter o;
     Server server;
     Object lock = new Object();
-
+    
+    String serverName = null;
+    
     public ChatRoom() throws NumberFormatException {
         host = ChatCreator.hostPane.getText();
         port = Integer.parseInt(ChatCreator.portPane.getText());
