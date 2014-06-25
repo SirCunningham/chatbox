@@ -208,7 +208,6 @@ public class Client implements Runnable {
 
     private void handleBootedUser(String responseLine) {
         String bootedUser = null;
-        System.out.println("(server, name) = ("+chatRoom.serverName+","+chatRoom.getName()+")");
         if (chatRoom.serverName != null) {
             bootedUser = XMLString.getBootedUser(responseLine, chatRoom.serverName);
             System.out.println("Booted User:" + bootedUser);
