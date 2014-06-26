@@ -376,9 +376,9 @@ public class Client implements Runnable {
     // Checks if we have received a fileresponse
     private void fileResponse(String html) {
         if (html.contains("</fileresponse>")) {
-            ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
-            if (chat != null) {
-                String name = chat.getName();
+            Object chatName = chatRoom.getList().getSelectedValue();
+            if (chatName != null) {
+                String name = (String) chatName;
                 if (!chatRoom.nameFileResponse.get(name).isShutdown()) {
                     chatRoom.recivedFileResponse.put(name, true);
                 }
@@ -523,6 +523,13 @@ public class Client implements Runnable {
                                     }
                                 } else {
                                     dialog.dispose();
+                                    String response = JOptionPane.showInputDialog(this, "Enter reason for not receving file");
+                                    o.println(String.format("<message sender=\"%s\">"
+                                            + "<text color=\"%s\"><fileresponse reply=\"no\" "
+                                            + "port=\"" + (port + 13)
+                                            + "\">%s</fileresponse></text></message>",
+                                            chatRoom.getNamePane().getText(), chatRoom.color,
+                                            response));
                                 }
                             }
                         }
