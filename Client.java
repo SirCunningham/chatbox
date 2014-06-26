@@ -10,15 +10,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import javax.swing.*;
 
-// add chatRoom.items.addElement(clientSocket.getInetAddress()); when
-// *new user is connected (certain msg comes)
-// *user changes name
-// Gör detta här eller i IOStream!
-//OBS OBS OBS
-//All data går igenom IOStream, alltid
-//Gör krypteringen i IOStream så sker det både för meddelanden och filer automatiskt
-//Filer använder en annan klient för gränssnittet är annorlunda där
-//OBS OBS OBS
+//funkar inte att byta namn globalt - bara lokalt!!
 public class Client implements Runnable {
 
     private Socket clientSocket;
@@ -294,7 +286,7 @@ public class Client implements Runnable {
 
             @Override
             public void run() {
-                //Check if recived fileresponse - if not, inform the user, else do nothing
+                //Check if received fileresponse - if not, inform the user, else do nothing
 
                 //No response
                 if (!chatRoom.recivedFileResponse.containsKey(chatName)) {
@@ -381,7 +373,7 @@ public class Client implements Runnable {
 
     }
 
-    // Checks if we have recived a fileresponse
+    // Checks if we have received a fileresponse
     private void fileResponse(String html) {
         if (html.contains("</fileresponse>")) {
             ChatRoom chat = (ChatRoom) chatRoom.getList().getSelectedValue();
@@ -394,7 +386,7 @@ public class Client implements Runnable {
         }
     }
 
-    // Checks if we have recived a keyresponse
+    // Checks if we have received a keyresponse
     private void keyResponse(String html) {
         if (html.matches("<message sender=(.*)>(.*)<encrypted type=(.*) "
                 + "key=(.*)>(.*)</encrypted>(.*)</message>")) {
@@ -407,7 +399,7 @@ public class Client implements Runnable {
         }
     }
 
-    // Checks if we have recived a keyrequest
+    // Checks if we have received a keyrequest
     private void keyRequest(String html) {
         String chatName = chatRoom.getName();
         String name = XMLString.getSenderWithoutColon(html);
@@ -427,12 +419,11 @@ public class Client implements Runnable {
         }
     }
 
-    // Checks if we have recived a filerequest
+    // Checks if we have received a filerequest
     private void fileRequest(final String html) {
         final String chatName = chatRoom.getName();
         final String name = XMLString.getSender(html).substring(0, chatName.length());
         if (html.contains("</filerequest>") && !name.equals(chatName)) {
-            System.out.println("XXX" + html);
             final JProgressBar progressBar;
             final JPanel invisibleContainer;
             final JLabel label;
