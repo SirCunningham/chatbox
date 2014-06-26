@@ -312,10 +312,10 @@ public class XMLString {
     public static String getFileDescription(String xmlMsg) {
         if (xmlMsg != null) {
             if (xmlMsg.matches("(.*)<filerequest(.*)>(.*)</filerequest>(.*)")) {
-                String[] strings = xmlMsg.split("<filerequest(.*)>");
+                String[] strings = xmlMsg.split("<filerequest(.*?)>");
                 for (String str : strings) {
-                    if (str.contains("</keyrequest>")) {
-                        return str.substring(0, str.indexOf("</keyrequest>"));
+                    if (str.contains("</filerequest>")) {
+                        return str.substring(0, str.indexOf("</filerequest>"));
                     }
                 }
             }
