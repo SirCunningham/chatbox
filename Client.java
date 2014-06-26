@@ -522,14 +522,14 @@ public class Client implements Runnable {
                                                         chatRoom.getMessagePane().getText()));
                                     }
                                 } else {
-                                    dialog.dispose();
-                                    String response = JOptionPane.showInputDialog(this, "Enter reason for not receving file");
+                                    String response = JOptionPane.showInputDialog(ChatCreator.frame, "Enter reason for not receving file");
                                     o.println(String.format("<message sender=\"%s\">"
                                             + "<text color=\"%s\"><fileresponse reply=\"no\" "
                                             + "port=\"" + (port + 13)
                                             + "\">%s</fileresponse></text></message>",
                                             chatRoom.getNamePane().getText(), chatRoom.color,
                                             response));
+                                    dialog.dispose();
                                 }
                             }
                         }

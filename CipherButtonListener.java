@@ -38,6 +38,8 @@ public class CipherButtonListener implements ActionListener {
                     chatRoom.doc.remove(chatRoom.cipherStart, chatRoom.cipherEnd - chatRoom.cipherStart);
                     chatRoom.doc.insertString(chatRoom.cipherStart, cipherText, chatRoom.style);
                     StyleConstants.setBackground(chatRoom.style, Color.WHITE);
+                    //inte nöjd med denna funktionalitet!
+                    chatRoom.getMessagePane().setText(chatRoom.cipherMessage);
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
                 }
