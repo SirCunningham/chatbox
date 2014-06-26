@@ -1,6 +1,7 @@
 package chatbox;
 
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.text.*;
 
 // Skicka fil med klient
@@ -22,7 +23,10 @@ public class SendFileButtonListener implements ActionListener {
                 + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
                 chatRoom.getFileSizePane().getText(), description);
         String message = chatRoom.getMessagePane().getText();
-
+        List<String> names = chatRoom.getList().getSelectedValuesList();
+        
+        System.out.println(names);
+        chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"%s\"><fileUsers users=\"%s\"></fileUsers></text></message>", chatRoom.getName(), chatRoom.color,names));
         chatRoom.appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
                 chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description));
         try {

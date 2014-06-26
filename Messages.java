@@ -1,5 +1,7 @@
 package chatbox;
 
+import java.util.List;
+
 public class Messages {
 
     public static String getFileMessage(ChatRoom chatRoom) {
@@ -11,13 +13,14 @@ public class Messages {
                 + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
                 chatRoom.getFileSizePane().getText(), description);
         String message = chatRoom.getMessagePane().getText();
+        List<String> names = chatRoom.getList().getSelectedValuesList();
         /*
         appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
         namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
          * 
          */
-        return String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
-                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description);
+        return String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest><fileUsers users=\"%s\"></fileUsers></message>",
+                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description,names);
     }
 
     public static String getQuitMessage(ChatRoom chatRoom) {
