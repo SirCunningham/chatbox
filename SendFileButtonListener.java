@@ -31,7 +31,7 @@ public class SendFileButtonListener implements ActionListener {
                 chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description));
         try {
             chatRoom.doc.remove(0, message.length());
-            chatRoom.doc.insertString(0, "Filerequest: " + fileData, chatRoom.style);
+            chatRoom.doc.insertString(0, "I want to send this file: " + fileData, chatRoom.style);
             chatRoom.getSendButton().doClick();
             chatRoom.doc.insertString(0, message, chatRoom.style);
         } catch (BadLocationException ex) {

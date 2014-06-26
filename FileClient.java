@@ -40,24 +40,29 @@ public class FileClient implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa lyssnare för att skicka till servern
-                // OBS!!! Vänta på fileresponse="yes" innan något skickas!
                 class SendFileButtonListener3 implements ActionListener {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        File transferFile = new File(chatRoom.filePath);
-                        byte[] bytearray = new byte[(int) transferFile.length()];
-                        try (FileInputStream fin = new FileInputStream(transferFile)) {
-                            BufferedInputStream bin = new BufferedInputStream(fin);
-                            bin.read(bytearray, 0, bytearray.length);
-                            o.write(bytearray, 0, bytearray.length);
-                            o.flush();
-                            PrintWriter pw = new PrintWriter(o, true);
-                            pw.println("THIS IS A REALLY UGLY HACK BUT IT WORKS");
-                        } catch (FileNotFoundException ex) {
-                            ChatCreator.showError("Failed to find file.");
-                        } catch (IOException ex) {
-                            ChatCreator.showError("Failed with I/O.");
+                        if (chatRoom.fileAcceptance == ChatRoom.ACCEPTED_FILE) {
+                            File transferFile = new File(chatRoom.filePath);
+                            byte[] bytearray = new byte[(int) transferFile.length()];
+                            try (FileInputStream fin = new FileInputStream(transferFile)) {
+                                BufferedInputStream bin = new BufferedInputStream(fin);
+                                bin.read(bytearray, 0, bytearray.length);
+                                o.write(bytearray, 0, bytearray.length);
+                                o.flush();
+                                PrintWriter pw = new PrintWriter(o, true);
+                                pw.println("THIS IS A REALLY UGLY HACK BUT IT WORKS");
+                            } catch (FileNotFoundException ex) {
+                                ChatCreator.showError("Failed to find file.");
+                            } catch (IOException ex) {
+                                ChatCreator.showError("Failed with I/O.");
+                            } finally {
+                                chatRoom.fileAcceptance = ChatRoom.NO_FILE;
+                            }
+                        } else {
+                            chatRoom.fileAcceptance = ChatRoom.PROPOSED_FILE;
                         }
                     }
                 }

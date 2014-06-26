@@ -28,6 +28,12 @@ public class ChatRoom {
     volatile boolean speedyDelete = false;
     volatile boolean statusUpdate = false;
     volatile boolean lockDocument = false;
+    
+    static final int NO_FILE = 0;
+    static final int PROPOSED_FILE = 1;
+    static final int ACCEPTED_FILE = 2;
+    volatile int fileAcceptance = NO_FILE;
+    
     JTextPane chatBox = new JTextPane();
     DefaultStyledDocument doc = new DefaultStyledDocument();
     public static AESCrypto AES;
@@ -50,7 +56,7 @@ public class ChatRoom {
     HashMap<String, String[]> nameToKey = new HashMap<>();      //String[] is a vector with two components; the first is the Caesar key and the second the AES key
     HashMap<String, ScheduledExecutorService> nameFileResponse = new HashMap<>();
     HashMap<String, ScheduledExecutorService> nameKeyResponse = new HashMap<>();
-    HashMap<String, Boolean> recivedFileResponse = new HashMap<>();
+    HashMap<String, Boolean> receivedFileResponse = new HashMap<>();
     HashMap<String, Boolean> recivedKeyResponse = new HashMap<>();
     HashMap<String, Boolean> isAllowedToConnect = new HashMap<>();
     final String host;

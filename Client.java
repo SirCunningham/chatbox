@@ -94,12 +94,14 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //Send filerequest to every person in the chat??
-                        String chatName = (String) chatRoom.getList().getSelectedValue();
-                        if (chatName != null) {
-                            o.println(Messages.getFileMessage(chatRoom));
-                            startTimer(chatName);
+                        if (chatRoom.fileAcceptance == ChatRoom.PROPOSED_FILE) {
+                            String chatName = (String) chatRoom.getList().getSelectedValue();
+                            if (chatName != null) {
+                                o.println(Messages.getFileMessage(chatRoom));
+                                startTimer(chatName);
+                            }
+                            chatRoom.fileAcceptance = ChatRoom.NO_FILE;
                         }
-
                     }
                 }
 
@@ -289,13 +291,13 @@ public class Client implements Runnable {
                 //Check if received fileresponse - if not, inform the user, else do nothing
 
                 //No response
-                if (!chatRoom.recivedFileResponse.containsKey(chatName)) {
+                if (!chatRoom.receivedFileResponse.containsKey(chatName)) {
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no fileresponse after one minute. "
                             + "It's not a virus, I promise!"
                             + "</text></message>", chatRoom.getName(),
                             chatRoom.color));
-                } else if (!chatRoom.recivedFileResponse.get(chatName)) {
+                } else if (!chatRoom.receivedFileResponse.get(chatName)) {
                     //No fileresponse
                     o.println(String.format("<message sender=\"%s\"><text color"
                             + "=\"%s\">I got no fileresponse after one minute. "
@@ -303,9 +305,12 @@ public class Client implements Runnable {
                             + "</text></message>", chatRoom.getName(),
                             chatRoom.color));
                 } else {
-                    System.out.println(chatRoom.recivedFileResponse.get(chatName));
+                    // OBS!! Kolla om fileresponse reply="yes" innan något skickas!
+                    chatRoom.fileAcceptance = ChatRoom.ACCEPTED_FILE;
+                    chatRoom.getSendFileButton().doClick();
+                    System.out.println(chatRoom.receivedFileResponse.get(chatName));
                 }
-                chatRoom.recivedFileResponse.put(chatName, false);  // Start over
+                chatRoom.receivedFileResponse.put(chatName, false);  // Start over
                 chatRoom.nameFileResponse.get(chatName).shutdown();
             }
         };
@@ -381,7 +386,7 @@ public class Client implements Runnable {
             if (chatName != null) {
                 String name = (String) chatName;
                 if (!chatRoom.nameFileResponse.get(name).isShutdown()) {
-                    chatRoom.recivedFileResponse.put(name, true);
+                    chatRoom.receivedFileResponse.put(name, true);
                 }
             }
         }
