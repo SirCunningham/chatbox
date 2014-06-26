@@ -53,7 +53,7 @@ public class Client implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String msg = Messages.getMessage(chatRoom);
-                        if (!msg.equals("")) {
+                        if (!msg.replaceAll("\\s+", " ").trim().equals("")) {
                             o.println(String.format("<message sender=\"%s\">"
                                     + "<text color=\"%s\">%s</text></message>",
                                     chatRoom.getName(), chatRoom.color, msg));

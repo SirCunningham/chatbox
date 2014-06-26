@@ -36,22 +36,7 @@ public class XMLString {
          * 
          */
     }
-    public static void main(String[] args) {
-        String test = "hej";
-        String enc = Encryption.encrypt("caesar", test, "10", AES);
-        String msg = "<message sender=\"User 377932797\"><text color=\"000000\"><connected users=\"[asdasd, ]\"></connected> in silva obscura...</text></message>";
-        String msg2 = "<message sender=\"Sven\"><text color=\"sad\">asds asd got the boot</text></message>";
-        //String msg = "<message sender=\"asd\"><text color=\"asd\"><encrypted type=\"AES\">" + enc1 + "</encrypted></text></message>";
-        System.out.println(getUsers(msg)[0]+"1");
-        System.out.println(getBootedUser(msg2, "Sven"));
-        int i = msg.indexOf("<encrypted");
-        //System.out.println(msg.matches("(.*)<encrypted type=(.*) key=(.*)>(.*)"));
-        //System.out.println(handleString(msg));
-        String keys[] = new String[2];
-        keys[0] = "10";
-        keys[1] = "737d7c20c6a0251ad48cdf53f8544af5ef5431c9f945c2296bcebce747e43acb";
 
-    }
     public static String[] getUsers(String xmlStr) {
         boolean matches = xmlStr.matches("(.*)<connected users=(.*)>(.*)</connected>(.*)");
         if (matches) {
@@ -277,6 +262,20 @@ public class XMLString {
             if (xmlMsg.matches("<message sender=(.*)>(.*)</message>")) {
                 int index = xmlMsg.indexOf("sender");
                 return xmlMsg.substring(index + 8, xmlMsg.indexOf(">") - 1) + ": ";
+            }
+        }
+        return null;
+    }
+    
+    public static String getMessage(String xmlMsg) {
+        if (xmlMsg != null) {
+            if (xmlMsg.matches("(.*)<text(.*)>(.*)</text>(.*)")) {
+                String[] strings = xmlMsg.split("<text(.*?)>");
+                for (String str : strings) {
+                    if (str.contains("</text>")) {
+                        return str.substring(0, str.indexOf("</text>"));
+                    }
+                }
             }
         }
         return null;

@@ -30,17 +30,8 @@ class IOStream extends Thread {
             // Skapa input- och outputströmmar
             i = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             o = new PrintWriter(clientSocket.getOutputStream(), true);
-            /*
-             while (true) {
-             name = i.readLine();
-             // Integrera med GUI, behövs nog inte här!!!
-             if (!name.isEmpty()) {
-             break;
-             } else {
-             }}
-             **/
 
-            // Ge välkomstmeddelande
+            // Ge välkomstmeddelande, flyttat till annan del av programmet
             /*
              o.println("<message sender=system> Welcome " + name
              + " to our chat room.\nTo leave enter /quit in a new line.</message>");
@@ -65,22 +56,26 @@ class IOStream extends Thread {
                 }
 
                 // Skicka privata meddelanden
-                if (line.startsWith("@")) {
-                    /*
-                     String[] words = line.split("\\s", 2);
-                     if (words.length > 1 && words[1] != null) {
-                     words[1] = words[1].trim();
-                     if (!words[1].isEmpty()) {
-                     synchronized (lock) {
-                    
-                     for (IOStream stream : streams) {
-                     if (stream != this && stream.clientName.equals(words[0])) {
-                     stream.o.println("<" + name + "> " + words[1]);
-                    
-                     // Visa att meddelandet har skickats
-                     this.o.println("<" + name + "> " + words[1]);
-                     break;}}}}}
-                     **/
+                String msg = XMLString.getMessage(line);
+                if (msg != null && msg.startsWith("@")) {
+                    String[] words = msg.split("\\s", 2);
+                    if (words.length > 1 && words[1] != null) {
+                        words[1] = words[1].trim();
+                        if (!words[1].isEmpty()) {
+                            synchronized (lock) {
+                                for (IOStream stream : streams) {
+                                    //vet inte var namnen sparas, här kan det kollas i alla fall...
+                                    if (stream != this && stream.clientName.equals(words[0])) {
+                                        stream.o.println(line);
+                                        
+                                        // Visa att meddelandet har skickats
+                                        this.o.println(line);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
                     // Skicka publika meddelanden
                     synchronized (lock) {
@@ -92,6 +87,7 @@ class IOStream extends Thread {
                     }
                 }
             }
+            // Flyttat till annan del av programmet
             synchronized (lock) {
                 for (IOStream stream : streams) {
                     if (stream != this) {
