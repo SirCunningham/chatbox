@@ -42,7 +42,7 @@ public class Server implements Runnable {
 
                     // Skapa tråd för varje klient
                     synchronized (lock) {
-                        streams.addLast(new IOStream(clientSocket, streams, lock));
+                        streams.addLast(new IOStream(clientSocket, streams, lock, chatRoom));
                         streams.getLast().start();
                     }
                 } catch (SocketTimeoutException e) {

@@ -6,22 +6,24 @@ import java.util.*;
 
 class IOStream extends Thread {
 
-    protected final String clientName = "@NN";
+    protected final String clientName = "NN";
     private String chatName = "";
     private BufferedReader i;
     private PrintWriter o;
     protected final Socket clientSocket;
     protected final LinkedList<IOStream> streams;
     protected final Object lock;
+    private final ChatRoom chatRoom;
     protected InputStream bi;
     protected OutputStream bo;
     boolean alive = true;
 
     public IOStream(Socket clientSocket, LinkedList<IOStream> streams,
-            Object lock) {
+            Object lock, ChatRoom chatRoom) {
         this.clientSocket = clientSocket;
         this.streams = streams;
         this.lock = lock;
+        this.chatRoom = chatRoom;
     }
 
     @Override
@@ -55,24 +57,28 @@ class IOStream extends Thread {
                     break;
                 }
 
-                // Skicka privata meddelanden
+                // Skicka privata meddelanden         
                 String msg = XMLString.getMessage(line);
                 if (msg != null && msg.startsWith("@")) {
+                    List<String> names = Arrays.asList(chatRoom.getItems().toString().split("\\s*(,|[|])\\s*"));
                     String[] words = msg.split("\\s", 2);
-                    if (words.length > 1 && words[1] != null) {
-                        words[1] = words[1].trim();
-                        if (!words[1].isEmpty()) {
-                            synchronized (lock) {
-                                for (IOStream stream : streams) {
-                                    //vet inte var namnen sparas, här kan det kollas i alla fall...
-                                    if (stream != this && stream.clientName.equals(words[0])) {
-                                        stream.o.println(line);
-                                        
-                                        // Visa att meddelandet har skickats
-                                        this.o.println(line);
-                                        break;
+                    if (words.length > 1) {
+                        for (String word : words) {
+                            if (names.contains(word)) {
+                                synchronized (lock) {
+                                    for (IOStream stream : streams) {
+                                        //vet inte var namnen sparas, här kan det kollas i alla fall...
+                                        if (stream != this && names.contains(stream.clientName)) {
+                                            stream.o.println(line);
+
+                                            // Visa att meddelandet har skickats
+                                            this.o.println(line);
+                                            break;
+                                        }
                                     }
                                 }
+                            } else {
+                                break;
                             }
                         }
                     }
