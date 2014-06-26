@@ -509,7 +509,7 @@ public class Client implements Runnable {
                                             o.println(String.format("<message sender=\"%s\">"
                                                             + "<text color=\"%s\"><fileresponse reply=\"yes\" "
                                                             + "port=\"" + (port + 13)
-                                                            + "\">%s</filerespnse></text></message>",
+                                                            + "\">%s</fileresponse></text></message>",
                                                             chatName, chatRoom.color,
                                                             chatRoom.getMessagePane().getText()));
                                             return;
