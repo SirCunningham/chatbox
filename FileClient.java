@@ -43,6 +43,7 @@ public class FileClient implements Runnable {
         if (clientSocket != null && i != null && o != null) {
             try {
                 // Skapa lyssnare för att skicka till servern
+                // OBS!!! Vänta på fileresponse="yes" innan något skickas!
                 class SendFileButtonListener3 implements ActionListener {
 
                     @Override
