@@ -314,8 +314,8 @@ public class Client implements Runnable {
                 chatRoom.nameFileResponse.get(chatName).shutdown();
             }
         };
-        //Run after 1 minute
-        chatRoom.nameFileResponse.get(chatName).schedule(task, 60, TimeUnit.SECONDS);
+        //Run after 1 minute, now 10 seconds because of hack...
+        chatRoom.nameFileResponse.get(chatName).schedule(task, 10, TimeUnit.SECONDS);
     }
 
     private void handleChangedName(String responseLine) {

@@ -22,8 +22,7 @@ public class BootButtonListener implements ActionListener {
         try {
             chatRoom.doc.remove(0, message.length());
             String chatName = (String) chatRoom.getList().getSelectedValue();
-            chatRoom.doc.insertString(0,
-                    String.format("%s got the boot",
+            chatRoom.doc.insertString(0, String.format("%s got the boot",
                             chatName), chatRoom.style);
             chatRoom.getSendButton().doClick();
             chatRoom.doc.insertString(0, message, chatRoom.style);
