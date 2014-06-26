@@ -372,8 +372,9 @@ public class XMLString {
 
     public static String convertAngle(String hex) {
         hex = hex.replaceAll("&", "&amp;");
-        hex = hex.replaceAll("<", "&lt;");
-        hex = hex.replaceAll(">", "&gt;");
+        //inte nöjd med denna funktionalitet!
+        //hex = hex.replaceAll("<", "&lt;");
+        //hex = hex.replaceAll(">", "&gt;");
         return hex;
     }
 }
