@@ -61,14 +61,15 @@ class IOStream extends Thread {
                 String msg = XMLString.getMessage(line);
                 if (msg != null && msg.startsWith("@")) {
                     List<String> names = Arrays.asList(chatRoom.getItems().toString().split("\\s*(,|[|])\\s*"));
-                    String[] words = msg.split("\\s", 2);
+                    int index = msg.indexOf("\\S", 1);
+                    String[] words = msg.split("\\s+", index);
                     if (words.length > 1) {
                         for (String word : words) {
                             if (names.contains(word)) {
                                 synchronized (lock) {
                                     for (IOStream stream : streams) {
-                                        //vet inte var namnen sparas, här kan det kollas i alla fall...
-                                        if (stream != this && names.contains(stream.clientName)) {
+                                        //clientName är fel!
+                                        if (stream != this && stream.clientName.equals(word)) {
                                             stream.o.println(line);
 
                                             // Visa att meddelandet har skickats
