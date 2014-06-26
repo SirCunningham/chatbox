@@ -432,7 +432,7 @@ public class Client implements Runnable {
     // Checks if we have received a filerequest
     private void fileRequest(final String html) {
         final String chatName = chatRoom.getName();
-        final String name = XMLString.getSender(html).substring(0, chatName.length());
+        final String name = XMLString.getSender(html);
         if (html.contains("</filerequest>") && !name.equals(chatName)) {
             if (html.matches("(.*)<fileUsers users=(.*)></fileUsers>(.*)")) {
                 String[] fileUsers = XMLString.getFileUsers(html);
@@ -536,7 +536,7 @@ public class Client implements Runnable {
                                                         chatRoom.getMessagePane().getText()));
                                             }
                                         } else {
-                                            String response = JOptionPane.showInputDialog(ChatCreator.frame, "Enter reason for not receving file");
+                                            String response = JOptionPane.showInputDialog(ChatCreator.frame, "Enter reason for not receiving file:");
                                             o.println(String.format("<message sender=\"%s\">"
                                                     + "<text color=\"%s\"><fileresponse reply=\"no\" "
                                                     + "port=\"" + (port + 13)

@@ -3,6 +3,7 @@ package chatbox;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
+import java.util.regex.Pattern;
 
 class IOStream extends Thread {
 
@@ -60,9 +61,9 @@ class IOStream extends Thread {
                 // Skicka privata meddelanden         
                 String msg = XMLString.getMessage(line);
                 if (msg != null && msg.startsWith("@")) {
-                    List<String> names = Arrays.asList(chatRoom.getItems().toString().split("\\s*(,|[|])\\s*"));
-                    int index = msg.indexOf("\\S", 1);
-                    String[] words = msg.split("\\s+", index);
+                    String names = chatRoom.getItems().toString();
+                    int index = XMLString.indexOf(Pattern.compile("\\S"), msg.substring(1)) + 1;
+                    String[] words = msg.substring(index).split("\\s+");
                     if (words.length > 1) {
                         for (String word : words) {
                             if (names.contains(word)) {
