@@ -3,7 +3,6 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import javax.swing.JFileChooser;
 
 // För kryptering av filer, se:
 // https://stackoverflow.com/questions/16911632/java-file-encryption
@@ -12,11 +11,9 @@ public class FileClient implements Runnable {
     private Socket clientSocket;
     protected BufferedReader i;
     protected OutputStream o;
-    private final int port;
     private final ChatRoom chatRoom;
 
     public FileClient(String host, int port, final ChatRoom chatRoom) {
-        this.port = port;
         this.chatRoom = chatRoom;
         // Starta socket för klienten
         try {
