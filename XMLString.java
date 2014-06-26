@@ -7,6 +7,8 @@ import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -280,11 +282,17 @@ public class XMLString {
         return null;
     }
     
+    public static int indexOf(Pattern pattern, String string) {
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find() ? matcher.start() : -1;
+    }
+    
     public static String getFileName(String xmlMsg) {
         if (xmlMsg != null) {
-            if (xmlMsg.matches("<filerequest(.*)name=(.*)>(.*)</filerequest>")) {
+            if (xmlMsg.matches("(.*)<filerequest(.*)name=(.*)>(.*)</filerequest>(.*)")) {
                 int index = xmlMsg.indexOf("name");
-                return xmlMsg.substring(index + 6, xmlMsg.indexOf(">") - 1) + ": ";
+                String relMsg = xmlMsg.substring(index + 6);
+                return relMsg.substring(0, indexOf(Pattern.compile("\"( |>)"), relMsg));
             }
         }
         return null;
@@ -292,9 +300,10 @@ public class XMLString {
     
     public static String getFileSize(String xmlMsg) {
         if (xmlMsg != null) {
-            if (xmlMsg.matches("<filerequest(.*)size=(.*)>(.*)</filerequest>")) {
+            if (xmlMsg.matches("(.*)<filerequest(.*)size=(.*)>(.*)</filerequest>(.*)")) {
                 int index = xmlMsg.indexOf("size");
-                return xmlMsg.substring(index + 6, xmlMsg.indexOf(">") - 1) + ": ";
+                String relMsg = xmlMsg.substring(index + 6);
+                return relMsg.substring(0, indexOf(Pattern.compile("\"( |>)"), relMsg));
             }
         }
         return null;
@@ -302,7 +311,7 @@ public class XMLString {
     
     public static String getFileDescription(String xmlMsg) {
         if (xmlMsg != null) {
-            if (xmlMsg.matches("<filerequest(.*)>(.*)</filerequest>")) {
+            if (xmlMsg.matches("(.*)<filerequest(.*)>(.*)</filerequest>(.*)")) {
                 String[] strings = xmlMsg.split("<filerequest(.*)>");
                 for (String str : strings) {
                     if (str.contains("</keyrequest>")) {
