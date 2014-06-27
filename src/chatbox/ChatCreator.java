@@ -22,7 +22,7 @@ final public class ChatCreator {
     static final JTextPane namePane = new JTextPane();
     static final JTextPane tabPane = new JTextPane();
     static final JButton startButton = new JButton("Join server");
-    static final JButton closeButton = new IconButton("src/resources/closeIcon.png");
+    static final JButton closeButton = new IconButton("/resources/closeIcon.png");
     static final JComboBox serverOptions;
     static final JTabbedPane tabbedPane = new JTabbedPane();
     static String host = "127.0.0.1";

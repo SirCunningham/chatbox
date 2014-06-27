@@ -8,7 +8,7 @@ public class IconButton extends JButton {
 
     public IconButton(String pathToIcon) {
         try {
-            setIcon(new ImageIcon(ImageIO.read(new File(pathToIcon))));
+            setIcon(new ImageIcon(ImageIO.read(IconButton.class.getResourceAsStream(pathToIcon))));
         } catch (IOException e) {
             ChatCreator.showError("Följande fil kunde inte hittas: " + pathToIcon);
         }

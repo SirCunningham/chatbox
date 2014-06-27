@@ -108,7 +108,7 @@ public class StartButtonListener implements ActionListener {
     */
     
     private JPanel createTabPanel() throws IOException {
-        ImageIcon icon = new ImageIcon(ImageIO.read(new File("src/resources/closeIcon.png")));
+        ImageIcon icon = new ImageIcon(ImageIO.read(new File("/resources/closeIcon.png")));
         JPanel tabPanel = new JPanel(new GridBagLayout());
         tabPanel.setOpaque(false);
         JLabel tabLabel = new JLabel(ChatCreator.tabPane.getText() + " ");
