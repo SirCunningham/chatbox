@@ -13,13 +13,13 @@ public class RightPanel extends JPanel {
     private final JPanel infoPanel = new JPanel();
     private final JPanel filePanel = new JPanel();
     private final JPanel fileButtonPanel = new JPanel();
-    private final JButton fileButton = new IconButton("resources/fileIcon.png");
+    private final JButton fileButton = new IconButton("src/resources/fileIcon.png");
     private final JTextPane filePane = new JTextPane();
     private final JTextPane fileSizePane = new JTextPane();
     private final JTextPane descriptionPane = new JTextPane();
     private final JButton sendFileButton = new JButton("Send file to selected");
     private final JButton progressBarButton = new JButton("NEW Receive [test!]");
-    private final JButton closeButton = new IconButton("resources/closeIcon.png");
+    private final JButton closeButton = new IconButton("src/resources/closeIcon.png");
     private final JComboBox fileEncryptions;
     private final JComboBox keyRequestEncryptions;
 

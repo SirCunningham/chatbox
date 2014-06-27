@@ -7,7 +7,7 @@ import javax.swing.text.html.*;
 
 public class LeftPanel extends JPanel {
 
-    private final JButton colorButton = new IconButton("resources/colorIcon.png");
+    private final JButton colorButton = new IconButton("src/resources/colorIcon.png");
     private final JTextPane namePane = new JTextPane();
     private final JTextPane messagePane;
     private final JButton sendButton = new JButton("Send message");
