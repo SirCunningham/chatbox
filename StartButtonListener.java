@@ -107,8 +107,6 @@ public class StartButtonListener implements ActionListener {
     }
     */
     
-    
-    
     private JPanel createTabPanel() throws IOException {
         ImageIcon icon = new ImageIcon(ImageIO.read(new File("closeIcon.png")));
         JPanel tabPanel = new JPanel(new GridBagLayout());
