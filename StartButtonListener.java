@@ -34,9 +34,9 @@ public class StartButtonListener implements ActionListener {
                 if (!chatRoom.isServer) {
                     //funkar ej längre med detta!!
                     chatRoom.o = new Client(chatRoom.host, chatRoom.port, chatRoom).o;
+                    chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>I beg to be connected!!</request></text></message>", chatRoom.getName()));
                     try {
                         //Vänta på bekräftelse, fixa riktigt villkor
-                        chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"0000ff\"><request>I beg to be connected!!</request></text></message>", chatRoom.getName()));
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
                         ChatCreator.showError("You failed to be connected.");
