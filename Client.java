@@ -402,10 +402,6 @@ public class Client implements Runnable {
                     invisibleContainer.add(label, BorderLayout.PAGE_START);
                     invisibleContainer.add(progressBar, BorderLayout.CENTER);
 
-                    String description = chatRoom.getDescriptionPane().getText();
-                    if (description.equals("File description (optional)")) {
-                        description = "No description";
-                    }
                     String fileData = String.format("%s sends a filerequest.\n\n"
                             + "File name: %s\nFile size: %s\nFile description: %s\nAccept file?",
                             XMLString.getSenderWithoutColon(html), XMLString.getFileName(html),

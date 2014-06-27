@@ -91,16 +91,14 @@ public class FileClient implements Runnable {
                     public void actionPerformed(ActionEvent e) {                       
                         // Send filerequest to every selected person in the chat
                         if (chatRoom.fileAcceptance == ChatRoom.NO_FILE) {
-                            List<String> names = chatRoom.getList().getSelectedValuesList();
-                            chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"%s\"><fileUsers users=\"%s\">%s</fileUsers></text></message>",
-                                    chatRoom.getName(), chatRoom.color, names, "I just sent a filerequest to some of my friends."));
-                            
                             String chatName = (String) chatRoom.getList().getSelectedValue();
                             if (chatName != null) {
+                                chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"%s\">I just sent something:</text></message>",
+                                        chatRoom.getNamePane().getText(), chatRoom.color));
                                 chatRoom.o.println(Messages.getFileMessage(chatRoom));
                                 startTimer(chatName);
+                                chatRoom.fileAcceptance = ChatRoom.PROPOSED_FILE;
                             }
-                            chatRoom.fileAcceptance = ChatRoom.PROPOSED_FILE;
                         } else if (chatRoom.fileAcceptance == ChatRoom.ACCEPTED_FILE) {
                             File transferFile = new File(chatRoom.filePath);
                             byte[] bytearray = new byte[(int) transferFile.length()];

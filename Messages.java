@@ -5,14 +5,13 @@ import java.util.List;
 public class Messages {
 
     public static String getFileMessage(ChatRoom chatRoom) {
+        String description = chatRoom.getDescriptionPane().getText();
+        if (description.equals("File description (optional)")) {
+            description = "No description";
+        }
         List<String> names = chatRoom.getList().getSelectedValuesList();
-        /*
-        appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
-        namePane.getText(), filePane.getText(), fileSizePane.getText(), description));
-         * 
-         */
         return String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest><fileUsers users=\"%s\"></fileUsers></message>",
-                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), "I just sent something.", names);
+                chatRoom.getName(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description, names);
     }
 
     public static String getQuitMessage(ChatRoom chatRoom) {
