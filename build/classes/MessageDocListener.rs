@@ -1,2 +1,0 @@
-chatbox.MessageDocListener
-chatbox.MessageDocListener$1
