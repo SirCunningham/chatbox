@@ -1,0 +1,3 @@
+chatbox.FileClient$1SendFileButtonListener
+chatbox.FileClient
+chatbox.FileClient$1
