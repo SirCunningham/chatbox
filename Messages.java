@@ -5,14 +5,6 @@ import java.util.List;
 public class Messages {
 
     public static String getFileMessage(ChatRoom chatRoom) {
-        String description = chatRoom.getDescriptionPane().getText();
-        if (description.equals("File description (optional)")) {
-            description = "No description";
-        }
-        String fileData = String.format("File name: %s\nFile size: %s\n"
-                + "File description: %s\nAccept file?", chatRoom.getFilePane().getText(),
-                chatRoom.getFileSizePane().getText(), description);
-        String message = chatRoom.getMessagePane().getText();
         List<String> names = chatRoom.getList().getSelectedValuesList();
         /*
         appendToPane(String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest></message>",
@@ -20,7 +12,7 @@ public class Messages {
          * 
          */
         return String.format("<message sender=\"%s\"><filerequest name=\"%s\" size=\"%s\">%s</filerequest><fileUsers users=\"%s\"></fileUsers></message>",
-                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), description,names);
+                chatRoom.getNamePane().getText(), chatRoom.getFilePane().getText(), chatRoom.getFileSizePane().getText(), "I just sent something.", names);
     }
 
     public static String getQuitMessage(ChatRoom chatRoom) {

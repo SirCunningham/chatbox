@@ -3,6 +3,9 @@ package chatbox;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 // För kryptering av filer, se:
 // https://stackoverflow.com/questions/16911632/java-file-encryption
@@ -31,6 +34,48 @@ public class FileClient implements Runnable {
             ChatCreator.showError("Port out of range.");
         }
     }
+    
+    // Start timer when we send file
+    private void startTimer(final String chatName) {
+
+        chatRoom.nameFileResponse.put(chatName,
+                Executors.newSingleThreadScheduledExecutor());
+
+        Runnable task = new Runnable() {
+
+            @Override
+            public void run() {
+                //Check if received fileresponse - if not, inform the user, else do nothing
+
+                //No response
+                if (!chatRoom.receivedFileResponse.containsKey(chatName)) {
+                    chatRoom.o.println(String.format("<message sender=\"%s\"><text color"
+                            + "=\"%s\">I got no fileresponse after one minute. "
+                            + "It's not a virus, I promise!"
+                            + "</text></message>", chatRoom.getName(),
+                            chatRoom.color));
+                    chatRoom.fileAcceptance = ChatRoom.NO_FILE;
+                } else if (!chatRoom.receivedFileResponse.get(chatName)) {
+                    //No fileresponse
+                    chatRoom.o.println(String.format("<message sender=\"%s\"><text color"
+                            + "=\"%s\">I got no fileresponse after one minute. "
+                            + "It's not a virus, I promise!"
+                            + "</text></message>", chatRoom.getName(),
+                            chatRoom.color));
+                    chatRoom.fileAcceptance = ChatRoom.NO_FILE;
+                } else {
+                    // Kolla om fileresponse reply="yes" innan något skickas!
+                    chatRoom.fileAcceptance = ChatRoom.ACCEPTED_FILE;
+                    chatRoom.getSendFileButton().doClick();
+                    System.out.println(chatRoom.receivedFileResponse.get(chatName));
+                }
+                chatRoom.receivedFileResponse.put(chatName, false);  // Start over
+                chatRoom.nameFileResponse.get(chatName).shutdown();
+            }
+        };
+        //Run after 1 minute, now 10 seconds because of hack...
+        chatRoom.nameFileResponse.get(chatName).schedule(task, 10, TimeUnit.SECONDS);
+    }
 
     // Skapa tråd för att läsa från servern
     @Override
@@ -39,12 +84,24 @@ public class FileClient implements Runnable {
         String responseLine;
         if (clientSocket != null && i != null && o != null) {
             try {
-                // Skapa lyssnare för att skicka till servern
-                class SendFileButtonListener3 implements ActionListener {
+                // Skapa lyssnare för att skicka filer till servern
+                class SendFileButtonListener implements ActionListener {
 
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (chatRoom.fileAcceptance == ChatRoom.ACCEPTED_FILE) {
+                    public void actionPerformed(ActionEvent e) {                       
+                        // Send filerequest to every selected person in the chat
+                        if (chatRoom.fileAcceptance == ChatRoom.NO_FILE) {
+                            List<String> names = chatRoom.getList().getSelectedValuesList();
+                            chatRoom.o.println(String.format("<message sender=\"%s\"><text color=\"%s\"><fileUsers users=\"%s\">%s</fileUsers></text></message>",
+                                    chatRoom.getName(), chatRoom.color, names, "I just sent a filerequest to some of my friends."));
+                            
+                            String chatName = (String) chatRoom.getList().getSelectedValue();
+                            if (chatName != null) {
+                                chatRoom.o.println(Messages.getFileMessage(chatRoom));
+                                startTimer(chatName);
+                            }
+                            chatRoom.fileAcceptance = ChatRoom.PROPOSED_FILE;
+                        } else if (chatRoom.fileAcceptance == ChatRoom.ACCEPTED_FILE) {
                             File transferFile = new File(chatRoom.filePath);
                             byte[] bytearray = new byte[(int) transferFile.length()];
                             try (FileInputStream fin = new FileInputStream(transferFile)) {
@@ -61,13 +118,11 @@ public class FileClient implements Runnable {
                             } finally {
                                 chatRoom.fileAcceptance = ChatRoom.NO_FILE;
                             }
-                        } else {
-                            chatRoom.fileAcceptance = ChatRoom.PROPOSED_FILE;
                         }
                     }
                 }
 
-                SendFileButtonListener3 sendFileButtonListener = new SendFileButtonListener3();
+                SendFileButtonListener sendFileButtonListener = new SendFileButtonListener();
                 chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
 
                 //hacklösning

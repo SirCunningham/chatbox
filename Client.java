@@ -88,22 +88,6 @@ public class Client implements Runnable {
                         }
                     }
                 }
-                // finns redan i ChatRoom, onödig dubblering, ta bort där?
-                class SendFileButtonListener2 implements ActionListener {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //Send filerequest to every person in the chat??
-                        if (chatRoom.fileAcceptance == ChatRoom.PROPOSED_FILE) {
-                            String chatName = (String) chatRoom.getList().getSelectedValue();
-                            if (chatName != null) {
-                                o.println(Messages.getFileMessage(chatRoom));
-                                startTimer(chatName);
-                            }
-                            chatRoom.fileAcceptance = ChatRoom.NO_FILE;
-                        }
-                    }
-                }
 
                 // Stäng av hela programmet
                 class CloseButtonListener implements ActionListener {
@@ -147,11 +131,8 @@ public class Client implements Runnable {
                 }
 
                 // Varför lyssna på closeButton här? Obs! Anonyma lyssnare stängs ej av på slutet! Vilken lyssnare?
-                // Obs! Två olika klasser med samma namn - vilken avses??  Båda används - måste fixas (Om du syftar på SendFileButtonListener
                 SendButtonListener sendButtonListener = new SendButtonListener();
                 chatRoom.getSendButton().addActionListener(sendButtonListener);
-                SendFileButtonListener2 sendFileButtonListener = new SendFileButtonListener2();
-                chatRoom.getSendFileButton().addActionListener(sendFileButtonListener);
                 chatRoom.getCloseButton().addActionListener(new CloseButtonListener());
                 chatRoom.getKeyRequestButton().addActionListener(new KeyRequestButtonListener());
 
@@ -182,7 +163,6 @@ public class Client implements Runnable {
                         + "abandoned!</text><disconnect /></message>"));
                 chatRoom.getSendButton().setEnabled(false);
                 chatRoom.getSendButton().removeActionListener(sendButtonListener);
-                chatRoom.getSendFileButton().removeActionListener(sendFileButtonListener);
                 i.close();
                 o.close();
                 clientSocket.close();
@@ -276,46 +256,6 @@ public class Client implements Runnable {
         };
         chatRoom.nameKeyResponse.get(chatName).schedule(task, 10,
                 TimeUnit.SECONDS);
-    }
-
-    // Start timer when we send file
-    private void startTimer(final String chatName) {
-
-        chatRoom.nameFileResponse.put(chatName,
-                Executors.newSingleThreadScheduledExecutor());
-
-        Runnable task = new Runnable() {
-
-            @Override
-            public void run() {
-                //Check if received fileresponse - if not, inform the user, else do nothing
-
-                //No response
-                if (!chatRoom.receivedFileResponse.containsKey(chatName)) {
-                    o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no fileresponse after one minute. "
-                            + "It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(),
-                            chatRoom.color));
-                } else if (!chatRoom.receivedFileResponse.get(chatName)) {
-                    //No fileresponse
-                    o.println(String.format("<message sender=\"%s\"><text color"
-                            + "=\"%s\">I got no fileresponse after one minute. "
-                            + "It's not a virus, I promise!"
-                            + "</text></message>", chatRoom.getName(),
-                            chatRoom.color));
-                } else {
-                    // OBS!! Kolla om fileresponse reply="yes" innan något skickas!
-                    chatRoom.fileAcceptance = ChatRoom.ACCEPTED_FILE;
-                    chatRoom.getSendFileButton().doClick();
-                    System.out.println(chatRoom.receivedFileResponse.get(chatName));
-                }
-                chatRoom.receivedFileResponse.put(chatName, false);  // Start over
-                chatRoom.nameFileResponse.get(chatName).shutdown();
-            }
-        };
-        //Run after 1 minute, now 10 seconds because of hack...
-        chatRoom.nameFileResponse.get(chatName).schedule(task, 10, TimeUnit.SECONDS);
     }
 
     private void handleChangedName(String responseLine) {
@@ -530,7 +470,7 @@ public class Client implements Runnable {
                                                             + "port=\"" + (port + 13)
                                                             + "\">%s</fileresponse></text></message>",
                                                             chatName, chatRoom.color,
-                                                            chatRoom.getMessagePane().getText()));
+                                                            "You got me interested."));
                                                     return;
                                                 }
                                                 o.println(String.format("<message sender=\"%s\">"

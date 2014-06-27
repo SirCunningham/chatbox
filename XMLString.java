@@ -37,14 +37,6 @@ public class XMLString {
          */
     }
     
-    public static void main(String[] args) {
-        String msg = "<message sender=\"INFO\">"
-                + "<text color=\"0000ff\"><fileUsers users=\"[asd]\"></fileUsers>The server has been "
-                + "abandoned!</text><disconnect /></message>";
-        String[] names = getFileUsers(msg);
-        System.out.println(names[0]);
-    }
-    
     public static String[] getFileUsers(String xmlStr) {
         if (xmlStr.matches("(.*)<fileUsers users=(.*)>(.*)</fileUsers>(.*)")) {
             int i = xmlStr.indexOf("<fileUsers users=\"[");

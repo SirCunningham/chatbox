@@ -44,7 +44,6 @@ public class RightPanel extends JPanel {
         fileButton.addActionListener(new FileButtonListener(chatRoom));
         fileButton.setBorder(BorderFactory.createEmptyBorder());
         fileButton.setToolTipText("Open file explorer");
-        sendFileButton.addActionListener(new SendFileButtonListener(chatRoom));
         sendFileButton.setEnabled(false);
         progressBarButton.addActionListener(new ProgressBarButtonListener(chatRoom));
         closeButton.setFocusPainted(false);
