@@ -133,7 +133,7 @@ public class FileClient implements Runnable {
                             } else {
                                 chatRoom.bw.write(responseLine);
                                 chatRoom.bw.newLine();
-                                System.out.println(chatRoom.savePath.length());
+                                // skrivs i filen chatRoom.savePath
                             }
                         }
                     } catch (IOException ex) {
