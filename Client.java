@@ -473,16 +473,17 @@ public class Client implements Runnable {
                                                         + "<text color=\"%s\"><fileresponse reply=\"no\" "
                                                         + "port=\"" + (port + 13)
                                                         + "\">%s</fileresponse></text></message>",
-                                                        chatRoom.getNamePane().getText(), chatRoom.color,
-                                                        chatRoom.getMessagePane().getText()));
+                                                        chatName, chatRoom.color,
+                                                        "I changed my mind. No longer interested."));
                                             }
                                         } else {
-                                            String response = JOptionPane.showInputDialog(ChatCreator.frame, "Enter reason for not receiving file:");
+                                            String response = JOptionPane.showInputDialog(ChatCreator.frame,
+                                                    "Enter reason for not receiving file:");
                                             o.println(String.format("<message sender=\"%s\">"
                                                     + "<text color=\"%s\"><fileresponse reply=\"no\" "
                                                     + "port=\"" + (port + 13)
                                                     + "\">%s</fileresponse></text></message>",
-                                                    chatRoom.getNamePane().getText(), chatRoom.color,
+                                                    chatName, chatRoom.color,
                                                     response));
                                             dialog.dispose();
                                         }
